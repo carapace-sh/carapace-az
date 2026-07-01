@@ -7,6 +7,7 @@ import (
 	"github.com/carapace-sh/carapace-az/cmd/carapace-az/cmd/azcli"
 	"github.com/carapace-sh/carapace-az/cmd/carapace-az/cmd/common"
 	_ "github.com/carapace-sh/carapace-az/pkg/actions"
+	"github.com/carapace-sh/carapace-az/pkg/actions/az"
 	spec "github.com/carapace-sh/carapace-spec"
 	"github.com/carapace-sh/carapace/pkg/style"
 	"github.com/spf13/cobra"
@@ -36,7 +37,8 @@ func init() {
 	rootCmd.PersistentFlags().Bool("version", false, "Show version information.")
 
 	carapace.Gen(rootCmd).FlagCompletion(carapace.ActionMap{
-		"output": carapace.ActionValues("json", "jsonc", "none", "table", "tsv", "yaml", "yamlc").StyleF(style.ForExtension),
+		"output":       carapace.ActionValues("json", "jsonc", "none", "table", "tsv", "yaml", "yamlc").StyleF(style.ForExtension),
+		"subscription": az.ActionSubscriptions(),
 	})
 
 	for name, description := range azcli.Services() {

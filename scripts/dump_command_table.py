@@ -14,14 +14,31 @@ def serialize_argument(name, arg):
     if isinstance(options, str):
         options = [options]
 
+    help_val = settings.get('help', '')
+    if not isinstance(help_val, str):
+        help_val = str(help_val) if help_val else ''
+
+    choices = settings.get('choices')
+    if callable(choices):
+        try:
+            choices = choices()
+        except Exception:
+            choices = None
+    if choices:
+        choices = list(choices)
+
+    nargs = settings.get('nargs')
+    if nargs is not None:
+        nargs = str(nargs)
+
     return {
         'name': name,
         'options': options,
-        'help': settings.get('help', ''),
+        'help': help_val,
         'required': settings.get('required', False),
-        'choices': list(settings['choices']) if settings.get('choices') else None,
+        'choices': choices,
         'type': str(settings.get('type', '')),
-        'nargs': str(settings.get('nargs', '')) or None,
+        'nargs': nargs,
         'default': settings.get('default', None),
         'metavar': settings.get('metavar', None),
     }
@@ -42,7 +59,7 @@ def serialize_command(name, cmd):
     return {
         'description': description or '',
         'arguments': arguments,
-        'group': name.split()[0] if ' ' in name or len(name.split()) > 1 else name,
+        'group': name.split()[0],
     }
 
 
@@ -55,29 +72,21 @@ def serialize_group(name, group):
 
 def main():
     try:
-        from azure.cli.core import AzCli, MainCommandsLoader
-        from azure.cli.core.commands import AzCliCommandInvoker
-        from azure.cli.core.parser import AzCliCommandParser
-        from azure.cli.core._config import GLOBAL_CONFIG_DIR, ENV_VAR_PREFIX
-        from azure.cli.core._help import AzCliHelp
-        from azure.cli.core._output import AzOutputProducer
-        from azure.cli.core.azlogging import AzCliLogging
+        from azure.cli.core import get_default_cli
         from azure.cli.core.file_util import create_invoker_and_load_cmds_and_args
     except ImportError as e:
         print(f'Error: Azure CLI not available: {e}', file=sys.stderr)
         sys.exit(1)
 
-    cli = AzCli(
-        cli_name='az',
-        config_dir=GLOBAL_CONFIG_DIR,
-        config_env_var_prefix=ENV_VAR_PREFIX,
-        commands_loader_cls=MainCommandsLoader,
-        invocation_cls=AzCliCommandInvoker,
-        parser_cls=AzCliCommandParser,
-        logging_cls=AzCliLogging,
-        output_cls=AzOutputProducer,
-        help_cls=AzCliHelp,
-    )
+    cli = get_default_cli()
+
+    try:
+        from azure.cli.core import EVENT_FAILED_EXTENSION_LOAD
+        def _extension_failed_handler(_, event_data):
+            print(f'Warning: failed to load extension: {event_data}', file=sys.stderr)
+        cli.register_event(EVENT_FAILED_EXTENSION_LOAD, _extension_failed_handler)
+    except ImportError:
+        pass
 
     create_invoker_and_load_cmds_and_args(cli)
 
@@ -93,10 +102,15 @@ def main():
     for name, group in command_group_table.items():
         groups[name] = serialize_group(name, group)
 
+    try:
+        from azure.cli.core import __version__ as az_version
+    except ImportError:
+        az_version = ''
+
     output = {
         'cli': {
             'name': 'az',
-            'version': '',
+            'version': az_version,
         },
         'commands': commands,
         'groups': groups,

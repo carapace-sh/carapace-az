@@ -8,7 +8,6 @@ permissions:
 jobs:
   az:
     runs-on: ubuntu-latest
-    container: ghcr.io/carapace-sh/go:1.25.4
     if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'carapace-sh/carapace-az'
     steps:
     - name: deep clone
@@ -21,6 +20,11 @@ jobs:
 
     - name: generate command table
       run: docker compose build && docker compose run --rm az > az_commands.json
+
+    - name: setup go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
 
     - name: generate specs
       run: go run -C cmd/carapace-spec-az . --target cmd/carapace-az/cmd/azcli --no-doc az_commands.json
