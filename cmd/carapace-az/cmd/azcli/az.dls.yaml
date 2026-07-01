@@ -1,22 +1,91 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: dls
-description: dls
+description: Manage Data Lake Store accounts and filesystems.
 commands:
     - name: account
       commands:
-        - name: firewall
+        - name: trusted-provider
           commands:
-            - name: update
+            - name: delete
+              description: Deletes the specified trusted identity provider from the specified Data Lake Store account.
               flags:
-                --end-ip-address=: ""
-                --firewall-rule-name=!: ""
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --start-ip-address=: ""
+                --subscription=: Name or ID of subscription.
+                --trusted-id-provider-name=!: The name of the trusted identity provider to delete.
+                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
+                -n, --account=: Name of the Data Lake Store account.
+            - name: create
+              description: Creates or updates the specified trusted identity provider.
+              flags:
+                --id-provider=!: The URL of this trusted identity provider.
+                --subscription=: Name or ID of subscription.
+                --trusted-id-provider-name=!: The name of the trusted identity provider.
+                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
+                -n, --account=!: Name of the Data Lake Store account.
+            - name: list
+              description: Lists the Data Lake Store trusted identity providers within the specified Data Lake Store account.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
                 -n, --account=: Name of the Data Lake Store account.
+            - name: update
+              description: Updates the specified trusted identity provider.
+              flags:
+                --id-provider=: The URL of this trusted identity provider.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --trusted-id-provider-name=!: The name of the trusted identity provider.
+                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
+                -n, --account=: Name of the Data Lake Store account.
+            - name: show
+              description: Gets the specified Data Lake Store trusted identity provider.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --trusted-id-provider-name=!: The name of the trusted identity provider to retrieve.
+                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
+                -n, --account=: Name of the Data Lake Store account.
+        - name: delete
+          description: Deletes the specified Data Lake Store account.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
+            -n, --account=: Name of the Data Lake Store account.
+        - name: firewall
+          commands:
+            - name: list
+              description: Lists the Data Lake Store firewall rules within the specified Data Lake Store account.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
+                -n, --account=: Name of the Data Lake Store account.
+            - name: create
+              description: Creates a firewall rule in a Data Lake Store account.
+              flags:
+                --end-ip-address=!: The end of the valid ip range for the firewall rule.
+                --firewall-rule-name=!: The name of the firewall rule.
+                --start-ip-address=!: The start of the valid ip range for the firewall rule.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
+                -n, --account=!: Name of the Data Lake Store account.
             - name: show
               description: Gets the specified Data Lake Store firewall rule.
               flags:
@@ -30,14 +99,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
                 -n, --account=: Name of the Data Lake Store account.
-            - name: create
-              flags:
-                --end-ip-address=!: ""
-                --firewall-rule-name=!: ""
-                --start-ip-address=!: ""
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
-                -n, --account=!: Name of the Data Lake Store account.
             - name: delete
               description: Deletes the specified firewall rule from the specified Data Lake Store account.
               flags:
@@ -48,16 +109,53 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
                 -n, --account=: Name of the Data Lake Store account.
-            - name: list
-              description: Lists the Data Lake Store firewall rules within the specified Data Lake Store account.
+            - name: update
+              description: Updates a firewall rule in a Data Lake Store account.
               flags:
+                --end-ip-address=: The end of the valid ip range for the firewall rule.
+                --firewall-rule-name=!: The name of the firewall rule.
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
+                --start-ip-address=: The start of the valid ip range for the firewall rule.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
                 -n, --account=: Name of the Data Lake Store account.
+        - name: create
+          description: Creates a Data Lake Store account.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --default-group=: Name of the default group to give permissions to for freshly created files and folders in the Data Lake Store account.
+            --disable-encryption=: Indicates that the account will not have any form of encryption applied to it.
+            --encryption-type=: Indicates what type of encryption to provision the account with.
+            --key-name=: Key name for the user-assigned encryption type.
+            --key-vault-id=: Key vault for the user-assigned encryption type.
+            --key-version=: Key version for the user-assigned encryption type.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --tier=: The desired commitment tier for this account to use.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=: Location.
+            -n, --account=!: Name of the Data Lake Store account.
+          completion:
+            flag:
+                encryption-type:
+                    - UserManaged
+                    - ServiceManaged
+                tier:
+                    - Consumption
+                    - Commitment_1TB
+                    - Commitment_10TB
+                    - Commitment_100TB
+                    - Commitment_500TB
+                    - Commitment_1PB
+                    - Commitment_5PB
         - name: update
+          description: Updates a Data Lake Store account.
           flags:
             --allow-azure-ips=: Allow/block Azure originating IPs through the firewall
             --default-group=: Name of the default group to give permissions to for freshly created files and folders in the Data Lake Store account.
@@ -93,102 +191,6 @@ commands:
                 trusted-id-provider-state:
                     - Enabled
                     - Disabled
-        - name: list
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: trusted-provider
-          commands:
-            - name: create
-              flags:
-                --id-provider=!: ""
-                --subscription=: Name or ID of subscription.
-                --trusted-id-provider-name=!: ""
-                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
-                -n, --account=!: Name of the Data Lake Store account.
-            - name: list
-              description: Lists the Data Lake Store trusted identity providers within the specified Data Lake Store account.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
-                -n, --account=: Name of the Data Lake Store account.
-            - name: update
-              flags:
-                --id-provider=: ""
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --trusted-id-provider-name=!: ""
-                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
-                -n, --account=: Name of the Data Lake Store account.
-            - name: show
-              description: Gets the specified Data Lake Store trusted identity provider.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --trusted-id-provider-name=!: The name of the trusted identity provider to retrieve.
-                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
-                -n, --account=: Name of the Data Lake Store account.
-            - name: delete
-              description: Deletes the specified trusted identity provider from the specified Data Lake Store account.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --trusted-id-provider-name=!: The name of the trusted identity provider to delete.
-                -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
-                -n, --account=: Name of the Data Lake Store account.
-        - name: create
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --default-group=: Name of the default group to give permissions to for freshly created files and folders in the Data Lake Store account.
-            --disable-encryption=: Indicates that the account will not have any form of encryption applied to it.
-            --encryption-type=: Indicates what type of encryption to provision the account with.
-            --key-name=: ""
-            --key-vault-id=: ""
-            --key-version=: Key version for the user-assigned encryption type.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --tier=: The desired commitment tier for this account to use.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=: Location.
-            -n, --account=!: Name of the Data Lake Store account.
-          completion:
-            flag:
-                encryption-type:
-                    - UserManaged
-                    - ServiceManaged
-                tier:
-                    - Consumption
-                    - Commitment_1TB
-                    - Commitment_10TB
-                    - Commitment_100TB
-                    - Commitment_500TB
-                    - Commitment_1PB
-                    - Commitment_5PB
-        - name: delete
-          description: Deletes the specified Data Lake Store account.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
-            -n, --account=: Name of the Data Lake Store account.
         - name: enable-key-vault
           description: Attempts to enable a user managed Key Vault for encryption of the specified Data Lake Store account.
           flags:
@@ -210,31 +212,30 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: If not specified, will attempt to discover the resource group for the specified Data Lake Store account.
             -n, --account=: Name of the Data Lake Store account.
+        - name: list
+          description: Lists available Data Lake Store accounts.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
     - name: fs
       commands:
-        - name: download
-          flags:
-            --__PROGRESS_CALLBACK=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --block-size=: Number of bytes for a block.
-            --buffer-size=: Number of bytes for internal buffer.
-            --chunk-size=: Number of bytes for a chunk.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --destination-path=!: ""
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --overwrite=: Indicates that, if the destination file or folder exists, it should be overwritten
-            --source-path=!: ""
-            --subscription=: Name or ID of subscription.
-            --thread-count=: Specify the parallelism of the download.
-            -n, --account=: Name of the Data Lake Store account.
         - name: access
           commands:
+            - name: set-entry
+              description: Update the access control list for a file or folder.
+              flags:
+                --acl-spec=!: The ACL specification to set on the path in the format '[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,...'.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --path=!: The path in the specified Data Lake Store account where the action should take place.
+                --subscription=: Name or ID of subscription.
+                -n, --account=: Name of the Data Lake Store account.
             - name: set-permission
+              description: Set the permissions for a file or folder in a Data Lake Store account.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -246,57 +247,9 @@ commands:
                 --permission=!: 'The octal representation of the permissions for user, group and mask (for example: 777 is full rwx for all entities)'
                 --subscription=: Name or ID of subscription.
                 -n, --account=: Name of the Data Lake Store account.
-            - name: set-owner
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --group=: ""
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --owner=: ""
-                --path=!: The path in the specified Data Lake Store account where the action should take place.
-                --subscription=: Name or ID of subscription.
-                -n, --account=: Name of the Data Lake Store account.
-            - name: set
-              flags:
-                --acl-spec=!: The ACL specification to set on the path in the format '[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,...'.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --path=!: The path in the specified Data Lake Store account where the action should take place.
-                --subscription=: Name or ID of subscription.
-                -n, --account=: Name of the Data Lake Store account.
-            - name: remove-entry
-              flags:
-                --acl-spec=!: The ACL specification to set on the path in the format '[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,...'.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --path=!: The path in the specified Data Lake Store account where the action should take place.
-                --subscription=: Name or ID of subscription.
-                -n, --account=: Name of the Data Lake Store account.
             - name: show
+              description: Display the access control list (ACL).
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --path=!: The path in the specified Data Lake Store account where the action should take place.
-                --subscription=: Name or ID of subscription.
-                -n, --account=: Name of the Data Lake Store account.
-            - name: set-entry
-              flags:
-                --acl-spec=!: The ACL specification to set on the path in the format '[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,...'.
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
@@ -307,6 +260,7 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -n, --account=: Name of the Data Lake Store account.
             - name: remove-all
+              description: Remove the access control list for a file or folder.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -318,42 +272,63 @@ commands:
                 --path=!: The path in the specified Data Lake Store account where the action should take place.
                 --subscription=: Name or ID of subscription.
                 -n, --account=: Name of the Data Lake Store account.
-        - name: join
+            - name: set-owner
+              description: Set the owner information for a file or folder in a Data Lake Store account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --group=: The group Azure Active Directory object ID or user principal name to set as the owning group.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --owner=: The user Azure Active Directory object ID or user principal name to set as the owner.
+                --path=!: The path in the specified Data Lake Store account where the action should take place.
+                --subscription=: Name or ID of subscription.
+                -n, --account=: Name of the Data Lake Store account.
+            - name: remove-entry
+              description: Remove entries for the access control list of a file or folder.
+              flags:
+                --acl-spec=!: The ACL specification to set on the path in the format '[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,...'.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --path=!: The path in the specified Data Lake Store account where the action should take place.
+                --subscription=: Name or ID of subscription.
+                -n, --account=: Name of the Data Lake Store account.
+            - name: set
+              description: Replace the existing access control list for a file or folder.
+              flags:
+                --acl-spec=!: The ACL specification to set on the path in the format '[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,[default:]user|group|other:[entity id or UPN]:r|-w|-x|-,...'.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --path=!: The path in the specified Data Lake Store account where the action should take place.
+                --subscription=: Name or ID of subscription.
+                -n, --account=: Name of the Data Lake Store account.
+        - name: preview
+          description: Preview the content of a file in a Data Lake Store account.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --destination-path=!: ""
-            --force=: Indicates that, if the destination file already exists, it should be overwritten
+            --force=: Indicates that, if the preview is larger than 1MB, still retrieve it.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --source-paths=!:
-                description: The list of files in the specified Data Lake Store account to join.
-                nargs: -1
+            --length=: The amount of data to preview in bytes.
+            --offset=: The position in bytes to start the preview from.
+            --path=!: The path in the specified Data Lake Store account where the action should take place.
             --subscription=: Name or ID of subscription.
-            -n, --account=: Name of the Data Lake Store account.
-        - name: upload
-          flags:
-            --__PROGRESS_CALLBACK=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --block-size=: Number of bytes for a block.
-            --buffer-size=: Number of bytes for internal buffer.
-            --chunk-size=: Number of bytes for a chunk.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --destination-path=!: ""
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --overwrite=: Indicates that, if the destination file or folder exists, it should be overwritten
-            --source-path=!: ""
-            --subscription=: Name or ID of subscription.
-            --thread-count=: Specify the parallelism of the upload.
             -n, --account=: Name of the Data Lake Store account.
         - name: test
+          description: Test for the existence of a file or folder in a Data Lake Store account.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -365,6 +340,35 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --account=: Name of the Data Lake Store account.
         - name: show
+          description: Get file or folder information in a Data Lake Store account.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --path=!: The path in the specified Data Lake Store account where the action should take place.
+            --subscription=: Name or ID of subscription.
+            -n, --account=: Name of the Data Lake Store account.
+        - name: join
+          description: Join files in a Data Lake Store account into one file.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --destination-path=!: The destination path in the Data Lake Store account.
+            --force=: Indicates that, if the destination file already exists, it should be overwritten
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --source-paths=!:
+                description: The list of files in the specified Data Lake Store account to join.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --account=: Name of the Data Lake Store account.
+        - name: remove-expiry
+          description: Remove the expiration time for a file.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -376,6 +380,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --account=: Name of the Data Lake Store account.
         - name: delete
+          description: Delete a file or folder in a Data Lake Store account.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -387,7 +392,68 @@ commands:
             --recurse=: Indicates this should be a recursive delete of the folder.
             --subscription=: Name or ID of subscription.
             -n, --account=: Name of the Data Lake Store account.
+        - name: create
+          description: Creates a file or folder in a Data Lake Store account.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --content=: Content for the file to contain upon creation.
+            --folder=: Indicates that this new item is a folder and not a file.
+            --force=: Indicates that, if the file or folder exists, it should be overwritten
+            --path=!: The path in the specified Data Lake Store account where the action should take place.
+            --subscription=: Name or ID of subscription.
+            -n, --account=!: Name of the Data Lake Store account.
+        - name: upload
+          description: Upload a file or folder to a Data Lake Store account.
+          flags:
+            --__PROGRESS_CALLBACK=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --block-size=: Number of bytes for a block.
+            --buffer-size=: Number of bytes for internal buffer.
+            --chunk-size=: Number of bytes for a chunk.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --destination-path=!: The full path in the Data Lake Store filesystem to upload the file or folder to.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --overwrite=: Indicates that, if the destination file or folder exists, it should be overwritten
+            --source-path=!: The path to the file or folder to upload.
+            --subscription=: Name or ID of subscription.
+            --thread-count=: Specify the parallelism of the upload.
+            -n, --account=: Name of the Data Lake Store account.
+        - name: move
+          description: Move a file or folder in a Data Lake Store account.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --destination-path=!: The destination path in the Data Lake Store account.
+            --force=: Indicates that, if the destination file or folder already exists, it should be overwritten and replaced with the file or folder being moved.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --source-path=!: The file or folder to move.
+            --subscription=: Name or ID of subscription.
+            -n, --account=: Name of the Data Lake Store account.
+        - name: append
+          description: Append content to a file in a Data Lake Store account.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --content=!: Content to be appended to the file.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --path=!: The path in the specified Data Lake Store account where the action should take place.
+            --subscription=: Name or ID of subscription.
+            -n, --account=: Name of the Data Lake Store account.
         - name: set-expiry
+          description: Set the expiration time for a file.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -399,43 +465,8 @@ commands:
             --path=!: The path in the specified Data Lake Store account where the action should take place.
             --subscription=: Name or ID of subscription.
             -n, --account=: Name of the Data Lake Store account.
-        - name: remove-expiry
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --path=!: The path in the specified Data Lake Store account where the action should take place.
-            --subscription=: Name or ID of subscription.
-            -n, --account=: Name of the Data Lake Store account.
-        - name: preview
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --force=: Indicates that, if the preview is larger than 1MB, still retrieve it.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --length=: ""
-            --offset=: ""
-            --path=!: The path in the specified Data Lake Store account where the action should take place.
-            --subscription=: Name or ID of subscription.
-            -n, --account=: Name of the Data Lake Store account.
-        - name: create
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --content=: ""
-            --folder=: Indicates that this new item is a folder and not a file.
-            --force=: Indicates that, if the file or folder exists, it should be overwritten
-            --path=!: The path in the specified Data Lake Store account where the action should take place.
-            --subscription=: Name or ID of subscription.
-            -n, --account=!: Name of the Data Lake Store account.
         - name: list
+          description: List the files and folders in a Data Lake Store account.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -446,28 +477,24 @@ commands:
             --path=!: The path in the specified Data Lake Store account where the action should take place.
             --subscription=: Name or ID of subscription.
             -n, --account=: Name of the Data Lake Store account.
-        - name: move
+        - name: download
+          description: Download a file or folder from a Data Lake Store account to the local machine.
           flags:
+            --__PROGRESS_CALLBACK=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --block-size=: Number of bytes for a block.
+            --buffer-size=: Number of bytes for internal buffer.
+            --chunk-size=: Number of bytes for a chunk.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --destination-path=!: ""
-            --force=: Indicates that, if the destination file or folder already exists, it should be overwritten and replaced with the file or folder being moved.
+            --destination-path=!: The local path where the file or folder will be downloaded to.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --source-path=!: ""
+            --overwrite=: Indicates that, if the destination file or folder exists, it should be overwritten
+            --source-path=!: The full path in the Data Lake Store filesystem to download the file or folder from.
             --subscription=: Name or ID of subscription.
-            -n, --account=: Name of the Data Lake Store account.
-        - name: append
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --content=!: ""
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --path=!: The path in the specified Data Lake Store account where the action should take place.
-            --subscription=: Name or ID of subscription.
+            --thread-count=: Specify the parallelism of the download.
             -n, --account=: Name of the Data Lake Store account.

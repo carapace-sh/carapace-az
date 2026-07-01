@@ -1,17 +1,56 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: afd
-description: afd
+description: Manage Azure Front Door Standard/Premium.
 commands:
     - name: custom-domain
       commands:
         - name: list
+          description: List all the custom domains within the specified profile.
           flags:
             --max-items=: Total number of items to return in the command's output.
             --next-token=: Token to specify where to start paginating.
             --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
+        - name: show
+          description: Show the custom domain details.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the domain under the profile which is unique globally.
+        - name: delete
+          description: Delete a custom domain.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the domain under the profile which is unique globally.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: update
+          description: Update a custom domain within the specified profile.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -71,6 +110,7 @@ commands:
                     - "n"
                     - "0"
         - name: create
+          description: Create a custom domain within the specified profile.
           flags:
             --azure-dns-zone=: ID of the Azure DNS zone.
             --certificate-type=: Defines the source of the SSL certificate.
@@ -104,42 +144,8 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the domain under the profile which is unique globally.
-        - name: delete
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the domain under the profile which is unique globally.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: regenerate-validation-token
+          description: Regenerate the domain validation token to restart the validation process.
           flags:
             --custom-domain-name=: Name of the domain under the profile which is unique globally.
             --ids=:
@@ -165,6 +171,7 @@ commands:
                     - "n"
                     - "0"
         - name: wait
+          description: Place the CLI in a waiting state until a condition of the custom domain is met.
           flags:
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
@@ -182,32 +189,16 @@ commands:
             -n, --name=: Name of the domain under the profile which is unique globally.
     - name: endpoint
       commands:
-        - name: wait
+        - name: list
+          description: List all the endpoints within the specified profile.
           flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
+            -g, --resource-group=!: Name of resource group.
         - name: update
+          description: Update an endpoint within the specified profile.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -262,7 +253,83 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: wait
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
+        - name: delete
+          description: Delete an endpoint within the specified profile.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: purge
+          description: Removes cached contents from Azure Front Door.
+          flags:
+            --content-paths=!:
+                description: The path to the content to be purged.
+                nargs: -1
+            --domains=:
+                description: List of domains.
+                nargs: -1
+            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: create
+          description: Creates an endpoint within the specified profile.
           flags:
             --enabled-state=: Whether to enable use of this rule.
             --name-reuse-scope=: Indicates the endpoint name reuse scope.
@@ -297,89 +364,23 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: delete
+        - name: show
+          description: Show details of an endpoint within the specified profile.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
                 nargs: -1
             --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the endpoint under the profile which is unique globally.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: purge
-          flags:
-            --content-paths=!:
-                description: The path to the content to be purged.
-                nargs: -1
-            --domains=:
-                description: List of domains.
-                nargs: -1
-            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
     - name: log-analytic
       commands:
-        - name: ranking
+        - name: location
           commands:
             - name: list
               flags:
-                --custom-domains=:
-                    description: The domains to be included.
-                    nargs: -1
-                --date-time-begin=!: The start datetime.
-                --date-time-end=!: The end datetime.
-                --max-ranking=!: The maximum number of rows to return based on the ranking.
-                --metrics=!:
-                    description: Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
                 --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-                --rankings=!:
-                    description: Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
         - name: metric
@@ -416,11 +417,23 @@ commands:
                         - P1D
                         - PT1H
                         - PT5M
-        - name: location
+        - name: ranking
           commands:
             - name: list
               flags:
+                --custom-domains=:
+                    description: The domains to be included.
+                    nargs: -1
+                --date-time-begin=!: The start datetime.
+                --date-time-end=!: The end datetime.
+                --max-ranking=!: The maximum number of rows to return based on the ranking.
+                --metrics=!:
+                    description: Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
                 --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+                --rankings=!:
+                    description: Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
         - name: resource
@@ -432,160 +445,8 @@ commands:
                 -g, --resource-group=!: Name of resource group.
     - name: origin
       commands:
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --origin-group-name=!: Name of the origin group which is unique within the profile.
-            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: update
-          flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --enable-private-link=:
-                description: Indicates whether private link is enabled on that origin.
-                nargs: -1
-            --enabled-state=: Whether to enable health probes to be made against backends defined under backendPools.
-            --enforce-certificate-name-check=:
-                description: Whether to enable certificate name check at origin level
-                nargs: -1
-            --force-string=:
-                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                nargs: -1
-            --host-name=: The address of the origin.
-            --http-port=: The value of the HTTP port.
-            --https-port=: The value of the HTTPS port.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --origin-group-name=: Name of the origin group which is unique within the profile.
-            --origin-host-header=: The host header value sent to the origin with each request.
-            --priority=: Priority of origin in given origin group for load balancing.
-            --private-link-location=: The location of origin that will be connected to using the private link.
-            --private-link-request-message=: The message that is shown to the approver of the private link request.
-            --private-link-resource=: The resource ID of the origin that will be connected to using the private link.
-            --private-link-sub-resource-type=: The sub-resource type of the origin that will be connected to using the private link.You can use "az network private-link-resource list" to obtain the supported sub-resource types.
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --weight=: Weight of the origin in given origin group for load balancing.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin which is unique within the profile.
-          completion:
-            flag:
-                enable-private-link:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                enabled-state:
-                    - Disabled
-                    - Enabled
-                enforce-certificate-name-check:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                force-string:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: delete
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --origin-group-name=: Name of the origin group which is unique within the profile.
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin which is unique within the profile.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --origin-group-name=: Name of the origin group which is unique within the profile.
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin which is unique within the profile.
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --origin-group-name=: Name of the origin group which is unique within the profile.
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin which is unique within the profile.
         - name: create
+          description: Create an AFD origin.
           flags:
             --enable-private-link=:
                 description: Indicates whether private link is enabled on that origin.
@@ -650,9 +511,173 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: update
+          description: Update the settings of the specified AFD origin.
+          flags:
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --enable-private-link=:
+                description: Indicates whether private link is enabled on that origin.
+                nargs: -1
+            --enabled-state=: Whether to enable health probes to be made against backends defined under backendPools.
+            --enforce-certificate-name-check=:
+                description: Whether to enable certificate name check at origin level
+                nargs: -1
+            --force-string=:
+                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                nargs: -1
+            --host-name=: The address of the origin.
+            --http-port=: The value of the HTTP port.
+            --https-port=: The value of the HTTPS port.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --origin-group-name=: Name of the origin group which is unique within the profile.
+            --origin-host-header=: The host header value sent to the origin with each request.
+            --priority=: Priority of origin in given origin group for load balancing.
+            --private-link-location=: The location of origin that will be connected to using the private link.
+            --private-link-request-message=: The message that is shown to the approver of the private link request.
+            --private-link-resource=: The resource ID of the origin that will be connected to using the private link.
+            --private-link-sub-resource-type=: The sub-resource type of the origin that will be connected to using the private link.You can use "az network private-link-resource list" to obtain the supported sub-resource types.
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --weight=: Weight of the origin in given origin group for load balancing.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin which is unique within the profile.
+          completion:
+            flag:
+                enable-private-link:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                enabled-state:
+                    - Disabled
+                    - Enabled
+                enforce-certificate-name-check:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                force-string:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: delete
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --origin-group-name=: Name of the origin group which is unique within the profile.
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin which is unique within the profile.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: show
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --origin-group-name=: Name of the origin group which is unique within the profile.
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin which is unique within the profile.
+        - name: wait
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --origin-group-name=: Name of the origin group which is unique within the profile.
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin which is unique within the profile.
+        - name: list
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --origin-group-name=!: Name of the origin group which is unique within the profile.
+            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
     - name: origin-group
       commands:
+        - name: show
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin group which is unique within the endpoint.
         - name: delete
+          description: Deletes an existing origin group within the specified profile.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -678,32 +703,8 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin group which is unique within the endpoint.
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin group which is unique within the endpoint.
         - name: create
+          description: Creates a new origin group within the specified profile.
           flags:
             --additional-latency-in-milliseconds=: The additional latency in milliseconds for probes to fall into the lowest latency bucket
             --enable-health-probe=:
@@ -759,14 +760,8 @@ commands:
                 session-affinity-state:
                     - Disabled
                     - Enabled
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: update
+          description: Updates an existing origin group within the specified profile.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -848,29 +843,33 @@ commands:
                 session-affinity-state:
                     - Disabled
                     - Enabled
-    - name: profile
-      commands:
-        - name: log-scrubbing
-          commands:
-            - name: show
-              flags:
-                --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-        - name: usage
+        - name: list
           flags:
             --max-items=: Total number of items to return in the command's output.
             --next-token=: Token to specify where to start paginating.
             --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-        - name: list
+        - name: wait
           flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin group which is unique within the endpoint.
+    - name: profile
+      commands:
         - name: delete
+          description: Delete an AFD profile.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -894,7 +893,54 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: usage
+          description: List resource usage within the specific AFD profile.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: show
+          description: Show details of an AFD profile.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
+        - name: wait
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
+        - name: list
+          description: List AFD profiles.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: log-scrubbing
+          commands:
+            - name: show
+              flags:
+                --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
         - name: update
+          description: Update an AFD profile.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -960,30 +1006,8 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
         - name: create
+          description: Create a new AFD profile.
           flags:
             --identity-type=: Type of managed service identity (where both SystemAssigned and UserAssigned types are allowed).
             --identity=:
@@ -1040,122 +1064,19 @@ commands:
                     - Standard_Verizon
     - name: route
       commands:
-        - name: update
+        - name: show
+          description: Show route details.
           flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --content-types-to-compress=:
-                description: List of content types on which compression applies.
-                nargs: -1
-            --custom-domains=:
-                description: Custom domains referenced by this endpoint.
-                nargs: -1
-            --enable-caching=:
-                description: Indicates whether caching is enabled on that route.
-                nargs: -1
-            --enable-compression=:
-                description: Indicates whether content compression is enabled on AzureFrontDoor.
-                nargs: -1
-            --enabled-state=: Whether to enable use of this rule.
             --endpoint-name=: Name of the endpoint under the profile which is unique globally.
-            --force-string=:
-                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                nargs: -1
-            --forwarding-protocol=: Protocol this rule will use when forwarding traffic to backends.
-            --https-redirect=: Whether to automatically redirect HTTP traffic to HTTPS traffic.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --link-to-default-domain=: whether this route will be linked to the default endpoint domain.
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --origin-group=: Name or ID of the origin group to be associated with.
-            --origin-path=: A directory path on the origin that AzureFrontDoor can use to retrieve content from, e.g. contoso.cloudapp.net/originpath.
-            --patterns-to-match=:
-                description: The route patterns of the rule.
-                nargs: -1
             --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --query-parameters=:
-                description: Query parameters to include or exclude.
-                nargs: -1
-            --query-string-caching-behavior=: Defines how Frontdoor caches requests that include query strings.You can ignore any query strings when caching, ignore specific query strings,cache every request with a unique URL, or cache specific query strings
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --rule-sets=:
-                description: Collection of ID or name of rule set referenced by the route.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
             --subscription=: Name or ID of subscription.
-            --supported-protocols=:
-                description: List of supported protocols for this route.
-                nargs: -1
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the routing rule.
-          completion:
-            flag:
-                enable-caching:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                enable-compression:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                enabled-state:
-                    - Disabled
-                    - Enabled
-                force-string:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                forwarding-protocol:
-                    - HttpOnly
-                    - HttpsOnly
-                    - MatchRequest
-                https-redirect:
-                    - Disabled
-                    - Enabled
-                link-to-default-domain:
-                    - Disabled
-                    - Enabled
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: list
+          description: List all the routes within the specified endpoint.
           flags:
             --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
             --max-items=: Total number of items to return in the command's output.
@@ -1163,44 +1084,8 @@ commands:
             --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-        - name: delete
-          flags:
-            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the routing rule.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: show
-          flags:
-            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the routing rule.
         - name: create
+          description: Creates a new route within the specified endpoint.
           flags:
             --content-types-to-compress=:
                 description: List of content types on which compression applies.
@@ -1306,10 +1191,10 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the routing rule.
-    - name: rule
-      commands:
         - name: delete
+          description: Delete an existing route within the specified endpoint.
           flags:
+            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -1317,10 +1202,9 @@ commands:
                 description: Do not wait for the long-running operation to finish.
                 nargs: -1
             --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --rule-set-name=: Name of the rule set under the profile.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the delivery rule which is unique within the endpoint.
+            -n, --name=: Name of the routing rule.
             -y, --yes=: Do not prompt for confirmation.
           completion:
             flag:
@@ -1335,149 +1219,125 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: show
+        - name: update
+          description: Update an existing route within the specified endpoint.
           flags:
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --content-types-to-compress=:
+                description: List of content types on which compression applies.
+                nargs: -1
+            --custom-domains=:
+                description: Custom domains referenced by this endpoint.
+                nargs: -1
+            --enable-caching=:
+                description: Indicates whether caching is enabled on that route.
+                nargs: -1
+            --enable-compression=:
+                description: Indicates whether content compression is enabled on AzureFrontDoor.
+                nargs: -1
+            --enabled-state=: Whether to enable use of this rule.
+            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
+            --force-string=:
+                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                nargs: -1
+            --forwarding-protocol=: Protocol this rule will use when forwarding traffic to backends.
+            --https-redirect=: Whether to automatically redirect HTTP traffic to HTTPS traffic.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --link-to-default-domain=: whether this route will be linked to the default endpoint domain.
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --origin-group=: Name or ID of the origin group to be associated with.
+            --origin-path=: A directory path on the origin that AzureFrontDoor can use to retrieve content from, e.g. contoso.cloudapp.net/originpath.
+            --patterns-to-match=:
+                description: The route patterns of the rule.
+                nargs: -1
             --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --rule-set-name=: Name of the rule set under the profile.
+            --query-parameters=:
+                description: Query parameters to include or exclude.
+                nargs: -1
+            --query-string-caching-behavior=: Defines how Frontdoor caches requests that include query strings.You can ignore any query strings when caching, ignore specific query strings,cache every request with a unique URL, or cache specific query strings
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --rule-sets=:
+                description: Collection of ID or name of rule set referenced by the route.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
             --subscription=: Name or ID of subscription.
+            --supported-protocols=:
+                description: List of supported protocols for this route.
+                nargs: -1
             -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the delivery rule which is unique within the endpoint.
+            -n, --name=: Name of the routing rule.
+          completion:
+            flag:
+                enable-caching:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                enable-compression:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                enabled-state:
+                    - Disabled
+                    - Enabled
+                force-string:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                forwarding-protocol:
+                    - HttpOnly
+                    - HttpsOnly
+                    - MatchRequest
+                https-redirect:
+                    - Disabled
+                    - Enabled
+                link-to-default-domain:
+                    - Disabled
+                    - Enabled
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+    - name: rule
+      commands:
         - name: action
-          commands:
-            - name: remove
-              flags:
-                --actions=:
-                    description: A list of actions that are executed when all the conditions of a rule are satisfied.
-                    nargs: -1
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --conditions=:
-                    description: A list of conditions that must be matched for the actions to be executed  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --match-processing-behavior=: If this rule is a match should the rules engine continue running the remaining rules or stop.
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --order=: The order in which the rules are applied for the endpoint.
-                --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --rule-set-name=: Name of the rule set under the profile.
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the delivery rule which is unique within the endpoint.
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    match-processing-behavior:
-                        - Continue
-                        - Stop
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: list
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-                --rule-set-name=: Name of the rule set under the profile.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the delivery rule which is unique within the endpoint.
-            - name: add
-              flags:
-                --actions=:
-                    description: A list of actions that are executed when all the conditions of a rule are satisfied.
-                    nargs: -1
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --conditions=:
-                    description: A list of conditions that must be matched for the actions to be executed  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --match-processing-behavior=: If this rule is a match should the rules engine continue running the remaining rules or stop.
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --order=: The order in which the rules are applied for the endpoint.
-                --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --rule-set-name=: Name of the rule set under the profile.
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the delivery rule which is unique within the endpoint.
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    match-processing-behavior:
-                        - Continue
-                        - Stop
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-        - name: condition
           commands:
             - name: add
               flags:
@@ -1617,83 +1477,138 @@ commands:
             --rule-set-name=!: Name of the rule set under the profile.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --rule-set-name=: Name of the rule set under the profile.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the delivery rule which is unique within the endpoint.
-        - name: update
-          flags:
-            --actions=:
-                description: A list of actions that are executed when all the conditions of a rule are satisfied.
-                nargs: -1
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --conditions=:
-                description: A list of conditions that must be matched for the actions to be executed  Support shorthand-syntax, json-file and yaml-file.
-                nargs: -1
-            --force-string=:
-                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --match-processing-behavior=: If this rule is a match should the rules engine continue running the remaining rules or stop.
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --order=: The order in which the rules are applied for the endpoint.
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --rule-set-name=: Name of the rule set under the profile.
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the delivery rule which is unique within the endpoint.
-          completion:
-            flag:
-                force-string:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                match-processing-behavior:
-                    - Continue
-                    - Stop
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
+        - name: condition
+          commands:
+            - name: add
+              flags:
+                --actions=:
+                    description: A list of actions that are executed when all the conditions of a rule are satisfied.
+                    nargs: -1
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --conditions=:
+                    description: A list of conditions that must be matched for the actions to be executed  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --match-processing-behavior=: If this rule is a match should the rules engine continue running the remaining rules or stop.
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --order=: The order in which the rules are applied for the endpoint.
+                --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --rule-set-name=: Name of the rule set under the profile.
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the delivery rule which is unique within the endpoint.
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    match-processing-behavior:
+                        - Continue
+                        - Stop
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: list
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+                --rule-set-name=: Name of the rule set under the profile.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the delivery rule which is unique within the endpoint.
+            - name: remove
+              flags:
+                --actions=:
+                    description: A list of actions that are executed when all the conditions of a rule are satisfied.
+                    nargs: -1
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --conditions=:
+                    description: A list of conditions that must be matched for the actions to be executed  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --match-processing-behavior=: If this rule is a match should the rules engine continue running the remaining rules or stop.
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --order=: The order in which the rules are applied for the endpoint.
+                --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --rule-set-name=: Name of the rule set under the profile.
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the delivery rule which is unique within the endpoint.
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    match-processing-behavior:
+                        - Continue
+                        - Stop
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
         - name: create
           flags:
             --action-name=: 'The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/frontdoor/front-door-rules-engine-actions.'
@@ -1807,17 +1722,122 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-    - name: rule-set
-      commands:
+        - name: delete
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --rule-set-name=: Name of the rule set under the profile.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the delivery rule which is unique within the endpoint.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: update
+          flags:
+            --actions=:
+                description: A list of actions that are executed when all the conditions of a rule are satisfied.
+                nargs: -1
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --conditions=:
+                description: A list of conditions that must be matched for the actions to be executed  Support shorthand-syntax, json-file and yaml-file.
+                nargs: -1
+            --force-string=:
+                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --match-processing-behavior=: If this rule is a match should the rules engine continue running the remaining rules or stop.
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --order=: The order in which the rules are applied for the endpoint.
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --rule-set-name=: Name of the rule set under the profile.
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the delivery rule which is unique within the endpoint.
+          completion:
+            flag:
+                force-string:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                match-processing-behavior:
+                    - Continue
+                    - Stop
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: wait
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --rule-set-name=: Name of the rule set under the profile.
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the delivery rule which is unique within the endpoint.
         - name: show
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
             --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --rule-set-name=: Name of the rule set under the profile.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the rule set under the profile which is unique globally.
+            -n, --name=: Name of the delivery rule which is unique within the endpoint.
+    - name: rule-set
+      commands:
         - name: wait
           flags:
             --created=: wait until created with 'provisioningState' at 'Succeeded'
@@ -1834,7 +1854,15 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the rule set under the profile which is unique globally.
+        - name: create
+          description: Creates a new rule set under the specified profile.
+          flags:
+            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the rule set under the profile which is unique globally
         - name: delete
+          description: Delete the rule set.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1860,12 +1888,15 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: create
+        - name: show
           flags:
-            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the rule set under the profile which is unique globally
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the rule set under the profile which is unique globally.
         - name: list
           flags:
             --max-items=: Total number of items to return in the command's output.
@@ -1883,32 +1914,6 @@ commands:
             -g, --resource-group=!: Name of resource group.
     - name: secret
       commands:
-        - name: delete
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Secret under the profile.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: list
           flags:
             --max-items=: Total number of items to return in the command's output.
@@ -1916,61 +1921,8 @@ commands:
             --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Secret under the profile.
-        - name: create
-          flags:
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-            --secret-source=!: Resource ID of the Azure Key Vault certificate, expected format is like/subscriptions/sub1/resourceGroups/rg1/providers/Microsoft.KeyVault/vaults/vault1/secrets/cert1.
-            --secret-version=: Version of the certificate to be used.
-            --subscription=: Name or ID of subscription.
-            --use-latest-version=:
-                description: Whether to use the latest version for the certificate.
-                nargs: -1
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the Secret under the profile.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                use-latest-version:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: update
+          description: Update an existing secret within the specified profile.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -2043,8 +1995,45 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Secret under the profile.
-    - name: security-policy
-      commands:
+        - name: create
+          description: Creates a new secret within the specified profile.
+          flags:
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --secret-source=!: Resource ID of the Azure Key Vault certificate, expected format is like/subscriptions/sub1/resourceGroups/rg1/providers/Microsoft.KeyVault/vaults/vault1/secrets/cert1.
+            --secret-version=: Version of the certificate to be used.
+            --subscription=: Name or ID of subscription.
+            --use-latest-version=:
+                description: Whether to use the latest version for the certificate.
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the Secret under the profile.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                use-latest-version:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: delete
           flags:
             --ids=:
@@ -2056,7 +2045,7 @@ commands:
             --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the security policy under the profile.
+            -n, --name=: Name of the Secret under the profile.
             -y, --yes=: Do not prompt for confirmation.
           completion:
             flag:
@@ -2071,7 +2060,26 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: wait
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Secret under the profile.
+    - name: security-policy
+      commands:
         - name: create
+          description: Creates a new security policy within the specified profile.
           flags:
             --domains=!:
                 description: The domains to associate with the WAF policy.
@@ -2129,7 +2137,34 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the security policy under the profile.
+        - name: delete
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the security policy under the profile.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: update
+          description: Update an existing security policy within the specified profile.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -2183,28 +2218,6 @@ commands:
                     - "0"
     - name: waf-log-analytic
       commands:
-        - name: ranking
-          commands:
-            - name: list
-              flags:
-                --actions=:
-                    description: Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --date-time-begin=!: The start datetime.
-                --date-time-end=!: The end datetime.
-                --max-ranking=!: The maximum number of rows to return based on the ranking.
-                --metrics=!:
-                    description: Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
-                --rankings=!:
-                    description: Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --rule-types=:
-                    description: Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
         - name: metric
           commands:
             - name: list
@@ -2233,3 +2246,25 @@ commands:
                         - P1D
                         - PT1H
                         - PT5M
+        - name: ranking
+          commands:
+            - name: list
+              flags:
+                --actions=:
+                    description: Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --date-time-begin=!: The start datetime.
+                --date-time-end=!: The end datetime.
+                --max-ranking=!: The maximum number of rows to return based on the ranking.
+                --metrics=!:
+                    description: Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --profile-name=!: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+                --rankings=!:
+                    description: Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --rule-types=:
+                    description: Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.

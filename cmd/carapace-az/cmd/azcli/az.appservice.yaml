@@ -1,10 +1,20 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: appservice
-description: appservice
+description: Manage App Service plans.
 commands:
     - name: ase
       commands:
+        - name: list-addresses
+          description: List VIPs associated with an app service environment v2.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
         - name: update
+          description: Update app service environment.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -39,38 +49,19 @@ commands:
                     - I1
                     - I2
                     - I3
-        - name: list-addresses
+        - name: upgrade
+          description: Upgrade app service environment v3.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the app service environment
-        - name: send-test-notification
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
-        - name: list
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
+            -y, --yes=: Do not prompt for confirmation.
         - name: create-inbound-services
+          description: Private DNS Zone for Internal (ILB) App Service Environments.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -88,7 +79,34 @@ commands:
                 skip-dns:
                     - "true"
                     - "false"
+        - name: list
+          description: List app service environments.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: send-test-notification
+          description: Send a test upgrade notification in app service environment v3.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
+        - name: list-plans
+          description: List app service plans associated with an app service environment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
         - name: delete
+          description: Delete app service environment.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -99,6 +117,7 @@ commands:
             -n, --name=!: Name of the app service environment
             -y, --yes=: Do not prompt for confirmation.
         - name: create
+          description: Create app service environment.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -166,17 +185,8 @@ commands:
                 zone-redundant:
                     - "true"
                     - "false"
-        - name: upgrade
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
-            -y, --yes=: Do not prompt for confirmation.
-        - name: list-plans
+        - name: show
+          description: Show details of an app service environment.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -187,6 +197,7 @@ commands:
     - name: domain
       commands:
         - name: show-terms
+          description: Show the legal terms for purchasing and creating a custom domain.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -194,6 +205,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --hostname=!: Name of the custom domain
         - name: create
+          description: Create and purchase a custom domain.
           flags:
             --accept-terms=: By using this flag, you are accepting the conditions shown using the --show-hostname-purchase-terms flag.
             --cmd=:
@@ -212,6 +224,7 @@ commands:
     - name: hybrid-connection
       commands:
         - name: set-key
+          description: set the key that all apps in an appservice plan use to connect to the hybrid-connections in that appservice plan
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -223,6 +236,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
     - name: list-locations
+      description: List regions where a plan sku is available.
       flags:
         --cmd=:
             description: ==SUPPRESS==
@@ -275,14 +289,18 @@ commands:
                 - WS3
     - name: plan
       commands:
-        - name: list
+        - name: delete
+          description: Delete an App Service plan.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
+            --ids=:
+                description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the app service plan
+            -y, --yes=: Do not prompt for confirmation.
         - name: create
+          description: Create an app service plan.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -344,28 +362,8 @@ commands:
                     - WS1
                     - WS2
                     - WS3
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the app service plan
-        - name: delete
-          description: Delete an App Service plan.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the app service plan
-            -y, --yes=: Do not prompt for confirmation.
         - name: update
+          description: Update an app service plan.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -438,9 +436,30 @@ commands:
                     - WS1
                     - WS2
                     - WS3
+        - name: show
+          description: Get the app service plans for a resource group or a set of resource groups.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the app service plan
+        - name: list
+          description: List app service plans.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
     - name: vnet-integration
       commands:
         - name: list
+          description: list the virtual network integrations used in an appservice plan
           flags:
             --cmd=:
                 description: ==SUPPRESS==

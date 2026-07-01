@@ -2,7 +2,9 @@
 """Dump the Azure CLI command table as JSON for carapace spec generation.
 
 Uses Knack's command_table API to extract all commands, arguments,
-and command groups with rich metadata.
+and command groups with rich metadata. Descriptions are sourced from
+the knack help_files registry which contains YAML help text authored
+in the az CLI's _help.py modules.
 """
 import json
 import math
@@ -18,7 +20,37 @@ def sanitize_default(obj):
     return str(obj)
 
 
-def serialize_argument(name, arg):
+def parse_help_entry(entry):
+    """Parse a knack help YAML string into a dict."""
+    if not entry:
+        return {}
+    try:
+        import yaml
+        if isinstance(entry, str):
+            return yaml.safe_load(entry) or {}
+        return entry if isinstance(entry, dict) else {}
+    except Exception:
+        return {}
+
+
+def get_help(helps, key):
+    """Get parsed help for a command or group name."""
+    return parse_help_entry(helps.get(key))
+
+
+def get_param_help(helps, cmd_name, options):
+    """Get help text for a parameter from the command's help entry."""
+    cmd_help = get_help(helps, cmd_name)
+    params = cmd_help.get('parameters', [])
+    for param in params:
+        param_name = param.get('name', '')
+        for opt in options:
+            if param_name and param_name in [opt, opt.lstrip('-')]:
+                return param.get('short-summary', '') or param.get('long-summary', '')
+    return ''
+
+
+def serialize_argument(name, arg, helps, cmd_name):
     settings = arg.type.settings
     options = settings.get('options_list', [])
     if isinstance(options, str):
@@ -27,6 +59,9 @@ def serialize_argument(name, arg):
     help_val = settings.get('help', '')
     if not isinstance(help_val, str):
         help_val = str(help_val) if help_val else ''
+
+    if not help_val:
+        help_val = get_param_help(helps, cmd_name, options)
 
     choices = settings.get('choices')
     if callable(choices):
@@ -58,7 +93,7 @@ def serialize_argument(name, arg):
     }
 
 
-def serialize_command(name, cmd):
+def serialize_command(name, cmd, helps):
     description = cmd.description
     if callable(description):
         try:
@@ -66,9 +101,13 @@ def serialize_command(name, cmd):
         except Exception:
             description = ''
 
+    if not description:
+        help_data = get_help(helps, name)
+        description = help_data.get('short-summary', '') or help_data.get('long-summary', '')
+
     arguments = []
     for arg_name, arg in cmd.arguments.items():
-        arguments.append(serialize_argument(arg_name, arg))
+        arguments.append(serialize_argument(arg_name, arg, helps, name))
 
     return {
         'description': description or '',
@@ -77,9 +116,10 @@ def serialize_command(name, cmd):
     }
 
 
-def serialize_group(name, group):
+def serialize_group(name, group, helps):
+    help_data = get_help(helps, name)
     return {
-        'help': getattr(group, 'group_help', '') or '',
+        'help': help_data.get('short-summary', '') or '',
         'groups': {},
     }
 
@@ -104,17 +144,19 @@ def main():
 
     create_invoker_and_load_cmds_and_args(cli)
 
+    from knack.help_files import helps
+
     invoker = cli.invocation
     command_table = invoker.commands_loader.command_table
     command_group_table = invoker.commands_loader.command_group_table
 
     commands = {}
     for name, cmd in command_table.items():
-        commands[name] = serialize_command(name, cmd)
+        commands[name] = serialize_command(name, cmd, helps)
 
     groups = {}
     for name, group in command_group_table.items():
-        groups[name] = serialize_group(name, group)
+        groups[name] = serialize_group(name, group, helps)
 
     try:
         from azure.cli.core import __version__ as az_version

@@ -1,13 +1,9 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: monitor
-description: monitor
+description: Manage the Azure Monitor Service.
 commands:
     - name: account
       commands:
-        - name: list
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: update
           flags:
             --add=:
@@ -44,6 +40,14 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: show
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the Azure Monitor workspace.
         - name: create
           flags:
             --subscription=: Name or ID of subscription.
@@ -53,14 +57,10 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -l, --location=: The geo-location where the resource lives  When not specified, the location of the resource group will be used.
             -n, --name=!: The name of the Azure Monitor workspace.
-        - name: show
+        - name: list
           flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Azure Monitor workspace.
         - name: delete
           flags:
             --ids=:
@@ -111,10 +111,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the action group.
-        - name: list
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: show
           flags:
             --ids=:
@@ -123,46 +119,10 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the action group.
-        - name: wait
+        - name: list
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the action group.
-        - name: create
-          flags:
-            --short-name=: The short name of the action group.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'Space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -a, --actions=:
-                description: Add receivers to the action group during the creation.
-                nargs: -1
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=: Location.
-            -n, --name=!: The name of the action group.
-        - name: enable-receiver
-          flags:
-            --action-group=: The name of the action group.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the receiver to resubscribe.
         - name: test-notifications
           commands:
             - name: create
@@ -190,6 +150,25 @@ commands:
                         - "no"
                         - "n"
                         - "0"
+        - name: wait
+          description: Place the CLI in a waiting state.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the action group.
         - name: update
           flags:
             --add=:
@@ -233,12 +212,198 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: create
+          flags:
+            --short-name=: The short name of the action group.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'Space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -a, --actions=:
+                description: Add receivers to the action group during the creation.
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: Location.
+            -n, --name=!: The name of the action group.
+        - name: enable-receiver
+          flags:
+            --action-group=: The name of the action group.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the receiver to resubscribe.
     - name: activity-log
       commands:
         - name: alert
           commands:
+            - name: scope
+              commands:
+                - name: remove
+                  flags:
+                    --add=:
+                        description: Add an object to a list of objects by specifying a path and key value pairs.
+                        nargs: -1
+                    --force-string=:
+                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --remove=:
+                        description: Remove a property or an element from a list.
+                        nargs: -1
+                    --set=:
+                        description: Update an object by specifying a property path and value to set.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the activity log alert.
+                    -s, --scope=!:
+                        description: The scopes to remove.
+                        nargs: -1
+                  completion:
+                    flag:
+                        force-string:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: add
+                  flags:
+                    --add=:
+                        description: Add an object to a list of objects by specifying a path and key value pairs.
+                        nargs: -1
+                    --force-string=:
+                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --remove=:
+                        description: Remove a property or an element from a list.
+                        nargs: -1
+                    --reset=:
+                        description: Remove all the existing action groups before add new conditions.
+                        nargs: -1
+                    --set=:
+                        description: Update an object by specifying a property path and value to set.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the activity log alert.
+                    -s, --scope=!:
+                        description: List of scopes to add.
+                        nargs: -1
+                  completion:
+                    flag:
+                        force-string:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                        reset:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+            - name: create
+              flags:
+                --all-of=:
+                    description: The list of Activity Log Alert rule conditions.
+                    nargs: -1
+                --description=: A description of this Activity Log Alert rule.
+                --disable=:
+                    description: Disable the activity log alert rule after it is created.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: The tags of the resource.
+                    nargs: -1
+                -a, --action-group=:
+                    description: Add an action group.
+                    nargs: -1
+                -c, --condition=:
+                    description: The condition that will cause the alert rule to activate.
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the activity log alert.
+                -s, --scope=:
+                    description: A list of strings that will be used as prefixes.
+                    nargs: -1
+                -w, --webhook-properties=:
+                    description: Space-separated webhook properties in 'key[=value]' format.
+                    nargs: -1
+              completion:
+                flag:
+                    disable:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
             - name: action-group
               commands:
+                - name: remove
+                  flags:
+                    --add=:
+                        description: Add an object to a list of objects by specifying a path and key value pairs.
+                        nargs: -1
+                    --force-string=:
+                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --remove=:
+                        description: Remove a property or an element from a list.
+                        nargs: -1
+                    --set=:
+                        description: Update an object by specifying a property path and value to set.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --action-group=!:
+                        description: The names or the resource ids of the action groups to be added.
+                        nargs: -1
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the activity log alert.
+                  completion:
+                    flag:
+                        force-string:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
                 - name: add
                   flags:
                     --add=:
@@ -296,130 +461,6 @@ commands:
                             - "n"
                             - "0"
                         strict:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: remove
-                  flags:
-                    --add=:
-                        description: Add an object to a list of objects by specifying a path and key value pairs.
-                        nargs: -1
-                    --force-string=:
-                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --remove=:
-                        description: Remove a property or an element from a list.
-                        nargs: -1
-                    --set=:
-                        description: Update an object by specifying a property path and value to set.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --action-group=!:
-                        description: The names or the resource ids of the action groups to be added.
-                        nargs: -1
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the activity log alert.
-                  completion:
-                    flag:
-                        force-string:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-            - name: scope
-              commands:
-                - name: add
-                  flags:
-                    --add=:
-                        description: Add an object to a list of objects by specifying a path and key value pairs.
-                        nargs: -1
-                    --force-string=:
-                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --remove=:
-                        description: Remove a property or an element from a list.
-                        nargs: -1
-                    --reset=:
-                        description: Remove all the existing action groups before add new conditions.
-                        nargs: -1
-                    --set=:
-                        description: Update an object by specifying a property path and value to set.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the activity log alert.
-                    -s, --scope=!:
-                        description: List of scopes to add.
-                        nargs: -1
-                  completion:
-                    flag:
-                        force-string:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                        reset:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: remove
-                  flags:
-                    --add=:
-                        description: Add an object to a list of objects by specifying a path and key value pairs.
-                        nargs: -1
-                    --force-string=:
-                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --remove=:
-                        description: Remove a property or an element from a list.
-                        nargs: -1
-                    --set=:
-                        description: Update an object by specifying a property path and value to set.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the activity log alert.
-                    -s, --scope=!:
-                        description: The scopes to remove.
-                        nargs: -1
-                  completion:
-                    flag:
-                        force-string:
                             - "true"
                             - t
                             - "yes"
@@ -495,47 +536,8 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: create
-              flags:
-                --all-of=:
-                    description: The list of Activity Log Alert rule conditions.
-                    nargs: -1
-                --description=: A description of this Activity Log Alert rule.
-                --disable=:
-                    description: Disable the activity log alert rule after it is created.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: The tags of the resource.
-                    nargs: -1
-                -a, --action-group=:
-                    description: Add an action group.
-                    nargs: -1
-                -c, --condition=:
-                    description: The condition that will cause the alert rule to activate.
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the activity log alert.
-                -s, --scope=:
-                    description: A list of strings that will be used as prefixes.
-                    nargs: -1
-                -w, --webhook-properties=:
-                    description: Space-separated webhook properties in 'key[=value]' format.
-                    nargs: -1
-              completion:
-                flag:
-                    disable:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
             - name: list
+              description: List activity log alert rules under a resource group or the current subscription.
               flags:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
@@ -547,29 +549,28 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the activity log alert.
-        - name: list-categories
-          flags:
-            --subscription=: Name or ID of subscription.
         - name: list
+          description: List and query activity log events.
           flags:
-            --caller=: ""
+            --caller=: Caller to query for, such as an e-mail address or service principal ID.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --correlation-id=: ""
+            --correlation-id=: Correlation ID to query.
             --end-time=:
                 description: End time of the query.
                 nargs: -1
-            --max-events=: ""
-            --namespace=: ""
-            --offset=: ""
-            --resource-id=: ""
+            --max-events=: Maximum number of records to return.
+            --namespace=: Resource provider namespace.
+            --offset=: 'Time offset of the query range, in ##d##h format.'
+            --resource-id=: ARM ID of a resource.
             --select=:
+                description: Space-separated list of properties to return.
                 nargs: -1
             --start-time=:
                 description: Start time of the query.
                 nargs: -1
-            --status=: ""
+            --status=: 'Status to query for (ex: Failed)'
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
           completion:
@@ -599,14 +600,11 @@ commands:
                     - submissionTimestamp
                     - subscriptionId
                     - tenantId
+        - name: list-categories
+          flags:
+            --subscription=: Name or ID of subscription.
     - name: autoscale
       commands:
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: delete
           flags:
             --ids=:
@@ -615,84 +613,10 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The autoscale setting name.
-        - name: rule
-          commands:
-            - name: list
-              flags:
-                --autoscale-name=!: Name of the autoscale settings.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --profile-name=: Name of the autoscale profile.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: copy
-              flags:
-                --autoscale-name=!: Name of the autoscale settings.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --dest-schedule=!: Name of the profile to copy rules to.
-                --index=!:
-                    description: Space-separated list of rule indices to copy, or '*' to copy all rules.
-                    nargs: -1
-                --source-schedule=: Name of the profile to copy rules from.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: delete
-              flags:
-                --autoscale-name=!: Name of the autoscale settings.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --index=!:
-                    description: Space-separated list of rule indices to remove, or '*' to clear all rules.
-                    nargs: -1
-                --profile-name=: Name of the autoscale profile.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: create
-              flags:
-                --autoscale-name=!: Name of the autoscale settings.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --condition=!:
-                    description: Condition on which to scale.
-                    nargs: -1
-                --cooldown=: The number of minutes that must elapse before another scaling event can occur.
-                --profile-name=: Name of the autoscale profile.
-                --resource-namespace=: Target resource provider namespace.
-                --resource-parent=: Target resource parent path, if applicable.
-                --resource-type=: Target resource type.
-                --resource=: Name or ID of the target resource.
-                --scale=!:
-                    description: The direction and amount to scale.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --timegrain=:
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
         - name: profile
           commands:
-            - name: list
-              flags:
-                --autoscale-name=!: Name of the autoscale settings.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: delete
-              flags:
-                --autoscale-name=!: Name of the autoscale settings.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the autoscale profile.
             - name: create
+              description: Create a fixed or recurring autoscale profile.
               flags:
                 --autoscale-name=!: Name of the autoscale settings.
                 --cmd=:
@@ -709,12 +633,22 @@ commands:
                     description: Start time.
                     nargs: -1
                 --subscription=: Name or ID of subscription.
-                --timezone=!: ""
+                --timezone=!: Timezone name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Name of the autoscale profile.
                 -r, --recurrence=:
                     nargs: -1
+            - name: list
+              description: List autoscale profiles.
+              flags:
+                --autoscale-name=!: Name of the autoscale settings.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
             - name: list-timezones
+              description: Look up time zone information.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -723,6 +657,7 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -q, --search-query=: Query text to find.
             - name: show
+              description: Show details of an autoscale profile.
               flags:
                 --autoscale-name=!: Name of the autoscale settings.
                 --cmd=:
@@ -731,74 +666,16 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Name of the autoscale profile.
-        - name: create
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --count=!: The numer of instances to use.
-            --disabled=:
-                description: Create the autoscale settings in a disabled state.
-                nargs: -1
-            --email-administrator=:
-                description: Send email to subscription administrator on scaling.
-                nargs: -1
-            --email-coadministrators=:
-                description: Send email to subscription co-administrators on scaling.
-                nargs: -1
-            --max-count=: The maximum number of instances.
-            --min-count=: The minimum number of instances.
-            --resource-namespace=: Target resource provider namespace.
-            --resource-parent=: Target resource parent path, if applicable.
-            --resource-type=: Target resource type.
-            --resource=!: Name or ID of the target resource.
-            --scale-look-ahead-time=: The amount of time to specify by which instances are launched in advance.
-            --scale-mode=: The predictive autoscale mode
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -a, --action=:
-                nargs: -1
-            -g, --resource-group=: Name of resource group.
-            -l, --location=: Location.
-            -n, --name=: Name of the autoscale settings.
-          completion:
-            flag:
-                disabled:
-                    - "true"
-                    - "false"
-                email-administrator:
-                    - "true"
-                    - "false"
-                email-coadministrators:
-                    - "true"
-                    - "false"
-                scale-mode:
-                    - Disabled
-                    - ForecastOnly
-                    - Enabled
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The autoscale setting name.
-        - name: show-predictive-metric
-          flags:
-            --aggregation=!: The list of aggregation types (comma separated) to retrieve.
-            --autoscale-setting-name=: The autoscale setting name.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=!: The interval (i.e. timegrain) of the query.
-            --metric-name=!: The names of the metrics (comma separated) to retrieve.
-            --metric-namespace=!: Metric namespace to query metric definitions for.
-            --subscription=: Name or ID of subscription.
-            --timespan=!: The timespan of the query.
-            -g, --resource-group=: Name of resource group.
+            - name: delete
+              description: Delete an autoscale profile.
+              flags:
+                --autoscale-name=!: Name of the autoscale settings.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the autoscale profile.
         - name: update
           flags:
             --add=:
@@ -892,7 +769,146 @@ commands:
                     - Disabled
                     - Enabled
                     - ForecastOnly
+        - name: show
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The autoscale setting name.
+        - name: rule
+          commands:
+            - name: delete
+              description: Remove autoscale rules from a profile.
+              flags:
+                --autoscale-name=!: Name of the autoscale settings.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --index=!:
+                    description: Space-separated list of rule indices to remove, or '*' to clear all rules.
+                    nargs: -1
+                --profile-name=: Name of the autoscale profile.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: list
+              description: List autoscale rules for a profile.
+              flags:
+                --autoscale-name=!: Name of the autoscale settings.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --profile-name=: Name of the autoscale profile.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: copy
+              description: Copy autoscale rules from one profile to another.
+              flags:
+                --autoscale-name=!: Name of the autoscale settings.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --dest-schedule=!: Name of the profile to copy rules to.
+                --index=!:
+                    description: Space-separated list of rule indices to copy, or '*' to copy all rules.
+                    nargs: -1
+                --source-schedule=: Name of the profile to copy rules from.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: create
+              description: Add a new autoscale rule.
+              flags:
+                --autoscale-name=!: Name of the autoscale settings.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --condition=!:
+                    description: Condition on which to scale.
+                    nargs: -1
+                --cooldown=: The number of minutes that must elapse before another scaling event can occur.
+                --profile-name=: Name of the autoscale profile.
+                --resource-namespace=: Target resource provider namespace.
+                --resource-parent=: Target resource parent path, if applicable.
+                --resource-type=: Target resource type.
+                --resource=: Name or ID of the target resource.
+                --scale=!:
+                    description: The direction and amount to scale.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --timegrain=:
+                    description: The way metrics are polled across instances.
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+        - name: list
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: create
+          description: Create new autoscale settings.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --count=!: The numer of instances to use.
+            --disabled=:
+                description: Create the autoscale settings in a disabled state.
+                nargs: -1
+            --email-administrator=:
+                description: Send email to subscription administrator on scaling.
+                nargs: -1
+            --email-coadministrators=:
+                description: Send email to subscription co-administrators on scaling.
+                nargs: -1
+            --max-count=: The maximum number of instances.
+            --min-count=: The minimum number of instances.
+            --resource-namespace=: Target resource provider namespace.
+            --resource-parent=: Target resource parent path, if applicable.
+            --resource-type=: Target resource type.
+            --resource=!: Name or ID of the target resource.
+            --scale-look-ahead-time=: The amount of time to specify by which instances are launched in advance.
+            --scale-mode=: The predictive autoscale mode
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -a, --action=:
+                nargs: -1
+            -g, --resource-group=: Name of resource group.
+            -l, --location=: Location.
+            -n, --name=: Name of the autoscale settings.
+          completion:
+            flag:
+                disabled:
+                    - "true"
+                    - "false"
+                email-administrator:
+                    - "true"
+                    - "false"
+                email-coadministrators:
+                    - "true"
+                    - "false"
+                scale-mode:
+                    - Disabled
+                    - ForecastOnly
+                    - Enabled
+        - name: show-predictive-metric
+          flags:
+            --aggregation=!: The list of aggregation types (comma separated) to retrieve.
+            --autoscale-setting-name=: The autoscale setting name.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=!: The interval (i.e. timegrain) of the query.
+            --metric-name=!: The names of the metrics (comma separated) to retrieve.
+            --metric-namespace=!: Metric namespace to query metric definitions for.
+            --subscription=: Name or ID of subscription.
+            --timespan=!: The timespan of the query.
+            -g, --resource-group=: Name of resource group.
     - name: clone
+      description: Clone metrics alert rules from one resource to another resource.
       flags:
         --always-clone=: If this argument is applied, all monitor settings would be cloned instead of expanding its scope.
         --cmd=:
@@ -912,6 +928,14 @@ commands:
       commands:
         - name: subscription
           commands:
+            - name: delete
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -n, --name=: The name of the diagnostic setting.
+                -y, --yes=: Do not prompt for confirmation.
             - name: create
               flags:
                 --event-hub-auth-rule=: The resource Id for the event hub authorization rule.
@@ -925,14 +949,9 @@ commands:
                 --workspace=: The resource id of the log analytics workspace.
                 -l, --location=: Location of the resource
                 -n, --name=!: The name of the diagnostic setting.
-            - name: delete
+            - name: list
               flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -n, --name=: The name of the diagnostic setting.
-                -y, --yes=: Do not prompt for confirmation.
             - name: update
               flags:
                 --add=:
@@ -981,9 +1000,6 @@ commands:
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -n, --name=: The name of the diagnostic setting.
-            - name: list
-              flags:
-                --subscription=: Name or ID of subscription.
         - name: categories
           commands:
             - name: show
@@ -1003,32 +1019,6 @@ commands:
                 --resource=!: Name or ID of the target resource.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-        - name: show
-          flags:
-            --resource-namespace=: Target resource provider namespace.
-            --resource-parent=: Target resource parent path, if applicable.
-            --resource-type=: Target resource type.
-            --resource=!: Name or ID of the target resource.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the diagnostic setting.
-        - name: list
-          flags:
-            --resource-namespace=: Target resource provider namespace.
-            --resource-parent=: Target resource parent path, if applicable.
-            --resource-type=: Target resource type.
-            --resource=!: Name or ID of the target resource.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: delete
-          flags:
-            --resource-namespace=: Target resource provider namespace.
-            --resource-parent=: Target resource parent path, if applicable.
-            --resource-type=: Target resource type.
-            --resource=!: Name or ID of the target resource.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the diagnostic setting.
         - name: create
           flags:
             --event-hub-rule=: Name or ID of the event hub authorization rule.
@@ -1065,6 +1055,23 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: delete
+          flags:
+            --resource-namespace=: Target resource provider namespace.
+            --resource-parent=: Target resource parent path, if applicable.
+            --resource-type=: Target resource type.
+            --resource=!: Name or ID of the target resource.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the diagnostic setting.
+        - name: list
+          flags:
+            --resource-namespace=: Target resource provider namespace.
+            --resource-parent=: Target resource parent path, if applicable.
+            --resource-type=: Target resource type.
+            --resource=!: Name or ID of the target resource.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: update
           flags:
             --add=:
@@ -1112,200 +1119,23 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: show
+          flags:
+            --resource-namespace=: Target resource provider namespace.
+            --resource-parent=: Target resource parent path, if applicable.
+            --resource-type=: Target resource type.
+            --resource=!: Name or ID of the target resource.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the diagnostic setting.
     - name: log-analytics
       commands:
         - name: workspace
           commands:
-            - name: recover
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --workspace-name=!: Name of the Log Analytics Workspace.
-            - name: saved-search
-              commands:
-                - name: delete
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the saved search and it's unique in a given workspace.
-                    -y, --yes=: Do not prompt for confirmation.
-                - name: list
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=!: The name of the workspace.
-                    -g, --resource-group=!: Name of resource group.
-                - name: show
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the saved search and it's unique in a given workspace.
-                - name: update
-                  flags:
-                    --category=: The category of the saved search.
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --display-name=: Display name of the saved search.
-                    --func-alias=: Function Aliases are short names given to Saved Searches so they can be easily referenced in query.
-                    --func-param=: The optional function parameters if query serves as a function.
-                    --subscription=: Name or ID of subscription.
-                    --tags=:
-                        description: 'space-separated tags: key[=value] [key[=value] ...].'
-                        nargs: -1
-                    --workspace-name=!: Name of the Log Analytics Workspace.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Name of the saved search and it's unique in a given workspace.
-                    -q, --saved-query=: The query expression for the saved search.
-                - name: create
-                  flags:
-                    --category=!: The category of the saved search.
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --display-name=!: Display name of the saved search.
-                    --func-alias=: Function Aliases are short names given to Saved Searches so they can be easily referenced in query.
-                    --func-param=: The optional function parameters if query serves as a function.
-                    --subscription=: Name or ID of subscription.
-                    --tags=:
-                        description: 'space-separated tags: key[=value] [key[=value] ...].'
-                        nargs: -1
-                    --workspace-name=!: Name of the Log Analytics Workspace.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Name of the saved search and it's unique in a given workspace.
-                    -q, --saved-query=!: The query expression for the saved search.
-            - name: linked-storage
-              commands:
-                - name: delete
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --type=: Data source type for the linked storage account.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --workspace-name=: The name of the workspace.
-                    -y, --yes=: Do not prompt for confirmation.
-                  completion:
-                    flag:
-                        type:
-                            - Alerts
-                            - AzureWatson
-                            - CustomLogs
-                            - Ingestion
-                            - Query
-                - name: list
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --workspace-name=!: The name of the workspace.
-                - name: add
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --storage-accounts=!:
-                        description: List of Name or ID of Azure Storage Account.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --type=!: Data source type for the linked storage account.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --workspace-name=!: Name of the Log Analytics Workspace.
-                  completion:
-                    flag:
-                        type:
-                            - Alerts
-                            - AzureWatson
-                            - CustomLogs
-                            - Ingestion
-                            - Query
-                - name: show
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --type=: Data source type for the linked storage account.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --workspace-name=: The name of the workspace.
-                  completion:
-                    flag:
-                        type:
-                            - Alerts
-                            - AzureWatson
-                            - CustomLogs
-                            - Ingestion
-                            - Query
-                - name: remove
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --storage-accounts=!:
-                        description: List of Name or ID of Azure Storage Account.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --type=!: Data source type for the linked storage account.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --workspace-name=!: Name of the Log Analytics Workspace.
-                  completion:
-                    flag:
-                        type:
-                            - Alerts
-                            - AzureWatson
-                            - CustomLogs
-                            - Ingestion
-                            - Query
-                - name: create
-                  flags:
-                    --storage-accounts=!:
-                        description: List of Name or ID of Azure Storage Account.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --type=!: Data source type for the linked storage account.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --workspace-name=!: The name of the workspace.
-                  completion:
-                    flag:
-                        type:
-                            - Alerts
-                            - AzureWatson
-                            - CustomLogs
-                            - Ingestion
-                            - Query
             - name: table
               commands:
-                - name: restore
-                  commands:
-                    - name: create
-                      flags:
-                        --cmd=:
-                            description: ==SUPPRESS==
-                            nargs: -1
-                        --end-restore-time=!:
-                            description: Datetime format.
-                            nargs: -1
-                        --no-wait=: Do not wait for the long-running operation to finish.
-                        --restore-source-table=!: The table to restore data from.
-                        --start-restore-time=!:
-                            description: Datetime format.
-                            nargs: -1
-                        --subscription=: Name or ID of subscription.
-                        --workspace-name=!: Name of the Log Analytics Workspace.
-                        -g, --resource-group=!: Name of resource group.
-                        -n, --name=!: Name of the table.
                 - name: create
+                  description: Create a Log Analytics workspace microsoft/custom log table.
                   flags:
                     --cmd=:
                         description: ==SUPPRESS==
@@ -1327,9 +1157,78 @@ commands:
                         plan:
                             - Basic
                             - Analytics
+                - name: wait
+                  flags:
+                    --created=: wait until created with 'provisioningState' at 'Succeeded'
+                    --custom=: Wait until the condition satisfies a custom JMESPath query.
+                    --deleted=: wait until deleted
+                    --exists=: wait until the resource exists
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --interval=: polling interval in seconds
+                    --subscription=: Name or ID of subscription.
+                    --timeout=: maximum wait in seconds
+                    --updated=: wait until updated with provisioningState at 'Succeeded'
+                    --workspace-name=: The name of the workspace.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the table.
+                - name: update
+                  description: Update the properties of a Log Analytics workspace table.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --columns=:
+                        description: A list of table custom columns.Extracts multiple space-separated columns in column_name=column_type format
+                        nargs: -1
+                    --description=: Table description.
+                    --no-wait=: Do not wait for the long-running operation to finish.
+                    --plan=: The table plan.
+                    --retention-time=: The table retention in days, between 4 and 730. Setting this property to -1 will default to the workspace retention.
+                    --subscription=: Name or ID of subscription.
+                    --total-retention-time=: The table total retention in days, between 4 and 2556. Setting this property to -1 will default to table retention.
+                    --workspace-name=!: Name of the Log Analytics Workspace.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Name of the table.
+                  completion:
+                    flag:
+                        plan:
+                            - Basic
+                            - Analytics
+                - name: restore
+                  commands:
+                    - name: create
+                      description: Create a Log Analytics workspace restore logs table.
+                      flags:
+                        --cmd=:
+                            description: ==SUPPRESS==
+                            nargs: -1
+                        --end-restore-time=!:
+                            description: Datetime format.
+                            nargs: -1
+                        --no-wait=: Do not wait for the long-running operation to finish.
+                        --restore-source-table=!: The table to restore data from.
+                        --start-restore-time=!:
+                            description: Datetime format.
+                            nargs: -1
+                        --subscription=: Name or ID of subscription.
+                        --workspace-name=!: Name of the Log Analytics Workspace.
+                        -g, --resource-group=!: Name of resource group.
+                        -n, --name=!: Name of the table.
+                - name: migrate
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --table-name=: The name of the table.
+                    --workspace-name=: The name of the workspace.
+                    -g, --resource-group=: Name of resource group.
                 - name: search-job
                   commands:
                     - name: create
+                      description: Create a Log Analytics workspace search results table.
                       flags:
                         --cmd=:
                             description: ==SUPPRESS==
@@ -1358,28 +1257,6 @@ commands:
                         --workspace-name=: The name of the workspace.
                         -g, --resource-group=: Name of resource group.
                         -n, --name=: The name of the table.
-                - name: update
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --columns=:
-                        description: A list of table custom columns.Extracts multiple space-separated columns in column_name=column_type format
-                        nargs: -1
-                    --description=: Table description.
-                    --no-wait=: Do not wait for the long-running operation to finish.
-                    --plan=: The table plan.
-                    --retention-time=: The table retention in days, between 4 and 730. Setting this property to -1 will default to the workspace retention.
-                    --subscription=: Name or ID of subscription.
-                    --total-retention-time=: The table total retention in days, between 4 and 2556. Setting this property to -1 will default to table retention.
-                    --workspace-name=!: Name of the Log Analytics Workspace.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Name of the table.
-                  completion:
-                    flag:
-                        plan:
-                            - Basic
-                            - Analytics
                 - name: delete
                   flags:
                     --ids=:
@@ -1406,6 +1283,11 @@ commands:
                             - "no"
                             - "n"
                             - "0"
+                - name: list
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=!: The name of the workspace.
+                    -g, --resource-group=!: Name of resource group.
                 - name: show
                   flags:
                     --ids=:
@@ -1415,11 +1297,310 @@ commands:
                     --workspace-name=: The name of the workspace.
                     -g, --resource-group=: Name of resource group.
                     -n, --name=: The name of the table.
+            - name: linked-storage
+              commands:
+                - name: create
+                  flags:
+                    --storage-accounts=!:
+                        description: List of Name or ID of Azure Storage Account.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --type=!: Data source type for the linked storage account.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --workspace-name=!: The name of the workspace.
+                  completion:
+                    flag:
+                        type:
+                            - Alerts
+                            - AzureWatson
+                            - CustomLogs
+                            - Ingestion
+                            - Query
+                - name: remove
+                  description: Remove some linked storage accounts with specific data source type for log analytics workspace
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --storage-accounts=!:
+                        description: List of Name or ID of Azure Storage Account.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --type=!: Data source type for the linked storage account.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --workspace-name=!: Name of the Log Analytics Workspace.
+                  completion:
+                    flag:
+                        type:
+                            - Alerts
+                            - AzureWatson
+                            - CustomLogs
+                            - Ingestion
+                            - Query
+                - name: add
+                  description: Add some linked storage accounts with specific data source type for log analytics workspace.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --storage-accounts=!:
+                        description: List of Name or ID of Azure Storage Account.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --type=!: Data source type for the linked storage account.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --workspace-name=!: Name of the Log Analytics Workspace.
+                  completion:
+                    flag:
+                        type:
+                            - Alerts
+                            - AzureWatson
+                            - CustomLogs
+                            - Ingestion
+                            - Query
+                - name: list
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --workspace-name=!: The name of the workspace.
+                - name: delete
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --type=: Data source type for the linked storage account.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --workspace-name=: The name of the workspace.
+                    -y, --yes=: Do not prompt for confirmation.
+                  completion:
+                    flag:
+                        type:
+                            - Alerts
+                            - AzureWatson
+                            - CustomLogs
+                            - Ingestion
+                            - Query
+                - name: show
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --type=: Data source type for the linked storage account.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --workspace-name=: The name of the workspace.
+                  completion:
+                    flag:
+                        type:
+                            - Alerts
+                            - AzureWatson
+                            - CustomLogs
+                            - Ingestion
+                            - Query
+            - name: saved-search
+              commands:
+                - name: delete
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=: The name of the workspace.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the saved search and it's unique in a given workspace.
+                    -y, --yes=: Do not prompt for confirmation.
+                - name: update
+                  description: Update a saved search for a given workspace.
+                  flags:
+                    --category=: The category of the saved search.
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --display-name=: Display name of the saved search.
+                    --func-alias=: Function Aliases are short names given to Saved Searches so they can be easily referenced in query.
+                    --func-param=: The optional function parameters if query serves as a function.
+                    --subscription=: Name or ID of subscription.
+                    --tags=:
+                        description: 'space-separated tags: key[=value] [key[=value] ...].'
+                        nargs: -1
+                    --workspace-name=!: Name of the Log Analytics Workspace.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Name of the saved search and it's unique in a given workspace.
+                    -q, --saved-query=: The query expression for the saved search.
                 - name: list
                   flags:
                     --subscription=: Name or ID of subscription.
                     --workspace-name=!: The name of the workspace.
                     -g, --resource-group=!: Name of resource group.
+                - name: show
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=: The name of the workspace.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the saved search and it's unique in a given workspace.
+                - name: create
+                  description: Create a saved search for a given workspace.
+                  flags:
+                    --category=!: The category of the saved search.
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --display-name=!: Display name of the saved search.
+                    --func-alias=: Function Aliases are short names given to Saved Searches so they can be easily referenced in query.
+                    --func-param=: The optional function parameters if query serves as a function.
+                    --subscription=: Name or ID of subscription.
+                    --tags=:
+                        description: 'space-separated tags: key[=value] [key[=value] ...].'
+                        nargs: -1
+                    --workspace-name=!: Name of the Log Analytics Workspace.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Name of the saved search and it's unique in a given workspace.
+                    -q, --saved-query=!: The query expression for the saved search.
+            - name: pack
+              commands:
+                - name: disable
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=!: The name of the workspace.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The name of the intelligence pack to be enabled.
+                - name: enable
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=!: The name of the workspace.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The name of the intelligence pack to be enabled.
+                - name: list
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=!: The name of the workspace.
+                    -g, --resource-group=!: Name of resource group.
+            - name: linked-service
+              commands:
+                - name: list
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=!: The name of the workspace.
+                    -g, --resource-group=!: Name of resource group.
+                - name: update
+                  flags:
+                    --add=:
+                        description: Add an object to a list of objects by specifying a path and key value pairs.
+                        nargs: -1
+                    --force-string=:
+                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --no-wait=:
+                        description: Do not wait for the long-running operation to finish.
+                        nargs: -1
+                    --remove=:
+                        description: Remove a property or an element from a list.
+                        nargs: -1
+                    --resource-id=: The resource id of the resource that will be linked to the workspace.
+                    --set=:
+                        description: Update an object by specifying a property path and value to set.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --tags=:
+                        description: Resource tags.
+                        nargs: -1
+                    --workspace-name=: The name of the workspace.
+                    --write-access-resource-id=: The resource id of the resource that will be linked to the workspace.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the linkedServices resource.
+                  completion:
+                    flag:
+                        force-string:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                        no-wait:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: create
+                  flags:
+                    --no-wait=:
+                        description: Do not wait for the long-running operation to finish.
+                        nargs: -1
+                    --resource-id=: The resource id of the resource that will be linked to the workspace.
+                    --subscription=: Name or ID of subscription.
+                    --tags=:
+                        description: Resource tags.
+                        nargs: -1
+                    --workspace-name=!: The name of the workspace.
+                    --write-access-resource-id=: The resource id of the resource that will be linked to the workspace.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Name of the linkedServices resource.
+                  completion:
+                    flag:
+                        no-wait:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: delete
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --no-wait=:
+                        description: Do not wait for the long-running operation to finish.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=: The name of the workspace.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the linkedServices resource.
+                    -y, --yes=: Do not prompt for confirmation.
+                  completion:
+                    flag:
+                        no-wait:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: show
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=: The name of the workspace.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the linkedServices resource.
                 - name: wait
                   flags:
                     --created=: wait until created with 'provisioningState' at 'Succeeded'
@@ -1435,161 +1616,26 @@ commands:
                     --updated=: wait until updated with provisioningState at 'Succeeded'
                     --workspace-name=: The name of the workspace.
                     -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the table.
-                - name: migrate
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --table-name=: The name of the table.
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-            - name: data-export
-              commands:
-                - name: delete
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The data export rule name.
-                    -y, --yes=: Do not prompt for confirmation.
-                - name: create
-                  flags:
-                    --destination=!: The destination resource ID.
-                    --enable=:
-                        description: Active when enabled.
-                        nargs: -1
-                    --event-hub-name=: Optional.
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=!: The name of the workspace.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The data export rule name.
-                    -t, --tables=!:
-                        description: An array of tables to export.
-                        nargs: -1
-                  completion:
-                    flag:
-                        enable:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: update
-                  flags:
-                    --add=:
-                        description: Add an object to a list of objects by specifying a path and key value pairs.
-                        nargs: -1
-                    --destination=: The destination resource ID.
-                    --enable=:
-                        description: Active when enabled.
-                        nargs: -1
-                    --event-hub-name=: Optional.
-                    --force-string=:
-                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --remove=:
-                        description: Remove a property or an element from a list.
-                        nargs: -1
-                    --set=:
-                        description: Update an object by specifying a property path and value to set.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The data export rule name.
-                    -t, --tables=:
-                        description: An array of tables to export.
-                        nargs: -1
-                  completion:
-                    flag:
-                        enable:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                        force-string:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: show
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The data export rule name.
-                - name: list
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=!: The name of the workspace.
-                    -g, --resource-group=!: Name of resource group.
-            - name: delete
+                    -n, --name=: Name of the linkedServices resource.
+            - name: recover
+              description: Recover a workspace in a soft-delete state within 14 days.
               flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
+                --cmd=:
+                    description: ==SUPPRESS==
                     nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
                 --subscription=: Name or ID of subscription.
-                -f, --force=:
-                    description: Deletes the workspace without the recovery option.
-                    nargs: -1
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Log Analytics Workspace.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    force:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
+                -n, --workspace-name=!: Name of the Log Analytics Workspace.
+            - name: list-deleted-workspaces
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+            - name: list-usages
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the workspace.
             - name: update
               flags:
                 --add=:
@@ -1682,58 +1728,89 @@ commands:
                         - Premium
                         - Standalone
                         - Standard
-            - name: pack
+            - name: list-available-service-tier
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --workspace-name=: The name of the workspace.
+            - name: list-link-target
+              flags:
+                --subscription=: Name or ID of subscription.
+            - name: show
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Log Analytics Workspace.
+            - name: list-management-groups
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the workspace.
+            - name: data-export
               commands:
-                - name: enable
+                - name: delete
                   flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
                     --subscription=: Name or ID of subscription.
-                    --workspace-name=!: The name of the workspace.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The name of the intelligence pack to be enabled.
+                    --workspace-name=: The name of the workspace.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The data export rule name.
+                    -y, --yes=: Do not prompt for confirmation.
                 - name: list
                   flags:
                     --subscription=: Name or ID of subscription.
                     --workspace-name=!: The name of the workspace.
                     -g, --resource-group=!: Name of resource group.
-                - name: disable
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=!: The name of the workspace.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The name of the intelligence pack to be enabled.
-            - name: linked-service
-              commands:
                 - name: update
                   flags:
                     --add=:
                         description: Add an object to a list of objects by specifying a path and key value pairs.
                         nargs: -1
+                    --destination=: The destination resource ID.
+                    --enable=:
+                        description: Active when enabled.
+                        nargs: -1
+                    --event-hub-name=: Optional.
                     --force-string=:
                         description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
                         nargs: -1
                     --ids=:
                         description: One or more resource IDs (space-delimited).
                         nargs: -1
-                    --no-wait=:
-                        description: Do not wait for the long-running operation to finish.
-                        nargs: -1
                     --remove=:
                         description: Remove a property or an element from a list.
                         nargs: -1
-                    --resource-id=: The resource id of the resource that will be linked to the workspace.
                     --set=:
                         description: Update an object by specifying a property path and value to set.
                         nargs: -1
                     --subscription=: Name or ID of subscription.
-                    --tags=:
-                        description: Resource tags.
-                        nargs: -1
                     --workspace-name=: The name of the workspace.
-                    --write-access-resource-id=: The resource id of the resource that will be linked to the workspace.
                     -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the linkedServices resource.
+                    -n, --name=: The data export rule name.
+                    -t, --tables=:
+                        description: An array of tables to export.
+                        nargs: -1
                   completion:
                     flag:
+                        enable:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
                         force-string:
                             - "true"
                             - t
@@ -1745,91 +1822,6 @@ commands:
                             - "no"
                             - "n"
                             - "0"
-                        no-wait:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: delete
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --no-wait=:
-                        description: Do not wait for the long-running operation to finish.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the linkedServices resource.
-                    -y, --yes=: Do not prompt for confirmation.
-                  completion:
-                    flag:
-                        no-wait:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: create
-                  flags:
-                    --no-wait=:
-                        description: Do not wait for the long-running operation to finish.
-                        nargs: -1
-                    --resource-id=: The resource id of the resource that will be linked to the workspace.
-                    --subscription=: Name or ID of subscription.
-                    --tags=:
-                        description: Resource tags.
-                        nargs: -1
-                    --workspace-name=!: The name of the workspace.
-                    --write-access-resource-id=: The resource id of the resource that will be linked to the workspace.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Name of the linkedServices resource.
-                  completion:
-                    flag:
-                        no-wait:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: wait
-                  flags:
-                    --created=: wait until created with 'provisioningState' at 'Succeeded'
-                    --custom=: Wait until the condition satisfies a custom JMESPath query.
-                    --deleted=: wait until deleted
-                    --exists=: wait until the resource exists
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --interval=: polling interval in seconds
-                    --subscription=: Name or ID of subscription.
-                    --timeout=: maximum wait in seconds
-                    --updated=: wait until updated with provisioningState at 'Succeeded'
-                    --workspace-name=: The name of the workspace.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the linkedServices resource.
-                - name: list
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    --workspace-name=!: The name of the workspace.
-                    -g, --resource-group=!: Name of resource group.
                 - name: show
                   flags:
                     --ids=:
@@ -1838,27 +1830,39 @@ commands:
                     --subscription=: Name or ID of subscription.
                     --workspace-name=: The name of the workspace.
                     -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the linkedServices resource.
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Log Analytics Workspace.
-            - name: list-usages
+                    -n, --name=: The data export rule name.
+                - name: create
+                  flags:
+                    --destination=!: The destination resource ID.
+                    --enable=:
+                        description: Active when enabled.
+                        nargs: -1
+                    --event-hub-name=: Optional.
+                    --subscription=: Name or ID of subscription.
+                    --workspace-name=!: The name of the workspace.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The data export rule name.
+                    -t, --tables=!:
+                        description: An array of tables to export.
+                        nargs: -1
+                  completion:
+                    flag:
+                        enable:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+            - name: get-schema
               flags:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The name of the workspace.
-            - name: list-link-target
-              flags:
-                --subscription=: Name or ID of subscription.
-            - name: list
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
             - name: wait
               flags:
                 --created=: wait until created with 'provisioningState' at 'Succeeded'
@@ -1874,29 +1878,6 @@ commands:
                 --updated=: wait until updated with provisioningState at 'Succeeded'
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the Log Analytics Workspace.
-            - name: get-schema
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the workspace.
-            - name: list-management-groups
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the workspace.
-            - name: get-shared-keys
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the workspace.
-            - name: list-available-service-tier
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --workspace-name=: The name of the workspace.
             - name: create
               flags:
                 --identity-type=: Type of managed service identity.
@@ -1963,195 +1944,35 @@ commands:
                         - Premium
                         - Standalone
                         - Standard
-            - name: list-deleted-workspaces
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-        - name: query-pack
-          commands:
-            - name: query
-              commands:
-                - name: create
-                  flags:
-                    --body=!: Content of the query.
-                    --categories=:
-                        description: The related categories for the function.
-                        nargs: -1
-                    --description=: Description of the query.
-                    --display-name=!: Unique display name for your query within the query pack.
-                    --query-pack-name=!: The name of the log analytics query pack.
-                    --resource-types=:
-                        description: The related resource types for the function.
-                        nargs: -1
-                    --solutions=:
-                        description: The related Log Analytics solutions for the function.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --tags=:
-                        description: Tags associated with the query.
-                        nargs: -1
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The id name of a specific query defined in the log analytics query pack.
-                - name: show
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --query-pack-name=: The name of the log analytics query pack.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The id name of a specific query defined in the log analytics query pack.
-                - name: update
-                  flags:
-                    --add=:
-                        description: Add an object to a list of objects by specifying a path and key value pairs.
-                        nargs: -1
-                    --body=: Content of the query.
-                    --categories=:
-                        description: The related categories for the function.
-                        nargs: -1
-                    --description=: Description of the query.
-                    --display-name=: Unique display name for your query within the query pack.
-                    --force-string=:
-                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --query-pack-name=: The name of the log analytics query pack.
-                    --remove=:
-                        description: Remove a property or an element from a list.
-                        nargs: -1
-                    --resource-types=:
-                        description: The related resource types for the function.
-                        nargs: -1
-                    --set=:
-                        description: Update an object by specifying a property path and value to set.
-                        nargs: -1
-                    --solutions=:
-                        description: The related Log Analytics solutions for the function.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --tags=:
-                        description: Tags associated with the query.
-                        nargs: -1
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The id name of a specific query defined in the log analytics query pack.
-                  completion:
-                    flag:
-                        force-string:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: search
-                  flags:
-                    --categories=:
-                        description: The related categories for the function.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --include-body=:
-                        description: Whether or not to return the body of each applicable query.
-                        nargs: -1
-                    --query-pack-name=: The name of the log analytics query pack.
-                    --resource-types=:
-                        description: The related resource types for the function.
-                        nargs: -1
-                    --solutions=:
-                        description: The related Log Analytics solutions for the function.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --tags=:
-                        description: Tags associated with the query.
-                        nargs: -1
-                    -g, --resource-group=: Name of resource group.
-                  completion:
-                    flag:
-                        include-body:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: delete
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --query-pack-name=: The name of the log analytics query pack.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The id name of a specific query defined in the log analytics query pack.
-                    -y, --yes=: Do not prompt for confirmation.
-                - name: list
-                  flags:
-                    --include-body=:
-                        description: Whether or not to return the body of each applicable query.
-                        nargs: -1
-                    --query-pack-name=!: The name of the log analytics query pack.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                  completion:
-                    flag:
-                        include-body:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
             - name: delete
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
+                -f, --force=:
+                    description: Deletes the workspace without the recovery option.
+                    nargs: -1
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the log analytics query pack.
+                -n, --name=: Name of the Log Analytics Workspace.
                 -y, --yes=: Do not prompt for confirmation.
-            - name: update
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: Resource tags  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the log analytics query pack.
               completion:
                 flag:
-                    force-string:
+                    force:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    no-wait:
                         - "true"
                         - t
                         - "yes"
@@ -2166,15 +1987,44 @@ commands:
               flags:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-            - name: create
+            - name: get-shared-keys
               flags:
                 --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: Resource tags  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
                 -g, --resource-group=!: Name of resource group.
-                -l, --location=: Resource location  When not specified, the location of the resource group will be used.
-                -n, --name=!: The name of the log analytics query pack.
+                -n, --name=!: The name of the workspace.
+        - name: cluster
+          commands:
+            - name: list
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+            - name: delete
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Log Analytics Cluster.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
             - name: show
               flags:
                 --ids=:
@@ -2182,9 +2032,102 @@ commands:
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the log analytics query pack.
-        - name: cluster
-          commands:
+                -n, --name=: Name of the Log Analytics Cluster.
+            - name: wait
+              flags:
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Log Analytics Cluster.
+            - name: update
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --billing-type=: The cluster's billing type.
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --identity-type=: Type of managed service identity.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --key-name=: The name of the key associated with the Log Analytics cluster.
+                --key-rsa-size=: Selected key minimum required size.
+                --key-vault-uri=: The Key Vault uri which holds they key associated with the Log Analytics cluster.
+                --key-version=: The version of the key associated with the Log Analytics cluster.
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --sku-capacity=: The capacity of the SKU.
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: Resource tags.
+                    nargs: -1
+                --user-assigned=:
+                    description: The list of user identities associated with the resource.
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Log Analytics Cluster.
+              completion:
+                flag:
+                    billing-type:
+                        - Cluster
+                        - Workspaces
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    identity-type:
+                        - None
+                        - SystemAssigned
+                        - SystemAssigned,UserAssigned
+                        - UserAssigned
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    sku-capacity:
+                        - "100"
+                        - "1000"
+                        - "10000"
+                        - "200"
+                        - "2000"
+                        - "25000"
+                        - "300"
+                        - "400"
+                        - "500"
+                        - "5000"
+                        - "50000"
             - name: create
               flags:
                 --billing-type=: The cluster's billing type.
@@ -2243,54 +2186,179 @@ commands:
                         - "50000"
                     sku-name:
                         - CapacityReservation
-            - name: wait
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Log Analytics Cluster.
+        - name: query-pack
+          commands:
             - name: list
               flags:
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-            - name: show
+            - name: create
               flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Log Analytics Cluster.
+                --tags=:
+                    description: Resource tags  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -l, --location=: Resource location  When not specified, the location of the resource group will be used.
+                -n, --name=!: The name of the log analytics query pack.
+            - name: query
+              commands:
+                - name: list
+                  flags:
+                    --include-body=:
+                        description: Whether or not to return the body of each applicable query.
+                        nargs: -1
+                    --query-pack-name=!: The name of the log analytics query pack.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                  completion:
+                    flag:
+                        include-body:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: delete
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --query-pack-name=: The name of the log analytics query pack.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The id name of a specific query defined in the log analytics query pack.
+                    -y, --yes=: Do not prompt for confirmation.
+                - name: search
+                  flags:
+                    --categories=:
+                        description: The related categories for the function.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --include-body=:
+                        description: Whether or not to return the body of each applicable query.
+                        nargs: -1
+                    --query-pack-name=: The name of the log analytics query pack.
+                    --resource-types=:
+                        description: The related resource types for the function.
+                        nargs: -1
+                    --solutions=:
+                        description: The related Log Analytics solutions for the function.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --tags=:
+                        description: Tags associated with the query.
+                        nargs: -1
+                    -g, --resource-group=: Name of resource group.
+                  completion:
+                    flag:
+                        include-body:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: update
+                  flags:
+                    --add=:
+                        description: Add an object to a list of objects by specifying a path and key value pairs.
+                        nargs: -1
+                    --body=: Content of the query.
+                    --categories=:
+                        description: The related categories for the function.
+                        nargs: -1
+                    --description=: Description of the query.
+                    --display-name=: Unique display name for your query within the query pack.
+                    --force-string=:
+                        description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --query-pack-name=: The name of the log analytics query pack.
+                    --remove=:
+                        description: Remove a property or an element from a list.
+                        nargs: -1
+                    --resource-types=:
+                        description: The related resource types for the function.
+                        nargs: -1
+                    --set=:
+                        description: Update an object by specifying a property path and value to set.
+                        nargs: -1
+                    --solutions=:
+                        description: The related Log Analytics solutions for the function.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --tags=:
+                        description: Tags associated with the query.
+                        nargs: -1
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The id name of a specific query defined in the log analytics query pack.
+                  completion:
+                    flag:
+                        force-string:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: show
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --query-pack-name=: The name of the log analytics query pack.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The id name of a specific query defined in the log analytics query pack.
+                - name: create
+                  flags:
+                    --body=!: Content of the query.
+                    --categories=:
+                        description: The related categories for the function.
+                        nargs: -1
+                    --description=: Description of the query.
+                    --display-name=!: Unique display name for your query within the query pack.
+                    --query-pack-name=!: The name of the log analytics query pack.
+                    --resource-types=:
+                        description: The related resource types for the function.
+                        nargs: -1
+                    --solutions=:
+                        description: The related Log Analytics solutions for the function.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --tags=:
+                        description: Tags associated with the query.
+                        nargs: -1
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The id name of a specific query defined in the log analytics query pack.
             - name: update
               flags:
                 --add=:
                     description: Add an object to a list of objects by specifying a path and key value pairs.
                     nargs: -1
-                --billing-type=: The cluster's billing type.
                 --force-string=:
                     description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
                     nargs: -1
-                --identity-type=: Type of managed service identity.
                 --ids=:
                     description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --key-name=: The name of the key associated with the Log Analytics cluster.
-                --key-rsa-size=: Selected key minimum required size.
-                --key-vault-uri=: The Key Vault uri which holds they key associated with the Log Analytics cluster.
-                --key-version=: The version of the key associated with the Log Analytics cluster.
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
                     nargs: -1
                 --remove=:
                     description: Remove a property or an element from a list.
@@ -2298,21 +2366,14 @@ commands:
                 --set=:
                     description: Update an object by specifying a property path and value to set.
                     nargs: -1
-                --sku-capacity=: The capacity of the SKU.
                 --subscription=: Name or ID of subscription.
                 --tags=:
-                    description: Resource tags.
-                    nargs: -1
-                --user-assigned=:
-                    description: The list of user identities associated with the resource.
+                    description: Resource tags  Support shorthand-syntax, json-file and yaml-file.
                     nargs: -1
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Log Analytics Cluster.
+                -n, --name=: The name of the log analytics query pack.
               completion:
                 flag:
-                    billing-type:
-                        - Cluster
-                        - Workspaces
                     force-string:
                         - "true"
                         - t
@@ -2324,68 +2385,65 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-                    identity-type:
-                        - None
-                        - SystemAssigned
-                        - SystemAssigned,UserAssigned
-                        - UserAssigned
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    sku-capacity:
-                        - "100"
-                        - "1000"
-                        - "10000"
-                        - "200"
-                        - "2000"
-                        - "25000"
-                        - "300"
-                        - "400"
-                        - "500"
-                        - "5000"
-                        - "50000"
+            - name: show
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the log analytics query pack.
             - name: delete
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Log Analytics Cluster.
+                -n, --name=: The name of the log analytics query pack.
                 -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
     - name: log-profiles
       commands:
-        - name: delete
+        - name: show
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=: The name of the log profile.
+        - name: create
+          flags:
+            --categories=!:
+                description: Space-separated categories of the logs.
+                nargs: -1
+            --days=!: the number of days for the retention in days.
+            --enabled=!:
+                description: Whether the retention policy is enabled.
+                nargs: -1
+            --locations=!:
+                description: Space-separated list of regions for which Activity Log events should be stored.
+                nargs: -1
+            --service-bus-rule-id=: The service bus rule ID of the service bus namespace in which you would like to have Event Hubs created for streaming the Activity Log.
+            --storage-account-id=: the resource id of the storage account to which you would like to send the Activity Log.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'Space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -l, --location=!: Location.
+            -n, --name=!: The name of the log profile.
+          completion:
+            flag:
+                enabled:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: update
           flags:
             --add=:
@@ -2444,40 +2502,7 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: create
-          flags:
-            --categories=!:
-                description: Space-separated categories of the logs.
-                nargs: -1
-            --days=!: the number of days for the retention in days.
-            --enabled=!:
-                description: Whether the retention policy is enabled.
-                nargs: -1
-            --locations=!:
-                description: Space-separated list of regions for which Activity Log events should be stored.
-                nargs: -1
-            --service-bus-rule-id=: The service bus rule ID of the service bus namespace in which you would like to have Event Hubs created for streaming the Activity Log.
-            --storage-account-id=: the resource id of the storage account to which you would like to send the Activity Log.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'Space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -l, --location=!: Location.
-            -n, --name=!: The name of the log profile.
-          completion:
-            flag:
-                enabled:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: show
+        - name: delete
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -2489,57 +2514,19 @@ commands:
             --subscription=: Name or ID of subscription.
     - name: metrics
       commands:
-        - name: list-definitions
+        - name: list-namespaces
+          description: List the metric namespaces for the resource.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --namespace=: Namespace to query metric definitions for.
-            --resource-namespace=: Target resource provider namespace.
-            --resource-parent=: Target resource parent path, if applicable.
-            --resource-type=: Target resource type.
-            --resource=!: Name or ID of the target resource.
+            --resource-uri=!: The identifier of the resource.
+            --start-time=:
+                description: Start time of the query.
+                nargs: -1
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: alert
           commands:
-            - name: create
-              flags:
-                --auto-mitigate=:
-                    description: Automatically resolve the alert.
-                    nargs: -1
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --condition=!:
-                    nargs: -1
-                --description=: Free-text description of the rule.
-                --disabled=:
-                    nargs: -1
-                --evaluation-frequency=: Frequency with which to evaluate the rule in "##h##m##s" format.
-                --scopes=!:
-                    description: Space-separated list of scopes the rule applies to.
-                    nargs: -1
-                --severity=: Severity of the alert from 0 (critical) to 4 (verbose).
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: 'space-separated tags: key[=value] [key[=value] ...].'
-                    nargs: -1
-                --target-resource-region=: The region of the target resource(s) in scopes.
-                --target-resource-type=: The resource type of the target resource(s) in scopes.
-                --window-size=: Time over which to aggregate metrics in "##h##m##s" format.
-                -a, --action=:
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the alert rule.
-              completion:
-                flag:
-                    auto-mitigate:
-                        - "true"
-                        - "false"
-                    disabled:
-                        - "true"
-                        - "false"
             - name: update
               flags:
                 --add-actions=:
@@ -2623,36 +2610,10 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: delete
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the alert rule.
-            - name: list
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-            - name: dimension
-              commands:
-                - name: create
-                  flags:
-                    --operator=: Dimension operator.
-                    --subscription=: Name or ID of subscription.
-                    -n, --name=!: Name of the dimension.
-                    -v, --value=!:
-                        description: The values to apply on the operation.
-                        nargs: -1
-                  completion:
-                    flag:
-                        operator:
-                            - Include
-                            - Exclude
             - name: condition
               commands:
                 - name: create
+                  description: Build a metric alert rule condition.
                   flags:
                     --aggregation=!: Time aggregation.
                     --dimension=:
@@ -2699,7 +2660,75 @@ commands:
                         type:
                             - static
                             - dynamic
+            - name: dimension
+              commands:
+                - name: create
+                  description: Build a metric alert rule dimension.
+                  flags:
+                    --operator=: Dimension operator.
+                    --subscription=: Name or ID of subscription.
+                    -n, --name=!: Name of the dimension.
+                    -v, --value=!:
+                        description: The values to apply on the operation.
+                        nargs: -1
+                  completion:
+                    flag:
+                        operator:
+                            - Include
+                            - Exclude
+            - name: list
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+            - name: create
+              description: Create a metric-based alert rule.
+              flags:
+                --auto-mitigate=:
+                    description: Automatically resolve the alert.
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --condition=!:
+                    description: The condition which triggers the rule.
+                    nargs: -1
+                --description=: Free-text description of the rule.
+                --disabled=:
+                    description: Create the rule in a disabled state.
+                    nargs: -1
+                --evaluation-frequency=: Frequency with which to evaluate the rule in "##h##m##s" format.
+                --scopes=!:
+                    description: Space-separated list of scopes the rule applies to.
+                    nargs: -1
+                --severity=: Severity of the alert from 0 (critical) to 4 (verbose).
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: 'space-separated tags: key[=value] [key[=value] ...].'
+                    nargs: -1
+                --target-resource-region=: The region of the target resource(s) in scopes.
+                --target-resource-type=: The resource type of the target resource(s) in scopes.
+                --window-size=: Time over which to aggregate metrics in "##h##m##s" format.
+                -a, --action=:
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the alert rule.
+              completion:
+                flag:
+                    auto-mitigate:
+                        - "true"
+                        - "false"
+                    disabled:
+                        - "true"
+                        - "false"
             - name: show
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the alert rule.
+            - name: delete
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -2712,55 +2741,19 @@ commands:
             --metricnamespace=: Metric namespace where the metrics you want reside.
             --region=!: The region where the metrics you want reside.
             --subscription=: Name or ID of subscription.
-        - name: list-namespaces
+        - name: list-definitions
+          description: List the metric definitions for the resource.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --resource-uri=!: The identifier of the resource.
-            --start-time=:
-                description: Start time of the query.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: list
-          flags:
-            --aggregation=:
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --dimension=:
-                nargs: -1
-            --end-time=:
-                description: End time of the query.
-                nargs: -1
-            --filter=: ""
-            --interval=: ""
-            --metadata=: ""
-            --metrics=:
-                nargs: -1
-            --namespace=: ""
-            --offset=: ""
-            --orderby=: Aggregation to use for sorting results and the direction of the sort.
+            --namespace=: Namespace to query metric definitions for.
             --resource-namespace=: Target resource provider namespace.
             --resource-parent=: Target resource parent path, if applicable.
             --resource-type=: Target resource type.
             --resource=!: Name or ID of the target resource.
-            --start-time=:
-                description: Start time of the query.
-                nargs: -1
             --subscription=: Name or ID of subscription.
-            --top=: Max number of records to retrieve.
             -g, --resource-group=: Name of resource group.
-          completion:
-            flag:
-                aggregation:
-                    - None
-                    - Average
-                    - Count
-                    - Minimum
-                    - Maximum
-                    - Total
         - name: list-sub
           flags:
             --aggregation=: The list of aggregation types (comma separated) to retrieve.
@@ -2808,10 +2801,69 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: list
+          description: List the metric values for a resource.
+          flags:
+            --aggregation=:
+                description: The list of aggregation types (space-separated) to retrieve.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --dimension=:
+                description: The list of dimensions (space-separated) the metrics are queried into.
+                nargs: -1
+            --end-time=:
+                description: End time of the query.
+                nargs: -1
+            --filter=: A string used to reduce the set of metric data returned.
+            --interval=: 'The interval over which to aggregate metrics, in ##h##m format.'
+            --metadata=: Returns the metadata values instead of metric data
+            --metrics=:
+                description: Space-separated list of metric names to retrieve.
+                nargs: -1
+            --namespace=: Namespace to query metric definitions for.
+            --offset=: 'Time offset of the query range, in ##d##h format.'
+            --orderby=: Aggregation to use for sorting results and the direction of the sort.
+            --resource-namespace=: Target resource provider namespace.
+            --resource-parent=: Target resource parent path, if applicable.
+            --resource-type=: Target resource type.
+            --resource=!: Name or ID of the target resource.
+            --start-time=:
+                description: Start time of the query.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --top=: Max number of records to retrieve.
+            -g, --resource-group=: Name of resource group.
+          completion:
+            flag:
+                aggregation:
+                    - None
+                    - Average
+                    - Count
+                    - Minimum
+                    - Maximum
+                    - Total
     - name: private-link-scope
       commands:
         - name: private-endpoint-connection
           commands:
+            - name: wait
+              flags:
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --scope-name=: Name of the Azure Monitor Private Link Scope.
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the private endpoint connection associated with the private link scope.
             - name: approve
               flags:
                 --add=:
@@ -2851,6 +2903,43 @@ commands:
                         - "no"
                         - "n"
                         - "0"
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: show
+              flags:
+                --id=: ID of the private endpoint connection associated with the private link scope.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --scope-name=: Name of the Azure Monitor Private Link Scope.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the private endpoint connection associated with the private link scope.
+            - name: delete
+              flags:
+                --id=: ID of the private endpoint connection associated with the private link scope.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --scope-name=: Name of the Azure Monitor Private Link Scope.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the private endpoint connection associated with the private link scope.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
                     no-wait:
                         - "true"
                         - t
@@ -2919,61 +3008,36 @@ commands:
                 --scope-name=!: Name of the Azure Monitor Private Link Scope.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
-            - name: delete
-              flags:
-                --id=: ID of the private endpoint connection associated with the private link scope.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --scope-name=: Name of the Azure Monitor Private Link Scope.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the private endpoint connection associated with the private link scope.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: show
-              flags:
-                --id=: ID of the private endpoint connection associated with the private link scope.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --scope-name=: Name of the Azure Monitor Private Link Scope.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the private endpoint connection associated with the private link scope.
-            - name: wait
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --scope-name=: Name of the Azure Monitor Private Link Scope.
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the private endpoint connection associated with the private link scope.
+        - name: list
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: wait
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Azure Monitor Private Link Scope.
         - name: private-link-resource
           commands:
+            - name: list
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --scope-name=!: Name of the Azure Monitor Private Link Scope.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
             - name: show
               flags:
                 --ids=:
@@ -2983,36 +3047,15 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the private link resource.
-            - name: list
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --scope-name=!: Name of the Azure Monitor Private Link Scope.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
         - name: scoped-resource
           commands:
-            - name: list
+            - name: show
               flags:
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --scope-name=!: Name of the Azure Monitor Private Link Scope.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: wait
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --interval=: polling interval in seconds
                 --scope-name=: Name of the Azure Monitor Private Link Scope.
                 --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the assigned resource.
             - name: create
@@ -3038,13 +3081,20 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: show
+            - name: wait
               flags:
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
+                --interval=: polling interval in seconds
                 --scope-name=: Name of the Azure Monitor Private Link Scope.
                 --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the assigned resource.
             - name: delete
@@ -3073,14 +3123,38 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-        - name: show
+            - name: list
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --scope-name=!: Name of the Azure Monitor Private Link Scope.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+        - name: delete
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Azure Monitor Private Link Scope.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: update
           flags:
             --add=:
@@ -3125,49 +3199,11 @@ commands:
                 nargs: -1
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Azure Monitor Private Link Scope.
-        - name: delete
+        - name: show
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Azure Monitor Private Link Scope.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Azure Monitor Private Link Scope.

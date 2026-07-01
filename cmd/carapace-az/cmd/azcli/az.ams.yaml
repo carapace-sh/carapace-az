@@ -1,12 +1,49 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: ams
-description: ams
+description: Manage Azure Media Services resources.
 commands:
     - name: account
       commands:
-        - name: delete
-          description: Delete a Media Services account.
+        - name: sp
+          commands:
+            - name: create
+              description: Create or update a service principal and configure its access to an Azure Media Services account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --new-sp-name=: The new app name or app URI to update the RBAC with.
+                --role=: The role of the service principal.
+                --subscription=: Name or ID of subscription.
+                --xml=: Enables xml output format.
+                --years=: Number of years for which the secret will be valid.
+                -a, --account-name=!: The name of the Azure Media Services account.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=: The app name or app URI to associate the RBAC with.
+                -p, --password=: The friendly name of the password.
+            - name: reset-credentials
+              description: Generate a new client secret for a service principal configured for an Azure Media Services account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --role=: The role of the service principal.
+                --subscription=: Name or ID of subscription.
+                --xml=: Enables xml output format.
+                --years=: Number of years for which the secret will be valid.
+                -a, --account-name=: The name of the Azure Media Services account.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The app name or app URI to associate the RBAC with.
+                -p, --password=: The friendly name of the password.
+        - name: show
+          description: Show the details of an Azure Media Services account.
           flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -15,16 +52,18 @@ commands:
             -n, --name=: The name of the resource.
         - name: storage
           commands:
-            - name: remove
+            - name: sync-storage-keys
+              description: Synchronize storage account keys for a storage account associated with an Azure Media Services account.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
+                --storage-account-id=!: The storage account Id.
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=: The name of the Azure Media Services account.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The name or resource ID of the secondary storage account to detach from the Azure Media Services account.
             - name: set-authentication
+              description: Set the authentication of a storage account attached to an Azure Media Services account.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -46,16 +85,18 @@ commands:
                     system-assigned:
                         - "true"
                         - "false"
-            - name: sync-storage-keys
+            - name: remove
+              description: Detach a secondary storage from an Azure Media Services account.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --storage-account-id=!: The storage account Id.
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=: The name of the Azure Media Services account.
                 -g, --resource-group=: Name of resource group.
+                -n, --name=: The name or resource ID of the secondary storage account to detach from the Azure Media Services account.
             - name: add
+              description: Attach a secondary storage to an Azure Media Services account.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -73,11 +114,105 @@ commands:
                     system-assigned:
                         - "true"
                         - "false"
-        - name: list
+        - name: encryption
+          commands:
+            - name: show
+              description: Show the details of encryption settings for an Azure Media Services account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=: The name of the Azure Media Services account.
+                -g, --resource-group=: Name of resource group.
+            - name: set
+              description: Set the encryption settings for an Azure Media Services account.
+              flags:
+                --current-key-id=: The current key used to encrypt the Media Services account, including the key version.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --key-identifier=: The URL of the Key Vault key used to encrypt the account.
+                --key-type=!: SystemKeyThe encryption key source (provider).
+                --subscription=: Name or ID of subscription.
+                --system-assigned=:
+                    description: Set the system managed identity for account encryption.
+                    nargs: -1
+                --user-assigned=: Set the user managed identity for account encryption.
+                -a, --account-name=: The name of the Azure Media Services account.
+                -g, --resource-group=: Name of resource group.
+              completion:
+                flag:
+                    system-assigned:
+                        - "true"
+                        - "false"
+        - name: update
+          description: Update the details of an Azure Media Services account.
           flags:
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the resource.
+        - name: mru
+          commands:
+            - name: set
+              description: Set the type and number of media reserved units for an Azure Media Services account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --count=: The number of the encoding reserved units that you want to be provisioned for this account for concurrent tasks (one unit equals one task).
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --type=: Speed of reserved processing units.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the resource.
+            - name: show
+              description: Show the details of media reserved units for an Azure Media Services account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the resource.
+        - name: delete
+          description: Delete a Media Services account.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the resource.
         - name: create
+          description: Create an Azure Media Services account.
           flags:
             --default-action=: The behavior for IP access control in Key Delivery.
             --disable-public-network=: Set this flag to disable public network access for resources under the Media Services account.
@@ -103,41 +238,30 @@ commands:
                 mi-system-assigned:
                     - "true"
                     - "false"
-        - name: sp
+        - name: identity
           commands:
-            - name: create
+            - name: remove
+              description: Remove a managed identity to an Azure Media Services account.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --new-sp-name=: The new app name or app URI to update the RBAC with.
-                --role=: The role of the service principal.
-                --subscription=: Name or ID of subscription.
-                --xml=: Enables xml output format.
-                --years=: Number of years for which the secret will be valid.
-                -a, --account-name=!: The name of the Azure Media Services account.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=: The app name or app URI to associate the RBAC with.
-                -p, --password=: The friendly name of the password.
-            - name: reset-credentials
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --role=: The role of the service principal.
                 --subscription=: Name or ID of subscription.
-                --xml=: Enables xml output format.
-                --years=: Number of years for which the secret will be valid.
-                -a, --account-name=: The name of the Azure Media Services account.
+                --system-assigned=:
+                    description: Set the system managed identity on the media services account.
+                    nargs: -1
+                --user-assigned=:
+                    description: Set the user managed identities on the media services account.
+                    nargs: -1
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The app name or app URI to associate the RBAC with.
-                -p, --password=: The friendly name of the password.
-        - name: identity
-          commands:
+                -n, --name=: The name of the resource.
+              completion:
+                flag:
+                    system-assigned:
+                        - "true"
+                        - "false"
             - name: show
+              description: Show the details of managed identity settings for an Azure Media Services account.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -149,6 +273,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the resource.
             - name: assign
+              description: Assign a managed identity to an Azure Media Services account.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -170,59 +295,21 @@ commands:
                     system-assigned:
                         - "true"
                         - "false"
-            - name: remove
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --system-assigned=:
-                    description: Set the system managed identity on the media services account.
-                    nargs: -1
-                --user-assigned=:
-                    description: Set the user managed identities on the media services account.
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the resource.
-              completion:
-                flag:
-                    system-assigned:
-                        - "true"
-                        - "false"
-        - name: encryption
-          commands:
-            - name: set
-              flags:
-                --current-key-id=: The current key used to encrypt the Media Services account, including the key version.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --key-identifier=: The URL of the Key Vault key used to encrypt the account.
-                --key-type=!: SystemKeyThe encryption key source (provider).
-                --subscription=: Name or ID of subscription.
-                --system-assigned=:
-                    description: Set the system managed identity for account encryption.
-                    nargs: -1
-                --user-assigned=: Set the user managed identity for account encryption.
-                -a, --account-name=: The name of the Azure Media Services account.
-                -g, --resource-group=: Name of resource group.
-              completion:
-                flag:
-                    system-assigned:
-                        - "true"
-                        - "false"
-            - name: show
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=: The name of the Azure Media Services account.
-                -g, --resource-group=: Name of resource group.
+        - name: check-name
+          description: Checks whether the Media Service resource name is available.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -l, --location=: Location.
+            -n, --name=!: The name of the Azure Media Services account.
+        - name: list
+          description: List Azure Media Services accounts for the entire subscription.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+    - name: account-filter
+      commands:
         - name: show
+          description: Show the details of an account filter.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -231,66 +318,66 @@ commands:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the resource.
-        - name: mru
-          commands:
-            - name: show
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the resource.
-            - name: set
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --count=: The number of the encoding reserved units that you want to be provisioned for this account for concurrent tasks (one unit equals one task).
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --type=: Speed of reserved processing units.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the resource.
+            -n, --name=: The name of the account filter.
+        - name: delete
+          description: Delete an Account Filter.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the account filter.
+        - name: list
+          description: List Account Filters.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
         - name: update
+          description: Update the details of an account filter.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
                 nargs: -1
+            --bitrate=: The first quality bitrate.
             --cmd=:
                 description: ==SUPPRESS==
+                nargs: -1
+            --end-timestamp=: Applies to Video on Demand (VoD).
+            --first-quality=: The first quality (lowest) bitrate to include in the manifest.
+            --force-end-timestamp=:
+                description: Applies to Live Streaming only.
                 nargs: -1
             --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --live-backoff-duration=: Applies to Live Streaming only.
+            --presentation-window-duration=: Applies to Live Streaming only.
             --remove=:
                 description: Remove a property or an element from a list.
                 nargs: -1
             --set=:
                 description: Update an object by specifying a property path and value to set.
                 nargs: -1
+            --start-timestamp=: Applies to Video on Demand (VoD) or Live Streaming.
             --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
+            --timescale=: Applies to all timestamps and durations in a Presentation Time Range, specified as the number of increments in one second.
+            --tracks=: The JSON representing the track selections.
+            -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the resource.
-        - name: check-name
-          flags:
-            --subscription=: Name or ID of subscription.
-            -l, --location=: Location.
-            -n, --name=!: The name of the Azure Media Services account.
-    - name: account-filter
-      commands:
+            -n, --name=: The name of the account filter.
+          completion:
+            flag:
+                force-end-timestamp:
+                    - "true"
+                    - "false"
         - name: create
+          description: Create an account filter.
           flags:
             --bitrate=: The first quality bitrate.
             --end-timestamp=: Applies to Video on Demand (VoD).
@@ -312,74 +399,43 @@ commands:
                 force-end-timestamp:
                     - "true"
                     - "false"
+    - name: asset
+      commands:
+        - name: delete
+          description: Delete an Asset.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the asset.
         - name: update
+          description: Update the details of an asset.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
                 nargs: -1
-            --bitrate=: The first quality bitrate.
+            --alternate-id=: The alternate id of the asset.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --end-timestamp=: Applies to Video on Demand (VoD).
-            --first-quality=: The first quality (lowest) bitrate to include in the manifest.
-            --force-end-timestamp=:
-                description: Applies to Live Streaming only.
-                nargs: -1
+            --description=: The asset description.
             --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --live-backoff-duration=: Applies to Live Streaming only.
-            --presentation-window-duration=: Applies to Live Streaming only.
             --remove=:
                 description: Remove a property or an element from a list.
                 nargs: -1
             --set=:
                 description: Update an object by specifying a property path and value to set.
                 nargs: -1
-            --start-timestamp=: Applies to Video on Demand (VoD) or Live Streaming.
-            --subscription=: Name or ID of subscription.
-            --timescale=: Applies to all timestamps and durations in a Presentation Time Range, specified as the number of increments in one second.
-            --tracks=: The JSON representing the track selections.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the account filter.
-          completion:
-            flag:
-                force-end-timestamp:
-                    - "true"
-                    - "false"
-        - name: delete
-          description: Delete an Account Filter.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the account filter.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the account filter.
-        - name: list
-          description: List Account Filters.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
-    - name: asset
-      commands:
+            -n, --name=: The name of the asset.
         - name: list-streaming-locators
           description: List Streaming Locators.
           flags:
@@ -391,6 +447,7 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the asset.
         - name: get-sas-urls
+          description: Lists storage container URLs with shared access signatures (SAS) for uploading and downloading Asset content.
           flags:
             --expiry=: Specifies the UTC datetime (Y-m-d'T'H:M:S'Z') at which the SAS becomes invalid.
             --ids=:
@@ -407,47 +464,6 @@ commands:
                     - Read
                     - ReadWrite
                     - ReadWriteDelete
-        - name: get-encryption-key
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the asset.
-        - name: create
-          flags:
-            --alternate-id=: The alternate id of the asset.
-            --container=: The name of the asset blob container.
-            --description=: The asset description.
-            --storage-account=: The name of the storage account.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the asset.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the asset.
-        - name: delete
-          description: Delete an Asset.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the asset.
         - name: list
           description: List Assets.
           flags:
@@ -457,25 +473,35 @@ commands:
             --top=: Specifies a non-negative integer n that limits the number of items returned from a collection.
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
-        - name: update
+        - name: show
+          description: Show the details of an asset.
           flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --alternate-id=: The alternate id of the asset.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --description=: The asset description.
-            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the asset.
+        - name: create
+          description: Create an asset.
+          flags:
+            --alternate-id=: The alternate id of the asset.
+            --container=: The name of the asset blob container.
+            --description=: The asset description.
+            --storage-account=: The name of the storage account.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the asset.
+        - name: get-encryption-key
+          description: Get the asset storage encryption keys used to decrypt content created by version 2 of the Media Services API.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -a, --account-name=: The name of the Azure Media Services account.
@@ -483,7 +509,40 @@ commands:
             -n, --name=: The name of the asset.
     - name: asset-filter
       commands:
+        - name: list
+          description: List Asset Filters.
+          flags:
+            --asset-name=!: The name of the asset.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
+        - name: show
+          description: Show the details of an asset filter.
+          flags:
+            --asset-name=: The name of the asset.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the asset filter.
+        - name: delete
+          description: Delete an Asset Filter.
+          flags:
+            --asset-name=: The name of the asset.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the asset filter.
         - name: create
+          description: Create an asset filter.
           flags:
             --asset-name=!: The name of the asset.
             --bitrate=: The first quality bitrate.
@@ -506,38 +565,8 @@ commands:
                 force-end-timestamp:
                     - "true"
                     - "false"
-        - name: show
-          flags:
-            --asset-name=: The name of the asset.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the asset filter.
-        - name: list
-          description: List Asset Filters.
-          flags:
-            --asset-name=!: The name of the asset.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
-        - name: delete
-          description: Delete an Asset Filter.
-          flags:
-            --asset-name=: The name of the asset.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the asset filter.
         - name: update
+          description: Update the details of an asset filter.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -578,6 +607,31 @@ commands:
                     - "false"
     - name: asset-track
       commands:
+        - name: delete
+          description: Delete a Track.
+          flags:
+            --asset-name=!: The asset name
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --track-name=!: The name of the track.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+        - name: show
+          description: Show the details of a track.
+          flags:
+            --asset-name=!: The asset name
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --track-name=!: The name of the track.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
         - name: list
           description: List Tracks in the Asset.
           flags:
@@ -586,6 +640,7 @@ commands:
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
         - name: update
+          description: Update the parameters of a track.
           flags:
             --asset-name=!: The asset name
             --display-name=: The display name of the text track on a video player.
@@ -600,6 +655,7 @@ commands:
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
         - name: update-data
+          description: Update a track if the file in the storage container was recently modified.
           flags:
             --asset-name=!: The asset name
             --ids=:
@@ -611,6 +667,7 @@ commands:
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
         - name: create
+          description: Create a track for an Azure Media Services asset.
           flags:
             --asset-name=!: The asset name
             --display-name=: The display name of the text track on a video player.
@@ -623,35 +680,12 @@ commands:
             --track-type=!: The type of track.
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
-        - name: delete
-          description: Delete a Track.
-          flags:
-            --asset-name=!: The asset name
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --track-name=!: The name of the track.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-        - name: show
-          flags:
-            --asset-name=!: The asset name
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --track-name=!: The name of the track.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
     - name: content-key-policy
       commands:
         - name: option
           commands:
             - name: add
+              description: Add a new option to an existing content key policy.
               flags:
                 --alt-rsa-token-keys=:
                     description: Space-separated list of alternate rsa token keys.
@@ -691,6 +725,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The content key policy name.
             - name: update
+              description: Update an option from an existing content key policy.
               flags:
                 --add-alt-token-key-type=: The type of the token key to be used for the alternate verification key.
                 --add-alt-token-key=: Creates an alternate token key with either a string (for symmetric key) or a filepath to a certificate (x509) or public key (rsa).
@@ -722,6 +757,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The content key policy name.
             - name: remove
+              description: Remove an option from an existing content key policy.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -731,42 +767,6 @@ commands:
                 -a, --account-name=: The name of the Azure Media Services account.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The content key policy name.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --with-secrets=: Include secret values of the content key policy.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The content key policy name.
-        - name: update
-          flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --description=: The content key policy description.
-            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The content key policy name.
         - name: delete
           description: Delete a Content Key Policy.
           flags:
@@ -787,6 +787,7 @@ commands:
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
         - name: create
+          description: Create a new content key policy.
           flags:
             --alt-rsa-token-keys=:
                 description: Space-separated list of alternate rsa token keys.
@@ -823,20 +824,48 @@ commands:
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The content key policy name.
-    - name: job
-      commands:
-        - name: cancel
+        - name: update
+          description: Update an existing content key policy.
           flags:
-            --delete=: Delete the job being cancelled.
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --description=: The content key policy description.
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
             --ids=:
                 description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the job.
-            -t, --transform-name=: The name of the transform.
+            -n, --name=: The content key policy name.
+        - name: show
+          description: Show an existing content key policy.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --with-secrets=: Include secret values of the content key policy.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The content key policy name.
+    - name: job
+      commands:
         - name: start
+          description: Start a job.
           flags:
             --base-uri=: Base uri for http job input.
             --correlation-data=:
@@ -866,7 +895,29 @@ commands:
                     - Low
                     - Normal
                     - High
+        - name: list
+          description: List Jobs.
+          flags:
+            --filter=: Restricts the set of items returned.
+            --orderby=: Specifies the key by which the result collection should be ordered.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
+            -t, --transform-name=!: The name of the transform.
+        - name: cancel
+          description: Cancel a job.
+          flags:
+            --delete=: Delete the job being cancelled.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the job.
+            -t, --transform-name=: The name of the transform.
         - name: show
+          description: Show the details of a job.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -879,27 +930,8 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the job.
             -t, --transform-name=: The name of the transform.
-        - name: delete
-          description: Delete Job.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the job.
-            -t, --transform-name=: The name of the transform.
-        - name: list
-          description: List Jobs.
-          flags:
-            --filter=: Restricts the set of items returned.
-            --orderby=: Specifies the key by which the result collection should be ordered.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
-            -t, --transform-name=!: The name of the transform.
         - name: update
+          description: Update an existing job.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -930,9 +962,59 @@ commands:
                     - Low
                     - Normal
                     - High
+        - name: delete
+          description: Delete Job.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the job.
+            -t, --transform-name=: The name of the transform.
     - name: live-event
       commands:
-        - name: reset
+        - name: show
+          description: Show the details of a live event.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live event.
+        - name: delete
+          description: Delete Live Event.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live event.
+        - name: stop
+          description: Stop a live event.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --remove-outputs-on-stop=: Remove live outputs on stop.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live event.
+        - name: start
+          description: Start a live event.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -945,7 +1027,98 @@ commands:
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the live event.
+        - name: reset
+          description: Reset a live event.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live event.
+        - name: list
+          description: List live events.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
+        - name: standby
+          description: Allocate a live event to be started later.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live event.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of the live event is met.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live event.
+        - name: update
+          description: Update the details of a live event.
+          flags:
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --client-access-policy=: Filepath to the clientaccesspolicy.xml used by Microsoft Silverlight and Adobe Flash.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cross-domain-policy=: Filepath to the crossdomain.xml used by Microsoft Silverlight and Adobe Flash.
+            --description=: The live event description.
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --ips=:
+                description: Space-separated IP addresses for access control.
+                nargs: -1
+            --key-frame-interval-duration=: ISO 8601 timespan duration of the key frame interval duration in seconds.
+            --preview-ips=:
+                description: Space-separated IP addresses for access control.
+                nargs: -1
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live event.
         - name: create
+          description: Create a live event.
           flags:
             --access-token=: A unique identifier for a stream.
             --alternative-media-id=: An Alternative Media Identifier associated with the StreamingLocator created for the preview.
@@ -993,131 +1166,24 @@ commands:
                 streaming-protocol:
                     - FragmentedMP4
                     - RTMP
-        - name: start
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live event.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live event.
-        - name: standby
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live event.
-        - name: delete
-          description: Delete Live Event.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live event.
-        - name: update
-          flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --client-access-policy=: Filepath to the clientaccesspolicy.xml used by Microsoft Silverlight and Adobe Flash.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cross-domain-policy=: Filepath to the crossdomain.xml used by Microsoft Silverlight and Adobe Flash.
-            --description=: The live event description.
-            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --ips=:
-                description: Space-separated IP addresses for access control.
-                nargs: -1
-            --key-frame-interval-duration=: ISO 8601 timespan duration of the key frame interval duration in seconds.
-            --preview-ips=:
-                description: Space-separated IP addresses for access control.
-                nargs: -1
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live event.
-        - name: list
-          description: List live events.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
-        - name: wait
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live event.
-        - name: stop
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --remove-outputs-on-stop=: Remove live outputs on stop.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live event.
     - name: live-output
       commands:
+        - name: show
+          description: Show the details of a live output.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --live-event-name=: The name of the live event.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the live output.
         - name: create
+          description: Create a live output.
           flags:
             --archive-window-length=!: ISO 8601 timespan duration of the archive window length.
             --asset-name=!: The name of the asset.
@@ -1130,6 +1196,13 @@ commands:
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the live output.
+        - name: list
+          description: List Live Outputs.
+          flags:
+            --live-event-name=!: The name of the live event.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
         - name: delete
           description: Delete Live Output.
           flags:
@@ -1141,29 +1214,42 @@ commands:
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the live output.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --live-event-name=: The name of the live event.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the live output.
+    - name: streaming-endpoint
+      commands:
+        - name: akamai
+          commands:
+            - name: add
+              description: Add an AkamaiAccessControl to an existing streaming endpoint.
+              flags:
+                --base64-key=: Base64-encoded authentication key that will be used by the CDN.
+                --expiration=: The ISO 8601 DateTime value that specifies when the Akamai authentication expires.
+                --identifier=: The identifier for the authentication key.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=: The name of the Azure Media Services account.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the streaming endpoint.
+            - name: remove
+              description: Remove an AkamaiAccessControl from an existing streaming endpoint.
+              flags:
+                --identifier=!: The identifier for the authentication key.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=: The name of the Azure Media Services account.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the streaming endpoint.
         - name: list
-          description: List Live Outputs.
+          description: List StreamingEndpoints.
           flags:
-            --live-event-name=!: The name of the live event.
             --subscription=: Name or ID of subscription.
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
-    - name: streaming-endpoint
-      commands:
         - name: update
+          description: Update the details of a streaming endpoint.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -1202,75 +1288,32 @@ commands:
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the streaming endpoint.
-        - name: get-skus
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the streaming endpoint.
-        - name: scale
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --scale-units=!: The number of scale units for Premium StreamingEndpoints.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the streaming endpoint.
-        - name: wait
+        - name: stop
+          description: Stop a streaming endpoint.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --interval=: polling interval in seconds
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the streaming endpoint.
-        - name: akamai
-          commands:
-            - name: remove
-              flags:
-                --identifier=!: The identifier for the authentication key.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=: The name of the Azure Media Services account.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the streaming endpoint.
-            - name: add
-              flags:
-                --base64-key=: Base64-encoded authentication key that will be used by the CDN.
-                --expiration=: The ISO 8601 DateTime value that specifies when the Akamai authentication expires.
-                --identifier=: The identifier for the authentication key.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=: The name of the Azure Media Services account.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the streaming endpoint.
-        - name: list
-          description: List StreamingEndpoints.
+        - name: delete
+          description: Delete StreamingEndpoint.
           flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
             --subscription=: Name or ID of subscription.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the streaming endpoint.
         - name: create
+          description: Create a streaming endpoint.
           flags:
             --auto-start=: The flag indicates if the resource should be automatically started on creation.
             --availability-set-name=: The name of the AvailabilitySet used with this StreamingEndpoint for high availability streaming.
@@ -1298,30 +1341,29 @@ commands:
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the streaming endpoint.
-        - name: delete
-          description: Delete StreamingEndpoint.
+        - name: get-skus
+          description: Get the sku details for a streaming endpoint.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the streaming endpoint.
+        - name: scale
+          description: Set the scale of a streaming endpoint.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --scale-units=!: The number of scale units for Premium StreamingEndpoints.
             --subscription=: Name or ID of subscription.
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the streaming endpoint.
         - name: start
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the streaming endpoint.
-        - name: stop
+          description: Start a streaming endpoint.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -1335,6 +1377,7 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the streaming endpoint.
         - name: show
+          description: Show the details of a streaming endpoint.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -1343,40 +1386,33 @@ commands:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the streaming endpoint.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of the streaming endpoint is met.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the streaming endpoint.
     - name: streaming-locator
       commands:
-        - name: get-paths
-          description: List Paths.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the streaming locator.
-        - name: list
-          description: List Streaming Locators.
-          flags:
-            --filter=: Restricts the set of items returned.
-            --orderby=: Specifies the key by which the result collection should be ordered.
-            --subscription=: Name or ID of subscription.
-            --top=: Specifies a non-negative integer n that limits the number of items returned from a collection.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
-        - name: list-content-keys
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the streaming locator.
         - name: show
+          description: Show the details of a streaming locator.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -1398,7 +1434,27 @@ commands:
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the streaming locator.
+        - name: get-paths
+          description: List Paths.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the streaming locator.
+        - name: list
+          description: List Streaming Locators.
+          flags:
+            --filter=: Restricts the set of items returned.
+            --orderby=: Specifies the key by which the result collection should be ordered.
+            --subscription=: Name or ID of subscription.
+            --top=: Specifies a non-negative integer n that limits the number of items returned from a collection.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
         - name: create
+          description: Create a streaming locator.
           flags:
             --alternative-media-id=: An alternative media identifier associated with the streaming locator.
             --asset-name=!: The name of the asset used by the streaming locator.
@@ -1415,40 +1471,20 @@ commands:
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the streaming locator.
+        - name: list-content-keys
+          description: List content keys used by a streaming locator.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the streaming locator.
     - name: streaming-policy
       commands:
-        - name: delete
-          description: Delete a Streaming Policy.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the streaming policy.
-        - name: list
-          description: List Streaming Policies.
-          flags:
-            --filter=: Restricts the set of items returned.
-            --orderby=: Specifies the key by which the result collection should be ordered.
-            --subscription=: Name or ID of subscription.
-            --top=: Specifies a non-negative integer n that limits the number of items returned from a collection.
-            -a, --account-name=!: The name of the Azure Media Services account.
-            -g, --resource-group=!: Name of resource group.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the streaming policy.
         - name: create
+          description: Create a streaming policy.
           flags:
             --cbcs-clear-tracks=: The JSON representing which tracks should not be encrypted.
             --cbcs-default-key-label=: Label to specify Default Content Key for an encryption scheme.
@@ -1510,16 +1546,40 @@ commands:
                 cenc-disable-widevine:
                     - "true"
                     - "false"
-    - name: transform
-      commands:
+        - name: show
+          description: Show the details of a streaming policy.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the streaming policy.
         - name: list
-          description: List Transforms.
+          description: List Streaming Policies.
           flags:
             --filter=: Restricts the set of items returned.
             --orderby=: Specifies the key by which the result collection should be ordered.
             --subscription=: Name or ID of subscription.
+            --top=: Specifies a non-negative integer n that limits the number of items returned from a collection.
             -a, --account-name=!: The name of the Azure Media Services account.
             -g, --resource-group=!: Name of resource group.
+        - name: delete
+          description: Delete a Streaming Policy.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the streaming policy.
+    - name: transform
+      commands:
         - name: delete
           description: Delete Transform.
           flags:
@@ -1530,9 +1590,18 @@ commands:
             -a, --account-name=: The name of the Azure Media Services account.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the transform.
+        - name: list
+          description: List Transforms.
+          flags:
+            --filter=: Restricts the set of items returned.
+            --orderby=: Specifies the key by which the result collection should be ordered.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: The name of the Azure Media Services account.
+            -g, --resource-group=!: Name of resource group.
         - name: output
           commands:
             - name: remove
+              description: Remove an output from an existing transform.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -1543,6 +1612,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the transform.
             - name: add
+              description: Add an output to an existing transform.
               flags:
                 --audio-analysis-mode=: Determines the set of audio analysis operations to be performed.
                 --audio-language=: 'The language for the audio payload in the input using the BCP-47 format of "language tag-region" (e.g: en-US).'
@@ -1574,42 +1644,8 @@ commands:
                         - Low
                         - Normal
                         - High
-        - name: update
-          flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --description=: The description of the transform.
-            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the transform.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: The name of the Azure Media Services account.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the transform.
         - name: create
+          description: Create a transform.
           flags:
             --audio-analysis-mode=: Determines the set of audio analysis operations to be performed.
             --audio-language=: 'The language for the audio payload in the input using the BCP-47 format of "language tag-region" (e.g: en-US).'
@@ -1639,3 +1675,40 @@ commands:
                     - Low
                     - Normal
                     - High
+        - name: update
+          description: Update the details of a transform.
+          flags:
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --description=: The description of the transform.
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the transform.
+        - name: show
+          description: Show the details of a transform.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: The name of the Azure Media Services account.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the transform.

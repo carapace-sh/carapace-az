@@ -1,33 +1,174 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: image
-description: image
+description: Manage custom virtual machine images.
 commands:
     - name: builder
       commands:
-        - name: update
+        - name: cancel
+          description: Cancel the long running image build based on the image template.
           flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --defer=:
-                description: Temporarily store the object in the local cache instead of sending to Azure.
-                nargs: -1
-            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
             --ids=:
                 description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the image template.
+        - name: run
+          description: Create artifacts from a existing image template.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the image template.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of the template is met.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the image template.
+        - name: output
+          commands:
+            - name: remove
+              description: Remove an image builder output distributor from an image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --output-name=!: Name of the image builder run output.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+            - name: add
+              description: Add an image builder output distributor to an image builder template.
+              flags:
+                --__LOCATION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --artifact-tags=:
+                    description: Tags that will be applied to the output artifact once it has been created by the distributor.
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --gallery-image-definition=: Name or ID of the existing SIG image definition to create the customized image version with.
+                --gallery-name=: Shared image gallery name, if image definition name and not ID was provided.
+                --gallery-replication-regions=:
+                    description: Space-separated list of regions to replicate the image version into.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --is-vhd=: The output is a VHD distributor.
+                --managed-image-location=: Location where the customized image will be created.
+                --managed-image=: Name or ID of the customized managed image to be created.
+                --output-name=: Name of the image builder run output.
+                --subscription=: Name or ID of subscription.
+                --versioning=: Describe how to generate new x.y.z version number for distribution.
+                --vhd-uri=: Optional Azure Storage URI for the distributed VHD blob.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+              completion:
+                flag:
+                    versioning:
+                        - Latest
+                        - Source
+            - name: clear
+              description: Remove all image builder output distributors from an image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+            - name: versioning
+              commands:
+                - name: set
+                  description: Set the image builder output versioner of an image builder template.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --defer=:
+                        description: Temporarily store the object in the local cache instead of sending to Azure.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --major=: Major version for the generated version number.
+                    --output-name=!: Name of the image builder run output.
+                    --scheme=!: Version numbering scheme to be used.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the image template.
+                  completion:
+                    flag:
+                        scheme:
+                            - Latest
+                            - Source
+                - name: show
+                  description: Show versioning options on specified outputs.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --defer=:
+                        description: Temporarily store the object in the local cache instead of sending to Azure.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --output-name=!: Name of the image builder run output.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the image template.
+                - name: remove
+                  description: Remove all versioning options on specified outputs.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --defer=:
+                        description: Temporarily store the object in the local cache instead of sending to Azure.
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --output-name=!: Name of the image builder run output.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the image template.
         - name: trigger
           commands:
             - name: show
@@ -37,22 +178,6 @@ commands:
                     nargs: -1
                 --image-template-name=: The name of the image Template
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the trigger
-            - name: wait
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --image-template-name=: The name of the image Template
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the trigger
             - name: delete
@@ -111,74 +236,24 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-        - name: validator
-          commands:
-            - name: show
+            - name: wait
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
+                --image-template-name=: The name of the image Template
+                --interval=: polling interval in seconds
                 --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-            - name: add
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --continue-distribute-on-failure=:
-                    description: If validation fails and this parameter is set to false, output image(s) will not be distributed.
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --source-validation-only=:
-                    description: If this parameter is set to true, the image specified in the 'source' section will directly be validated.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-              completion:
-                flag:
-                    continue-distribute-on-failure:
-                        - "true"
-                        - "false"
-                    source-validation-only:
-                        - "true"
-                        - "false"
-            - name: remove
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-        - name: show-runs
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --output-name=: Name of the image builder run output.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the image template.
+                -n, --name=: The name of the trigger
         - name: create
+          description: Create an image builder template.
           flags:
             --__DESTINATIONS_LISTS=:
                 description: ==SUPPRESS==
@@ -231,139 +306,10 @@ commands:
             -i, --image-source=: The base image to customize.
             -l, --location=: Location.
             -n, --name=!: The name of the image template.
-        - name: output
-          commands:
-            - name: add
-              flags:
-                --__LOCATION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --artifact-tags=:
-                    description: Tags that will be applied to the output artifact once it has been created by the distributor.
-                    nargs: -1
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --gallery-image-definition=: Name or ID of the existing SIG image definition to create the customized image version with.
-                --gallery-name=: Shared image gallery name, if image definition name and not ID was provided.
-                --gallery-replication-regions=:
-                    description: Space-separated list of regions to replicate the image version into.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --is-vhd=: The output is a VHD distributor.
-                --managed-image-location=: Location where the customized image will be created.
-                --managed-image=: Name or ID of the customized managed image to be created.
-                --output-name=: Name of the image builder run output.
-                --subscription=: Name or ID of subscription.
-                --versioning=: Describe how to generate new x.y.z version number for distribution.
-                --vhd-uri=: Optional Azure Storage URI for the distributed VHD blob.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-              completion:
-                flag:
-                    versioning:
-                        - Latest
-                        - Source
-            - name: versioning
-              commands:
-                - name: show
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --defer=:
-                        description: Temporarily store the object in the local cache instead of sending to Azure.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --output-name=!: Name of the image builder run output.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the image template.
-                - name: remove
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --defer=:
-                        description: Temporarily store the object in the local cache instead of sending to Azure.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --output-name=!: Name of the image builder run output.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the image template.
-                - name: set
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --defer=:
-                        description: Temporarily store the object in the local cache instead of sending to Azure.
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --major=: Major version for the generated version number.
-                    --output-name=!: Name of the image builder run output.
-                    --scheme=!: Version numbering scheme to be used.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the image template.
-                  completion:
-                    flag:
-                        scheme:
-                            - Latest
-                            - Source
-            - name: remove
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --output-name=!: Name of the image builder run output.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-            - name: clear
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-        - name: cancel
-          description: Cancel the long running image build based on the image template.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the image template.
         - name: error-handler
           commands:
-            - name: show
+            - name: remove
+              description: Remove error handler from an existing image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -377,7 +323,8 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the image template.
-            - name: remove
+            - name: show
+              description: Show error handler of an existing image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -392,6 +339,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the image template.
             - name: add
+              description: Add error handler to an existing image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -415,21 +363,48 @@ commands:
                     on-validation-error:
                         - cleanup
                         - abort
-        - name: show
-          description: Get information about a virtual machine image template.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the image template.
         - name: optimizer
           commands:
+            - name: update
+              description: Update an optimizer from an existing image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --enable-vm-boot=:
+                    description: If this parameter is set to true, VM boot time will be improved by optimizing the final customized image output.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+              completion:
+                flag:
+                    enable-vm-boot:
+                        - "true"
+                        - "false"
             - name: show
+              description: Show optimizer of an existing image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+            - name: remove
+              description: Remove optimizer from an existing image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -444,6 +419,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the image template.
             - name: add
+              description: Add optimizer to an existing image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -465,78 +441,10 @@ commands:
                     enable-vm-boot:
                         - "true"
                         - "false"
-            - name: remove
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-            - name: update
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --enable-vm-boot=:
-                    description: If this parameter is set to true, VM boot time will be improved by optimizing the final customized image output.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-              completion:
-                flag:
-                    enable-vm-boot:
-                        - "true"
-                        - "false"
-        - name: list
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: customizer
           commands:
-            - name: remove
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --customizer-name=!: Name of the customizer.
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
-            - name: clear
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
             - name: add
+              description: Add an image builder customizer to an image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -577,27 +485,172 @@ commands:
                         - windows-restart
                         - windows-update
                         - file
-        - name: wait
+            - name: clear
+              description: Remove all image builder customizers from an image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+            - name: remove
+              description: Remove an image builder customizer from an image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --customizer-name=!: Name of the customizer.
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+        - name: update
+          description: Update an image builder template.
+          flags:
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --defer=:
+                description: Temporarily store the object in the local cache instead of sending to Azure.
+                nargs: -1
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the image template.
+        - name: list
+          description: List image builder templates.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: validator
+          commands:
+            - name: add
+              description: Add validate to an existing image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --continue-distribute-on-failure=:
+                    description: If validation fails and this parameter is set to false, output image(s) will not be distributed.
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --source-validation-only=:
+                    description: If this parameter is set to true, the image specified in the 'source' section will directly be validated.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+              completion:
+                flag:
+                    continue-distribute-on-failure:
+                        - "true"
+                        - "false"
+                    source-validation-only:
+                        - "true"
+                        - "false"
+            - name: remove
+              description: Remove validate from an existing image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+            - name: show
+              description: Show validate of an existing image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
+        - name: show-runs
+          description: Show an image builder template's run outputs.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --output-name=: Name of the image builder run output.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the image template.
+        - name: show
+          description: Get information about a virtual machine image template.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the image template.
         - name: identity
           commands:
+            - name: assign
+              description: Add managed identities to an existing image builder template.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --defer=:
+                    description: Temporarily store the object in the local cache instead of sending to Azure.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --user-assigned=:
+                    description: Specify one user assigned identity (name or ID, space delimited) of the image template.
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the image template.
             - name: remove
+              description: Remove managed identities from an existing image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -615,24 +668,8 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the image template.
                 -y, --yes=: Do not prompt for confirmation.
-            - name: assign
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --defer=:
-                    description: Temporarily store the object in the local cache instead of sending to Azure.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --user-assigned=:
-                    description: Specify one user assigned identity (name or ID, space delimited) of the image template.
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the image template.
             - name: show
+              description: Display managed identities of a image builder template.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -646,16 +683,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the image template.
-        - name: run
-          description: Create artifacts from a existing image template.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the image template.
         - name: delete
           description: Delete a virtual machine image template.
           flags:
@@ -666,6 +693,7 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the image template.
     - name: create
+      description: Create a custom Virtual Machine Image from managed disks or snapshots.
       flags:
         --__DATA_BLOB_URIS=:
             description: ==SUPPRESS==

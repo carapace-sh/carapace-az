@@ -1,19 +1,11 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: hdinsight
-description: hdinsight
+description: Manage HDInsight resources.
 commands:
     - name: application
       commands:
-        - name: delete
-          description: Deletes the specified application on the HDInsight cluster.
-          flags:
-            --cluster-name=!: The name of the cluster.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The constant value for the application name.
-            -y, --yes=: Do not prompt for confirmation.
         - name: wait
+          description: Place the CLI in a waiting state until an operation is complete.
           flags:
             --cluster-name=!: The name of the cluster.
             --cmd=:
@@ -29,23 +21,17 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The constant value for the application name.
-        - name: show
-          description: Gets properties of the specified application.
+        - name: delete
+          description: Deletes the specified application on the HDInsight cluster.
           flags:
             --cluster-name=!: The name of the cluster.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The constant value for the application name.
-        - name: list
-          description: Lists all of the applications for the HDInsight cluster.
-          flags:
-            --cluster-name=!: The name of the cluster.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
+            -y, --yes=: Do not prompt for confirmation.
         - name: create
+          description: Create an application for a HDInsight cluster.
           flags:
             --access-mode=: The access mode for the application.
             --cluster-name=!: The name of the cluster.
@@ -83,53 +69,35 @@ commands:
                 type:
                     - CustomApplication
                     - RServer
+        - name: show
+          description: Gets properties of the specified application.
+          flags:
+            --cluster-name=!: The name of the cluster.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The constant value for the application name.
+        - name: list
+          description: Lists all of the applications for the HDInsight cluster.
+          flags:
+            --cluster-name=!: The name of the cluster.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
     - name: autoscale
       commands:
         - name: list-timezones
+          description: List the available timezone name when enabling Schedule-based Autoscale.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
             --subscription=: Name or ID of subscription.
-        - name: wait
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the cluster.
         - name: condition
           commands:
-            - name: list
-              flags:
-                --cluster-name=!: The name of the cluster.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: delete
-              flags:
-                --cluster-name=!: The name of the cluster.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --index=!:
-                    description: The Space-separated list of condition indices which starts with 0 to delete.
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -y, --yes=: Do not prompt for confirmation.
             - name: wait
+              description: Place the CLI in a waiting state until an operation is complete.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -144,7 +112,31 @@ commands:
                 --updated=: wait until updated with provisioningState at 'Succeeded'
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The name of the cluster.
+            - name: delete
+              description: Delete schedule condition.
+              flags:
+                --cluster-name=!: The name of the cluster.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --index=!:
+                    description: The Space-separated list of condition indices which starts with 0 to delete.
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: list
+              description: List all schedule conditions.
+              flags:
+                --cluster-name=!: The name of the cluster.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
             - name: create
+              description: Add a new schedule condition.
               flags:
                 --cluster-name=!: The name of the cluster.
                 --cmd=:
@@ -169,6 +161,7 @@ commands:
                         - Saturday
                         - Sunday
             - name: update
+              description: Update a schedule condition.
               flags:
                 --cluster-name=!: The name of the cluster.
                 --cmd=:
@@ -194,6 +187,7 @@ commands:
                         - Saturday
                         - Sunday
         - name: update
+          description: Update the Autoscale configuration.
           flags:
             --cluster-name=!: The name of the cluster.
             --cmd=:
@@ -205,7 +199,44 @@ commands:
             --subscription=: Name or ID of subscription.
             --timezone=: The timezone for schedule autoscale type.
             -g, --resource-group=!: Name of resource group.
+        - name: show
+          description: Get the Autoscale configuration of a specified cluster.
+          flags:
+            --cluster-name=!: The name of the cluster.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: wait
+          description: Place the CLI in a waiting state until an operation is complete.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the cluster.
+        - name: delete
+          description: Disable Autoscale for a running cluster.
+          flags:
+            --cluster-name=!: The name of the cluster.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -y, --yes=: Do not prompt for confirmation.
         - name: create
+          description: Enable Autoscale for a running cluster.
           flags:
             --cluster-name=!: The name of the cluster.
             --cmd=:
@@ -237,36 +268,10 @@ commands:
                 type:
                     - Load
                     - Schedule
-        - name: show
-          flags:
-            --cluster-name=!: The name of the cluster.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: delete
-          flags:
-            --cluster-name=!: The name of the cluster.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -y, --yes=: Do not prompt for confirmation.
     - name: azure-monitor
       commands:
-        - name: show
-          description: Gets the status of Azure Monitor on the HDInsight cluster.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the cluster.
         - name: enable
+          description: Enable the Azure Monitor logs integration on an HDInsight cluster.
           flags:
             --__WORKSPACE_TYPE=:
                 description: ==SUPPRESS==
@@ -278,6 +283,15 @@ commands:
             --primary-key=: The certificate for the Log Analytics workspace.
             --subscription=: Name or ID of subscription.
             --workspace=!: The name, resource ID or workspace ID of Log Analytics workspace.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the cluster.
+        - name: show
+          description: Gets the status of Azure Monitor on the HDInsight cluster.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the cluster.
         - name: disable
@@ -294,16 +308,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the cluster.
-        - name: show
-          description: Gets the status of Azure Monitor Agent on the HDInsight cluster.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the cluster.
         - name: enable
+          description: Enable the Azure Monitor Agent logs integration on an HDInsight cluster.
           flags:
             --__WORKSPACE_TYPE=:
                 description: ==SUPPRESS==
@@ -317,7 +323,17 @@ commands:
             --workspace=!: The name, resource ID or workspace ID of Log Analytics workspace.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the cluster.
+        - name: show
+          description: Gets the status of Azure Monitor Agent on the HDInsight cluster.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the cluster.
     - name: create
+      description: Create a new cluster.
       flags:
         --assign-identity=:
             description: The name or ID of user assigned identity.
@@ -481,6 +497,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
     - name: list
+      description: List HDInsight clusters in a resource group or subscription.
       flags:
         --cmd=:
             description: ==SUPPRESS==
@@ -500,16 +517,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the cluster.
-        - name: show
-          description: Gets the status of Operations Management Suite (OMS) on the HDInsight cluster.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the cluster.
         - name: enable
+          description: Enable the Classic Azure Monitor logs integration on an HDInsight cluster.
           flags:
             --__WORKSPACE_TYPE=:
                 description: ==SUPPRESS==
@@ -523,7 +532,17 @@ commands:
             --workspace=!: The name, resource ID or workspace ID of Log Analytics workspace.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the cluster.
+        - name: show
+          description: Gets the status of Operations Management Suite (OMS) on the HDInsight cluster.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the cluster.
     - name: resize
+      description: Resize the specified HDInsight cluster to the specified size.
       flags:
         --cmd=:
             description: ==SUPPRESS==
@@ -534,6 +553,7 @@ commands:
         -g, --resource-group=!: Name of resource group.
         -n, --name=!: The name of the cluster.
     - name: rotate-disk-encryption-key
+      description: Rotate the disk encryption key of the specified HDInsight cluster.
       flags:
         --cmd=:
             description: ==SUPPRESS==
@@ -547,6 +567,35 @@ commands:
         -n, --name=!: The name of the cluster.
     - name: script-action
       commands:
+        - name: delete
+          description: Deletes a specified persisted script action of the cluster.
+          flags:
+            --cluster-name=!: The name of the cluster.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the script.
+        - name: execute
+          description: Execute script actions on the specified HDInsight cluster.
+          flags:
+            --cluster-name=!: The name of the cluster.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --persist-on-success=: If the scripts needs to be persisted.
+            --roles=!:
+                description: A space-delimited list of roles (nodes) where the script will be executed.
+                nargs: -1
+            --script-parameters=: The parameters for the script.
+            --script-uri=!: The URI to the script.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the script action.
+        - name: list
+          description: Lists all the persisted script actions for the specified cluster.
+          flags:
+            --cluster-name=!: The name of the cluster.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
         - name: list-execution-history
           description: Lists all scripts' execution history for the specified cluster.
           flags:
@@ -563,39 +612,11 @@ commands:
             --execution-id=!: The script execution id
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-        - name: execute
-          flags:
-            --cluster-name=!: The name of the cluster.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --persist-on-success=: If the scripts needs to be persisted.
-            --roles=!:
-                description: A space-delimited list of roles (nodes) where the script will be executed.
-                nargs: -1
-            --script-parameters=: The parameters for the script.
-            --script-uri=!: The URI to the script.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the script action.
-        - name: delete
-          description: Deletes a specified persisted script action of the cluster.
-          flags:
-            --cluster-name=!: The name of the cluster.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the script.
         - name: promote
           description: Promotes the specified ad-hoc script execution to a persisted script.
           flags:
             --cluster-name=!: The name of the cluster.
             --execution-id=!: The script execution id
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: list
-          description: Lists all the persisted script actions for the specified cluster.
-          flags:
-            --cluster-name=!: The name of the cluster.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
     - name: show
@@ -608,6 +629,7 @@ commands:
         -g, --resource-group=!: Name of resource group.
         -n, --name=!: The name of the cluster.
     - name: update
+      description: Update the tags or identity of the specified HDInsight cluster.
       flags:
         --assign-identity-type=: The type of identity used for the cluster.
         --assign-identity=:
@@ -624,6 +646,7 @@ commands:
         -g, --resource-group=!: Name of resource group.
         -n, --name=!: The name of the cluster.
     - name: wait
+      description: Place the CLI in a waiting state until an operation is complete.
       flags:
         --cmd=:
             description: ==SUPPRESS==

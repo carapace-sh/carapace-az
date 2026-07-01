@@ -1,9 +1,31 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: managedservices
-description: managedservices
+description: Manage the registration assignments and definitions in Azure.
 commands:
     - name: assignment
       commands:
+        - name: list
+          flags:
+            --include-definition=:
+                description: Tells whether to return registration definition details also along with registration assignment details.
+                nargs: -1
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+          completion:
+            flag:
+                include-definition:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: show
           flags:
             --assignment=!: The identifier (guid) or the fully qualified resource id of the registration assignment.
@@ -47,34 +69,6 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: wait
-          flags:
-            --assignment=!: The identifier (guid) or the fully qualified resource id of the registration assignment.
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --include-definition=:
-                description: Tells whether to return registration definition details also along with registration assignment details.
-                nargs: -1
-            --interval=: polling interval in seconds
-            --scope=!: Scope of the resource.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-          completion:
-            flag:
-                include-definition:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: delete
           flags:
             --assignment=!: The identifier (guid) or the fully qualified resource id of the registration assignment.
@@ -97,15 +91,21 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: list
+        - name: wait
           flags:
+            --assignment=!: The identifier (guid) or the fully qualified resource id of the registration assignment.
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
             --include-definition=:
                 description: Tells whether to return registration definition details also along with registration assignment details.
                 nargs: -1
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
+            --interval=: polling interval in seconds
+            --scope=!: Scope of the resource.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
           completion:
             flag:
                 include-definition:
@@ -121,27 +121,10 @@ commands:
                     - "0"
     - name: definition
       commands:
-        - name: delete
-          flags:
-            --definition=!: Guid of the registration definition.
-            --subscription=: Name or ID of subscription.
-            -y, --yes=: Do not prompt for confirmation.
         - name: show
           flags:
             --definition=!: Guid of the registration definition.
             --subscription=: Name or ID of subscription.
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --definition=!: Guid of the registration definition.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --interval=: polling interval in seconds
-            --scope=!: Scope of the resource.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
         - name: create
           flags:
             --definition-id=: Guid of the registration definition.
@@ -171,6 +154,23 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: wait
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --definition=!: Guid of the registration definition.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --interval=: polling interval in seconds
+            --scope=!: Scope of the resource.
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+        - name: delete
+          flags:
+            --definition=!: Guid of the registration definition.
+            --subscription=: Name or ID of subscription.
+            -y, --yes=: Do not prompt for confirmation.
         - name: list
           flags:
             --max-items=: Total number of items to return in the command's output.

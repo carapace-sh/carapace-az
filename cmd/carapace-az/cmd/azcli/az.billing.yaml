@@ -1,31 +1,33 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: billing
-description: billing
+description: Manage Azure Billing.
 commands:
     - name: account
       commands:
-        - name: invoice-section
-          commands:
-            - name: list
-              flags:
-                --billing-account-name=!: Billing Account Id.
-                --expand=: May be used to expand the billingProfiles.
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-            - name: show
-              flags:
-                --billing-account-name=!: Billing Account Id.
-                --expand=: May be used to expand the billingProfiles.
-                --invoice-section-name=!: InvoiceSection Id.
-                --subscription=: Name or ID of subscription.
-        - name: list-invoice-section
+        - name: show
+          description: Get a billing account by its ID.
           flags:
-            --billing-account-name=!: The ID that uniquely identifies a billing account.
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --expand=: May be used to expand the soldTo, invoice sections and billing profiles.
             --subscription=: Name or ID of subscription.
+            -n, --name=!: The ID that uniquely identifies a billing account.
+        - name: update
+          description: Update the properties of a billing account.
+          flags:
+            --billing-profiles-value=: The billing profiles associated with the billing account.
+            --departments=: The departments associated to the enrollment.
+            --display-name=: The billing account name.
+            --enrollment-accounts=: The accounts associated to the enrollment.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --sold-to=:
+                description: The address of the individual or organization that is responsible for the billing account.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The ID that uniquely identifies a billing account.
         - name: wait
+          description: Place the CLI in a waiting state until a condition of the billing account is met.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -40,10 +42,28 @@ commands:
             --timeout=: maximum wait in seconds
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -n, --name=!: The ID that uniquely identifies a billing account.
+        - name: list-invoice-section
+          flags:
+            --billing-account-name=!: The ID that uniquely identifies a billing account.
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
         - name: list
+          description: List the billing accounts that a user has access to.
           flags:
             --expand=: May be used to expand the soldTo, invoice sections and billing profiles.
             --subscription=: Name or ID of subscription.
+        - name: transaction
+          commands:
+            - name: list
+              flags:
+                --billing-account-name=!: The ID that uniquely identifies a billing account.
+                --filter=: May be used to filter by transaction type.
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --period-end-date=!: The end date to fetch the transactions.
+                --period-start-date=!: The start date to fetch the transactions.
+                --subscription=: Name or ID of subscription.
         - name: reservation
           commands:
             - name: list
@@ -56,45 +76,25 @@ commands:
                 --refresh-summary=: To indicate whether to refresh the roll up counts of the reservations group by provisioning states
                 --selected-state=: The selected provisioning state
                 --subscription=: Name or ID of subscription.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --expand=: May be used to expand the soldTo, invoice sections and billing profiles.
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: The ID that uniquely identifies a billing account.
-        - name: update
-          flags:
-            --billing-profiles-value=: The billing profiles associated with the billing account.
-            --departments=: The departments associated to the enrollment.
-            --display-name=: The billing account name.
-            --enrollment-accounts=: The accounts associated to the enrollment.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --sold-to=:
-                description: The address of the individual or organization that is responsible for the billing account.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: The ID that uniquely identifies a billing account.
-        - name: transaction
+        - name: invoice-section
           commands:
+            - name: show
+              flags:
+                --billing-account-name=!: Billing Account Id.
+                --expand=: May be used to expand the billingProfiles.
+                --invoice-section-name=!: InvoiceSection Id.
+                --subscription=: Name or ID of subscription.
             - name: list
               flags:
-                --billing-account-name=!: The ID that uniquely identifies a billing account.
-                --filter=: May be used to filter by transaction type.
+                --billing-account-name=!: Billing Account Id.
+                --expand=: May be used to expand the billingProfiles.
                 --max-items=: Total number of items to return in the command's output.
                 --next-token=: Token to specify where to start paginating.
-                --period-end-date=!: The end date to fetch the transactions.
-                --period-start-date=!: The start date to fetch the transactions.
                 --subscription=: Name or ID of subscription.
     - name: agreement
       commands:
-        - name: list
-          flags:
-            --account-name=!: The ID that uniquely identifies a billing account.
-            --expand=: May be used to expand the participants.
-            --subscription=: Name or ID of subscription.
         - name: show
+          description: Get an agreement by ID.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -103,9 +103,16 @@ commands:
             --expand=: May be used to expand the participants.
             --subscription=: Name or ID of subscription.
             -n, --name=!: The ID that uniquely identifies an agreement.
+        - name: list
+          description: List the agreements for a billing account.
+          flags:
+            --account-name=!: The ID that uniquely identifies a billing account.
+            --expand=: May be used to expand the participants.
+            --subscription=: Name or ID of subscription.
     - name: balance
       commands:
         - name: show
+          description: The available credit balance for a billing profile.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -116,6 +123,7 @@ commands:
     - name: customer
       commands:
         - name: list
+          description: List the customers that are billed to a billing account.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --filter=: May be used to filter the list of customers.
@@ -123,6 +131,7 @@ commands:
             --search=: Used for searching customers by their name.
             --subscription=: Name or ID of subscription.
         - name: show
+          description: Get a customer by its ID.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -141,6 +150,10 @@ commands:
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the enrollment account
+        - name: list
+          description: Lists the enrollment accounts the caller has access to.
+          flags:
+            --subscription=: Name or ID of subscription.
         - name: billing-permission
           commands:
             - name: list
@@ -150,13 +163,16 @@ commands:
                 --max-items=: Total number of items to return in the command's output.
                 --next-token=: Token to specify where to start paginating.
                 --subscription=: Name or ID of subscription.
-        - name: list
-          description: Lists the enrollment accounts the caller has access to.
-          flags:
-            --subscription=: Name or ID of subscription.
     - name: instruction
       commands:
+        - name: list
+          description: List the instructions by billing profile id.
+          flags:
+            --account-name=!: The ID that uniquely identifies a billing account.
+            --profile-name=!: The ID that uniquely identifies a billing profile.
+            --subscription=: Name or ID of subscription.
         - name: update
+          description: Update an instruction.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --add=:
@@ -180,6 +196,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --name=!: Instruction Name.
         - name: show
+          description: Show the instruction by name.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -188,12 +205,8 @@ commands:
             --profile-name=!: The ID that uniquely identifies a billing profile.
             --subscription=: Name or ID of subscription.
             -n, --name=!: Instruction Name.
-        - name: list
-          flags:
-            --account-name=!: The ID that uniquely identifies a billing account.
-            --profile-name=!: The ID that uniquely identifies a billing profile.
-            --subscription=: Name or ID of subscription.
         - name: create
+          description: Create an instruction.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --amount=: The amount budgeted for this billing instruction.
@@ -205,19 +218,34 @@ commands:
             -n, --name=!: Instruction Name.
     - name: invoice
       commands:
-        - name: list
-          flags:
-            --account-name=: The ID that uniquely identifies a billing account.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --period-end-date=!: The end date to fetch the invoices.
-            --period-start-date=!: The start date to fetch the invoices.
-            --profile-name=: The ID that uniquely identifies a billing profile.
-            --subscription=: Name or ID of subscription.
         - name: section
           commands:
+            - name: list
+              description: List the invoice sections that a user has access to.
+              flags:
+                --account-name=!: The ID that uniquely identifies a billing account.
+                --profile-name=!: The ID that uniquely identifies a billing profile.
+                --subscription=: Name or ID of subscription.
+            - name: show
+              description: Get an invoice section by its ID.
+              flags:
+                --account-name=!: The ID that uniquely identifies a billing account.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --profile-name=!: The ID that uniquely identifies a billing profile.
+                --subscription=: Name or ID of subscription.
+                -n, --name=!: The ID that uniquely identifies an invoice section.
+            - name: initiate-transfer
+              flags:
+                --billing-account-name=!: The ID that uniquely identifies a billing account.
+                --billing-profile-name=!: The ID that uniquely identifies a billing profile.
+                --invoice-section-name=!: The ID that uniquely identifies an invoice section.
+                --recipient-email-id=: The email ID of the recipient to whom the transfer request is sent.
+                --reseller-id=: Optional MPN ID of the reseller for transfer requests that are sent from a Microsoft Partner Agreement billing account.
+                --subscription=: Name or ID of subscription.
             - name: wait
+              description: Place the CLI in a waiting state until a condition of the billing invoice section is met.
               flags:
                 --account-name=!: The ID that uniquely identifies a billing account.
                 --cmd=:
@@ -234,6 +262,7 @@ commands:
                 --updated=: wait until updated with provisioningState at 'Succeeded'
                 -n, --name=!: The ID that uniquely identifies an invoice section.
             - name: update
+              description: Creates or updates an invoice section.
               flags:
                 --account-name=!: The ID that uniquely identifies a billing account.
                 --display-name=: The name of the invoice section.
@@ -245,6 +274,7 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -n, --name=!: The ID that uniquely identifies an invoice section.
             - name: create
+              description: Creates or updates an invoice section.
               flags:
                 --account-name=!: The ID that uniquely identifies a billing account.
                 --display-name=: The name of the invoice section.
@@ -255,28 +285,17 @@ commands:
                 --profile-name=!: The ID that uniquely identifies a billing profile.
                 --subscription=: Name or ID of subscription.
                 -n, --name=!: The ID that uniquely identifies an invoice section.
-            - name: list
-              flags:
-                --account-name=!: The ID that uniquely identifies a billing account.
-                --profile-name=!: The ID that uniquely identifies a billing profile.
-                --subscription=: Name or ID of subscription.
-            - name: initiate-transfer
-              flags:
-                --billing-account-name=!: The ID that uniquely identifies a billing account.
-                --billing-profile-name=!: The ID that uniquely identifies a billing profile.
-                --invoice-section-name=!: The ID that uniquely identifies an invoice section.
-                --recipient-email-id=: The email ID of the recipient to whom the transfer request is sent.
-                --reseller-id=: Optional MPN ID of the reseller for transfer requests that are sent from a Microsoft Partner Agreement billing account.
-                --subscription=: Name or ID of subscription.
-            - name: show
-              flags:
-                --account-name=!: The ID that uniquely identifies a billing account.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --profile-name=!: The ID that uniquely identifies a billing profile.
-                --subscription=: Name or ID of subscription.
-                -n, --name=!: The ID that uniquely identifies an invoice section.
+        - name: list
+          description: List the invoices for a subscription.
+          flags:
+            --account-name=: The ID that uniquely identifies a billing account.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --period-end-date=!: The end date to fetch the invoices.
+            --period-start-date=!: The start date to fetch the invoices.
+            --profile-name=: The ID that uniquely identifies a billing profile.
+            --subscription=: Name or ID of subscription.
         - name: download
           description: Get URL to download invoice
           flags:
@@ -288,6 +307,7 @@ commands:
             --invoice-name=: The ID that uniquely identifies an invoice
             --subscription=: Name or ID of subscription.
         - name: show
+          description: Get an invoice.
           flags:
             --account-name=: The ID that uniquely identifies a billing account.
             --by-subscription=: When provided, it must work with --invoice-name to get an invoice by subscription ID and invoice ID
@@ -313,6 +333,7 @@ commands:
     - name: permission
       commands:
         - name: list
+          description: List the billing permissions the caller has on a billing account.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --customer-name=: The ID that uniquely identifies a customer.
@@ -322,6 +343,7 @@ commands:
     - name: policy
       commands:
         - name: update
+          description: Update the policies for a billing profile.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --customer-name=: The ID that uniquely identifies a customer
@@ -343,6 +365,7 @@ commands:
                     - Allowed
                     - NotAllowed
         - name: show
+          description: Show the policies for a customer or for a billing profile.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account
             --cmd=:
@@ -353,15 +376,17 @@ commands:
             --subscription=: Name or ID of subscription.
     - name: product
       commands:
-        - name: show
+        - name: list
+          description: List the products for a billing account.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --customer-name=: The ID that uniquely identifies a customer.
+            --filter=: May be used to filter by product type.
+            --invoice-section-name=: The ID that uniquely identifies an invoice section.
+            --profile-name=: The ID that uniquely identifies a billing profile.
             --subscription=: Name or ID of subscription.
-            -n, --name=!: The ID that uniquely identifies a product.
         - name: update
+          description: Update the properties of a Product.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --auto-renew=: Indicates whether auto renewal is turned on or off for a product.
@@ -387,38 +412,81 @@ commands:
                     - Disabled
                     - Cancelled
                     - AutoRenew
-        - name: list
-          flags:
-            --account-name=!: The ID that uniquely identifies a billing account.
-            --customer-name=: The ID that uniquely identifies a customer.
-            --filter=: May be used to filter by product type.
-            --invoice-section-name=: The ID that uniquely identifies an invoice section.
-            --profile-name=: The ID that uniquely identifies a billing profile.
-            --subscription=: Name or ID of subscription.
         - name: move
+          description: Moves a product's charges to a new invoice section.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --destination-invoice-section-id=: The destination invoice section id.
             --subscription=: Name or ID of subscription.
             -n, --name=!: The ID that uniquely identifies a product.
         - name: validate-move
+          description: Validate if a product's charges can be moved to a new invoice section.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --destination-invoice-section-id=: The destination invoice section id.
             --subscription=: Name or ID of subscription.
             -n, --name=!: The ID that uniquely identifies a product.
-    - name: profile
-      commands:
         - name: show
+          description: Get a product by ID.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --expand=: May be used to expand the invoice sections.
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The ID that uniquely identifies a product.
+    - name: profile
+      commands:
+        - name: update
+          description: Creates or updates a billing profile.
+          flags:
+            --account-name=!: The ID that uniquely identifies a billing account.
+            --bill-to=:
+                description: Billing address.
+                nargs: -1
+            --display-name=: The name of the billing profile.
+            --enabled-azure-plans=:
+                description: Information about the enabled azure plans.
+                nargs: -1
+            --invoice-email-opt-in=:
+                description: Flag controlling whether the invoices for the billing profile are sent through email.
+                nargs: -1
+            --invoice-sections-value=: The invoice sections associated to the billing profile.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --po-number=: The purchase order name that will appear on the invoices generated for the billing profile.
             --subscription=: Name or ID of subscription.
             -n, --name=!: The ID that uniquely identifies a billing profile.
+          completion:
+            flag:
+                invoice-email-opt-in:
+                    - "true"
+                    - "false"
+        - name: create
+          description: Creates or updates a billing profile.
+          flags:
+            --account-name=!: The ID that uniquely identifies a billing account.
+            --bill-to=:
+                description: Billing address.
+                nargs: -1
+            --display-name=: The name of the billing profile.
+            --enabled-azure-plans=:
+                description: Information about the enabled azure plans.
+                nargs: -1
+            --invoice-email-opt-in=:
+                description: Flag controlling whether the invoices for the billing profile are sent through email.
+                nargs: -1
+            --invoice-sections-value=: The invoice sections associated to the billing profile.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --po-number=: The purchase order name that will appear on the invoices generated for the billing profile.
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The ID that uniquely identifies a billing profile.
+          completion:
+            flag:
+                invoice-email-opt-in:
+                    - "true"
+                    - "false"
         - name: wait
+          description: Place the CLI in a waiting state until a condition of the billing profile is met.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -434,52 +502,22 @@ commands:
             --timeout=: maximum wait in seconds
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -n, --name=!: The ID that uniquely identifies a billing profile.
-        - name: create
+        - name: list
+          description: List the billing profiles that a user has access to.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
-            --bill-to=:
-                description: Billing address.
-                nargs: -1
-            --display-name=: The name of the billing profile.
-            --enabled-azure-plans=:
-                description: Information about the enabled azure plans.
-                nargs: -1
-            --invoice-email-opt-in=:
-                description: Flag controlling whether the invoices for the billing profile are sent through email.
-                nargs: -1
-            --invoice-sections-value=: The invoice sections associated to the billing profile.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --po-number=: The purchase order name that will appear on the invoices generated for the billing profile.
+            --expand=: May be used to expand the invoice sections.
             --subscription=: Name or ID of subscription.
-            -n, --name=!: The ID that uniquely identifies a billing profile.
-          completion:
-            flag:
-                invoice-email-opt-in:
-                    - "true"
-                    - "false"
-        - name: update
+        - name: show
+          description: Get a billing profile by its ID.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
-            --bill-to=:
-                description: Billing address.
+            --cmd=:
+                description: ==SUPPRESS==
                 nargs: -1
-            --display-name=: The name of the billing profile.
-            --enabled-azure-plans=:
-                description: Information about the enabled azure plans.
-                nargs: -1
-            --invoice-email-opt-in=:
-                description: Flag controlling whether the invoices for the billing profile are sent through email.
-                nargs: -1
-            --invoice-sections-value=: The invoice sections associated to the billing profile.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --po-number=: The purchase order name that will appear on the invoices generated for the billing profile.
+            --expand=: May be used to expand the invoice sections.
             --subscription=: Name or ID of subscription.
             -n, --name=!: The ID that uniquely identifies a billing profile.
-          completion:
-            flag:
-                invoice-email-opt-in:
-                    - "true"
-                    - "false"
         - name: reservation
           commands:
             - name: list
@@ -493,26 +531,31 @@ commands:
                 --refresh-summary=: To indicate whether to refresh the roll up counts of the reservations group by provisioning state
                 --selected-state=: The selected provisioning state
                 --subscription=: Name or ID of subscription.
-        - name: list
-          flags:
-            --account-name=!: The ID that uniquely identifies a billing account.
-            --expand=: May be used to expand the invoice sections.
-            --subscription=: Name or ID of subscription.
     - name: property
       commands:
-        - name: update
-          flags:
-            --cost-center=: The cost center applied to the subscription.
-            --subscription=: Name or ID of subscription.
         - name: show
+          description: Get the billing properties for a subscription.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
             --subscription=: Name or ID of subscription.
+        - name: update
+          description: Update the billing property of a subscription.
+          flags:
+            --cost-center=: The cost center applied to the subscription.
+            --subscription=: Name or ID of subscription.
     - name: role-assignment
       commands:
+        - name: list
+          description: List the role assignments for the caller on a billing account.
+          flags:
+            --account-name=!: The ID that uniquely identifies a billing account.
+            --invoice-section-name=: The ID that uniquely identifies an invoice section.
+            --profile-name=: The ID that uniquely identifies a billing profile.
+            --subscription=: Name or ID of subscription.
         - name: show
+          description: Show the role assignment detail for the caller within different scopes.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -523,6 +566,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --name=!: The ID that uniquely identifies a role assignment.
         - name: delete
+          description: Delete a role assignment for the caller on a billing account.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --invoice-section-name=: The ID that uniquely identifies an invoice section.
@@ -530,15 +574,10 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --name=!: The ID that uniquely identifies a role assignment.
             -y, --yes=: Do not prompt for confirmation.
-        - name: list
-          flags:
-            --account-name=!: The ID that uniquely identifies a billing account.
-            --invoice-section-name=: The ID that uniquely identifies an invoice section.
-            --profile-name=: The ID that uniquely identifies a billing profile.
-            --subscription=: Name or ID of subscription.
     - name: role-definition
       commands:
         - name: show
+          description: Show the role definition details
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -549,6 +588,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --name=!: The name that uniquely identifies a role definition.
         - name: list
+          description: List the role definitions for a billing account.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --invoice-section-name=: The ID that uniquely identifies an invoice section.
@@ -556,21 +596,8 @@ commands:
             --subscription=: Name or ID of subscription.
     - name: subscription
       commands:
-        - name: list
-          flags:
-            --account-name=!: The ID that uniquely identifies a billing account.
-            --customer-name=: The ID that uniquely identifies a customer.
-            --invoice-section-name=: The ID that uniquely identifies an invoice section.
-            --profile-name=: The ID that uniquely identifies a billing profile.
-            --subscription=: Name or ID of subscription.
-        - name: show
-          flags:
-            --account-name=!: The ID that uniquely identifies a billing account.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
         - name: wait
+          description: Place the CLI in a waiting state until a condition of the billing subscription is met.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cmd=:
@@ -584,18 +611,37 @@ commands:
             --subscription=: Name or ID of subscription.
             --timeout=: maximum wait in seconds
             --updated=: wait until updated with provisioningState at 'Succeeded'
+        - name: show
+          description: Get a subscription by its ID.
+          flags:
+            --account-name=!: The ID that uniquely identifies a billing account.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
         - name: validate-move
+          description: Validate if a subscription's charges can be moved to a new invoice section.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --destination-invoice-section-id=!: The destination invoice section id.
             --subscription=: Name or ID of subscription.
         - name: move
+          description: Moves a subscription's charges to a new invoice section.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --destination-invoice-section-id=!: The destination invoice section id.
             --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
+        - name: list
+          description: List the subscriptions for a billing account.
+          flags:
+            --account-name=!: The ID that uniquely identifies a billing account.
+            --customer-name=: The ID that uniquely identifies a customer.
+            --invoice-section-name=: The ID that uniquely identifies an invoice section.
+            --profile-name=: The ID that uniquely identifies a billing profile.
+            --subscription=: Name or ID of subscription.
         - name: update
+          description: Update the properties of a billing subscription.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --cost-center=: The cost center applied to the subscription.
@@ -613,6 +659,7 @@ commands:
     - name: transaction
       commands:
         - name: list
+          description: List the transactions for an invoice.
           flags:
             --account-name=!: The ID that uniquely identifies a billing account.
             --invoice-name=!: The ID that uniquely identifies an invoice.
@@ -623,11 +670,6 @@ commands:
           flags:
             --subscription=: Name or ID of subscription.
             --transfer-name=!: The ID that uniquely identifies a transfer request.
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
         - name: accept-transfer
           flags:
             --product-details=:
@@ -635,3 +677,8 @@ commands:
                 nargs: -1
             --subscription=: Name or ID of subscription.
             --transfer-name=!: The ID that uniquely identifies a transfer request.
+        - name: list
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.

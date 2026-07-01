@@ -1,23 +1,37 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: policy
-description: policy
+description: Manage resource policies.
 commands:
     - name: assignment
       commands:
+        - name: update
+          description: Updates a policy assignment
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --description=: Description of the policy assignment.
+            --display-name=: Display name of the policy assignment.
+            --not-scopes=: Space-separated scopes where the policy assignment does not apply.
+            --scope=: Scope at which this policy assignment subcommand applies.
+            --subscription=: Name or ID of subscription.
+            -e, --enforcement-mode=: Enforcement mode of the policy assignment, e.g.
+            -g, --resource-group=: the resource group where the policy will be applied
+            -n, --name=: Name of the policy assignment.
+            -p, --params=: JSON formatted string or a path to a file or uri with parameter values of the policy rule.
+            -s, --sku=: policy sku.
+          completion:
+            flag:
+                enforcement-mode:
+                    - Default
+                    - DoNotEnforce
+                sku:
+                    - free
+                    - standard
         - name: non-compliance-message
           commands:
-            - name: delete
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --scope=: Scope at which this policy assignment subcommand applies.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: the resource group where the policy will be applied
-                -m, --message=!: Message that will be shown when a resource is denied by policy or evaluation details are inspected.
-                -n, --name=!: Name of the policy assignment.
-                -r, --policy-definition-reference-id=: Policy definition reference ID within the assigned initiative (policy set) that the message applies to.
             - name: create
+              description: Add a non-compliance message to a policy assignment.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -29,6 +43,7 @@ commands:
                 -n, --name=!: Name of the policy assignment.
                 -r, --policy-definition-reference-id=: Policy definition reference ID within the assigned initiative (policy set) that the message applies to.
             - name: list
+              description: List the non-compliance messages for a policy assignment.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -37,18 +52,22 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: the resource group where the policy will be applied
                 -n, --name=!: Name of the policy assignment.
+            - name: delete
+              description: Remove one or more non-compliance messages from a policy assignment.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --scope=: Scope at which this policy assignment subcommand applies.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: the resource group where the policy will be applied
+                -m, --message=!: Message that will be shown when a resource is denied by policy or evaluation details are inspected.
+                -n, --name=!: Name of the policy assignment.
+                -r, --policy-definition-reference-id=: Policy definition reference ID within the assigned initiative (policy set) that the message applies to.
         - name: identity
           commands:
             - name: show
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --scope=: Scope at which this policy assignment subcommand applies.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: the resource group where the policy will be applied
-                -n, --name=!: Name of the policy assignment.
-            - name: remove
+              description: Show a policy assignment's managed identity.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -58,6 +77,7 @@ commands:
                 -g, --resource-group=: the resource group where the policy will be applied
                 -n, --name=!: Name of the policy assignment.
             - name: assign
+              description: Add a system assigned identity or a user assigned identity to a policy assignment.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -70,6 +90,46 @@ commands:
                 --user-assigned=: UserAssigned Identity Id to be used for policy assignment.
                 -g, --resource-group=: the resource group where the policy will be applied
                 -n, --name=!: Name of the policy assignment.
+            - name: remove
+              description: Remove a managed identity from a policy assignment.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --scope=: Scope at which this policy assignment subcommand applies.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: the resource group where the policy will be applied
+                -n, --name=!: Name of the policy assignment.
+        - name: delete
+          description: Delete a resource policy assignment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --scope=: Scope at which this policy assignment subcommand applies.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: the resource group where the policy will be applied
+            -n, --name=!: Name of the policy assignment.
+        - name: show
+          description: Show a resource policy assignment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --scope=: Scope at which this policy assignment subcommand applies.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: the resource group where the policy will be applied
+            -n, --name=!: Name of the policy assignment.
+        - name: list
+          description: List resource policy assignments.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --disable-scope-strict-match=: Include policy assignments either inherited from parent scope or at child scope.
+            --scope=: Scope at which this policy assignment subcommand applies.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: the resource group where the policy will be applied
         - name: create
           description: Creates a policy assignment
           flags:
@@ -104,84 +164,17 @@ commands:
                 sku:
                     - free
                     - standard
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --scope=: Scope at which this policy assignment subcommand applies.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: the resource group where the policy will be applied
-            -n, --name=!: Name of the policy assignment.
-        - name: update
-          description: Updates a policy assignment
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --description=: Description of the policy assignment.
-            --display-name=: Display name of the policy assignment.
-            --not-scopes=: Space-separated scopes where the policy assignment does not apply.
-            --scope=: Scope at which this policy assignment subcommand applies.
-            --subscription=: Name or ID of subscription.
-            -e, --enforcement-mode=: Enforcement mode of the policy assignment, e.g.
-            -g, --resource-group=: the resource group where the policy will be applied
-            -n, --name=: Name of the policy assignment.
-            -p, --params=: JSON formatted string or a path to a file or uri with parameter values of the policy rule.
-            -s, --sku=: policy sku.
-          completion:
-            flag:
-                enforcement-mode:
-                    - Default
-                    - DoNotEnforce
-                sku:
-                    - free
-                    - standard
-        - name: list
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --disable-scope-strict-match=: Include policy assignments either inherited from parent scope or at child scope.
-            --scope=: Scope at which this policy assignment subcommand applies.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: the resource group where the policy will be applied
-        - name: delete
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --scope=: Scope at which this policy assignment subcommand applies.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: the resource group where the policy will be applied
-            -n, --name=!: Name of the policy assignment.
     - name: attestation
       commands:
-        - name: delete
+        - name: list
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
-            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
-            --resource-type=: 'Resource type (Ex: resourceTypeC).'
-            --resource=: Resource ID or resource name.
+            --filter=: OData filter expression.
+            --resource-id=: Resource ID.
             --subscription=: Name or ID of subscription.
+            --top=: Maximum number of records to return.
             -g, --resource-group=: Name of resource group.
-            -n, --attestation-name=!: The name of the attestation.
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
-            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
-            --resource-type=: 'Resource type (Ex: resourceTypeC).'
-            --resource=: Resource ID or resource name.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --attestation-name=!: The name of the attestation.
         - name: create
+          description: Create a policy attestation.
           flags:
             --assessment-date=: The time the evidence was assessed.
             --cmd=:
@@ -212,7 +205,34 @@ commands:
                     - Compliant
                     - NonCompliant
                     - Unknown
+        - name: show
+          description: Get a policy attestation.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
+            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
+            --resource-type=: 'Resource type (Ex: resourceTypeC).'
+            --resource=: Resource ID or resource name.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --attestation-name=!: The name of the attestation.
+        - name: delete
+          description: Delete an existing policy attestation.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
+            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
+            --resource-type=: 'Resource type (Ex: resourceTypeC).'
+            --resource=: Resource ID or resource name.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --attestation-name=!: The name of the attestation.
         - name: update
+          description: Update an existing policy attestation.
           flags:
             --assessment-date=: The time the evidence was assessed.
             --cmd=:
@@ -243,16 +263,10 @@ commands:
                     - Compliant
                     - NonCompliant
                     - Unknown
-        - name: list
-          flags:
-            --filter=: OData filter expression.
-            --resource-id=: Resource ID.
-            --subscription=: Name or ID of subscription.
-            --top=: Maximum number of records to return.
-            -g, --resource-group=: Name of resource group.
     - name: definition
       commands:
         - name: list
+          description: List policy definitions.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -262,7 +276,20 @@ commands:
                 nargs: -1
             --management-group=: The name of the management group of the policy [set] definition.
             --subscription=: The subscription id of the policy [set] definition.
+        - name: delete
+          description: Delete a policy definition.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --management-group=: The name of the management group of the policy [set] definition.
+            --subscription=: The subscription id of the policy [set] definition.
+            -n, --name=!: The policy definition name.
         - name: create
+          description: Create a policy definition.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -281,7 +308,20 @@ commands:
             --subscription=: The subscription id of the policy [set] definition.
             -m, --mode=: Mode of the policy definition, e.g. All, Indexed.
             -n, --name=!: Name of the new policy definition.
+        - name: show
+          description: Show a policy definition.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --management-group=: The name of the management group of the policy [set] definition.
+            --subscription=: The subscription id of the policy [set] definition.
+            -n, --name=!: The policy definition name.
         - name: update
+          description: Update a policy definition.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -300,31 +340,10 @@ commands:
             --subscription=: The subscription id of the policy [set] definition.
             -m, --mode=: Mode of the policy definition, e.g. All, Indexed.
             -n, --name=!: The policy definition name.
-        - name: delete
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --management-group=: The name of the management group of the policy [set] definition.
-            --subscription=: The subscription id of the policy [set] definition.
-            -n, --name=!: The policy definition name.
-        - name: show
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --management-group=: The name of the management group of the policy [set] definition.
-            --subscription=: The subscription id of the policy [set] definition.
-            -n, --name=!: The policy definition name.
     - name: event
       commands:
         - name: list
+          description: List policy events.
           flags:
             --apply=: Apply expression for aggregations using OData notation.
             --cmd=:
@@ -348,18 +367,8 @@ commands:
             -s, --policy-set-definition=: Name of policy set definition.
     - name: exemption
       commands:
-        - name: show
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --scope=: Scope to which this policy exemption applies.
-            -g, --resource-group=: the resource group where the policy will be applied
-            -n, --name=!: Name of the policy exemption.
         - name: update
+          description: Update a policy exemption.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -386,6 +395,7 @@ commands:
                     - Waiver
                     - Mitigated
         - name: create
+          description: Create a policy exemption.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -412,18 +422,8 @@ commands:
                 exemption-category:
                     - Waiver
                     - Mitigated
-        - name: list
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --scope=: Scope to which this policy exemption applies.
-            -g, --resource-group=: the resource group where the policy will be applied
-            -i, --disable-scope-strict-match=: Include policy exemptions either inherited from parent scope or at child scope.
         - name: delete
+          description: Delete a policy exemption.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -434,51 +434,52 @@ commands:
             --scope=: Scope to which this policy exemption applies.
             -g, --resource-group=: the resource group where the policy will be applied
             -n, --name=!: Name of the policy exemption.
-    - name: metadata
-      commands:
         - name: show
+          description: Show a policy exemption.
           flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: The name of the metadata resource.
+            --scope=: Scope to which this policy exemption applies.
+            -g, --resource-group=: the resource group where the policy will be applied
+            -n, --name=!: Name of the policy exemption.
         - name: list
+          description: List policy exemptions.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --scope=: Scope to which this policy exemption applies.
+            -g, --resource-group=: the resource group where the policy will be applied
+            -i, --disable-scope-strict-match=: Include policy exemptions either inherited from parent scope or at child scope.
+    - name: metadata
+      commands:
+        - name: list
+          description: List policy metadata resources.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
             --subscription=: Name or ID of subscription.
             --top=: Maximum number of records to return.
+        - name: show
+          description: Get a single policy metadata resource.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The name of the metadata resource.
     - name: remediation
       commands:
-        - name: delete
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
-            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
-            --resource-type=: 'Resource type (Ex: resourceTypeC).'
-            --resource=: Resource ID or resource name.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -m, --management-group=: Name of management group.
-            -n, --name=!: Name of the remediation.
-        - name: cancel
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
-            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
-            --resource-type=: 'Resource type (Ex: resourceTypeC).'
-            --resource=: Resource ID or resource name.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -m, --management-group=: Name of management group.
-            -n, --name=!: Name of the remediation.
         - name: list
+          description: List resource policy remediations.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -490,22 +491,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -m, --management-group=: Name of management group.
-        - name: deployment
-          commands:
-            - name: list
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
-                --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
-                --resource-type=: 'Resource type (Ex: resourceTypeC).'
-                --resource=: Resource ID or resource name.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -m, --management-group=: Name of management group.
-                -n, --name=!: Name of the remediation.
         - name: create
+          description: Create a resource policy remediation.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -529,7 +516,52 @@ commands:
                 resource-discovery-mode:
                     - ExistingNonCompliant
                     - ReEvaluateCompliance
+        - name: delete
+          description: Delete a resource policy remediation.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
+            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
+            --resource-type=: 'Resource type (Ex: resourceTypeC).'
+            --resource=: Resource ID or resource name.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -m, --management-group=: Name of management group.
+            -n, --name=!: Name of the remediation.
+        - name: deployment
+          commands:
+            - name: list
+              description: Lists deployments for a resource policy remediation.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
+                --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
+                --resource-type=: 'Resource type (Ex: resourceTypeC).'
+                --resource=: Resource ID or resource name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -m, --management-group=: Name of management group.
+                -n, --name=!: Name of the remediation.
+        - name: cancel
+          description: Cancel a resource policy remediation.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
+            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
+            --resource-type=: 'Resource type (Ex: resourceTypeC).'
+            --resource=: Resource ID or resource name.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -m, --management-group=: Name of management group.
+            -n, --name=!: Name of the remediation.
         - name: show
+          description: Show a resource policy remediation.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -545,17 +577,7 @@ commands:
     - name: set-definition
       commands:
         - name: delete
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --management-group=: The name of the management group of the policy [set] definition.
-            --subscription=: The subscription id of the policy [set] definition.
-            -n, --name=!: The policy set definition name.
-        - name: show
+          description: Delete a policy set definition.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -567,6 +589,7 @@ commands:
             --subscription=: The subscription id of the policy [set] definition.
             -n, --name=!: The policy set definition name.
         - name: create
+          description: Create a policy set definition.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -586,6 +609,7 @@ commands:
             --subscription=: The subscription id of the policy [set] definition.
             -n, --name=!: Name of the new policy set definition.
         - name: update
+          description: Update a policy set definition.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -605,6 +629,7 @@ commands:
             --subscription=: The subscription id of the policy [set] definition.
             -n, --name=!: The policy set definition name.
         - name: list
+          description: List policy set definitions.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
@@ -614,28 +639,22 @@ commands:
                 nargs: -1
             --management-group=: The name of the management group of the policy [set] definition.
             --subscription=: The subscription id of the policy [set] definition.
-    - name: state
-      commands:
-        - name: summarize
+        - name: show
+          description: Show a policy set definition.
           flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --filter=: Filter expression using OData notation.
-            --from=: ISO 8601 formatted timestamp specifying the start time of the interval to query.
-            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
-            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
-            --resource-type=: 'Resource type (Ex: resourceTypeC).'
-            --resource=: Resource ID or resource name.
-            --subscription=: Name or ID of subscription.
-            --to=: ISO 8601 formatted timestamp specifying the end time of the interval to query.
-            --top=: Maximum number of records to return.
-            -a, --policy-assignment=: Name of policy assignment.
-            -d, --policy-definition=: Name of policy definition.
-            -g, --resource-group=: Name of resource group.
-            -m, --management-group=: Name of management group.
-            -s, --policy-set-definition=: Name of policy set definition.
+            --management-group=: The name of the management group of the policy [set] definition.
+            --subscription=: The subscription id of the policy [set] definition.
+            -n, --name=!: The policy set definition name.
+    - name: state
+      commands:
         - name: list
+          description: List policy compliance states.
           flags:
             --all=: Within the specified time interval, get all policy states instead of the latest only.
             --apply=: Apply expression for aggregations using OData notation.
@@ -660,6 +679,7 @@ commands:
             -m, --management-group=: Name of management group.
             -s, --policy-set-definition=: Name of policy set definition.
         - name: trigger-scan
+          description: Trigger a policy compliance evaluation for a scope.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -667,3 +687,23 @@ commands:
             --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
+        - name: summarize
+          description: Summarize policy compliance states.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --filter=: Filter expression using OData notation.
+            --from=: ISO 8601 formatted timestamp specifying the start time of the interval to query.
+            --namespace=: 'Provider namespace (Ex: Microsoft.Provider).'
+            --parent=: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
+            --resource-type=: 'Resource type (Ex: resourceTypeC).'
+            --resource=: Resource ID or resource name.
+            --subscription=: Name or ID of subscription.
+            --to=: ISO 8601 formatted timestamp specifying the end time of the interval to query.
+            --top=: Maximum number of records to return.
+            -a, --policy-assignment=: Name of policy assignment.
+            -d, --policy-definition=: Name of policy definition.
+            -g, --resource-group=: Name of resource group.
+            -m, --management-group=: Name of management group.
+            -s, --policy-set-definition=: Name of policy set definition.

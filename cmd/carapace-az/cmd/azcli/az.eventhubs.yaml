@@ -5,6 +5,7 @@ commands:
     - name: cluster
       commands:
         - name: show
+          description: Get the resource description of the specified Event Hubs Cluster.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -12,7 +13,17 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Event Hubs Cluster.
+        - name: list
+          description: List the available Event Hubs Clusters within an ARM resource group.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: available-region
+          description: List the quantity of available pre-provisioned Event Hubs Clusters, indexed by Azure region.
+          flags:
+            --subscription=: Name or ID of subscription.
         - name: create
+          description: Create EventHubs Cluster
           flags:
             --capacity=: The quantity of Event Hubs Cluster Capacity Units contained in this cluster.
             --no-wait=:
@@ -56,7 +67,16 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: namespace
+          commands:
+            - name: list
+              description: List of Namespaces within given Cluster.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Event Hubs Cluster.
         - name: update
+          description: Update tags of EventHubs Cluster
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -125,33 +145,8 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: namespace
-          commands:
-            - name: list
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Event Hubs Cluster.
-        - name: list
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Event Hubs Cluster.
         - name: delete
+          description: Delete an existing Event Hubs Cluster.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -176,32 +171,65 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: available-region
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of the Cluster operation is completed.
           flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the Event Hubs Cluster.
     - name: eventhub
       commands:
-        - name: authorization-rule
+        - name: consumer-group
           commands:
-            - name: create
+            - name: update
+              description: Updates the EventHub ConsumerGroup
               flags:
-                --eventhub-name=!: The Event Hub name
-                --namespace-name=!: The Namespace name
-                --rights=:
-                    description: The rights associated with the rule.
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --eventhub-name=: The Event Hub name
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
                     nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The authorization rule name.
-            - name: list
-              flags:
-                --eventhub-name=!: The Event Hub name
-                --max-items=: Total number of items to return in the command's output.
-                --namespace-name=!: The Namespace name
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: show
+                --user-metadata=: User Metadata is a placeholder to store user-defined string data with maximum length 1024. e.g. it can be used to store descriptive data, such as list of teams and their contact information also user-defined configuration settings can be stored.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The consumer group name
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: delete
+              description: Deletes the ConsumerGroup
               flags:
                 --eventhub-name=: The Event Hub name
                 --ids=:
@@ -210,10 +238,44 @@ commands:
                 --namespace-name=: The Namespace name
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
+                -n, --name=: The consumer group name
+            - name: list
+              description: List the ConsumerGroup by Eventhub
+              flags:
+                --eventhub-name=!: The Event Hub name
+                --max-items=: Total number of items to return in the command's output.
+                --namespace-name=!: The Namespace name
+                --next-token=: Token to specify where to start paginating.
+                --skip=: Skip is only used if a previous operation returned a partial result.
+                --subscription=: Name or ID of subscription.
+                --top=: May be used to limit the number of results to the most recent N usageDetails.
+                -g, --resource-group=!: Name of resource group.
+            - name: create
+              description: Creates the EventHub ConsumerGroup
+              flags:
+                --eventhub-name=!: The Event Hub name
+                --namespace-name=!: The Namespace name
+                --subscription=: Name or ID of subscription.
+                --user-metadata=: User Metadata is a placeholder to store user-defined string data with maximum length 1024. e.g. it can be used to store descriptive data, such as list of teams and their contact information also user-defined configuration settings can be stored.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The consumer group name
+            - name: show
+              description: Shows the ConsumerGroup Details
+              flags:
+                --eventhub-name=: The Event Hub name
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The consumer group name
+        - name: authorization-rule
+          commands:
             - name: keys
               commands:
                 - name: list
+                  description: Shows the connection strings of Authorizationrule for the Eventhub.
                   flags:
                     --eventhub-name=!: The Event Hub name
                     --name=!: The authorization rule name.
@@ -221,6 +283,7 @@ commands:
                     --subscription=: Name or ID of subscription.
                     -g, --resource-group=!: Name of resource group.
                 - name: renew
+                  description: Regenerate the connection strings of Authorizationrule for the namespace.
                   flags:
                     --eventhub-name=: The Event Hub name
                     --ids=:
@@ -237,7 +300,19 @@ commands:
                         key:
                             - PrimaryKey
                             - SecondaryKey
+            - name: delete
+              description: Deletes the Authorizationrule of Eventhub.
+              flags:
+                --eventhub-name=: The Event Hub name
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
             - name: update
+              description: Updates Authorizationrule for the given Eventhub
               flags:
                 --add=:
                     description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -275,7 +350,8 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: delete
+            - name: show
+              description: shows the details of Authorizationrule
               flags:
                 --eventhub-name=: The Event Hub name
                 --ids=:
@@ -285,92 +361,28 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The authorization rule name.
-        - name: consumer-group
-          commands:
-            - name: update
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --eventhub-name=: The Event Hub name
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --user-metadata=: User Metadata is a placeholder to store user-defined string data with maximum length 1024. e.g. it can be used to store descriptive data, such as list of teams and their contact information also user-defined configuration settings can be stored.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The consumer group name
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: delete
-              flags:
-                --eventhub-name=: The Event Hub name
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The consumer group name
             - name: list
+              description: shows the list of Authorization-rules by Eventhub
               flags:
                 --eventhub-name=!: The Event Hub name
                 --max-items=: Total number of items to return in the command's output.
                 --namespace-name=!: The Namespace name
                 --next-token=: Token to specify where to start paginating.
-                --skip=: Skip is only used if a previous operation returned a partial result.
                 --subscription=: Name or ID of subscription.
-                --top=: May be used to limit the number of results to the most recent N usageDetails.
                 -g, --resource-group=!: Name of resource group.
-            - name: show
-              flags:
-                --eventhub-name=: The Event Hub name
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The consumer group name
             - name: create
+              description: Creates Authorizationrule for the given Eventhub
               flags:
                 --eventhub-name=!: The Event Hub name
                 --namespace-name=!: The Namespace name
+                --rights=:
+                    description: The rights associated with the rule.
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                --user-metadata=: User Metadata is a placeholder to store user-defined string data with maximum length 1024. e.g. it can be used to store descriptive data, such as list of teams and their contact information also user-defined configuration settings can be stored.
                 -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The consumer group name
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --namespace-name=!: The Namespace name
-            --next-token=: Token to specify where to start paginating.
-            --skip=: Skip is only used if a previous operation returned a partial result.
-            --subscription=: Name or ID of subscription.
-            --top=: May be used to limit the number of results to the most recent N usageDetails.
-            -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The authorization rule name.
         - name: update
+          description: Updates the EventHubs Eventhub
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -470,16 +482,18 @@ commands:
                 timestamp-type:
                     - Create
                     - LogAppend
-        - name: delete
+        - name: list
+          description: List the EventHub by Namespace
           flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The Namespace name
+            --max-items=: Total number of items to return in the command's output.
+            --namespace-name=!: The Namespace name
+            --next-token=: Token to specify where to start paginating.
+            --skip=: Skip is only used if a previous operation returned a partial result.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The Event Hub name
+            --top=: May be used to limit the number of results to the most recent N usageDetails.
+            -g, --resource-group=!: Name of resource group.
         - name: create
+          description: Creates the EventHubs Eventhub
           flags:
             --archive-name-format=: Blob naming convention for archive, e.g. {Namespace}/{EventHub}/{PartitionId}/{Year}/{Month}/{Day}/{Hour}/{Minute}/{Second}.
             --blob-container=: Blob container Name
@@ -534,7 +548,18 @@ commands:
                 timestamp-type:
                     - Create
                     - LogAppend
+        - name: delete
+          description: Deletes the Eventhub
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The Namespace name
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The Event Hub name
         - name: show
+          description: shows the Eventhub Details
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -545,9 +570,30 @@ commands:
             -n, --name=: The Event Hub name
     - name: georecovery-alias
       commands:
+        - name: break-pair
+          description: Disables Geo-Disaster Recovery Configuration Alias and stops replicating changes from primary to secondary namespaces
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The Namespace name
+            --subscription=: Name or ID of subscription.
+            -a, --alias=: The Disaster Recovery configuration name
+            -g, --resource-group=: Name of resource group.
+        - name: fail-over
+          description: Invokes Geo-Disaster Recovery Configuration Alias to point to the secondary namespace
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The Namespace name
+            --subscription=: Name or ID of subscription.
+            -a, --alias=: The Disaster Recovery configuration name
+            -g, --resource-group=: Name of resource group.
         - name: authorization-rule
           commands:
             - name: show
+              description: Show properties of EventHubs Geo-Disaster Recovery Configuration Alias and Namespace Authorizationrule
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -558,6 +604,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The authorization rule name.
             - name: list
+              description: List of Authorizationrule by EventHubs Namespace
               flags:
                 --max-items=: Total number of items to return in the command's output.
                 --namespace-name=!: The Namespace name
@@ -568,13 +615,25 @@ commands:
             - name: keys
               commands:
                 - name: list
+                  description: Shows the keys and connection strings of Authorizationrule for the EventHubs Namespace
                   flags:
                     --namespace-name=!: The Namespace name
                     --subscription=: Name or ID of subscription.
                     -a, --alias=!: The Disaster Recovery configuration name
                     -g, --resource-group=!: Name of resource group.
                     -n, --name=!: The authorization rule name.
+        - name: exists
+          description: Check the availability of Geo-Disaster Recovery Configuration Alias Name
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The Namespace name
+            --subscription=: Name or ID of subscription.
+            -a, --alias=!: Name to check the namespace name availability
+            -g, --resource-group=: Name of resource group.
         - name: set
+          description: Sets a Geo-Disaster Recovery Configuration Alias for the give Namespace
           flags:
             --alternate-name=: Alternate Name for the Alias, when the Namespace name and Alias name are same
             --cmd=:
@@ -589,7 +648,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -a, --alias=!: Name of the Geo-Disaster Recovery Configuration Alias
             -g, --resource-group=: Name of resource group.
-        - name: delete
+        - name: show
+          description: shows properties of Geo-Disaster Recovery Configuration Alias for Primay or Secondary Namespace
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -606,14 +666,15 @@ commands:
             --subscription=: Name or ID of subscription.
             -a, --name=!: The Disaster Recovery configuration name
             -g, --resource-group=!: Name of resource group.
-        - name: exists
+        - name: delete
+          description: Delete Geo-Disaster Recovery Configuration Alias
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
             --namespace-name=: The Namespace name
             --subscription=: Name or ID of subscription.
-            -a, --alias=!: Name to check the namespace name availability
+            -a, --alias=: The Disaster Recovery configuration name
             -g, --resource-group=: Name of resource group.
         - name: list
           flags:
@@ -622,791 +683,10 @@ commands:
             --next-token=: Token to specify where to start paginating.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The Namespace name
-            --subscription=: Name or ID of subscription.
-            -a, --alias=: The Disaster Recovery configuration name
-            -g, --resource-group=: Name of resource group.
-        - name: break-pair
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The Namespace name
-            --subscription=: Name or ID of subscription.
-            -a, --alias=: The Disaster Recovery configuration name
-            -g, --resource-group=: Name of resource group.
-        - name: fail-over
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The Namespace name
-            --subscription=: Name or ID of subscription.
-            -a, --alias=: The Disaster Recovery configuration name
-            -g, --resource-group=: Name of resource group.
     - name: namespace
       commands:
-        - name: private-endpoint-connection
-          commands:
-            - name: approve
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=: Comments for approve operation.
-                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
-                --namespace-name=: The eventhubs namesapce name.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified eventhubs namespace.
-                -n, --name=: The name of the private endpoint connection associated with the EventHubs Namespace.
-            - name: update
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --description=: Description of the connection state.
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --provisioning-state=: Provisioning state of the Private Endpoint Connection.
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --status=: Status of the connection.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The PrivateEndpointConnection name
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    provisioning-state:
-                        - Canceled
-                        - Creating
-                        - Deleting
-                        - Failed
-                        - Succeeded
-                        - Updating
-                    status:
-                        - Approved
-                        - Disconnected
-                        - Pending
-                        - Rejected
-            - name: create
-              flags:
-                --description=: Description of the connection state.
-                --namespace-name=!: The Namespace name
-                --provisioning-state=: Provisioning state of the Private Endpoint Connection.
-                --status=: Status of the connection.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The PrivateEndpointConnection name
-              completion:
-                flag:
-                    provisioning-state:
-                        - Canceled
-                        - Creating
-                        - Deleting
-                        - Failed
-                        - Succeeded
-                        - Updating
-                    status:
-                        - Approved
-                        - Disconnected
-                        - Pending
-                        - Rejected
-            - name: wait
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The PrivateEndpointConnection name
-            - name: delete
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=: Comments for delete operation.
-                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
-                --namespace-name=: The eventhubs namesapce name.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified eventhubs namespace.
-                -n, --name=: The name of the private endpoint connection associated with the EventHubs Namespace.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: list
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --namespace-name=!: The Namespace name
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: reject
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=: Comments for reject operation.
-                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
-                --namespace-name=: The eventhubs namesapce name.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified eventhubs namespace.
-                -n, --name=: The name of the private endpoint connection associated with the EventHubs Namespace.
-            - name: show
-              flags:
-                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The PrivateEndpointConnection name
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The Namespace name
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The Namespace name
-        - name: encryption
-          commands:
-            - name: remove
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --encryption-config=!:
-                    description: List of KeyVaultProperties objects.
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: add
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --encryption-config=!:
-                    description: List of KeyVaultProperties objects.
-                    nargs: -1
-                --infra-encryption=:
-                    description: A boolean value that indicates whether Infrastructure Encryption (Double Encryption) is enabled/disabled
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-              completion:
-                flag:
-                    infra-encryption:
-                        - "true"
-                        - "false"
-        - name: schema-registry
-          commands:
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Schema Group name
-            - name: list
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --namespace-name=!: The Namespace name
-                --next-token=: Token to specify where to start paginating.
-                --skip=: Skip is only used if a previous operation returned a partial result.
-                --subscription=: Name or ID of subscription.
-                --top=: May be used to limit the number of results to the most recent N usageDetails.
-                -g, --resource-group=!: Name of resource group.
-            - name: delete
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Schema Group name
-            - name: create
-              flags:
-                --group-properties=:
-                    description: dictionary object for SchemaGroup group properties  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --namespace-name=!: The Namespace name
-                --schema-compatibility=: Compatibility of Schema.
-                --schema-type=: Type of Schema.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The Schema Group name
-              completion:
-                flag:
-                    schema-compatibility:
-                        - Backward
-                        - Forward
-                        - None
-                    schema-type:
-                        - Avro
-                        - Unknown
-            - name: update
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --group-properties=:
-                    description: dictionary object for SchemaGroup group properties  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --schema-compatibility=: Compatibility of Schema.
-                --schema-type=: Type of Schema.
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Schema Group name
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    schema-compatibility:
-                        - Backward
-                        - Forward
-                        - None
-                    schema-type:
-                        - Avro
-                        - Unknown
-        - name: replica
-          commands:
-            - name: add
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --geo-data-replication-config=!:
-                    description: A list of regions where replicas of the namespace are maintained Object
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: remove
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --geo-data-replication-config=!:
-                    description: A list of regions where replicas of the namespace are maintained Object
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-        - name: network-rule-set
-          commands:
-            - name: list
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The Namespace name
-            - name: ip-rule
-              commands:
-                - name: remove
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --ip-rule=:
-                        description: List VirtualNetwork Rules.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --namespace-name=!: Name of the Namespace
-                - name: add
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --ip-rule=:
-                        description: List VirtualNetwork Rules.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --namespace-name=!: Name of the Namespace
-            - name: virtual-network-rule
-              commands:
-                - name: remove
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subnet=:
-                        description: List VirtualNetwork Rules.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --namespace-name=!: Name of the Namespace
-                - name: add
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subnet=:
-                        description: List VirtualNetwork Rules.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --namespace-name=!: Name of the Namespace
-            - name: update
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --default-action=: Default Action for Network Rule Set
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --ip-rules=:
-                    description: List of IpRules  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --public-network-access=: This determines if traffic is allowed over public network.
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --virtual-network-rules=:
-                    description: List VirtualNetwork Rules  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Namespace name
-                -t, --enable-trusted-service-access=:
-                    description: Value that indicates whether Trusted Service Access is Enabled or not.
-                    nargs: -1
-              completion:
-                flag:
-                    default-action:
-                        - Allow
-                        - Deny
-                    enable-trusted-service-access:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    public-network-access:
-                        - Disabled
-                        - Enabled
-                        - SecuredByPerimeter
-            - name: create
-              flags:
-                --default-action=: Default Action for Network Rule Set
-                --ip-rules=:
-                    description: List of IpRules  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                --public-network-access=: This determines if traffic is allowed over public network.
-                --subscription=: Name or ID of subscription.
-                --virtual-network-rules=:
-                    description: List VirtualNetwork Rules  Support shorthand-syntax, json-file and yaml-file.
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The Namespace name
-                -t, --enable-trusted-service-access=:
-                    description: Value that indicates whether Trusted Service Access is Enabled or not.
-                    nargs: -1
-              completion:
-                flag:
-                    default-action:
-                        - Allow
-                        - Deny
-                    enable-trusted-service-access:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    public-network-access:
-                        - Disabled
-                        - Enabled
-                        - SecuredByPerimeter
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Namespace name
-        - name: identity
-          commands:
-            - name: assign
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                --system-assigned=:
-                    description: System Assigned Identity
-                    nargs: -1
-                --user-assigned=:
-                    description: User Assigned Identity
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-              completion:
-                flag:
-                    system-assigned:
-                        - "true"
-                        - "false"
-            - name: remove
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                --system-assigned=:
-                    description: System Assigned Identity
-                    nargs: -1
-                --user-assigned=:
-                    description: User Assigned Identity
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-              completion:
-                flag:
-                    system-assigned:
-                        - "true"
-                        - "false"
-        - name: private-link-resource
-          commands:
-            - name: show
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --namespace-name=!: The Namespace name
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-        - name: application-group
-          commands:
-            - name: policy
-              commands:
-                - name: add
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --namespace-name=: Name of Namespace
-                    --subscription=: Name or ID of subscription.
-                    --throttling-policy-config=!:
-                        description: List of Throttling Policy Objects
-                        nargs: -1
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of Application Group
-                - name: remove
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --namespace-name=: Name of Namespace
-                    --policy=!:
-                        description: List of Throttling Policy Objects
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of Application Group
-            - name: delete
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Application Group name
-            - name: create
-              flags:
-                --client-app-group-identifier=!: The Unique identifier for application group.Supports SAS(NamespaceSASKeyName=KeyName or EntitySASKeyName=KeyName) or AAD(AADAppID=Guid)
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --is-enabled=:
-                    description: Determines if Application Group is allowed to create connection with namespace or not.
-                    nargs: -1
-                --namespace-name=!: Name of Namespace
-                --subscription=: Name or ID of subscription.
-                --throttling-policy-config=:
-                    description: List of Throttling Policy Objects
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of Application Group
-              completion:
-                flag:
-                    is-enabled:
-                        - "true"
-                        - "false"
-            - name: list
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --namespace-name=!: The Namespace name
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Application Group name
-            - name: update
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --is-enabled=:
-                    description: Determines if Application Group is allowed to create connection with namespace or not.
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --policies=:
-                    description: List of group policies that define the behavior of application group.
-                    nargs: -1
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The Application Group name
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    is-enabled:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-        - name: authorization-rule
-          commands:
-            - name: create
-              flags:
-                --namespace-name=!: The Namespace name
-                --rights=:
-                    description: The rights associated with the rule.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The authorization rule name.
-            - name: keys
-              commands:
-                - name: renew
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --key-value=: Optional, if the key value provided, is set for KeyType or autogenerated Key value set for keyType
-                    --key=!: The access key to regenerate.
-                    --name=: The authorization rule name.
-                    --namespace-name=: The Namespace name
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                  completion:
-                    flag:
-                        key:
-                            - PrimaryKey
-                            - SecondaryKey
-                - name: list
-                  flags:
-                    --name=!: The authorization rule name.
-                    --namespace-name=!: The Namespace name
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-            - name: update
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --rights=:
-                    description: The rights associated with the rule.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: delete
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
-            - name: list
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --namespace-name=!: The Namespace name
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The Namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
         - name: update
+          description: Updates the EventHubs Namespace
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -1549,52 +829,421 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: failover
-          flags:
-            --force=:
-                description: If Force is false then graceful failover is attempted after ensuring no data loss.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The Namespace name
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --primary-location=: Query parameter for the new primary location after failover.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-          completion:
-            flag:
-                force:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
+        - name: network-rule-set
+          commands:
+            - name: virtual-network-rule
+              commands:
+                - name: remove
+                  description: Remove network rule for a namespace
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subnet=:
+                        description: List VirtualNetwork Rules.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --namespace-name=!: Name of the Namespace
+                - name: add
+                  description: Add a Virtual-Network-Rule for network rule of namespace.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subnet=:
+                        description: List VirtualNetwork Rules.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --namespace-name=!: Name of the Namespace
+            - name: update
+              description: Update network rule properties of the given Namespace.
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --default-action=: Default Action for Network Rule Set
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --ip-rules=:
+                    description: List of IpRules  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --public-network-access=: This determines if traffic is allowed over public network.
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --virtual-network-rules=:
+                    description: List VirtualNetwork Rules  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Namespace name
+                -t, --enable-trusted-service-access=:
+                    description: Value that indicates whether Trusted Service Access is Enabled or not.
+                    nargs: -1
+              completion:
+                flag:
+                    default-action:
+                        - Allow
+                        - Deny
+                    enable-trusted-service-access:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    public-network-access:
+                        - Disabled
+                        - Enabled
+                        - SecuredByPerimeter
+            - name: show
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Namespace name
+            - name: ip-rule
+              commands:
+                - name: add
+                  description: Add a IP-Rule for network rule of namespace.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --ip-rule=:
+                        description: List VirtualNetwork Rules.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --namespace-name=!: Name of the Namespace
+                - name: remove
+                  description: Remove Ip-Rule from network rule of namespace
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --ip-rule=:
+                        description: List VirtualNetwork Rules.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --namespace-name=!: Name of the Namespace
+            - name: create
+              flags:
+                --default-action=: Default Action for Network Rule Set
+                --ip-rules=:
+                    description: List of IpRules  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --public-network-access=: This determines if traffic is allowed over public network.
+                --subscription=: Name or ID of subscription.
+                --virtual-network-rules=:
+                    description: List VirtualNetwork Rules  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The Namespace name
+                -t, --enable-trusted-service-access=:
+                    description: Value that indicates whether Trusted Service Access is Enabled or not.
+                    nargs: -1
+              completion:
+                flag:
+                    default-action:
+                        - Allow
+                        - Deny
+                    enable-trusted-service-access:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    public-network-access:
+                        - Disabled
+                        - Enabled
+                        - SecuredByPerimeter
+            - name: list
+              description: Show properties of Network rule of the given Namespace.
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The Namespace name
+        - name: schema-registry
+          commands:
+            - name: update
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --group-properties=:
+                    description: dictionary object for SchemaGroup group properties  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --schema-compatibility=: Compatibility of Schema.
+                --schema-type=: Type of Schema.
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Schema Group name
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    schema-compatibility:
+                        - Backward
+                        - Forward
+                        - None
+                    schema-type:
+                        - Avro
+                        - Unknown
+            - name: show
+              description: Get a specific schema group from an EventHub namespace.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Schema Group name
+            - name: list
+              description: Lists all schema groups of the EventHub Namespace
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --namespace-name=!: The Namespace name
+                --next-token=: Token to specify where to start paginating.
+                --skip=: Skip is only used if a previous operation returned a partial result.
+                --subscription=: Name or ID of subscription.
+                --top=: May be used to limit the number of results to the most recent N usageDetails.
+                -g, --resource-group=!: Name of resource group.
+            - name: create
+              description: Creates a schema group for an EventHub namespace
+              flags:
+                --group-properties=:
+                    description: dictionary object for SchemaGroup group properties  Support shorthand-syntax, json-file and yaml-file.
+                    nargs: -1
+                --namespace-name=!: The Namespace name
+                --schema-compatibility=: Compatibility of Schema.
+                --schema-type=: Type of Schema.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The Schema Group name
+              completion:
+                flag:
+                    schema-compatibility:
+                        - Backward
+                        - Forward
+                        - None
+                    schema-type:
+                        - Avro
+                        - Unknown
+            - name: delete
+              description: Deletes a schema group from a namespace
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Schema Group name
+        - name: private-endpoint-connection
+          commands:
+            - name: list
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --namespace-name=!: The Namespace name
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: create
+              flags:
+                --description=: Description of the connection state.
+                --namespace-name=!: The Namespace name
+                --provisioning-state=: Provisioning state of the Private Endpoint Connection.
+                --status=: Status of the connection.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The PrivateEndpointConnection name
+              completion:
+                flag:
+                    provisioning-state:
+                        - Canceled
+                        - Creating
+                        - Deleting
+                        - Failed
+                        - Succeeded
+                        - Updating
+                    status:
+                        - Approved
+                        - Disconnected
+                        - Pending
+                        - Rejected
+            - name: show
+              description: Show details of a private endpoint connection request for eventhubs namespace.
+              flags:
+                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The PrivateEndpointConnection name
+            - name: approve
+              description: Approve a private endpoint connection request for eventhubs namesapce.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=: Comments for approve operation.
+                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
+                --namespace-name=: The eventhubs namesapce name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified eventhubs namespace.
+                -n, --name=: The name of the private endpoint connection associated with the EventHubs Namespace.
+            - name: reject
+              description: Reject a private endpoint connection request for eventhubs namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=: Comments for reject operation.
+                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
+                --namespace-name=: The eventhubs namesapce name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified eventhubs namespace.
+                -n, --name=: The name of the private endpoint connection associated with the EventHubs Namespace.
+            - name: delete
+              description: Delete a private endpoint connection request for eventhubs namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=: Comments for delete operation.
+                --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
+                --namespace-name=: The eventhubs namesapce name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified eventhubs namespace.
+                -n, --name=: The name of the private endpoint connection associated with the EventHubs Namespace.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: update
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --description=: Description of the connection state.
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --provisioning-state=: Provisioning state of the Private Endpoint Connection.
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --status=: Status of the connection.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The PrivateEndpointConnection name
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    provisioning-state:
+                        - Canceled
+                        - Creating
+                        - Deleting
+                        - Failed
+                        - Succeeded
+                        - Updating
+                    status:
+                        - Approved
+                        - Disconnected
+                        - Pending
+                        - Rejected
+            - name: wait
+              flags:
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The PrivateEndpointConnection name
         - name: delete
+          description: Deletes the Namespaces
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1618,7 +1267,373 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: application-group
+          commands:
+            - name: create
+              description: Creates an application group for an EventHub namespace
+              flags:
+                --client-app-group-identifier=!: The Unique identifier for application group.Supports SAS(NamespaceSASKeyName=KeyName or EntitySASKeyName=KeyName) or AAD(AADAppID=Guid)
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --is-enabled=:
+                    description: Determines if Application Group is allowed to create connection with namespace or not.
+                    nargs: -1
+                --namespace-name=!: Name of Namespace
+                --subscription=: Name or ID of subscription.
+                --throttling-policy-config=:
+                    description: List of Throttling Policy Objects
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of Application Group
+              completion:
+                flag:
+                    is-enabled:
+                        - "true"
+                        - "false"
+            - name: show
+              description: Gets an application group in an EventHub namespace
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Application Group name
+            - name: update
+              description: Updates an application group in an EventHub namespace
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --is-enabled=:
+                    description: Determines if Application Group is allowed to create connection with namespace or not.
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --policies=:
+                    description: List of group policies that define the behavior of application group.
+                    nargs: -1
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Application Group name
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    is-enabled:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: list
+              description: Lists all application groups in an EventHub namespace
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --namespace-name=!: The Namespace name
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: policy
+              commands:
+                - name: remove
+                  description: Removes an application group policy from the existing policies.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --namespace-name=: Name of Namespace
+                    --policy=!:
+                        description: List of Throttling Policy Objects
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of Application Group
+                - name: add
+                  description: Appends an application group policy to the existing policy.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --namespace-name=: Name of Namespace
+                    --subscription=: Name or ID of subscription.
+                    --throttling-policy-config=!:
+                        description: List of Throttling Policy Objects
+                        nargs: -1
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of Application Group
+            - name: delete
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The Application Group name
+        - name: private-link-resource
+          commands:
+            - name: show
+              description: Get the private link resources that need to be created for a eventhubs namespace.
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --namespace-name=!: The Namespace name
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+        - name: identity
+          commands:
+            - name: assign
+              description: Assign System or User or System,User assigned identities to a namespace
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                --system-assigned=:
+                    description: System Assigned Identity
+                    nargs: -1
+                --user-assigned=:
+                    description: User Assigned Identity
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+              completion:
+                flag:
+                    system-assigned:
+                        - "true"
+                        - "false"
+            - name: remove
+              description: Remove System or User or System,User assigned identities from a namespace
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                --system-assigned=:
+                    description: System Assigned Identity
+                    nargs: -1
+                --user-assigned=:
+                    description: User Assigned Identity
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+              completion:
+                flag:
+                    system-assigned:
+                        - "true"
+                        - "false"
+        - name: exists
+          description: check for the availability of the given name for the Namespace
+          flags:
+            --name=!: Name to check the namespace name availability
+            --subscription=: Name or ID of subscription.
+        - name: authorization-rule
+          commands:
+            - name: update
+              description: Updates Authorizationrule for the given Namespace
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --rights=:
+                    description: The rights associated with the rule.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: keys
+              commands:
+                - name: renew
+                  description: Regenerate the connection strings of Authorizationrule for the namespace.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --key-value=: Optional, if the key value provided, is set for KeyType or autogenerated Key value set for keyType
+                    --key=!: The access key to regenerate.
+                    --name=: The authorization rule name.
+                    --namespace-name=: The Namespace name
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                  completion:
+                    flag:
+                        key:
+                            - PrimaryKey
+                            - SecondaryKey
+                - name: list
+                  description: Shows the connection strings for namespace
+                  flags:
+                    --name=!: The authorization rule name.
+                    --namespace-name=!: The Namespace name
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+            - name: delete
+              description: Deletes the Authorizationrule of the namespace.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
+            - name: show
+              description: Shows the details of Authorizationrule
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The Namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
+            - name: create
+              description: Creates Authorizationrule for the given Namespace
+              flags:
+                --namespace-name=!: The Namespace name
+                --rights=:
+                    description: The rights associated with the rule.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The authorization rule name.
+            - name: list
+              description: Shows the list of Authorizationrule by Namespace
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --namespace-name=!: The Namespace name
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+        - name: encryption
+          commands:
+            - name: add
+              description: Add Encryption properties to a namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --encryption-config=!:
+                    description: List of KeyVaultProperties objects.
+                    nargs: -1
+                --infra-encryption=:
+                    description: A boolean value that indicates whether Infrastructure Encryption (Double Encryption) is enabled/disabled
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+              completion:
+                flag:
+                    infra-encryption:
+                        - "true"
+                        - "false"
+            - name: remove
+              description: Remove one or more Encryption properties from a namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --encryption-config=!:
+                    description: List of KeyVaultProperties objects.
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+        - name: list
+          description: Lists the EventHubs Namespaces
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: replica
+          commands:
+            - name: add
+              description: Add one or more Replica properties to a namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --geo-data-replication-config=!:
+                    description: A list of regions where replicas of the namespace are maintained Object
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: remove
+              description: Remove one or more Replica properties to a namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --geo-data-replication-config=!:
+                    description: A list of regions where replicas of the namespace are maintained Object
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
         - name: create
+          description: Creates the EventHubs Namespace
           flags:
             --alternate-name=: Alternate name specified when alias and namespace names are same.
             --capacity=: Capacity for Sku
@@ -1696,7 +1711,66 @@ commands:
                 zone-redundant:
                     - "true"
                     - "false"
-        - name: exists
+        - name: wait
           flags:
-            --name=!: Name to check the namespace name availability
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The Namespace name
+        - name: failover
+          flags:
+            --force=:
+                description: If Force is false then graceful failover is attempted after ensuring no data loss.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The Namespace name
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --primary-location=: Query parameter for the new primary location after failover.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+          completion:
+            flag:
+                force:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: show
+          description: shows the Event Hubs Namespace Details
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The Namespace name

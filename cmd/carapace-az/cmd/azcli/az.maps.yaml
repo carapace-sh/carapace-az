@@ -1,9 +1,38 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: maps
-description: maps
+description: Manage Azure Maps.
 commands:
     - name: account
       commands:
+        - name: keys
+          commands:
+            - name: renew
+              description: Regenerate either the primary or secondary key for use with the Maps APIs.
+              flags:
+                --key=!: Whether the operation refers to the primary or secondary key
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Resource group name
+                -n, --name=!: The name of the maps account
+              completion:
+                flag:
+                    key:
+                        - primary
+                        - secondary
+            - name: list
+              description: Get the keys to use with the Maps APIs.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Resource group name
+                -n, --name=!: The name of the maps account
+        - name: delete
+          description: Delete a Maps Account.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Resource group name
+            -n, --name=: The name of the maps account
         - name: show
           description: Get a Maps Account.
           flags:
@@ -17,6 +46,7 @@ commands:
             -g, --resource-group=: Resource group name
             -n, --name=: The name of the maps account
         - name: update
+          description: Updates a Maps Account.
           flags:
             --disable-local-auth=:
                 description: Allows toggle functionality on Azure Policy to disable Azure Maps local authentication support.
@@ -54,29 +84,8 @@ commands:
                     - UserAssigned
                     - SystemAssigned, UserAssigned
                     - None
-        - name: list
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Resource group name
-        - name: keys
-          commands:
-            - name: list
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Resource group name
-                -n, --name=!: The name of the maps account
-            - name: renew
-              flags:
-                --key=!: Whether the operation refers to the primary or secondary key
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Resource group name
-                -n, --name=!: The name of the maps account
-              completion:
-                flag:
-                    key:
-                        - primary
-                        - secondary
         - name: create
+          description: Create a Maps Account.
           flags:
             --accept-tos=: You must agree to the License and Privacy Statement to create an account.
             --disable-local-auth=:
@@ -112,18 +121,21 @@ commands:
                     - UserAssigned
                     - SystemAssigned, UserAssigned
                     - None
-        - name: delete
-          description: Delete a Maps Account.
+        - name: list
+          description: Show all maps accounts in a subscription or in a resource group.
           flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Resource group name
-            -n, --name=: The name of the maps account
     - name: creator
       commands:
+        - name: list
+          description: Get all Creator instances for an Azure Maps Account.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Resource group name
+            -n, --name=!: The name of the maps account
         - name: update
+          description: Updates the Maps Creator resource.
           flags:
             --creator-name=: The name of the Maps Creator instance.
             --ids=:
@@ -137,6 +149,7 @@ commands:
             -g, --resource-group=: Resource group name
             -n, --name=: The name of the maps account
         - name: create
+          description: Create a Maps Creator resource.
           flags:
             --creator-name=!: The name of the Maps Creator instance.
             --storage-units=!: The storage units to be allocated.
@@ -148,6 +161,7 @@ commands:
             -l, --location=: Location.
             -n, --name=!: The name of the maps account
         - name: delete
+          description: Delete a Maps Creator resource.
           flags:
             --creator-name=: The name of the Maps Creator instance.
             --ids=:
@@ -157,12 +171,8 @@ commands:
             -g, --resource-group=: Resource group name
             -n, --name=: The name of the maps account
             -y, --yes=: Do not prompt for confirmation.
-        - name: list
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Resource group name
-            -n, --name=!: The name of the maps account
         - name: show
+          description: Get a Maps Creator resource.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -177,5 +187,6 @@ commands:
     - name: map
       commands:
         - name: list-operation
+          description: List operations available for the Maps Resource Provider.
           flags:
             --subscription=: Name or ID of subscription.

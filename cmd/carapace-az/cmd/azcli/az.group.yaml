@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: group
-description: group
+description: Manage resource groups and template deployments.
 commands:
     - name: create
       description: Create a new resource group.
@@ -32,6 +32,7 @@ commands:
     - name: deployment
       commands:
         - name: wait
+          description: Place the CLI in a waiting state until a deployment condition is met.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -47,6 +48,7 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
         - name: validate
+          description: Validate whether a template is syntactically correct.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -74,19 +76,13 @@ commands:
                 no-prompt:
                     - "true"
                     - "false"
-        - name: delete
-          description: Deletes a deployment from the deployment history.
+        - name: list
+          description: Get all the deployments for a resource group.
           flags:
-            --no-wait=: Do not wait for the long-running operation to finish.
+            --filter=: The filter to apply on the operation.
             --subscription=: Name or ID of subscription.
+            --top=: The number of results to get.
             -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The deployment name.
-        - name: cancel
-          description: Cancels a currently running template deployment.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The deployment name.
         - name: show
           description: Gets a deployment.
           flags:
@@ -97,6 +93,7 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
         - name: create
+          description: Start a deployment.
           flags:
             --aux-subs=:
                 description: Auxiliary subscriptions which will be used during deployment across tenants.
@@ -133,10 +130,24 @@ commands:
                     - "true"
                     - "false"
         - name: export
+          description: Export the template used for a deployment.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The deployment name.
+        - name: cancel
+          description: Cancels a currently running template deployment.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The deployment name.
+        - name: delete
+          description: Deletes a deployment from the deployment history.
+          flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
@@ -161,13 +172,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The deployment name.
-        - name: list
-          description: Get all the deployments for a resource group.
-          flags:
-            --filter=: The filter to apply on the operation.
-            --subscription=: Name or ID of subscription.
-            --top=: The number of results to get.
-            -g, --resource-group=!: Name of resource group.
     - name: exists
       description: Checks whether a resource group exists.
       flags:
@@ -200,29 +204,6 @@ commands:
             nargs: -1
     - name: lock
       commands:
-        - name: delete
-          flags:
-            --__PARENT_RESOURCE_PATH=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_NAME=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_PROVIDER_NAMESPACE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_TYPE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the lock
         - name: update
           description: Allows updates to the lock-type(level) and the notes of the lock
           flags:
@@ -255,6 +236,52 @@ commands:
                     - CanNotDelete
                     - ReadOnly
         - name: show
+          description: Show the details of a resource group lock
+          flags:
+            --__PARENT_RESOURCE_PATH=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_NAME=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_PROVIDER_NAMESPACE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_TYPE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the lock
+        - name: list
+          description: List lock information in the resource-group.
+          flags:
+            --__PARENT_RESOURCE_PATH=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_NAME=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_PROVIDER_NAMESPACE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_TYPE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --filter-string=: A query filter to use to restrict the results.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: delete
+          description: Delete a resource group lock.
           flags:
             --__PARENT_RESOURCE_PATH=:
                 description: ==SUPPRESS==
@@ -278,6 +305,7 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the lock
         - name: create
+          description: Create a resource group lock.
           flags:
             --__PARENT_RESOURCE_PATH=:
                 description: ==SUPPRESS==
@@ -304,26 +332,6 @@ commands:
                 lock-type:
                     - CanNotDelete
                     - ReadOnly
-        - name: list
-          flags:
-            --__PARENT_RESOURCE_PATH=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_NAME=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_PROVIDER_NAMESPACE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_TYPE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --filter-string=: A query filter to use to restrict the results.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
     - name: show
       description: Gets a resource group.
       flags:
@@ -333,6 +341,7 @@ commands:
         --subscription=: Name or ID of subscription.
         -n, --name=!: Name of resource group.
     - name: update
+      description: Update a resource group.
       flags:
         --add=:
             description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -353,6 +362,7 @@ commands:
             nargs: -1
         -n, --name=!: Name of resource group.
     - name: wait
+      description: Place the CLI in a waiting state until a condition of the resource group is met.
       flags:
         --cmd=:
             description: ==SUPPRESS==

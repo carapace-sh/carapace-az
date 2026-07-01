@@ -1,9 +1,27 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: bot
-description: bot
+description: Manage Microsoft Azure Bot Service.
 commands:
     - name: authsetting
       commands:
+        - name: list-providers
+          description: Gets supported OAuth Service providers.
+          flags:
+            --provider-name=: Service provider name for which to fetch details.
+            --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Deletes a Connection Setting registration for a Bot Service.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --setting-name=!: Name of the oauth connection setting.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
+        - name: list
+          description: Returns all the Connection Settings registered to a particular BotService resource.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
         - name: create
           description: Create a custom OAuth service provider.
           flags:
@@ -28,25 +46,8 @@ commands:
             -c, --setting-name=!: Name of the oauth connection setting.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The resource name of the bot.
-        - name: delete
-          description: Deletes a Connection Setting registration for a Bot Service.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -c, --setting-name=!: Name of the oauth connection setting.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
-        - name: list-providers
-          description: Gets supported OAuth Service providers.
-          flags:
-            --provider-name=: Service provider name for which to fetch details.
-            --subscription=: Name or ID of subscription.
-        - name: list
-          description: Returns all the Connection Settings registered to a particular BotService resource.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
     - name: create
+      description: Create a new v4 SDK bot.
       flags:
         --app-type=!: Microsoft App Type for the bot.
         --appid=!: The Microsoft account ID (MSA ID) to be used with the bot.
@@ -80,7 +81,25 @@ commands:
         -n, --name=!: The resource name of the bot.
     - name: directline
       commands:
+        - name: show
+          description: Get details of the Directline Channel on a bot
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --with-secrets=:
+                description: Show secrets in response for the channel.
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
+          completion:
+            flag:
+                with-secrets:
+                    - "true"
+                    - "false"
         - name: create
+          description: Create the DirectLine Channel on a bot with only v3 protocol enabled.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state.
@@ -116,23 +135,14 @@ commands:
                 enable-enhanced-auth:
                     - "true"
                     - "false"
-        - name: show
+        - name: delete
+          description: Delete the Directline Channel on a bot
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
-            --with-secrets=:
-                description: Show secrets in response for the channel.
-                nargs: -1
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The resource name of the bot.
-          completion:
-            flag:
-                with-secrets:
-                    - "true"
-                    - "false"
         - name: update
+          description: Update the DirectLine Channel on a bot with only v3 protocol enabled.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state.
@@ -167,12 +177,8 @@ commands:
                 enable-enhanced-auth:
                     - "true"
                     - "false"
-        - name: delete
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
     - name: download
+      description: Download an existing bot.
       flags:
         --cmd=:
             description: ==SUPPRESS==
@@ -183,7 +189,25 @@ commands:
         -n, --name=!: The resource name of the bot.
     - name: email
       commands:
+        - name: show
+          description: Get details of the email Channel on a bot
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --with-secrets=:
+                description: Show secrets in response for the channel.
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
+          completion:
+            flag:
+                with-secrets:
+                    - "true"
+                    - "false"
         - name: create
+          description: Create the Email Channel on a bot.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state
@@ -199,35 +223,16 @@ commands:
                 add-disabled:
                     - "true"
                     - "false"
-        - name: show
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --with-secrets=:
-                description: Show secrets in response for the channel.
-                nargs: -1
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
-          completion:
-            flag:
-                with-secrets:
-                    - "true"
-                    - "false"
         - name: delete
+          description: Delete the email Channel on a bot
           flags:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The resource name of the bot.
     - name: facebook
       commands:
-        - name: delete
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
         - name: create
+          description: Create the Facebook Channel on a bot.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state
@@ -245,7 +250,14 @@ commands:
                 add-disabled:
                     - "true"
                     - "false"
+        - name: delete
+          description: Delete the Facebook Channel on a bot
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
         - name: show
+          description: Get details of the Facebook Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -263,7 +275,14 @@ commands:
                     - "false"
     - name: kik
       commands:
+        - name: delete
+          description: Delete the Kik Channel on a bot
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
         - name: show
+          description: Get details of the Kik Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -280,6 +299,7 @@ commands:
                     - "true"
                     - "false"
         - name: create
+          description: Create the Kik Channel on a bot.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state.
@@ -301,14 +321,10 @@ commands:
                 is-validated:
                     - "true"
                     - "false"
-        - name: delete
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
     - name: msteams
       commands:
         - name: show
+          description: Get details of the Microsoft Teams Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -324,7 +340,14 @@ commands:
                 with-secrets:
                     - "true"
                     - "false"
+        - name: delete
+          description: Delete the Microsoft Teams Channel on a bot
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
         - name: create
+          description: Create the Microsoft Teams Channel on a bot.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state.
@@ -345,12 +368,8 @@ commands:
                 enable-calling:
                     - "true"
                     - "false"
-        - name: delete
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
     - name: prepare-deploy
+      description: Add scripts/config files for publishing with `az webapp deployment`.
       flags:
         --code-dir=: The directory to place the generated deployment files in.
         --lang=!: The language or runtime of the bot.
@@ -381,6 +400,7 @@ commands:
                 - v3
                 - v4
     - name: publish
+      description: Publish to a bot's associated app service.
       flags:
         --cmd=:
             description: ==SUPPRESS==
@@ -419,7 +439,14 @@ commands:
                 - "false"
     - name: skype
       commands:
+        - name: delete
+          description: Delete the Skype Channel on a bot
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
         - name: create
+          description: Create the Skype Channel on a bot.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state.
@@ -472,6 +499,7 @@ commands:
                     - "true"
                     - "false"
         - name: show
+          description: Get details of the Skype Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -487,19 +515,16 @@ commands:
                 with-secrets:
                     - "true"
                     - "false"
-        - name: delete
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
     - name: slack
       commands:
         - name: delete
+          description: Delete the Slack Channel on a bot
           flags:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The resource name of the bot.
         - name: create
+          description: Create the Slack Channel on a bot.
           flags:
             --add-disabled=:
                 description: Add the channel in a disabled state.
@@ -518,6 +543,7 @@ commands:
                     - "true"
                     - "false"
         - name: show
+          description: Get details of the Slack Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -535,7 +561,14 @@ commands:
                     - "false"
     - name: sms
       commands:
+        - name: delete
+          description: Delete the SMS Channel on a bot
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The resource name of the bot.
         - name: create
+          description: Create the SMS Channel on a bot.
           flags:
             --account-sid=!: The account SID for the Twilio account.
             --add-disabled=:
@@ -558,12 +591,8 @@ commands:
                 is-validated:
                     - "true"
                     - "false"
-        - name: delete
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The resource name of the bot.
         - name: show
+          description: Get details of the SMS Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -582,11 +611,13 @@ commands:
     - name: telegram
       commands:
         - name: delete
+          description: Delete the Telegram Channel on a bot
           flags:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The resource name of the bot.
         - name: show
+          description: Get details of the Telegram Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -603,6 +634,7 @@ commands:
                     - "true"
                     - "false"
         - name: create
+          description: Create the Telegram Channel on a bot.
           flags:
             --access-token=!: The access token for the Telegram account.
             --add-disabled=:
@@ -624,6 +656,7 @@ commands:
                     - "true"
                     - "false"
     - name: update
+      description: Update an existing bot.
       flags:
         --app-insights-api-key=: Azure Application Insights API Key used to read bot analytics data.
         --app-insights-app-id=: Azure Application Insights Application ID used to read bot analytics data.
@@ -649,6 +682,7 @@ commands:
     - name: webchat
       commands:
         - name: show
+          description: Get details of the Webchat Channel on a bot
           flags:
             --cmd=:
                 description: ==SUPPRESS==
