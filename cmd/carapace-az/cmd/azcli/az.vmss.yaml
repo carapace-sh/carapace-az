@@ -486,6 +486,7 @@ commands:
                 - "true"
                 - "false"
     - name: delete
+      description: Delete a VM scale set.
       flags:
         --force-deletion=:
             description: Optional parameter to force delete a VM scale set.
@@ -538,11 +539,6 @@ commands:
         -n, --name=!: Scale set name.
     - name: diagnostics
       commands:
-        - name: get-default-config
-          description: Show the default config file which defines data to be collected.
-          flags:
-            --is-windows-os=: for Windows VMs
-            --subscription=: Name or ID of subscription.
         - name: set
           description: Enable diagnostics on a VMSS.
           flags:
@@ -563,6 +559,11 @@ commands:
                 no-auto-upgrade-minor-version:
                     - "true"
                     - "false"
+        - name: get-default-config
+          description: Show the default config file which defines data to be collected.
+          flags:
+            --is-windows-os=: for Windows VMs
+            --subscription=: Name or ID of subscription.
     - name: disk
       commands:
         - name: attach
@@ -625,26 +626,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Scale set name.
-        - name: disable
-          description: Disable the encryption on a VMSS with managed disks.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --force=: continue by ignoring client side validation errors
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --volume-type=: Type of volume that the encryption operation is performed on
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
-          completion:
-            flag:
-                volume-type:
-                    - DATA
-                    - OS
-                    - ALL
         - name: enable
           description: Encrypt a VMSS with managed disks.
           flags:
@@ -670,10 +651,63 @@ commands:
                     - DATA
                     - OS
                     - ALL
+        - name: disable
+          description: Disable the encryption on a VMSS with managed disks.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --force=: continue by ignoring client side validation errors
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --volume-type=: Type of volume that the encryption operation is performed on
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
+          completion:
+            flag:
+                volume-type:
+                    - DATA
+                    - OS
+                    - ALL
     - name: extension
       commands:
         - name: image
           commands:
+            - name: show
+              description: Get a virtual machine extension image.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --version=: Extension version
+                -l, --location=: Location.
+                -n, --name=: Name of the extension.
+                -p, --publisher=: Image publisher name.
+            - name: list-names
+              description: List virtual machine extension image types.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -l, --location=: Location.
+                -p, --publisher=: Image publisher name.
+            - name: list-versions
+              description: List virtual machine extension image versions.
+              flags:
+                --filter=: The filter to apply on the operation.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --orderby=: The $orderby odata query option.
+                --subscription=: Name or ID of subscription.
+                --top=: The $top odata query option.
+                -l, --location=: Location.
+                -n, --name=: Name of the extension.
+                -p, --publisher=: Image publisher name.
             - name: list
               description: List the information on available extensions.
               flags:
@@ -686,36 +720,29 @@ commands:
                 -l, --location=: Image location.
                 -n, --name=: Image name
                 -p, --publisher=: Image publisher name
-            - name: list-versions
-              flags:
-                --filter=: The filter to apply on the operation.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --orderby=: The $orderby odata query option.
-                --subscription=: Name or ID of subscription.
-                --top=: The $top odata query option.
-                -l, --location=: Location.
-                -n, --name=: Name of the extension.
-                -p, --publisher=: Image publisher name.
-            - name: list-names
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -l, --location=: Location.
-                -p, --publisher=: Image publisher name.
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --version=: Extension version
-                -l, --location=: Location.
-                -n, --name=: Name of the extension.
-                -p, --publisher=: Image publisher name.
+        - name: upgrade
+          description: Upgrade all extensions for all VMSS instances to the latest version.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
+        - name: show
+          description: Show details on a VMSS extension.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --vmss-name=!: Scale set name.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the extension.
         - name: set
           description: Add an extension to a VMSS or update an existing extension.
           flags:
@@ -750,6 +777,15 @@ commands:
                 no-auto-upgrade-minor-version:
                     - "true"
                     - "false"
+        - name: list
+          description: List extensions associated with a VMSS.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --vmss-name=!: Scale set name.
+            -g, --resource-group=!: Name of resource group.
         - name: delete
           description: Delete an extension from a VMSS.
           flags:
@@ -761,38 +797,6 @@ commands:
             --vmss-name=!: Scale set name.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the extension.
-        - name: show
-          description: Show details on a VMSS extension.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --vmss-name=!: Scale set name.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the extension.
-        - name: list
-          description: List extensions associated with a VMSS.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --vmss-name=!: Scale set name.
-            -g, --resource-group=!: Name of resource group.
-        - name: upgrade
-          description: Upgrade all extensions for all VMSS instances to the latest version.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
     - name: get-instance-view
       description: View an instance of a VMSS.
       flags:
@@ -807,6 +811,7 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: Scale set name.
     - name: get-os-upgrade-history
+      description: List the OS upgrades on a VM scale set instance.
       flags:
         --max-items=: Total number of items to return in the command's output.
         --next-token=: Token to specify where to start paginating.
@@ -835,6 +840,18 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Scale set name.
+        - name: show
+          description: display VM scaleset's managed identity info.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the Virtual Machine.
         - name: remove
           description: Remove user assigned identities from a VM scaleset.
           flags:
@@ -850,19 +867,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Scale set name.
-        - name: show
-          description: display VM scaleset's managed identity info.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Virtual Machine.
     - name: list
+      description: List all VM scale sets under a resource group.
       flags:
         --max-items=: Total number of items to return in the command's output.
         --next-token=: Token to specify where to start paginating.
@@ -893,6 +899,7 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: Scale set name.
     - name: list-instances
+      description: List all virtual machines in a VM scale sets.
       flags:
         --expand=: The expand expression to apply to the operation.
         --filter=: The filter to apply to the operation.
@@ -903,6 +910,7 @@ commands:
         -g, --resource-group=!: Name of resource group.
         -n, --name=!: The name of the VM scale set.
     - name: list-skus
+      description: List SKUs available for your VM scale set, including the minimum and maximum VM instances allowed for each SKU.
       flags:
         --max-items=: Total number of items to return in the command's output.
         --next-token=: Token to specify where to start paginating.
@@ -911,7 +919,16 @@ commands:
         -n, --name=!: The name of the VM scale set.
     - name: nic
       commands:
+        - name: list
+          description: Get all network interfaces in a virtual machine scale set.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            --vmss-name=!: Scale set name.
+            -g, --resource-group=!: Name of resource group.
         - name: show
+          description: Get the specified network interface in a virtual machine scale set.
           flags:
             --expand=: Expands referenced resources.
             --ids=:
@@ -922,14 +939,8 @@ commands:
             --vmss-name=: Scale set name.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The network interface (NIC).
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            --vmss-name=!: Scale set name.
-            -g, --resource-group=!: Name of resource group.
         - name: list-vm-nics
+          description: Get information about all network interfaces in a virtual machine in a virtual machine scale set.
           flags:
             --instance-id=!: The virtual machine index.
             --max-items=: Total number of items to return in the command's output.
@@ -938,6 +949,7 @@ commands:
             --vmss-name=!: Scale set name.
             -g, --resource-group=!: Name of resource group.
     - name: perform-maintenance
+      description: Perform maintenance on one or more virtual machines in a VM scale set.
       flags:
         --ids=:
             description: One or more resource IDs (space-delimited).
@@ -1004,6 +1016,32 @@ commands:
     - name: rolling-upgrade
       commands:
         - name: start
+          description: Start a rolling upgrade to move all virtual machine scale set instances to the latest available Platform Image OS version.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: cancel
+          description: Cancel the current virtual machine scale set rolling upgrade.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1028,6 +1066,7 @@ commands:
                     - "n"
                     - "0"
         - name: get-latest
+          description: Get the status of the latest virtual machine scale set rolling upgrade.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1035,70 +1074,16 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Scale set name.
-        - name: cancel
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
     - name: run-command
       commands:
-        - name: update
-          description: The operation to update the VMSS run command.
+        - name: list
+          description: The operation to get all run commands of an instance in Virtual Machine Scaleset.
           flags:
-            --async-execution=:
-                description: Optional.
-                nargs: -1
-            --command-id=: Specify a command id of predefined script.
-            --error-blob-uri=: Uri (without SAS) to an append blob where the script error stream will be uploaded.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --instance-id=: The instance ID of the virtual machine.
-            --name=!: The name of the virtual machine run command.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --output-blob-uri=: Uri (without SAS) to an append blob where the script output will be uploaded.
-            --parameters=:
-                description: Set custom parameters in a name-value pair.
-                nargs: -1
-            --protected-parameters=:
-                description: Set custom parameters in a name-value pair.
-                nargs: -1
-            --run-as-password=: Password if needed for using run-as-user parameter.
-            --run-as-user=: By default script process runs under system/root user.
-            --script-uri=: Contain a uri to the script to execute on the VM.
-            --script=: Contain the powershell or bash script to execute on the VM.
+            --expand=: The expand expression to apply on the operation.
+            --instance-id=!: The instance ID of the virtual machine.
             --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --timeout-in-seconds=: The timeout in seconds to execute the run command.
-            --vmss-name=: The name of the VM scale set.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=: Location.
-          completion:
-            flag:
-                async-execution:
-                    - "true"
-                    - "false"
+            --vmss-name=!: The name of the VM scale set.
+            -g, --resource-group=!: Name of resource group.
         - name: create
           description: The operation to Create the VMSS VM run command.
           flags:
@@ -1163,14 +1148,6 @@ commands:
             --subscription=: Name or ID of subscription.
             --vmss-name=: The name of the VM scale set.
             -g, --resource-group=: Name of resource group.
-        - name: list
-          description: The operation to get all run commands of an instance in Virtual Machine Scaleset.
-          flags:
-            --expand=: The expand expression to apply on the operation.
-            --instance-id=!: The instance ID of the virtual machine.
-            --subscription=: Name or ID of subscription.
-            --vmss-name=!: The name of the VM scale set.
-            -g, --resource-group=!: Name of resource group.
         - name: invoke
           description: Execute a specific run command on a Virtual Machine Scale Set instance.
           flags:
@@ -1191,6 +1168,44 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Scale set name.
+        - name: update
+          description: The operation to update the VMSS run command.
+          flags:
+            --async-execution=:
+                description: Optional.
+                nargs: -1
+            --command-id=: Specify a command id of predefined script.
+            --error-blob-uri=: Uri (without SAS) to an append blob where the script error stream will be uploaded.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --instance-id=: The instance ID of the virtual machine.
+            --name=!: The name of the virtual machine run command.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --output-blob-uri=: Uri (without SAS) to an append blob where the script output will be uploaded.
+            --parameters=:
+                description: Set custom parameters in a name-value pair.
+                nargs: -1
+            --protected-parameters=:
+                description: Set custom parameters in a name-value pair.
+                nargs: -1
+            --run-as-password=: Password if needed for using run-as-user parameter.
+            --run-as-user=: By default script process runs under system/root user.
+            --script-uri=: Contain a uri to the script to execute on the VM.
+            --script=: Contain the powershell or bash script to execute on the VM.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --timeout-in-seconds=: The timeout in seconds to execute the run command.
+            --vmss-name=: The name of the VM scale set.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=: Location.
+          completion:
+            flag:
+                async-execution:
+                    - "true"
+                    - "false"
     - name: scale
       description: Change the number of VMs within a VMSS.
       flags:
@@ -1240,6 +1255,7 @@ commands:
         -n, --name=!: Scale set name.
         -u, --include-user-data=: Include the user data properties in the query result.
     - name: simulate-eviction
+      description: Simulate the eviction of a Spot virtual machine in a VM scale set.
       flags:
         --ids=:
             description: One or more resource IDs (space-delimited).
@@ -1534,6 +1550,7 @@ commands:
                 - "true"
                 - "false"
     - name: update-domain-walk
+      description: Manual platform update domain walk to update virtual machines in a service fabric virtual machine scale set.
       flags:
         --ids=:
             description: One or more resource IDs (space-delimited).

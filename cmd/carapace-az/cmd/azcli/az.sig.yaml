@@ -3,6 +3,7 @@ name: sig
 description: Manage shared image gallery.
 commands:
     - name: create
+      description: Create a shared image gallery.
       flags:
         --description=: The description of the gallery.
         --eula=: Community gallery publisher eula
@@ -52,6 +53,7 @@ commands:
                 - "n"
                 - "0"
     - name: delete
+      description: Delete a Shared Image Gallery.
       flags:
         --ids=:
             description: One or more resource IDs (space-delimited).
@@ -77,9 +79,104 @@ commands:
                 - "0"
     - name: gallery-application
       commands:
+        - name: create
+          description: Create a gallery Application Definition.
+          flags:
+            --description=: The description of this gallery Application Definition resource.
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --os-type=!: This property allows you to specify the supported type of the OS that application is built for.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: Resource tags  Support shorthand-syntax, json-file and yaml-file.
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: Resource location  When not specified, the location of the resource group will be used.
+            -n, --name=!: The name of the gallery application.
+            -r, --gallery-name=!: Gallery name.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                os-type:
+                    - Linux
+                    - Windows
         - name: version
           commands:
+            - name: list
+              description: List gallery application versions.
+              flags:
+                --application-name=!: The name of the gallery application.
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -r, --gallery-name=!: Gallery name.
+            - name: create
+              description: Create a gallery application version.
+              flags:
+                --application-name=!: The name of the gallery application.
+                --config-file-name=: Optional.
+                --default-file-link=: Optional.
+                --end-of-life-date=: The end of life date of the gallery image version.
+                --exclude-from=:
+                    description: If set to true, Virtual Machines deployed from the latest version of the Image Definition won't use this Image Version.
+                    nargs: -1
+                --install-command=!: Required.
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --package-file-link=!: Required.
+                --package-file-name=: Optional.
+                --remove-command=!: Required.
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: 'Space-separated tags: key[=value] [key[=value] ...].'
+                    nargs: -1
+                --target-regions=:
+                    description: The target regions where the Image Version is going to be replicated to.
+                    nargs: -1
+                --update-command=: Optional.
+                -g, --resource-group=!: Name of resource group.
+                -l, --location=: Resource location  When not specified, the location of the resource group will be used.
+                -n, --name=!: The name of the gallery application version.
+                -r, --gallery-name=!: Gallery name.
+              completion:
+                flag:
+                    exclude-from:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
             - name: update
+              description: Update a gallery application version.
               flags:
                 --add=:
                     description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -152,7 +249,31 @@ commands:
                         - "no"
                         - "n"
                         - "0"
+            - name: wait
+              description: Place the CLI in a waiting state until a condition is met.
+              flags:
+                --application-name=: The name of the gallery application.
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --expand=: The expand expression to apply on the operation.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the gallery application version.
+                -r, --gallery-name=: Gallery name.
+              completion:
+                flag:
+                    expand:
+                        - ReplicationStatus
             - name: delete
+              description: Delete a gallery application version.
               flags:
                 --application-name=: The name of the gallery application.
                 --ids=:
@@ -179,81 +300,8 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: create
-              flags:
-                --application-name=!: The name of the gallery application.
-                --config-file-name=: Optional.
-                --default-file-link=: Optional.
-                --end-of-life-date=: The end of life date of the gallery image version.
-                --exclude-from=:
-                    description: If set to true, Virtual Machines deployed from the latest version of the Image Definition won't use this Image Version.
-                    nargs: -1
-                --install-command=!: Required.
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --package-file-link=!: Required.
-                --package-file-name=: Optional.
-                --remove-command=!: Required.
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: 'Space-separated tags: key[=value] [key[=value] ...].'
-                    nargs: -1
-                --target-regions=:
-                    description: The target regions where the Image Version is going to be replicated to.
-                    nargs: -1
-                --update-command=: Optional.
-                -g, --resource-group=!: Name of resource group.
-                -l, --location=: Resource location  When not specified, the location of the resource group will be used.
-                -n, --name=!: The name of the gallery application version.
-                -r, --gallery-name=!: Gallery name.
-              completion:
-                flag:
-                    exclude-from:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: wait
-              flags:
-                --application-name=: The name of the gallery application.
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --expand=: The expand expression to apply on the operation.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the gallery application version.
-                -r, --gallery-name=: Gallery name.
-              completion:
-                flag:
-                    expand:
-                        - ReplicationStatus
             - name: show
+              description: Get information about a gallery application version.
               flags:
                 --application-name=: The name of the gallery application.
                 --expand=: The expand expression to apply on the operation.
@@ -268,15 +316,70 @@ commands:
                 flag:
                     expand:
                         - ReplicationStatus
-            - name: list
-              flags:
-                --application-name=!: The name of the gallery application.
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -r, --gallery-name=!: Gallery name.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the gallery application.
+            -r, --gallery-name=: Gallery name.
+        - name: list
+          description: List gallery Application Definitions in a gallery.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -r, --gallery-name=!: Gallery name.
+        - name: show
+          description: Get information about a gallery Application Definition.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the gallery application.
+            -r, --gallery-name=: Gallery name.
+        - name: delete
+          description: Delete a gallery Application.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the gallery application.
+            -r, --gallery-name=: Gallery name.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: update
+          description: Update a gallery Application Definition.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -329,64 +432,44 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: create
-          flags:
-            --description=: The description of this gallery Application Definition resource.
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --os-type=!: This property allows you to specify the supported type of the OS that application is built for.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: Resource tags  Support shorthand-syntax, json-file and yaml-file.
-                nargs: -1
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=: Resource location  When not specified, the location of the resource group will be used.
-            -n, --name=!: The name of the gallery application.
-            -r, --gallery-name=!: Gallery name.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                os-type:
-                    - Linux
-                    - Windows
-        - name: delete
+    - name: image-definition
+      commands:
+        - name: show-community
+          description: Get a community gallery image.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
+            --public-gallery-name=: The public name of the community gallery.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the gallery application.
-            -r, --gallery-name=: Gallery name.
-            -y, --yes=: Do not prompt for confirmation.
+            -i, --gallery-image-definition=: The name of the community gallery image definition from which the image versions are to be listed.
+            -l, --location=: Location.
+        - name: list-shared
+          description: List VM Image definitions in a gallery shared directly to your subscription or tenant
+          flags:
+            --gallery-unique-name=: The unique name of the Shared Gallery.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --marker=: A string value that identifies the portion of the list of containers to be returned with the next listing operation.
+            --shared-to=: The query parameter to decide what shared galleries to fetch when doing listing operations.
+            --show-next-marker=: Show nextMarker in result when specified.
+            --subscription=: Name or ID of subscription.
+            -l, --location=: Location.
           completion:
             flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
+                shared-to:
+                    - tenant
+        - name: list
+          description: List gallery image definitions in a gallery.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -r, --gallery-name=!: The name of the Shared Image Gallery from which Image Definitions are to be listed.
         - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
           flags:
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
@@ -400,27 +483,67 @@ commands:
             --timeout=: maximum wait in seconds
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the gallery application.
-            -r, --gallery-name=: Gallery name.
+            -i, --gallery-image-name=: The name of the gallery image definition to be retrieved.
+            -r, --gallery-name=: The name of the Shared Image Gallery from which the Image Definitions are to be retrieved.
+        - name: delete
+          description: Delete a gallery image.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -i, --gallery-image-name=: The name of the gallery image definition to be deleted.
+            -r, --gallery-name=: The name of the Shared Image Gallery in which the Image Definition is to be deleted.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: list-community
+          description: List VM Image definitions in a gallery community
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --marker=: A string value that identifies the portion of the list of containers to be returned with the next listing operation.
+            --public-gallery-name=: The public name of community gallery.
+            --show-next-marker=: Show nextMarker in result when specified.
+            --subscription=: Name or ID of subscription.
+            -l, --location=: Location.
         - name: show
+          description: Get information about a gallery image definition.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the gallery application.
-            -r, --gallery-name=: Gallery name.
-        - name: list
+            -i, --gallery-image-name=: The name of the gallery image definition to be retrieved.
+            -r, --gallery-name=: The name of the Shared Image Gallery from which the Image Definitions are to be retrieved.
+        - name: show-shared
+          description: Get a shared gallery image
           flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
+            --gallery-unique-name=: The unique name of the Shared Gallery.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -r, --gallery-name=!: Gallery name.
-    - name: image-definition
-      commands:
+            -i, --gallery-image-name=: The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
+            -l, --location=: Location.
         - name: update
+          description: Update a VM Image definition.
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -519,110 +642,43 @@ commands:
                 os-type:
                     - Windows
                     - Linux
-        - name: wait
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -i, --gallery-image-name=: The name of the gallery image definition to be retrieved.
-            -r, --gallery-name=: The name of the Shared Image Gallery from which the Image Definitions are to be retrieved.
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -r, --gallery-name=!: The name of the Shared Image Gallery from which Image Definitions are to be listed.
-        - name: show-shared
-          flags:
-            --gallery-unique-name=: The unique name of the Shared Gallery.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -i, --gallery-image-name=: The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
-            -l, --location=: Location.
-        - name: list-community
-          description: List VM Image definitions in a gallery community
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --marker=: A string value that identifies the portion of the list of containers to be returned with the next listing operation.
-            --public-gallery-name=: The public name of community gallery.
-            --show-next-marker=: Show nextMarker in result when specified.
-            --subscription=: Name or ID of subscription.
-            -l, --location=: Location.
-        - name: delete
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -i, --gallery-image-name=: The name of the gallery image definition to be deleted.
-            -r, --gallery-name=: The name of the Shared Image Gallery in which the Image Definition is to be deleted.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: show-community
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --public-gallery-name=: The public name of the community gallery.
-            --subscription=: Name or ID of subscription.
-            -i, --gallery-image-definition=: The name of the community gallery image definition from which the image versions are to be listed.
-            -l, --location=: Location.
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -i, --gallery-image-name=: The name of the gallery image definition to be retrieved.
-            -r, --gallery-name=: The name of the Shared Image Gallery from which the Image Definitions are to be retrieved.
-        - name: list-shared
-          description: List VM Image definitions in a gallery shared directly to your subscription or tenant
-          flags:
-            --gallery-unique-name=: The unique name of the Shared Gallery.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --marker=: A string value that identifies the portion of the list of containers to be returned with the next listing operation.
-            --shared-to=: The query parameter to decide what shared galleries to fetch when doing listing operations.
-            --show-next-marker=: Show nextMarker in result when specified.
-            --subscription=: Name or ID of subscription.
-            -l, --location=: Location.
-          completion:
-            flag:
-                shared-to:
-                    - tenant
     - name: image-version
       commands:
+        - name: show-shared
+          description: Get an image version in a gallery shared directly to your subscription or tenant
+          flags:
+            --gallery-unique-name=: The unique name of the Shared Gallery.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -e, --gallery-image-version=: The name of the gallery image version to be created.
+            -i, --gallery-image-name=: The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
+            -l, --location=: Location.
+        - name: undelete
+          description: Restore soft deleted Image Version
+          flags:
+            --allow-replicated-location-deletion=:
+                description: Indicate whether or not removing this gallery image version from replicated regions is allowed.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -e, --gallery-image-version=!: Gallery image version in semantic version pattern.
+            -g, --resource-group=!: Name of resource group.
+            -i, --gallery-image-definition=!: gallery image definition
+            -l, --location=: Location.
+            -r, --gallery-name=!: gallery name
+          completion:
+            flag:
+                allow-replicated-location-deletion:
+                    - "true"
+                    - "false"
         - name: create
           description: create a new image version
           flags:
@@ -703,125 +759,6 @@ commands:
                     - Standard_LRS
                     - Standard_ZRS
                     - Premium_LRS
-        - name: undelete
-          description: Restore soft deleted Image Version
-          flags:
-            --allow-replicated-location-deletion=:
-                description: Indicate whether or not removing this gallery image version from replicated regions is allowed.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -e, --gallery-image-version=!: Gallery image version in semantic version pattern.
-            -g, --resource-group=!: Name of resource group.
-            -i, --gallery-image-definition=!: gallery image definition
-            -l, --location=: Location.
-            -r, --gallery-name=!: gallery name
-          completion:
-            flag:
-                allow-replicated-location-deletion:
-                    - "true"
-                    - "false"
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -i, --gallery-image-name=!: Gallery image definition.
-            -r, --gallery-name=!: Gallery name.
-        - name: show-shared
-          flags:
-            --gallery-unique-name=: The unique name of the Shared Gallery.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -e, --gallery-image-version=: The name of the gallery image version to be created.
-            -i, --gallery-image-name=: The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
-            -l, --location=: Location.
-        - name: list-shared
-          description: List VM Image Versions in a gallery shared directly to your subscription or tenant
-          flags:
-            --gallery-unique-name=: The unique name of the Shared Gallery.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --marker=: A string value that identifies the portion of the list of containers to be returned with the next listing operation.
-            --shared-to=: The query parameter to decide what shared galleries to fetch when doing listing operations.
-            --show-next-marker=: Show nextMarker in result when specified.
-            --subscription=: Name or ID of subscription.
-            -i, --gallery-image-definition=: The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
-            -l, --location=: Location.
-          completion:
-            flag:
-                shared-to:
-                    - tenant
-        - name: show-community
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --public-gallery-name=: The public name of the community gallery.
-            --subscription=: Name or ID of subscription.
-            -e, --gallery-image-version=: Gallery image version in semantic version pattern.
-            -i, --gallery-image-name=: The name of the community gallery image definition from which the image versions are to be listed.
-            -l, --location=: Location.
-        - name: delete
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -e, --gallery-image-version=: The name of the gallery image version to be deleted.
-            -g, --resource-group=: Name of resource group.
-            -i, --gallery-image-name=: The name of the gallery image definition in which the Image Version resides.
-            -r, --gallery-name=: The name of the Shared Image Gallery in which the Image Definition resides.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: wait
-          description: wait for image version related operation
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --expand=: The expand expression to apply on the operation.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -e, --gallery-image-version=: The name of the gallery image version to be deleted.
-            -g, --resource-group=: Name of resource group.
-            -i, --gallery-image-definition=: The name of the gallery image definition in which the Image Version resides.
-            -r, --gallery-name=: The name of the Shared Image Gallery in which the Image Definition resides.
-          completion:
-            flag:
-                expand:
-                    - ReplicationStatus
-                    - UefiSettings
         - name: update
           description: update a share image version
           flags:
@@ -865,7 +802,87 @@ commands:
                 block-deletion-before-end-of-life:
                     - "true"
                     - "false"
+        - name: show-community
+          description: Get a community gallery image version.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --public-gallery-name=: The public name of the community gallery.
+            --subscription=: Name or ID of subscription.
+            -e, --gallery-image-version=: Gallery image version in semantic version pattern.
+            -i, --gallery-image-name=: The name of the community gallery image definition from which the image versions are to be listed.
+            -l, --location=: Location.
+        - name: delete
+          description: Delete a gallery image version.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -e, --gallery-image-version=: The name of the gallery image version to be deleted.
+            -g, --resource-group=: Name of resource group.
+            -i, --gallery-image-name=: The name of the gallery image definition in which the Image Version resides.
+            -r, --gallery-name=: The name of the Shared Image Gallery in which the Image Definition resides.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --expand=: The expand expression to apply on the operation.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -e, --gallery-image-version=: The name of the gallery image version to be deleted.
+            -g, --resource-group=: Name of resource group.
+            -i, --gallery-image-definition=: The name of the gallery image definition in which the Image Version resides.
+            -r, --gallery-name=: The name of the Shared Image Gallery in which the Image Definition resides.
+          completion:
+            flag:
+                expand:
+                    - ReplicationStatus
+                    - UefiSettings
+        - name: list-shared
+          description: List VM Image Versions in a gallery shared directly to your subscription or tenant
+          flags:
+            --gallery-unique-name=: The unique name of the Shared Gallery.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --marker=: A string value that identifies the portion of the list of containers to be returned with the next listing operation.
+            --shared-to=: The query parameter to decide what shared galleries to fetch when doing listing operations.
+            --show-next-marker=: Show nextMarker in result when specified.
+            --subscription=: Name or ID of subscription.
+            -i, --gallery-image-definition=: The name of the Shared Gallery Image Definition from which the Image Versions are to be listed.
+            -l, --location=: Location.
+          completion:
+            flag:
+                shared-to:
+                    - tenant
         - name: show
+          description: Get information about a gallery image version.
           flags:
             --expand=: The expand expression to apply on the operation.
             --ids=:
@@ -893,7 +910,17 @@ commands:
             --subscription=: Name or ID of subscription.
             -i, --gallery-image-definition=: The name of the community gallery image definition from which the image versions are to be listed.
             -l, --location=: Location.
+        - name: list
+          description: List gallery image versions in a gallery image definition.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -i, --gallery-image-name=!: Gallery image definition.
+            -r, --gallery-name=!: Gallery name.
     - name: list
+      description: List galleries under a resource group.
       flags:
         --max-items=: Total number of items to return in the command's output.
         --next-token=: Token to specify where to start paginating.
@@ -910,6 +937,7 @@ commands:
         --subscription=: Name or ID of subscription.
         -l, --location=: Location.
     - name: list-shared
+      description: List all shared galleries shared directly to your subscription or tenant
       flags:
         --max-items=: Total number of items to return in the command's output.
         --next-token=: Token to specify where to start paginating.
@@ -922,7 +950,39 @@ commands:
                 - tenant
     - name: share
       commands:
+        - name: add
+          description: Share gallery with subscriptions and tenants.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription-ids=:
+                description: A list of subscription ids to share the gallery with.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --tenant-ids=:
+                description: A list of tenant ids to share the gallery with.
+                nargs: -1
+            -g, --resource-group=: Name of resource group.
+            -r, --gallery-name=: The name of the Shared Image Gallery.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: wait
+          description: Place the CLI in a waiting state until a condition of a shared gallery is met.
           flags:
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
@@ -945,7 +1005,33 @@ commands:
                     - SharingProfile/Groups
                 select:
                     - Permissions
-        - name: add
+        - name: reset
+          description: Disable gallery from being shared with subscription or tenant.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --gallery-name=: The name of the Shared Image Gallery.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: enable-community
+          description: Allow to share gallery to the community.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -976,6 +1062,7 @@ commands:
                     - "n"
                     - "0"
         - name: remove
+          description: Stop sharing gallery with a subscription or tenant.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -990,60 +1077,6 @@ commands:
             --tenant-ids=:
                 description: A list of tenant ids to share the gallery with.
                 nargs: -1
-            -g, --resource-group=: Name of resource group.
-            -r, --gallery-name=: The name of the Shared Image Gallery.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: enable-community
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription-ids=:
-                description: A list of subscription ids to share the gallery with.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --tenant-ids=:
-                description: A list of tenant ids to share the gallery with.
-                nargs: -1
-            -g, --resource-group=: Name of resource group.
-            -r, --gallery-name=: The name of the Shared Image Gallery.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: reset
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -r, --gallery-name=: The name of the Shared Image Gallery.
           completion:
@@ -1060,6 +1093,7 @@ commands:
                     - "n"
                     - "0"
     - name: show
+      description: Retrieve information about a Shared Image Gallery.
       flags:
         --ids=:
             description: One or more resource IDs (space-delimited).
@@ -1087,6 +1121,7 @@ commands:
                 - "n"
                 - "0"
     - name: show-community
+      description: Get a community gallery by gallery public name.
       flags:
         --ids=:
             description: One or more resource IDs (space-delimited).
@@ -1095,6 +1130,7 @@ commands:
         -l, --location=: Location.
         -n, --name=: The public name of the community gallery.
     - name: show-shared
+      description: Get a gallery that has been shared directly to your subscription or tenant.
       flags:
         --ids=:
             description: One or more resource IDs (space-delimited).
@@ -1103,6 +1139,7 @@ commands:
         -l, --location=: Location.
         -n, --name=: The unique name of the Shared Gallery.
     - name: update
+      description: Update a share image gallery.
       flags:
         --add=:
             description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -1174,6 +1211,7 @@ commands:
                 - "n"
                 - "0"
     - name: wait
+      description: Place the CLI in a waiting state until a condition is met.
       flags:
         --created=: wait until created with 'provisioningState' at 'Succeeded'
         --custom=: Wait until the condition satisfies a custom JMESPath query.

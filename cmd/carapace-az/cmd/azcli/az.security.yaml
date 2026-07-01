@@ -4,10 +4,6 @@ description: Manage your security posture with Microsoft Defender for Cloud.
 commands:
     - name: adaptive-application-controls
       commands:
-        - name: list
-          description: Adaptive Application Controls - List
-          flags:
-            --subscription=: Name or ID of subscription.
         - name: show
           description: Adaptive Application Controls - Get
           flags:
@@ -17,6 +13,10 @@ commands:
             --group-name=!: Name of an application control VM/server group
             --subscription=: Name or ID of subscription.
             -l, --location=: Location of the resource.
+        - name: list
+          description: Adaptive Application Controls - List
+          flags:
+            --subscription=: Name or ID of subscription.
     - name: adaptive_network_hardenings
       commands:
         - name: list
@@ -41,6 +41,20 @@ commands:
             -g, --resource-group=!: Name of resource group.
     - name: alert
       commands:
+        - name: list
+          description: List security alerts.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=: location of the resource
+        - name: update
+          description: Updates a security alert status.
+          flags:
+            --status=!: target status of the alert.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=!: location of the resource
+            -n, --name=!: name of the resource to be fetched
         - name: show
           description: Shows a security alert.
           flags:
@@ -51,34 +65,24 @@ commands:
             -g, --resource-group=: Name of resource group.
             -l, --location=!: location of the resource
             -n, --name=!: name of the resource to be fetched
-        - name: update
-          description: Updates a security alert status.
-          flags:
-            --status=!: target status of the alert.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=!: location of the resource
-            -n, --name=!: name of the resource to be fetched
-        - name: list
-          description: List security alerts.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=: location of the resource
     - name: alerts-suppression-rule
       commands:
-        - name: upsert_scope
-          description: Update an alerts suppression rule with scope element.
-          flags:
-            --any-of=: A list of strings to scope the suppression rule by.
-            --contains-substring=: The string to scope the suppression rule by.
-            --field=!: Entity name.
-            --rule-name=!: The unique name of the alerts suppression rule.
-            --subscription=: Name or ID of subscription.
         - name: delete
           description: Delete an alerts suppression rule.
           flags:
             --rule-name=!: The unique name of the alerts suppression rule.
+            --subscription=: Name or ID of subscription.
+        - name: show
+          description: Shows an alerts suppression rule.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --rule-name=!: The unique name of the alerts suppression rule.
+            --subscription=: Name or ID of subscription.
+        - name: list
+          description: List all alerts suppression rule on a subscription scope.
+          flags:
             --subscription=: Name or ID of subscription.
         - name: update
           description: Updates or create an alerts suppression rule.
@@ -90,21 +94,17 @@ commands:
             --rule-name=!: The unique name of the alerts suppression rule.
             --state=!: Possible states of the rule.
             --subscription=: Name or ID of subscription.
-        - name: list
-          description: List all alerts suppression rule on a subscription scope.
-          flags:
-            --subscription=: Name or ID of subscription.
-        - name: show
-          description: Shows an alerts suppression rule.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --rule-name=!: The unique name of the alerts suppression rule.
-            --subscription=: Name or ID of subscription.
         - name: delete_scope
           description: Delete an alerts suppression rule scope.
           flags:
+            --field=!: Entity name.
+            --rule-name=!: The unique name of the alerts suppression rule.
+            --subscription=: Name or ID of subscription.
+        - name: upsert_scope
+          description: Update an alerts suppression rule with scope element.
+          flags:
+            --any-of=: A list of strings to scope the suppression rule by.
+            --contains-substring=: The string to scope the suppression rule by.
             --field=!: Entity name.
             --rule-name=!: The unique name of the alerts suppression rule.
             --subscription=: Name or ID of subscription.
@@ -127,7 +127,46 @@ commands:
       commands:
         - name: apim
           commands:
+            - name: show
+              description: Gets an Azure API Management API if it has been onboarded to Microsoft Defender for APIs.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --service-name=: The name of the API Management service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: API revision identifier.
+            - name: offboard
+              description: Offboard an Azure API Management API from Microsoft Defender for APIs.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --service-name=: The name of the API Management service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: API revision identifier.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: wait
+              description: Place the CLI in a waiting state until a condition is met.
+              flags:
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --service-name=: The name of the API Management service.
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: API revision identifier.
             - name: onboard
+              description: Onboard an Azure API Management API to Microsoft Defender for APIs.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -152,50 +191,32 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: offboard
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --service-name=: The name of the API Management service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: API revision identifier.
-                -y, --yes=: Do not prompt for confirmation.
             - name: list
+              description: Gets a list of API collections that have been onboarded to Microsoft Defender for APIs.
               flags:
                 --max-items=: Total number of items to return in the command's output.
                 --next-token=: Token to specify where to start paginating.
                 --service-name=: The name of the API Management service.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --service-name=: The name of the API Management service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: API revision identifier.
-            - name: wait
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --service-name=: The name of the API Management service.
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: API revision identifier.
     - name: assessment
       commands:
+        - name: delete
+          description: Deletes a security assessment.
+          flags:
+            --assessed-resource-id=: The target resource for this assessment
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: name of the resource to be fetched
+        - name: list
+          description: List all security assessment results.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
         - name: create
           description: Creates a customer managed security assessment.
           flags:
@@ -218,35 +239,11 @@ commands:
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
-        - name: delete
-          description: Deletes a security assessment.
-          flags:
-            --assessed-resource-id=: The target resource for this assessment
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: name of the resource to be fetched
-        - name: list
-          description: List all security assessment results.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
     - name: assessment-metadata
       commands:
         - name: delete
           description: Deletes a security assessment type and all it's assessment results.
           flags:
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: name of the resource to be fetched
-        - name: show
-          description: Shows a security assessment.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
         - name: create
@@ -258,40 +255,20 @@ commands:
             --severity=!: Indicates the importance of the security risk if the assessment is unhealthy
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
+        - name: show
+          description: Shows a security assessment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: name of the resource to be fetched
         - name: list
           description: List all security assessment results.
           flags:
             --subscription=: Name or ID of subscription.
     - name: atp
       commands:
-        - name: storage
-          commands:
-            - name: update
-              description: Toggle status of Advanced Threat Protection for a storage account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --is-enabled=!:
-                    description: Enable or disable Advanced Threat Protection for a received storage or Cosmos DB account.
-                    nargs: -1
-                --storage-account=!: Name of an existing Storage account.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-              completion:
-                flag:
-                    is-enabled:
-                        - "true"
-                        - "false"
-            - name: show
-              description: Display Advanced Threat Protection settings for a storage account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --storage-account=!: Name of an existing Storage account.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
         - name: cosmosdb
           commands:
             - name: update
@@ -320,12 +297,42 @@ commands:
                 --cosmosdb-account=!: Name of an existing Cosmos DB account.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
+        - name: storage
+          commands:
+            - name: update
+              description: Toggle status of Advanced Threat Protection for a storage account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --is-enabled=!:
+                    description: Enable or disable Advanced Threat Protection for a received storage or Cosmos DB account.
+                    nargs: -1
+                --storage-account=!: Name of an existing Storage account.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+              completion:
+                flag:
+                    is-enabled:
+                        - "true"
+                        - "false"
+            - name: show
+              description: Display Advanced Threat Protection settings for a storage account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --storage-account=!: Name of an existing Storage account.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
     - name: auto-provisioning-setting
       commands:
-        - name: list
-          description: List the auto provisioning settings.
+        - name: update
+          description: Updates your automatic provisioning settings on the subscription.
           flags:
+            --auto-provision=!: Automatic provisioning toggle.
             --subscription=: Name or ID of subscription.
+            -n, --name=!: name of the resource to be fetched
         - name: show
           description: Shows an auto provisioning setting.
           flags:
@@ -334,14 +341,26 @@ commands:
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
-        - name: update
-          description: Updates your automatic provisioning settings on the subscription.
+        - name: list
+          description: List the auto provisioning settings.
           flags:
-            --auto-provision=!: Automatic provisioning toggle.
             --subscription=: Name or ID of subscription.
-            -n, --name=!: name of the resource to be fetched
     - name: automation
       commands:
+        - name: create_or_update
+          description: Creates or update a security automation.
+          flags:
+            --actions=!: A collection of the actions which are triggered if all the configured rules evaluations, within at least one rule set, are true
+            --description=: The security automation description
+            --etag=: Entity tag is used for comparing two or more entities from the same requested resource
+            --isEnabled=: Indicates whether the security automation is enabled
+            --scopes=!: A collection of scopes on which the security automations logic is applied
+            --sources=!: A collection of the source event types which evaluate the security automation set of rules
+            --subscription=: Name or ID of subscription.
+            --tags=: A list of key value pairs that describe the resource
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: location of the resource
+            -n, --name=!: name of the resource to be fetched
         - name: validate
           description: Validates a security automation model before create or update.
           flags:
@@ -356,30 +375,16 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -l, --location=: location of the resource
             -n, --name=!: name of the resource to be fetched
-        - name: delete
-          description: Deletes a security automation.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: name of the resource to be fetched
         - name: list
           description: List all security automations under subscription/resource group
           flags:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-        - name: create_or_update
-          description: Creates or update a security automation.
+        - name: delete
+          description: Deletes a security automation.
           flags:
-            --actions=!: A collection of the actions which are triggered if all the configured rules evaluations, within at least one rule set, are true
-            --description=: The security automation description
-            --etag=: Entity tag is used for comparing two or more entities from the same requested resource
-            --isEnabled=: Indicates whether the security automation is enabled
-            --scopes=!: A collection of scopes on which the security automations logic is applied
-            --sources=!: A collection of the source event types which evaluate the security automation set of rules
             --subscription=: Name or ID of subscription.
-            --tags=: A list of key value pairs that describe the resource
             -g, --resource-group=!: Name of resource group.
-            -l, --location=: location of the resource
             -n, --name=!: name of the resource to be fetched
         - name: show
           description: Shows a security automation.
@@ -449,15 +454,8 @@ commands:
             --subscription=: Name or ID of subscription.
     - name: contact
       commands:
-        - name: delete
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=: Name of the security contact object
-            -y, --yes=: Do not prompt for confirmation.
         - name: update
+          description: Update security contact configurations for the subscription
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -497,14 +495,8 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: show
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=: Name of the security contact object
         - name: create
+          description: Creates a security contact.
           flags:
             --alert-notifications=:
                 description: Defines whether to send email notifications about new security alerts  Support shorthand-syntax, json-file and yaml-file.
@@ -517,10 +509,28 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --name=!: Name of the security contact object
         - name: list
+          description: List all security contact configurations for the subscription
           flags:
             --max-items=: Total number of items to return in the command's output.
             --next-token=: Token to specify where to start paginating.
             --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Delete security contact configurations for the subscription
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the security contact object
+            -y, --yes=: Do not prompt for confirmation.
+        - name: show
+          description: Get Default Security contact configurations for the subscription
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the security contact object
     - name: discovered-security-solution
       commands:
         - name: list
@@ -553,12 +563,6 @@ commands:
             -n, --name=!: name of the resource to be fetched
     - name: iot-alerts
       commands:
-        - name: list
-          description: List all yours IoT Security solution aggregated alerts.
-          flags:
-            --solution-name=!: Name of the IoT Security solution
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: show
           description: Shows a single aggregated alert of yours IoT Security solution.
           flags:
@@ -576,14 +580,14 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: name of the resource to be fetched
-    - name: iot-analytics
-      commands:
         - name: list
-          description: List all IoT security Analytics metrics.
+          description: List all yours IoT Security solution aggregated alerts.
           flags:
             --solution-name=!: Name of the IoT Security solution
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
+    - name: iot-analytics
+      commands:
         - name: show
           description: Shows IoT Security Analytics metrics.
           flags:
@@ -593,8 +597,20 @@ commands:
             --solution-name=!: Name of the IoT Security solution
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
+        - name: list
+          description: List all IoT security Analytics metrics.
+          flags:
+            --solution-name=!: Name of the IoT Security solution
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
     - name: iot-recommendations
       commands:
+        - name: list
+          description: List all yours IoT Security solution aggregated recommendations.
+          flags:
+            --solution-name=!: Name of the IoT Security solution
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
         - name: show
           description: Shows a single aggregated recommendation of yours IoT Security solution.
           flags:
@@ -605,31 +621,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: name of the resource to be fetched
-        - name: list
-          description: List all yours IoT Security solution aggregated recommendations.
-          flags:
-            --solution-name=!: Name of the IoT Security solution
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
     - name: iot-solution
       commands:
-        - name: show
-          description: Shows a IoT Security solution.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --solution-name=!: Name of the IoT Security solution
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: update
-          description: Update your IoT Security solution.
-          flags:
-            --display-name=: Resource display name
-            --iot-hubs=: IoT Hub resource IDs
-            --solution-name=!: Name of the IoT Security solution
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: list
           description: List all IoT Security solutions.
           flags:
@@ -647,6 +640,23 @@ commands:
         - name: delete
           description: Delete your IoT Security solution.
           flags:
+            --solution-name=!: Name of the IoT Security solution
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: update
+          description: Update your IoT Security solution.
+          flags:
+            --display-name=: Resource display name
+            --iot-hubs=: IoT Hub resource IDs
+            --solution-name=!: Name of the IoT Security solution
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: show
+          description: Shows a IoT Security solution.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
             --solution-name=!: Name of the IoT Security solution
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
@@ -670,28 +680,20 @@ commands:
             -l, --location=: location of the resource
     - name: location
       commands:
-        - name: show
-          description: Shows the Microsoft Defender for Cloud Home region location.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: name of the resource to be fetched
         - name: list
           description: Shows the Microsoft Defender for Cloud Home region location.
           flags:
             --subscription=: Name or ID of subscription.
-    - name: pricing
-      commands:
         - name: show
-          description: Shows the Azure Defender plan for the subscription
+          description: Shows the Microsoft Defender for Cloud Home region location.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
+    - name: pricing
+      commands:
         - name: list
           description: Shows the Azure Defender plans for the subscription.
           flags:
@@ -705,6 +707,14 @@ commands:
             --subplan=: bundle suplan
             --subscription=: Name or ID of subscription.
             --tier=!: pricing tier type
+            -n, --name=!: name of the resource to be fetched
+        - name: show
+          description: Shows the Azure Defender plan for the subscription
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
     - name: regulatory-compliance-assessments
       commands:
@@ -726,34 +736,34 @@ commands:
             -n, --name=!: name of the resource to be fetched
     - name: regulatory-compliance-controls
       commands:
+        - name: show
+          description: Shows a regulatory compliance details state for selected standard.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --standard-name=!: The compliance standard name
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: name of the resource to be fetched
         - name: list
           description: List supported of regulatory compliance controls details and state for selected standard.
           flags:
             --standard-name=!: The compliance standard name
             --subscription=: Name or ID of subscription.
+    - name: regulatory-compliance-standards
+      commands:
         - name: show
           description: Shows a regulatory compliance details state for selected standard.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --standard-name=!: The compliance standard name
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
-    - name: regulatory-compliance-standards
-      commands:
         - name: list
           description: List supported regulatory compliance standards details and state results.
           flags:
             --subscription=: Name or ID of subscription.
-        - name: show
-          description: Shows a regulatory compliance details state for selected standard.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: name of the resource to be fetched
     - name: secure-score-control-definitions
       commands:
         - name: list
@@ -762,6 +772,10 @@ commands:
             --subscription=: Name or ID of subscription.
     - name: secure-score-controls
       commands:
+        - name: list
+          description: List supported of secure score controls details and state for scope.
+          flags:
+            --subscription=: Name or ID of subscription.
         - name: list_by_score
           description: List supported of secure score controls details and state for selected score.
           flags:
@@ -770,10 +784,6 @@ commands:
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
-        - name: list
-          description: List supported of secure score controls details and state for scope.
-          flags:
-            --subscription=: Name or ID of subscription.
     - name: secure-scores
       commands:
         - name: show
@@ -790,126 +800,63 @@ commands:
             --subscription=: Name or ID of subscription.
     - name: security-connector
       commands:
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: devops
           commands:
-            - name: gitlabgroup
+            - name: azuredevopsorg
               commands:
-                - name: list-subgroups
-                  flags:
-                    --group-name=: The GitLab group fully-qualified name.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The security connector name.
-                - name: show
-                  flags:
-                    --group-name=: The GitLab group fully-qualified name.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The security connector name.
-                - name: list
-                  flags:
-                    --max-items=: Total number of items to return in the command's output.
-                    --next-token=: Token to specify where to start paginating.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The security connector name.
                 - name: project
                   commands:
-                    - name: list
+                    - name: wait
+                      description: Place the CLI in a waiting state until a condition is met.
                       flags:
-                        --group-name=!: The GitLab group fully-qualified name.
-                        --max-items=: Total number of items to return in the command's output.
-                        --next-token=: Token to specify where to start paginating.
-                        --subscription=: Name or ID of subscription.
-                        -g, --resource-group=!: Name of resource group.
-                        -n, --name=!: The security connector name.
-                    - name: show
-                      flags:
-                        --group-name=: The GitLab group fully-qualified name.
+                        --created=: wait until created with 'provisioningState' at 'Succeeded'
+                        --custom=: Wait until the condition satisfies a custom JMESPath query.
+                        --deleted=: wait until deleted
+                        --exists=: wait until the resource exists
                         --ids=:
                             description: One or more resource IDs (space-delimited).
                             nargs: -1
+                        --interval=: polling interval in seconds
+                        --org-name=: The Azure DevOps organization name.
                         --project-name=: The project name.
                         --subscription=: Name or ID of subscription.
+                        --timeout=: maximum wait in seconds
+                        --updated=: wait until updated with provisioningState at 'Succeeded'
                         -g, --resource-group=: Name of resource group.
                         -n, --name=: The security connector name.
-            - name: show
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The security connector name.
-            - name: azuredevopsorg
-              commands:
-                - name: show
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --org-name=: The Azure DevOps organization name.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The security connector name.
-                - name: create
-                  flags:
-                    --actionable-remediation=:
-                        description: Configuration payload for PR Annotations.
-                        nargs: -1
-                    --no-wait=:
-                        description: Do not wait for the long-running operation to finish.
-                        nargs: -1
-                    --org-name=!: The Azure DevOps organization name.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The security connector name.
-                  completion:
-                    flag:
-                        no-wait:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: wait
-                  flags:
-                    --created=: wait until created with 'provisioningState' at 'Succeeded'
-                    --custom=: Wait until the condition satisfies a custom JMESPath query.
-                    --deleted=: wait until deleted
-                    --exists=: wait until the resource exists
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --interval=: polling interval in seconds
-                    --org-name=: The Azure DevOps organization name.
-                    --subscription=: Name or ID of subscription.
-                    --timeout=: maximum wait in seconds
-                    --updated=: wait until updated with provisioningState at 'Succeeded'
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The security connector name.
-                - name: project
-                  commands:
                     - name: repo
                       commands:
+                        - name: wait
+                          description: Place the CLI in a waiting state until a condition is met.
+                          flags:
+                            --created=: wait until created with 'provisioningState' at 'Succeeded'
+                            --custom=: Wait until the condition satisfies a custom JMESPath query.
+                            --deleted=: wait until deleted
+                            --exists=: wait until the resource exists
+                            --ids=:
+                                description: One or more resource IDs (space-delimited).
+                                nargs: -1
+                            --interval=: polling interval in seconds
+                            --org-name=: The Azure DevOps organization name.
+                            --project-name=: The project name.
+                            --repo-name=: The repository name.
+                            --subscription=: Name or ID of subscription.
+                            --timeout=: maximum wait in seconds
+                            --updated=: wait until updated with provisioningState at 'Succeeded'
+                            -g, --resource-group=: Name of resource group.
+                            -n, --name=: The security connector name.
+                        - name: list
+                          description: List Azure DevOps repositories onboarded to the connector.
+                          flags:
+                            --max-items=: Total number of items to return in the command's output.
+                            --next-token=: Token to specify where to start paginating.
+                            --org-name=!: The Azure DevOps organization name.
+                            --project-name=!: The project name.
+                            --subscription=: Name or ID of subscription.
+                            -g, --resource-group=!: Name of resource group.
+                            -n, --name=!: The security connector name.
                         - name: update
+                          description: Update a monitored Azure DevOps repository resource.
                           flags:
                             --actionable-remediation=:
                                 description: Configuration payload for PR Annotations.
@@ -939,45 +886,8 @@ commands:
                                     - "no"
                                     - "n"
                                     - "0"
-                        - name: list
-                          flags:
-                            --max-items=: Total number of items to return in the command's output.
-                            --next-token=: Token to specify where to start paginating.
-                            --org-name=!: The Azure DevOps organization name.
-                            --project-name=!: The project name.
-                            --subscription=: Name or ID of subscription.
-                            -g, --resource-group=!: Name of resource group.
-                            -n, --name=!: The security connector name.
-                        - name: wait
-                          flags:
-                            --created=: wait until created with 'provisioningState' at 'Succeeded'
-                            --custom=: Wait until the condition satisfies a custom JMESPath query.
-                            --deleted=: wait until deleted
-                            --exists=: wait until the resource exists
-                            --ids=:
-                                description: One or more resource IDs (space-delimited).
-                                nargs: -1
-                            --interval=: polling interval in seconds
-                            --org-name=: The Azure DevOps organization name.
-                            --project-name=: The project name.
-                            --repo-name=: The repository name.
-                            --subscription=: Name or ID of subscription.
-                            --timeout=: maximum wait in seconds
-                            --updated=: wait until updated with provisioningState at 'Succeeded'
-                            -g, --resource-group=: Name of resource group.
-                            -n, --name=: The security connector name.
-                        - name: show
-                          flags:
-                            --ids=:
-                                description: One or more resource IDs (space-delimited).
-                                nargs: -1
-                            --org-name=: The Azure DevOps organization name.
-                            --project-name=: The project name.
-                            --repo-name=: The repository name.
-                            --subscription=: Name or ID of subscription.
-                            -g, --resource-group=: Name of resource group.
-                            -n, --name=: The security connector name.
                         - name: create
+                          description: Create a monitored Azure DevOps repository resource.
                           flags:
                             --actionable-remediation=:
                                 description: Configuration payload for PR Annotations.
@@ -1004,24 +914,20 @@ commands:
                                     - "no"
                                     - "n"
                                     - "0"
-                    - name: wait
-                      flags:
-                        --created=: wait until created with 'provisioningState' at 'Succeeded'
-                        --custom=: Wait until the condition satisfies a custom JMESPath query.
-                        --deleted=: wait until deleted
-                        --exists=: wait until the resource exists
-                        --ids=:
-                            description: One or more resource IDs (space-delimited).
-                            nargs: -1
-                        --interval=: polling interval in seconds
-                        --org-name=: The Azure DevOps organization name.
-                        --project-name=: The project name.
-                        --subscription=: Name or ID of subscription.
-                        --timeout=: maximum wait in seconds
-                        --updated=: wait until updated with provisioningState at 'Succeeded'
-                        -g, --resource-group=: Name of resource group.
-                        -n, --name=: The security connector name.
+                        - name: show
+                          description: Get a monitored Azure DevOps repository resource.
+                          flags:
+                            --ids=:
+                                description: One or more resource IDs (space-delimited).
+                                nargs: -1
+                            --org-name=: The Azure DevOps organization name.
+                            --project-name=: The project name.
+                            --repo-name=: The repository name.
+                            --subscription=: Name or ID of subscription.
+                            -g, --resource-group=: Name of resource group.
+                            -n, --name=: The security connector name.
                     - name: update
+                      description: Update a monitored Azure DevOps project resource.
                       flags:
                         --actionable-remediation=:
                             description: Configuration payload for PR Annotations.
@@ -1050,15 +956,8 @@ commands:
                                 - "no"
                                 - "n"
                                 - "0"
-                    - name: list
-                      flags:
-                        --max-items=: Total number of items to return in the command's output.
-                        --next-token=: Token to specify where to start paginating.
-                        --org-name=!: The Azure DevOps organization name.
-                        --subscription=: Name or ID of subscription.
-                        -g, --resource-group=!: Name of resource group.
-                        -n, --name=!: The security connector name.
                     - name: show
+                      description: Get a monitored Azure DevOps project resource.
                       flags:
                         --ids=:
                             description: One or more resource IDs (space-delimited).
@@ -1069,6 +968,7 @@ commands:
                         -g, --resource-group=: Name of resource group.
                         -n, --name=: The security connector name.
                     - name: create
+                      description: Create a monitored Azure DevOps project resource.
                       flags:
                         --actionable-remediation=:
                             description: Configuration payload for PR Annotations.
@@ -1094,7 +994,17 @@ commands:
                                 - "no"
                                 - "n"
                                 - "0"
+                    - name: list
+                      description: List Azure DevOps projects onboarded to the connector.
+                      flags:
+                        --max-items=: Total number of items to return in the command's output.
+                        --next-token=: Token to specify where to start paginating.
+                        --org-name=!: The Azure DevOps organization name.
+                        --subscription=: Name or ID of subscription.
+                        -g, --resource-group=!: Name of resource group.
+                        -n, --name=!: The security connector name.
                 - name: list
+                  description: List Azure DevOps organizations onboarded to the connector.
                   flags:
                     --max-items=: Total number of items to return in the command's output.
                     --next-token=: Token to specify where to start paginating.
@@ -1102,6 +1012,7 @@ commands:
                     -g, --resource-group=!: Name of resource group.
                     -n, --name=!: The security connector name.
                 - name: update
+                  description: Update monitored Azure DevOps organization details.
                   flags:
                     --actionable-remediation=:
                         description: Configuration payload for PR Annotations.
@@ -1129,27 +1040,125 @@ commands:
                             - "no"
                             - "n"
                             - "0"
-            - name: list-available-azuredevopsorgs
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The security connector name.
-            - name: list-available-githubowners
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The security connector name.
+                - name: show
+                  description: Get a monitored Azure DevOps organization resource.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --org-name=: The Azure DevOps organization name.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The security connector name.
+                - name: create
+                  description: Create monitored Azure DevOps organization details.
+                  flags:
+                    --actionable-remediation=:
+                        description: Configuration payload for PR Annotations.
+                        nargs: -1
+                    --no-wait=:
+                        description: Do not wait for the long-running operation to finish.
+                        nargs: -1
+                    --org-name=!: The Azure DevOps organization name.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The security connector name.
+                  completion:
+                    flag:
+                        no-wait:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: wait
+                  description: Place the CLI in a waiting state until a condition is met.
+                  flags:
+                    --created=: wait until created with 'provisioningState' at 'Succeeded'
+                    --custom=: Wait until the condition satisfies a custom JMESPath query.
+                    --deleted=: wait until deleted
+                    --exists=: wait until the resource exists
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --interval=: polling interval in seconds
+                    --org-name=: The Azure DevOps organization name.
+                    --subscription=: Name or ID of subscription.
+                    --timeout=: maximum wait in seconds
+                    --updated=: wait until updated with provisioningState at 'Succeeded'
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The security connector name.
+            - name: gitlabgroup
+              commands:
+                - name: list-subgroups
+                  description: Gets nested subgroups of given GitLab Group which are onboarded to the connector.
+                  flags:
+                    --group-name=: The GitLab group fully-qualified name.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The security connector name.
+                - name: list
+                  description: List GitLab groups onboarded to the connector.
+                  flags:
+                    --max-items=: Total number of items to return in the command's output.
+                    --next-token=: Token to specify where to start paginating.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The security connector name.
+                - name: show
+                  description: Get a monitored GitLab Group resource for a given fully-qualified name.
+                  flags:
+                    --group-name=: The GitLab group fully-qualified name.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The security connector name.
+                - name: project
+                  commands:
+                    - name: list
+                      description: List GitLab projects that are directly owned by given group and onboarded to the connector.
+                      flags:
+                        --group-name=!: The GitLab group fully-qualified name.
+                        --max-items=: Total number of items to return in the command's output.
+                        --next-token=: Token to specify where to start paginating.
+                        --subscription=: Name or ID of subscription.
+                        -g, --resource-group=!: Name of resource group.
+                        -n, --name=!: The security connector name.
+                    - name: show
+                      description: Get a monitored GitLab Project resource for a given fully-qualified group name and project name.
+                      flags:
+                        --group-name=: The GitLab group fully-qualified name.
+                        --ids=:
+                            description: One or more resource IDs (space-delimited).
+                            nargs: -1
+                        --project-name=: The project name.
+                        --subscription=: Name or ID of subscription.
+                        -g, --resource-group=: Name of resource group.
+                        -n, --name=: The security connector name.
             - name: githubowner
               commands:
+                - name: list
+                  description: List a list of GitHub owners onboarded to the connector.
+                  flags:
+                    --max-items=: Total number of items to return in the command's output.
+                    --next-token=: Token to specify where to start paginating.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The security connector name.
                 - name: repo
                   commands:
                     - name: show
+                      description: Get a monitored GitHub repository.
                       flags:
                         --ids=:
                             description: One or more resource IDs (space-delimited).
@@ -1160,6 +1169,7 @@ commands:
                         -g, --resource-group=: Name of resource group.
                         -n, --name=: The security connector name.
                     - name: list
+                      description: List GitHub repositories onboarded to the connector.
                       flags:
                         --max-items=: Total number of items to return in the command's output.
                         --next-token=: Token to specify where to start paginating.
@@ -1168,6 +1178,7 @@ commands:
                         -g, --resource-group=!: Name of resource group.
                         -n, --name=!: The security connector name.
                 - name: show
+                  description: Get a monitored GitHub owner.
                   flags:
                     --ids=:
                         description: One or more resource IDs (space-delimited).
@@ -1176,14 +1187,34 @@ commands:
                     --subscription=: Name or ID of subscription.
                     -g, --resource-group=: Name of resource group.
                     -n, --name=: The security connector name.
-                - name: list
-                  flags:
-                    --max-items=: Total number of items to return in the command's output.
-                    --next-token=: Token to specify where to start paginating.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The security connector name.
-            - name: list-available-gitlabgroups
+            - name: delete
+              description: Delete a DevOps Connector.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The security connector name.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: show
+              description: Get a DevOps Configuration.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -1192,6 +1223,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The security connector name.
             - name: update
+              description: Update a DevOps Configuration.
               flags:
                 --authorization-code=: Sets one-time OAuth code to exchange for refresh and access tokens.
                 --auto-discovery=: AutoDiscovery states.
@@ -1224,32 +1256,51 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: delete
+            - name: wait
+              description: Place the CLI in a waiting state until a condition is met.
+              flags:
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The security connector name.
+            - name: list-available-gitlabgroups
+              description: Returns a list of all GitLab groups accessible by the user token consumed by the connector.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The security connector name.
+            - name: list-available-githubowners
+              description: Returns a list of all GitHub owners accessible by the user token consumed by the connector.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The security connector name.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
+            - name: list-available-azuredevopsorgs
+              description: Returns a list of all Azure DevOps organizations accessible by the user token consumed by the connector.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The security connector name.
             - name: create
+              description: Create a DevOps Configuration.
               flags:
                 --authorization-code=: Sets one-time OAuth code to exchange for refresh and access tokens.
                 --auto-discovery=: AutoDiscovery states.
@@ -1279,22 +1330,18 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: wait
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The security connector name.
+        - name: delete
+          description: Delete a security connector.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The security connector name.
+            -y, --yes=: Do not prompt for confirmation.
         - name: show
+          description: Get details of a specific security connector
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1302,58 +1349,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The security connector name.
-        - name: update
-          flags:
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --environment-data=:
-                description: The security connector environment data.
-                nargs: -1
-            --environment-name=: The multi cloud resource's cloud name.
-            --force-string=:
-                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --offerings=:
-                description: A collection of offerings for the security connector.
-                nargs: -1
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: A list of key value pairs that describe the resource.
-                nargs: -1
-            -g, --resource-group=: Name of resource group.
-            -l, --location=: Location where the resource is stored
-            -n, --name=: The security connector name.
-          completion:
-            flag:
-                environment-name:
-                    - AWS
-                    - Azure
-                    - AzureDevOps
-                    - GCP
-                    - GitLab
-                    - Github
-                force-string:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: create
+          description: Create a security connector.
           flags:
             --environment-data=:
                 description: The security connector environment data.
@@ -1379,15 +1376,65 @@ commands:
                     - GCP
                     - GitLab
                     - Github
-        - name: delete
+        - name: update
+          description: Update a security connector.
           flags:
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --environment-data=:
+                description: The security connector environment data.
+                nargs: -1
+            --environment-name=: The multi cloud resource's cloud name.
+            --force-string=:
+                description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --offerings=:
+                description: A collection of offerings for the security connector.
+                nargs: -1
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: A list of key value pairs that describe the resource.
+                nargs: -1
+            -g, --resource-group=: Name of resource group.
+            -l, --location=: Location where the resource is stored
+            -n, --name=: The security connector name.
+          completion:
+            flag:
+                environment-name:
+                    - AWS
+                    - Azure
+                    - AzureDevOps
+                    - GCP
+                    - GitLab
+                    - Github
+                force-string:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: list
+          description: List all the security connectors in the specified subscription.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The security connector name.
-            -y, --yes=: Do not prompt for confirmation.
     - name: security-solutions
       commands:
         - name: list
@@ -1402,13 +1449,17 @@ commands:
             --subscription=: Name or ID of subscription.
     - name: setting
       commands:
-        - name: show
+        - name: create
+          description: Create settings about different configurations in Microsoft Defender for Cloud
           flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
+            --alert-sync-settings=:
+                description: Support shorthand-syntax, json-file and yaml-file.
+                nargs: -1
+            --data-export-settings=:
+                description: Support shorthand-syntax, json-file and yaml-file.
                 nargs: -1
             --subscription=: Name or ID of subscription.
-            -n, --name=: The name of the setting
+            -n, --name=!: The name of the setting
           completion:
             flag:
                 name:
@@ -1417,7 +1468,14 @@ commands:
                     - WDATP
                     - WDATP_EXCLUDE_LINUX_PUBLIC_PREVIEW
                     - WDATP_UNIFIED_SOLUTION
+        - name: list
+          description: List security settings.
+          flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
         - name: update
+          description: Update settings about different configurations in Microsoft Defender for Cloud
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -1461,16 +1519,14 @@ commands:
                     - WDATP
                     - WDATP_EXCLUDE_LINUX_PUBLIC_PREVIEW
                     - WDATP_UNIFIED_SOLUTION
-        - name: create
+        - name: show
+          description: Get of different configurations in Microsoft Defender for Cloud
           flags:
-            --alert-sync-settings=:
-                description: Support shorthand-syntax, json-file and yaml-file.
-                nargs: -1
-            --data-export-settings=:
-                description: Support shorthand-syntax, json-file and yaml-file.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
-            -n, --name=!: The name of the setting
+            -n, --name=: The name of the setting
           completion:
             flag:
                 name:
@@ -1479,13 +1535,17 @@ commands:
                     - WDATP
                     - WDATP_EXCLUDE_LINUX_PUBLIC_PREVIEW
                     - WDATP_UNIFIED_SOLUTION
-        - name: list
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
     - name: sub-assessment
       commands:
+        - name: list
+          description: List all security sub assessment results.
+          flags:
+            --assessed-resource-id=: The target resource for this assessment
+            --assessment-name=: Name of the assessment resource
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
         - name: show
           description: Shows a security sub assessment.
           flags:
@@ -1496,17 +1556,13 @@ commands:
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
-        - name: list
-          description: List all security sub assessment results.
-          flags:
-            --assessed-resource-id=: The target resource for this assessment
-            --assessment-name=: Name of the assessment resource
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
     - name: task
       commands:
+        - name: list
+          description: List security tasks (recommendations).
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: show
           description: shows a security task (recommendation).
           flags:
@@ -1516,17 +1572,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: name of the resource to be fetched
-        - name: list
-          description: List security tasks (recommendations).
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
     - name: topology
       commands:
-        - name: list
-          description: Shows the network topology in your subscription.
-          flags:
-            --subscription=: Name or ID of subscription.
         - name: show
           description: Shows the network topology in your subscription.
           flags:
@@ -1536,12 +1583,28 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: name of the resource to be fetched
+        - name: list
+          description: Shows the network topology in your subscription.
+          flags:
+            --subscription=: Name or ID of subscription.
     - name: va
       commands:
         - name: sql
           commands:
             - name: results
               commands:
+                - name: list
+                  description: View all Sql Vulnerability Assessment scan results.
+                  flags:
+                    --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
+                    --database-name=!: The name of the scanned database
+                    --scan-id=!: The ID of the scan
+                    --server-name=!: The name of the scanned server
+                    --subscription=: Name or ID of subscription.
+                    --vm-name=: Provide the name of the machine, for On-Premise resources only
+                    --vm-resource-id=!: Resource ID of the scanned machine.
+                    --vm-uuid=: Provide the UUID of the scanned machine, for On-Premise resources only
+                    --workspace-id=!: The ID of the workspace connected to the scanned machine
                 - name: show
                   description: View Sql Vulnerability Assessment scan results.
                   flags:
@@ -1558,35 +1621,8 @@ commands:
                     --vm-resource-id=!: Resource ID of the scanned machine.
                     --vm-uuid=: Provide the UUID of the scanned machine, for On-Premise resources only
                     --workspace-id=!: The ID of the workspace connected to the scanned machine
-                - name: list
-                  description: View all Sql Vulnerability Assessment scan results.
-                  flags:
-                    --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
-                    --database-name=!: The name of the scanned database
-                    --scan-id=!: The ID of the scan
-                    --server-name=!: The name of the scanned server
-                    --subscription=: Name or ID of subscription.
-                    --vm-name=: Provide the name of the machine, for On-Premise resources only
-                    --vm-resource-id=!: Resource ID of the scanned machine.
-                    --vm-uuid=: Provide the UUID of the scanned machine, for On-Premise resources only
-                    --workspace-id=!: The ID of the workspace connected to the scanned machine
             - name: baseline
               commands:
-                - name: show
-                  description: View Sql Vulnerability Assessment rule baseline.
-                  flags:
-                    --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --database-name=!: The name of the scanned database
-                    --rule-id=!: The ID of the scanned rule.
-                    --server-name=!: The name of the scanned server
-                    --subscription=: Name or ID of subscription.
-                    --vm-name=: Provide the name of the machine, for On-Premise resources only
-                    --vm-resource-id=!: Resource ID of the scanned machine.
-                    --vm-uuid=: Provide the UUID of the scanned machine, for On-Premise resources only
-                    --workspace-id=!: The ID of the workspace connected to the scanned machine
                 - name: set
                   description: Sets Sql Vulnerability Assessment baseline.
                   flags:
@@ -1609,11 +1645,12 @@ commands:
                         latest:
                             - "true"
                             - "false"
-                - name: list
-                  description: View Sql Vulnerability Assessment baseline for all rules.
+                - name: delete
+                  description: Delete Sql Vulnerability Assessment rule baseline.
                   flags:
                     --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
                     --database-name=!: The name of the scanned database
+                    --rule-id=!: The ID of the scanned rule.
                     --server-name=!: The name of the scanned server
                     --subscription=: Name or ID of subscription.
                     --vm-name=: Provide the name of the machine, for On-Premise resources only
@@ -1643,10 +1680,24 @@ commands:
                         latest:
                             - "true"
                             - "false"
-                - name: delete
-                  description: Delete Sql Vulnerability Assessment rule baseline.
+                - name: list
+                  description: View Sql Vulnerability Assessment baseline for all rules.
                   flags:
                     --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
+                    --database-name=!: The name of the scanned database
+                    --server-name=!: The name of the scanned server
+                    --subscription=: Name or ID of subscription.
+                    --vm-name=: Provide the name of the machine, for On-Premise resources only
+                    --vm-resource-id=!: Resource ID of the scanned machine.
+                    --vm-uuid=: Provide the UUID of the scanned machine, for On-Premise resources only
+                    --workspace-id=!: The ID of the workspace connected to the scanned machine
+                - name: show
+                  description: View Sql Vulnerability Assessment rule baseline.
+                  flags:
+                    --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
                     --database-name=!: The name of the scanned database
                     --rule-id=!: The ID of the scanned rule.
                     --server-name=!: The name of the scanned server
@@ -1685,21 +1736,12 @@ commands:
                     --workspace-id=!: The ID of the workspace connected to the scanned machine
     - name: workspace-setting
       commands:
-        - name: list
-          description: Shows the workspace settings in your subscription - these settings let you control which workspace will hold your security data
-          flags:
-            --subscription=: Name or ID of subscription.
         - name: show
           description: Shows the workspace settings in your subscription - these settings let you control which workspace will hold your security data
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: name of the resource to be fetched
-        - name: delete
-          description: Deletes the workspace settings in your subscription - this will make the security events on the subscription be reported to the default workspace
-          flags:
             --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched
         - name: create
@@ -1710,4 +1752,13 @@ commands:
                 nargs: -1
             --subscription=: Name or ID of subscription.
             --target-workspace=!: An ID of the workspace resource that will hold the security data
+            -n, --name=!: name of the resource to be fetched
+        - name: list
+          description: Shows the workspace settings in your subscription - these settings let you control which workspace will hold your security data
+          flags:
+            --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Deletes the workspace settings in your subscription - this will make the security events on the subscription be reported to the default workspace
+          flags:
+            --subscription=: Name or ID of subscription.
             -n, --name=!: name of the resource to be fetched

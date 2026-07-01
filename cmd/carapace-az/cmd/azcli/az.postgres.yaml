@@ -4,12 +4,6 @@ description: Manage Azure Database for PostgreSQL servers.
 commands:
     - name: db
       commands:
-        - name: list
-          description: List all the databases in a given server.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -s, --server-name=!: Name of the Server.
         - name: delete
           description: Deletes a database.
           flags:
@@ -21,6 +15,21 @@ commands:
             -n, --name=!: The name of the database
             -s, --server-name=: Name of the server.
             -y, --yes=: Do not prompt for confirmation.
+        - name: list
+          description: List all the databases in a given server.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -s, --server-name=!: Name of the Server.
+        - name: create
+          description: Create a PostgreSQL database.
+          flags:
+            --charset=: The charset of the database
+            --collation=: The collation of the database
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the database
+            -s, --server-name=!: Name of the server.
         - name: show
           description: Gets information about a database.
           flags:
@@ -34,55 +43,248 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the database
             -s, --server-name=: Name of the server.
-        - name: create
-          description: Create a PostgreSQL database.
-          flags:
-            --charset=: The charset of the database
-            --collation=: The collation of the database
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the database
-            -s, --server-name=!: Name of the server.
     - name: flexible-server
       commands:
-        - name: index-tuning
+        - name: identity
           commands:
-            - name: list-settings
-              description: Get tuning settings associated for a PostgreSQL flexible server.
+            - name: assign
+              description: Add user assigned managed identities to the server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: list-recommendations
-              description: Get available tuning index recommendations associated with a PostgreSQL flexible server.
+                -g, --resource-group=!: Name of resource group.
+                -n, --identity=!:
+                    description: Space-separated names or ID's of identities.
+                    nargs: -1
+                -s, --server-name=!: Name of the server.
+            - name: remove
+              description: Remove user assigned managed identites from the server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -r, --recommendation-type=: Retrieve recommendations based on type.
-                -s, --server-name=: Name of the server.
+                -g, --resource-group=!: Name of resource group.
+                -n, --identity=!:
+                    description: Space-separated names or ID's of identities.
+                    nargs: -1
+                -s, --server-name=!: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: update
+              description: Update to enable or disable system assigned managed identity on the server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                --system-assigned=!: Enable or disable system assigned identity to authenticate to cloud services without storing credentials in code.
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
               completion:
                 flag:
-                    recommendation-type:
-                        - CreateIndex
-                        - DropIndex
-            - name: show-settings
-              description: Get a tuning setting for a PostgreSQL flexible server.
+                    system-assigned:
+                        - Enabled
+                        - Disabled
+            - name: show
+              description: Get an user assigned managed identity from the server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --identity=!: Name or ID of identity to show.
+                -s, --server-name=!: Name of the server.
+            - name: list
+              description: List all user assigned managed identities from the server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+        - name: private-endpoint-connection
+          commands:
+            - name: approve
+              description: Approve a private endpoint connection request for a server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=!: Comments for approve operation.
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: delete
+              description: Deletes a private endpoint connection with a given name.
+              flags:
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: reject
+              description: Reject a private endpoint connection request for a server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=!: Comments for reject operation.
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: list
+              description: Gets all private endpoint connections on a server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: show
+              description: Gets a private endpoint connection.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+        - name: microsoft-entra-admin
+          commands:
+            - name: list
+              description: List all Microsoft Entra administrators.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+            - name: wait
+              description: Wait for a Microsoft Entra administrator to satisfy certain conditions.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --interval=: polling interval in seconds
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+            - name: show
+              description: Get a Microsoft Entra administrator.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+            - name: delete
+              description: Delete a Microsoft Entra administrator.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: create
+              description: Create a Microsoft Entra administrator.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+                -t, --type=: Type of the Microsoft Entra administrator.
+                -u, --display-name=!: Display name of the Microsoft Entra administrator user or group.
+              completion:
+                flag:
+                    type:
+                        - User
+                        - Group
+                        - ServicePrincipal
+                        - Unknown
+        - name: fabric-mirroring
+          commands:
+            - name: start
+              description: Enable bringing your PostgreSQL data into Microsoft Fabric.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -d, --database-names=!:
+                    description: Space-separated list of the database names to be mirrored.
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: stop
+              description: Stop bringing your PostgreSQL data into Microsoft Fabric.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: update-databases
+              description: Update allowed mirrored databases.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -d, --database-names=!:
+                    description: Space-separated list of the database names to be mirrored.
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+        - name: index-tuning
+          commands:
+            - name: set-settings
+              description: Update a tuning setting for a PostgreSQL flexible server.
+              flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
@@ -90,6 +292,7 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=!: The name of the tuning setting.
                 -s, --server-name=: Name of the server.
+                -v, --value=: Value of the tuning setting.
               completion:
                 flag:
                     name:
@@ -117,9 +320,12 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -s, --server-name=: Name of the server.
-            - name: set-settings
-              description: Update a tuning setting for a PostgreSQL flexible server.
+            - name: show-settings
+              description: Get a tuning setting for a PostgreSQL flexible server.
               flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
@@ -127,7 +333,6 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=!: The name of the tuning setting.
                 -s, --server-name=: Name of the server.
-                -v, --value=: Value of the tuning setting.
               completion:
                 flag:
                     name:
@@ -161,28 +366,95 @@ commands:
                     enabled:
                         - "True"
                         - "False"
-        - name: parameter
-          commands:
-            - name: set
-              description: Update the parameter of a flexible server.
+            - name: list-recommendations
+              description: Get available tuning index recommendations associated with a PostgreSQL flexible server.
               flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --source=: Source of the configuration.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the server configuration
+                -r, --recommendation-type=: Retrieve recommendations based on type.
                 -s, --server-name=: Name of the server.
-                -v, --value=: Value of the configuration.
-            - name: list
-              description: List all the configurations in a given server.
+              completion:
+                flag:
+                    recommendation-type:
+                        - CreateIndex
+                        - DropIndex
+            - name: list-settings
+              description: Get tuning settings associated for a PostgreSQL flexible server.
               flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+        - name: virtual-endpoint
+          commands:
+            - name: show
+              description: Get the details of a virtual endpoint.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the virtual endpoint.
+                -s, --server-name=: Name of the server.
+            - name: list
+              description: List all virtual endpoints for a flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: delete
+              description: Delete a virtual endpoint.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the virtual endpoint.
+                -s, --server-name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: create
+              description: Create a new virtual endpoint for a flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
+                -m, --members=!: The read replicas the virtual endpoints point to.
+                -n, --name=!: Name of the virtual endpoint.
                 -s, --server-name=!: Name of the server.
-            - name: show
-              description: Gets information about a configuration of server.
+                -t, --endpoint-type=!: Virtual Endpoints offer two distinct types of connection points.
+              completion:
+                flag:
+                    endpoint-type:
+                        - ReadWrite
+            - name: update
+              description: Update a virtual endpoint.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -192,23 +464,37 @@ commands:
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the server configuration
+                -m, --members=!: The read replicas the virtual endpoints point to.
+                -n, --name=: Name of the virtual endpoint.
                 -s, --server-name=: Name of the server.
+                -t, --endpoint-type=!: Virtual Endpoints offer two distinct types of connection points.
+              completion:
+                flag:
+                    endpoint-type:
+                        - ReadWrite
+        - name: show-connection-string
+          description: Show the connection strings for a PostgreSQL flexible-server database.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --pg-bouncer=: Show connection strings for PgBouncer.
+            --subscription=: Name or ID of subscription.
+            -d, --database-name=: The name of the database to be created when provisioning the database server
+            -p, --admin-password=: The password of the administrator.
+            -s, --server-name=: Name of the server.
+            -u, --admin-user=: Administrator username for the server.
         - name: firewall-rule
           commands:
-            - name: show
-              description: Get the details of a firewall rule.
+            - name: list
+              description: List all firewall rules for a flexible server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the server.
-                -r, --rule-name=: The name of the firewall rule.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the server.
             - name: update
               description: Update a firewall rule.
               flags:
@@ -234,6 +520,18 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the server.
                 -r, --rule-name=: The name of the firewall rule.
+            - name: create
+              description: Create a new firewall rule for a flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --end-ip-address=: The end IP address of the firewall rule.
+                --start-ip-address=: The start IP address of the firewall rule.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the server.
+                -r, --rule-name=: The name of the firewall rule.
             - name: delete
               description: Delete a firewall rule.
               flags:
@@ -248,29 +546,605 @@ commands:
                 -n, --name=: Name of the server.
                 -r, --rule-name=: The name of the firewall rule.
                 -y, --yes=: Do not prompt for confirmation.
-            - name: list
-              description: List all firewall rules for a flexible server.
+            - name: show
+              description: Get the details of a firewall rule.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the server.
+                -r, --rule-name=: The name of the firewall rule.
+        - name: ad-admin
+          commands:
+            - name: wait
+              description: Wait for a Microsoft Entra administrator to satisfy certain conditions.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --interval=: polling interval in seconds
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+            - name: create
+              description: Create a Microsoft Entra administrator.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+                -t, --type=: Type of the Microsoft Entra administrator.
+                -u, --display-name=!: Display name of the Microsoft Entra administrator user or group.
+              completion:
+                flag:
+                    type:
+                        - User
+                        - Group
+                        - ServicePrincipal
+                        - Unknown
+            - name: delete
+              description: Delete a Microsoft Entra administrator.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: show
+              description: Get a Microsoft Entra administrator.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+            - name: list
+              description: List all Microsoft Entra administrators.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+        - name: parameter
+          commands:
+            - name: list
+              description: List all the configurations in a given server.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+            - name: set
+              description: Update the parameter of a flexible server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --source=: Source of the configuration.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the server configuration
+                -s, --server-name=: Name of the server.
+                -v, --value=: Value of the configuration.
+            - name: show
+              description: Gets information about a configuration of server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the server configuration
+                -s, --server-name=: Name of the server.
+        - name: update
+          description: Update a flexible server.
+          flags:
+            --active-directory-auth=: Whether Microsoft Entra authentication is enabled.
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
+            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
+            --backup-retention=: The number of days a backup is retained.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --high-availability=: Enable (ZoneRedundant or SameZone) or disable high availability feature.
+            --identity=: The name or resource ID of the user assigned identity for data encryption.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --iops=: Value of IOPS in (operations/sec) to be allocated for this server.
+            --key=: The resource ID of the primary keyvault key for data encryption.
+            --maintenance-window=: Period of time (UTC) designated for maintenance.
+            --microsoft-entra-auth=: Whether Microsoft Entra authentication is enabled.
+            --node-count=: The number of nodes for elastic cluster.
+            --password-auth=: Whether password authentication is enabled.
+            --performance-tier=: Performance tier of the server.
+            --private-dns-zone=: This parameter only applies for a server with private access.
+            --public-access=: Enable or disable the public access on a server.
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --sku-name=: The name of the compute SKU.
+            --standby-zone=: The availability zone information of the standby server when high availability is enabled.
+            --storage-auto-grow=: Enable or disable autogrow of the storage.
+            --storage-size=: The storage capacity of the server.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --throughput=: Storage throughput in (MB/sec) for the server.
+            --tier=: Compute tier of the server.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+            -p, --admin-password=: The password of the administrator.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                active-directory-auth:
+                    - Enabled
+                    - Disabled
+                high-availability:
+                    - ZoneRedundant
+                    - SameZone
+                    - Disabled
+                microsoft-entra-auth:
+                    - Enabled
+                    - Disabled
+                password-auth:
+                    - Enabled
+                    - Disabled
+                public-access:
+                    - Enabled
+                    - Disabled
+                storage-auto-grow:
+                    - Enabled
+                    - Disabled
+        - name: advanced-threat-protection-setting
+          commands:
+            - name: show
+              description: Gets an advanced threat protection setting.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: update
+              description: Updates an advanced threat protection setting.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --state=!: State of advanced threat protection setting.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+              completion:
+                flag:
+                    state:
+                        - Enabled
+                        - Disabled
+        - name: private-link-resource
+          commands:
+            - name: list
+              description: Gets the private link resources for PostgreSQL server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: show
+              description: Gets a private link resource for a PostgreSQL flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+        - name: geo-restore
+          description: Geo-restore a flexible server from backup.
+          flags:
+            --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
+            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
+            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --geo-redundant-backup=: Whether or not geo redundant backup is enabled.
+            --identity=: The name or resource ID of the user assigned identity for data encryption.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --key=: The resource ID of the primary keyvault key for data encryption.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --private-dns-zone=: This parameter only applies for a server with private access.
+            --restore-time=: The point in time in UTC to restore from (ISO8601 format), e.g., 2017-04-26T02:10:00+00:00The default value is set to current time.
+            --source-server=!: The name or resource ID of the source server to restore from.
+            --subnet-prefixes=: The subnet IP address prefix to use when creating a new subnet in CIDR format.
+            --subnet=: Name or resource ID of a new or existing subnet.
+            --subscription=: Name or ID of subscription.
+            --vnet=: Name or ID of a new or existing virtual network.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=!: Location.
+            -n, --name=: Name of the server.
+            -y, --yes=: Do not prompt for confirmation.
+            -z, --zone=: Availability zone into which to provision the resource.
+          completion:
+            flag:
+                geo-redundant-backup:
+                    - Enabled
+                    - Disabled
+        - name: db
+          commands:
+            - name: list
+              description: List all the databases in a given server.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+            - name: create
+              description: Create a PostgreSQL database on a flexible server.
+              flags:
+                --charset=: The charset of the database.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --collation=: The collation of the database.
+                --subscription=: Name or ID of subscription.
+                -d, --database-name=: The name of the database to be created when provisioning the database server
+                -g, --resource-group=!: Name of resource group.
+                -s, --server-name=!: Name of the server.
+            - name: delete
+              description: Delete a database on a flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -d, --database-name=: The name of the database to be created when provisioning the database server
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: show
+              description: Gets information about a database.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -d, --database-name=: The name of the database to be created when provisioning the database server
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+        - name: deploy
+          commands:
+            - name: run
+              description: Run an existing workflow in your github repository
+              flags:
+                --action-name=!: The name of the github action
+                --branch=!: The name of the branch you want upload github action file.
+                --subscription=: Name or ID of subscription.
+            - name: setup
+              description: Create GitHub Actions workflow file for PostgreSQL server.
+              flags:
+                --action-name=: The name of the github action
+                --allow-push=:
+                    description: Push the action yml file to the remote repository.
+                    nargs: -1
+                --branch=: The name of the branch you want upload github action file.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --repo=!: The name of your github username and repository e.g., Azure/azure-cli
+                --sql-file=!: The path of the sql file.
+                --subscription=: Name or ID of subscription.
+                -d, --database-name=: The name of the database to be created when provisioning the database server
+                -g, --resource-group=: Name of resource group.
+                -p, --admin-password=!: The password of the administrator.
+                -s, --server-name=: Name of the server.
+                -u, --admin-user=!: Administrator username for the server.
+              completion:
+                flag:
+                    allow-push:
+                        - "true"
+                        - "false"
+        - name: list-skus
+          description: Lists available sku's in the given region.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -l, --location=!: Location.
+        - name: delete
+          description: Delete a flexible server.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: long-term-retention
+          commands:
+            - name: show
+              description: Gets the result of the give long term retention backup operation for the flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -b, --backup-name=!: Backup name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the server.
+            - name: start
+              description: Start long-term-retention backup for a flexible server.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -b, --backup-name=!: The name of the new long-term-retention backup.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the server.
+                -u, --sas-url=!: Container SAS URL.
+            - name: list
+              description: Gets the result of the give long term retention backup operations for the flexible server.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the server.
+            - name: pre-check
+              description: Performs all the checks that are needed for the subsequent long-term-retention backup operation to succeed.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -b, --backup-name=!: The name of the new long-term-retention backup.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the server.
+        - name: revive-dropped
+          description: Revive a dropped flexible server from backup.
+          flags:
+            --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
+            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
+            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --geo-redundant-backup=: Whether or not geo redundant backup is enabled.
+            --identity=: The name or resource ID of the user assigned identity for data encryption.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --key=: The resource ID of the primary keyvault key for data encryption.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --private-dns-zone=: This parameter only applies for a server with private access.
+            --source-server=!: The name or resource ID of the source server to restore from.
+            --subnet-prefixes=: The subnet IP address prefix to use when creating a new subnet in CIDR format.
+            --subnet=: Name or resource ID of a new or existing subnet.
+            --subscription=: Name or ID of subscription.
+            --vnet=: Name or ID of a new or existing virtual network.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=!: Location.
+            -n, --name=: Name of the server.
+            -y, --yes=: Do not prompt for confirmation.
+            -z, --zone=: Availability zone into which to provision the resource.
+          completion:
+            flag:
+                geo-redundant-backup:
+                    - Enabled
+                    - Disabled
+        - name: migration
+          commands:
+            - name: check-name-availability
+              description: Checks if the provided migration-name can be used.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --migration-name=!: Name of the migration.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Resource Group Name of the migration target server.
+                -n, --name=: Migration target server name.
+            - name: show
+              description: Get the details of a specific migration.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --migration-name=!: Name of the migration.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Resource Group Name of the migration target server.
+                -n, --name=: Migration target server name.
+            - name: update
+              description: Update a specific migration.
+              flags:
+                --cancel=: Cancel the data migration for all the databases.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cutover=: Cut-over the data migration for all the databases in the migration.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --migration-name=!: Name of the migration.
+                --setup-replication=: Allow the migration workflow to setup logical replication on the source.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Resource Group Name of the migration target server.
+                -n, --name=: Migration target server name.
+            - name: list
+              description: List the migrations of a flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --filter=: Indicate whether all the migrations or just the Active migrations are returned.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Resource Group Name of the migration target server.
+                -n, --name=!: Name of the server.
+              completion:
+                flag:
+                    filter:
+                        - Active
+                        - All
+            - name: create
+              description: Create a new migration workflow for a flexible server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --migration-mode=: Either offline or online(with CDC) migration
+                --migration-name=: Name of the migration.
+                --migration-option=: Supported Migration Option.
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: 'space-separated tags: key[=value] [key[=value] ...].'
+                    nargs: -1
+                -b, --properties=!: Request properties.
+                -g, --resource-group=!: Resource Group Name of the migration target server.
+                -l, --location=: Location.
+                -n, --name=!: Migration target server name.
+              completion:
+                flag:
+                    migration-mode:
+                        - offline
+                        - online
+                    migration-option:
+                        - Validate
+                        - ValidateAndMigrate
+                        - Migrate
+        - name: backup
+          commands:
+            - name: list
+              description: List all the backups for a given server.
+              flags:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Name of the server.
             - name: create
-              description: Create a new firewall rule for a flexible server.
+              description: Create a new backup for a flexible server.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -b, --backup-name=!: The name of the new backup.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the server.
+            - name: show
+              description: Get specific backup for a given server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --end-ip-address=: The end IP address of the firewall rule.
-                --start-ip-address=: The start IP address of the firewall rule.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the server.
-                -r, --rule-name=: The name of the firewall rule.
+                -b, --backup-name=: The name of the backup.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the server.
+            - name: delete
+              description: Delete a specific backup.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -b, --backup-name=!: The name of the new backup.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+        - name: upgrade
+          description: Upgrade the major version of a flexible server.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+            -v, --version=!: Server major version.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                version:
+                    - "12"
+                    - "13"
+                    - "14"
+                    - "15"
+                    - "16"
         - name: replica
           commands:
+            - name: stop-replication
+              description: Stop replication to a read replica and make it a read/write server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
             - name: list
               description: List all read replicas for a given server.
               flags:
@@ -280,29 +1154,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Name of the source server.
-            - name: promote
-              description: Stop replication of a read replica and promote it to an independent server or as a primary server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --promote-mode=: Whether to promote read replica to an independent server or promote it as a primary server.
-                --promote-option=: Whether to sync data before promoting read replica or promote as soon as possible.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    promote-mode:
-                        - standalone
-                        - switchover
-                    promote-option:
-                        - planned
-                        - forced
             - name: create
               description: Create a read replica for a server.
               flags:
@@ -331,8 +1182,8 @@ commands:
                 -l, --location=: Location.
                 -y, --yes=: Do not prompt for confirmation.
                 -z, --zone=: Availability zone into which to provision the resource.
-            - name: stop-replication
-              description: Stop replication to a read replica and make it a read/write server.
+            - name: promote
+              description: Stop replication of a read replica and promote it to an independent server or as a primary server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -340,290 +1191,43 @@ commands:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
+                --promote-mode=: Whether to promote read replica to an independent server or promote it as a primary server.
+                --promote-option=: Whether to sync data before promoting read replica or promote as soon as possible.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the server.
                 -y, --yes=: Do not prompt for confirmation.
-        - name: migration
-          commands:
-            - name: show
-              description: Get the details of a specific migration.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --migration-name=!: Name of the migration.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Resource Group Name of the migration target server.
-                -n, --name=: Migration target server name.
-            - name: list
-              description: List the migrations of a flexible server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --filter=: Indicate whether all the migrations or just the Active migrations are returned.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Resource Group Name of the migration target server.
-                -n, --name=!: Name of the server.
               completion:
                 flag:
-                    filter:
-                        - Active
-                        - All
-            - name: check-name-availability
-              description: Checks if the provided migration-name can be used.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --migration-name=!: Name of the migration.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Resource Group Name of the migration target server.
-                -n, --name=: Migration target server name.
-            - name: update
-              description: Update a specific migration.
-              flags:
-                --cancel=: Cancel the data migration for all the databases.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --cutover=: Cut-over the data migration for all the databases in the migration.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --migration-name=!: Name of the migration.
-                --setup-replication=: Allow the migration workflow to setup logical replication on the source.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Resource Group Name of the migration target server.
-                -n, --name=: Migration target server name.
-            - name: create
-              description: Create a new migration workflow for a flexible server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --migration-mode=: Either offline or online(with CDC) migration
-                --migration-name=: Name of the migration.
-                --migration-option=: Supported Migration Option.
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: 'space-separated tags: key[=value] [key[=value] ...].'
-                    nargs: -1
-                -b, --properties=!: Request properties.
-                -g, --resource-group=!: Resource Group Name of the migration target server.
-                -l, --location=: Location.
-                -n, --name=!: Migration target server name.
-              completion:
-                flag:
-                    migration-mode:
-                        - offline
-                        - online
-                    migration-option:
-                        - Validate
-                        - ValidateAndMigrate
-                        - Migrate
-        - name: server-logs
-          commands:
-            - name: download
-              description: Download log files for a PostgreSQL flexible server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!:
-                    description: Space-separated list of log filenames on the server to download.
-                    nargs: -1
-                -s, --server-name=: Name of the server.
-            - name: list
-              description: List log files for a PostgreSQL flexible server.
-              flags:
-                --file-last-written=: Integer in hours to indicate file last modify time.
-                --filename-contains=: The pattern that file name should match.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --max-file-size=: The file size limitation to filter files.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-        - name: fabric-mirroring
-          commands:
-            - name: stop
-              description: Stop bringing your PostgreSQL data into Microsoft Fabric.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: update-databases
-              description: Update allowed mirrored databases.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -d, --database-names=!:
-                    description: Space-separated list of the database names to be mirrored.
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: start
-              description: Enable bringing your PostgreSQL data into Microsoft Fabric.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -d, --database-names=!:
-                    description: Space-separated list of the database names to be mirrored.
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-        - name: microsoft-entra-admin
-          commands:
-            - name: wait
-              description: Wait for a Microsoft Entra administrator to satisfy certain conditions.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-            - name: show
-              description: Get a Microsoft Entra administrator.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-            - name: list
-              description: List all Microsoft Entra administrators.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-            - name: create
-              description: Create a Microsoft Entra administrator.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-                -t, --type=: Type of the Microsoft Entra administrator.
-                -u, --display-name=!: Display name of the Microsoft Entra administrator user or group.
-              completion:
-                flag:
-                    type:
-                        - User
-                        - Group
-                        - ServicePrincipal
-                        - Unknown
-            - name: delete
-              description: Delete a Microsoft Entra administrator.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-        - name: identity
-          commands:
-            - name: remove
-              description: Remove user assigned managed identites from the server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --identity=!:
-                    description: Space-separated names or ID's of identities.
-                    nargs: -1
-                -s, --server-name=!: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: show
-              description: Get an user assigned managed identity from the server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --identity=!: Name or ID of identity to show.
-                -s, --server-name=!: Name of the server.
-            - name: list
-              description: List all user assigned managed identities from the server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-            - name: assign
-              description: Add user assigned managed identities to the server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --identity=!:
-                    description: Space-separated names or ID's of identities.
-                    nargs: -1
-                -s, --server-name=!: Name of the server.
-            - name: update
-              description: Update to enable or disable system assigned managed identity on the server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                --system-assigned=!: Enable or disable system assigned identity to authenticate to cloud services without storing credentials in code.
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-              completion:
-                flag:
-                    system-assigned:
-                        - Enabled
-                        - Disabled
+                    promote-mode:
+                        - standalone
+                        - switchover
+                    promote-option:
+                        - planned
+                        - forced
+        - name: start
+          description: Starts a server.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+        - name: restart
+          description: Restart a flexible server.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --failover=: Forced or planned failover for server restart operation.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
         - name: wait
           description: Wait for the flexible server to satisfy certain conditions.
           flags:
@@ -643,178 +1247,95 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the server.
-        - name: backup
+        - name: server-logs
           commands:
             - name: list
-              description: List all the backups for a given server.
+              description: List log files for a PostgreSQL flexible server.
               flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the server.
-            - name: create
-              description: Create a new backup for a flexible server.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -b, --backup-name=!: The name of the new backup.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the server.
-            - name: delete
-              description: Delete a specific backup.
-              flags:
+                --file-last-written=: Integer in hours to indicate file last modify time.
+                --filename-contains=: The pattern that file name should match.
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --subscription=: Name or ID of subscription.
-                -b, --backup-name=!: The name of the new backup.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: show
-              description: Get specific backup for a given server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -b, --backup-name=: The name of the backup.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the server.
-        - name: private-endpoint-connection
-          commands:
-            - name: show
-              description: Gets a private endpoint connection.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: reject
-              description: Reject a private endpoint connection request for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=!: Comments for reject operation.
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: list
-              description: Gets all private endpoint connections on a server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
+                --max-file-size=: The file size limitation to filter files.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -s, --server-name=: Name of the server.
-            - name: delete
-              description: Deletes a private endpoint connection with a given name.
+            - name: download
+              description: Download log files for a PostgreSQL flexible server.
               flags:
-                --id=: The ID of the private endpoint connection associated with the Server.
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: approve
-              description: Approve a private endpoint connection request for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
+                -n, --name=!:
+                    description: Space-separated list of log filenames on the server to download.
                     nargs: -1
-                --description=!: Comments for approve operation.
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-        - name: ad-admin
-          commands:
-            - name: wait
-              description: Wait for a Microsoft Entra administrator to satisfy certain conditions.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-            - name: show
-              description: Get a Microsoft Entra administrator.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-            - name: create
-              description: Create a Microsoft Entra administrator.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-                -t, --type=: Type of the Microsoft Entra administrator.
-                -u, --display-name=!: Display name of the Microsoft Entra administrator user or group.
-              completion:
-                flag:
-                    type:
-                        - User
-                        - Group
-                        - ServicePrincipal
-                        - Unknown
-            - name: list
-              description: List all Microsoft Entra administrators.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-            - name: delete
-              description: Delete a Microsoft Entra administrator.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=!: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
+                -s, --server-name=: Name of the server.
+        - name: show
+          description: Gets information about a server.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+        - name: stop
+          description: Stop a flexible server.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+        - name: restore
+          description: Restore a flexible server from backup.
+          flags:
+            --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
+            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
+            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --geo-redundant-backup=: Whether or not geo redundant backup is enabled.
+            --identity=: The name or resource ID of the user assigned identity for data encryption.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --key=: The resource ID of the primary keyvault key for data encryption.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --private-dns-zone=: This parameter only applies for a server with private access.
+            --restore-time=: The point in time in UTC to restore from (ISO8601 format), e.g., 2017-04-26T02:10:00+00:00The default value is set to current time.
+            --source-server=!: The name or resource ID of the source server to restore from.
+            --storage-type=: Storage type for the new server.
+            --subnet-prefixes=: The subnet IP address prefix to use when creating a new subnet in CIDR format.
+            --subnet=: Name or resource ID of a new or existing subnet.
+            --subscription=: Name or ID of subscription.
+            --vnet=: Name or ID of a new or existing virtual network.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+            -y, --yes=: Do not prompt for confirmation.
+            -z, --zone=: Availability zone into which to provision the resource.
+          completion:
+            flag:
+                geo-redundant-backup:
+                    - Enabled
+                    - Disabled
+                storage-type:
+                    - PremiumV2_LRS
+        - name: list
+          description: List available flexible servers.
+          flags:
+            --show-cluster=: Only show elastic clusters.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: create
           description: Create a PostgreSQL flexible server.
           flags:
@@ -900,563 +1421,12 @@ commands:
                 storage-type:
                     - PremiumV2_LRS
                     - Premium_LRS
-        - name: advanced-threat-protection-setting
-          commands:
-            - name: show
-              description: Gets an advanced threat protection setting.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: update
-              description: Updates an advanced threat protection setting.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --state=!: State of advanced threat protection setting.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-              completion:
-                flag:
-                    state:
-                        - Enabled
-                        - Disabled
-        - name: geo-restore
-          description: Geo-restore a flexible server from backup.
-          flags:
-            --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
-            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
-            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --geo-redundant-backup=: Whether or not geo redundant backup is enabled.
-            --identity=: The name or resource ID of the user assigned identity for data encryption.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --key=: The resource ID of the primary keyvault key for data encryption.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --private-dns-zone=: This parameter only applies for a server with private access.
-            --restore-time=: The point in time in UTC to restore from (ISO8601 format), e.g., 2017-04-26T02:10:00+00:00The default value is set to current time.
-            --source-server=!: The name or resource ID of the source server to restore from.
-            --subnet-prefixes=: The subnet IP address prefix to use when creating a new subnet in CIDR format.
-            --subnet=: Name or resource ID of a new or existing subnet.
-            --subscription=: Name or ID of subscription.
-            --vnet=: Name or ID of a new or existing virtual network.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=!: Location.
-            -n, --name=: Name of the server.
-            -y, --yes=: Do not prompt for confirmation.
-            -z, --zone=: Availability zone into which to provision the resource.
-          completion:
-            flag:
-                geo-redundant-backup:
-                    - Enabled
-                    - Disabled
-        - name: virtual-endpoint
-          commands:
-            - name: create
-              description: Create a new virtual endpoint for a flexible server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -m, --members=!: The read replicas the virtual endpoints point to.
-                -n, --name=!: Name of the virtual endpoint.
-                -s, --server-name=!: Name of the server.
-                -t, --endpoint-type=!: Virtual Endpoints offer two distinct types of connection points.
-              completion:
-                flag:
-                    endpoint-type:
-                        - ReadWrite
-            - name: show
-              description: Get the details of a virtual endpoint.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the virtual endpoint.
-                -s, --server-name=: Name of the server.
-            - name: update
-              description: Update a virtual endpoint.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -m, --members=!: The read replicas the virtual endpoints point to.
-                -n, --name=: Name of the virtual endpoint.
-                -s, --server-name=: Name of the server.
-                -t, --endpoint-type=!: Virtual Endpoints offer two distinct types of connection points.
-              completion:
-                flag:
-                    endpoint-type:
-                        - ReadWrite
-            - name: list
-              description: List all virtual endpoints for a flexible server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: delete
-              description: Delete a virtual endpoint.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the virtual endpoint.
-                -s, --server-name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-        - name: private-link-resource
-          commands:
-            - name: show
-              description: Gets a private link resource for a PostgreSQL flexible server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: list
-              description: Gets the private link resources for PostgreSQL server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-        - name: db
-          commands:
-            - name: show
-              description: Gets information about a database.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -d, --database-name=: The name of the database to be created when provisioning the database server
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: delete
-              description: Delete a database on a flexible server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -d, --database-name=: The name of the database to be created when provisioning the database server
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: create
-              description: Create a PostgreSQL database on a flexible server.
-              flags:
-                --charset=: The charset of the database.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --collation=: The collation of the database.
-                --subscription=: Name or ID of subscription.
-                -d, --database-name=: The name of the database to be created when provisioning the database server
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-            - name: list
-              description: List all the databases in a given server.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -s, --server-name=!: Name of the server.
-        - name: revive-dropped
-          description: Revive a dropped flexible server from backup.
-          flags:
-            --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
-            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
-            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --geo-redundant-backup=: Whether or not geo redundant backup is enabled.
-            --identity=: The name or resource ID of the user assigned identity for data encryption.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --key=: The resource ID of the primary keyvault key for data encryption.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --private-dns-zone=: This parameter only applies for a server with private access.
-            --source-server=!: The name or resource ID of the source server to restore from.
-            --subnet-prefixes=: The subnet IP address prefix to use when creating a new subnet in CIDR format.
-            --subnet=: Name or resource ID of a new or existing subnet.
-            --subscription=: Name or ID of subscription.
-            --vnet=: Name or ID of a new or existing virtual network.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=!: Location.
-            -n, --name=: Name of the server.
-            -y, --yes=: Do not prompt for confirmation.
-            -z, --zone=: Availability zone into which to provision the resource.
-          completion:
-            flag:
-                geo-redundant-backup:
-                    - Enabled
-                    - Disabled
-        - name: show-connection-string
-          description: Show the connection strings for a PostgreSQL flexible-server database.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --pg-bouncer=: Show connection strings for PgBouncer.
-            --subscription=: Name or ID of subscription.
-            -d, --database-name=: The name of the database to be created when provisioning the database server
-            -p, --admin-password=: The password of the administrator.
-            -s, --server-name=: Name of the server.
-            -u, --admin-user=: Administrator username for the server.
-        - name: list
-          description: List available flexible servers.
-          flags:
-            --show-cluster=: Only show elastic clusters.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: update
-          description: Update a flexible server.
-          flags:
-            --active-directory-auth=: Whether Microsoft Entra authentication is enabled.
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
-            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
-            --backup-retention=: The number of days a backup is retained.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-            --high-availability=: Enable (ZoneRedundant or SameZone) or disable high availability feature.
-            --identity=: The name or resource ID of the user assigned identity for data encryption.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --iops=: Value of IOPS in (operations/sec) to be allocated for this server.
-            --key=: The resource ID of the primary keyvault key for data encryption.
-            --maintenance-window=: Period of time (UTC) designated for maintenance.
-            --microsoft-entra-auth=: Whether Microsoft Entra authentication is enabled.
-            --node-count=: The number of nodes for elastic cluster.
-            --password-auth=: Whether password authentication is enabled.
-            --performance-tier=: Performance tier of the server.
-            --private-dns-zone=: This parameter only applies for a server with private access.
-            --public-access=: Enable or disable the public access on a server.
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-            --sku-name=: The name of the compute SKU.
-            --standby-zone=: The availability zone information of the standby server when high availability is enabled.
-            --storage-auto-grow=: Enable or disable autogrow of the storage.
-            --storage-size=: The storage capacity of the server.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --throughput=: Storage throughput in (MB/sec) for the server.
-            --tier=: Compute tier of the server.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-            -p, --admin-password=: The password of the administrator.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                active-directory-auth:
-                    - Enabled
-                    - Disabled
-                high-availability:
-                    - ZoneRedundant
-                    - SameZone
-                    - Disabled
-                microsoft-entra-auth:
-                    - Enabled
-                    - Disabled
-                password-auth:
-                    - Enabled
-                    - Disabled
-                public-access:
-                    - Enabled
-                    - Disabled
-                storage-auto-grow:
-                    - Enabled
-                    - Disabled
-        - name: stop
-          description: Stop a flexible server.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-        - name: long-term-retention
-          commands:
-            - name: pre-check
-              description: Performs all the checks that are needed for the subsequent long-term-retention backup operation to succeed.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -b, --backup-name=!: The name of the new long-term-retention backup.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the server.
-            - name: list
-              description: Gets the result of the give long term retention backup operations for the flexible server.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the server.
-            - name: show
-              description: Gets the result of the give long term retention backup operation for the flexible server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -b, --backup-name=!: Backup name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the server.
-            - name: start
-              description: Start long-term-retention backup for a flexible server.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -b, --backup-name=!: The name of the new long-term-retention backup.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the server.
-                -u, --sas-url=!: Container SAS URL.
-        - name: start
-          description: Starts a server.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-        - name: restore
-          description: Restore a flexible server from backup.
-          flags:
-            --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
-            --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
-            --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --geo-redundant-backup=: Whether or not geo redundant backup is enabled.
-            --identity=: The name or resource ID of the user assigned identity for data encryption.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --key=: The resource ID of the primary keyvault key for data encryption.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --private-dns-zone=: This parameter only applies for a server with private access.
-            --restore-time=: The point in time in UTC to restore from (ISO8601 format), e.g., 2017-04-26T02:10:00+00:00The default value is set to current time.
-            --source-server=!: The name or resource ID of the source server to restore from.
-            --storage-type=: Storage type for the new server.
-            --subnet-prefixes=: The subnet IP address prefix to use when creating a new subnet in CIDR format.
-            --subnet=: Name or resource ID of a new or existing subnet.
-            --subscription=: Name or ID of subscription.
-            --vnet=: Name or ID of a new or existing virtual network.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-            -y, --yes=: Do not prompt for confirmation.
-            -z, --zone=: Availability zone into which to provision the resource.
-          completion:
-            flag:
-                geo-redundant-backup:
-                    - Enabled
-                    - Disabled
-                storage-type:
-                    - PremiumV2_LRS
-        - name: show
-          description: Gets information about a server.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-        - name: restart
-          description: Restart a flexible server.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --failover=: Forced or planned failover for server restart operation.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-        - name: list-skus
-          description: Lists available sku's in the given region.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -l, --location=!: Location.
-        - name: deploy
-          commands:
-            - name: run
-              description: Run an existing workflow in your github repository
-              flags:
-                --action-name=!: The name of the github action
-                --branch=!: The name of the branch you want upload github action file.
-                --subscription=: Name or ID of subscription.
-            - name: setup
-              description: Create GitHub Actions workflow file for PostgreSQL server.
-              flags:
-                --action-name=: The name of the github action
-                --allow-push=:
-                    description: Push the action yml file to the remote repository.
-                    nargs: -1
-                --branch=: The name of the branch you want upload github action file.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --repo=!: The name of your github username and repository e.g., Azure/azure-cli
-                --sql-file=!: The path of the sql file.
-                --subscription=: Name or ID of subscription.
-                -d, --database-name=: The name of the database to be created when provisioning the database server
-                -g, --resource-group=: Name of resource group.
-                -p, --admin-password=!: The password of the administrator.
-                -s, --server-name=: Name of the server.
-                -u, --admin-user=!: Administrator username for the server.
-              completion:
-                flag:
-                    allow-push:
-                        - "true"
-                        - "false"
-        - name: upgrade
-          description: Upgrade the major version of a flexible server.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-            -v, --version=!: Server major version.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                version:
-                    - "12"
-                    - "13"
-                    - "14"
-                    - "15"
-                    - "16"
-        - name: delete
-          description: Delete a flexible server.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-            -y, --yes=: Do not prompt for confirmation.
     - name: server
       commands:
-        - name: key
+        - name: configuration
           commands:
-            - name: delete
-              description: Drop Server Key.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -k, --kid=!: The Azure Key Vault key identifier of the server key.
-                -s, --name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: create
-              description: Create Server Key.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -k, --kid=!: The Azure Key Vault key identifier of the server key.
-                -s, --name=!: Name of the server.
-            - name: list
-              description: Gets a list of  Server keys.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --name=: Name of the server.
             - name: show
-              description: Get Server Key.
+              description: Gets information about a configuration of server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -1466,20 +1436,33 @@ commands:
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -k, --kid=!: The Azure Key Vault key identifier of the server key.
-                -s, --name=: Name of the server.
+                -n, --name=: The name of the server configuration.
+                -s, --server-name=: Name of the server.
+            - name: list
+              description: List all the configurations in a given server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: set
+              description: Update the configuration of a server.
+              flags:
+                --__SOURCE=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --value=: Value of the configuration.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the configuration
+                -s, --server-name=: Name of the server.
         - name: vnet-rule
           commands:
-            - name: delete
-              description: Deletes the virtual network rule with the given name.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the vnet rule.
-                -s, --server-name=: Name of the server.
             - name: create
               description: Create a virtual network rule to allows access to a PostgreSQL server.
               flags:
@@ -1505,6 +1488,16 @@ commands:
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: delete
+              description: Deletes the virtual network rule with the given name.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the vnet rule.
                 -s, --server-name=: Name of the server.
             - name: show
               description: Gets a virtual network rule.
@@ -1552,324 +1545,6 @@ commands:
                     ignore-missing-endpoint:
                         - "true"
                         - "false"
-        - name: firewall-rule
-          commands:
-            - name: delete
-              description: Deletes a server firewall rule.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the firewall rule.
-                -s, --server-name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: create
-              description: Create a new firewall rule for a server.
-              flags:
-                --end-ip-address=!: The end IP address of the firewall rule.
-                --start-ip-address=!: The start IP address of the firewall rule.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the firewall rule.
-                -s, --server-name=!: Name of the server.
-            - name: update
-              description: Update a firewall rule.
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --end-ip-address=: The end IP address of the firewall rule.
-                --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --start-ip-address=: The start IP address of the firewall rule.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the firewall rule.
-                -s, --server-name=: Name of the server.
-            - name: list
-              description: List all the firewall rules in a given server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: show
-              description: Gets information about a server firewall rule.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the firewall rule.
-                -s, --server-name=: Name of the server.
-        - name: ad-admin
-          commands:
-            - name: create
-              description: Sets a server's AD admin.
-              flags:
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --object-id=: The unique ID of the Microsoft Entra administrator.
-                -s, --server-name=!: Name of the server.
-                -u, --display-name=: Display name of the Microsoft Entra administrator user or group.
-            - name: delete
-              description: Deletes server active directory administrator.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: wait
-              description: Place the CLI in a waiting state until a condition of the PostgreSQL server Active Directory Administrator is met.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: show
-              description: Gets information about a AAD server administrator.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: list
-              description: Returns a list of server Administrators.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-        - name: private-endpoint-connection
-          commands:
-            - name: approve
-              description: Approve a private endpoint connection request for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=: Comments for approve operation.
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: show
-              description: Gets a private endpoint connection.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: reject
-              description: Reject a private endpoint connection request for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=: Comments for reject operation.
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: delete
-              description: Deletes a private endpoint connection with a given name.
-              flags:
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-        - name: replica
-          commands:
-            - name: create
-              description: Create a read replica for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --sku-name=: The name of the sku.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -l, --location=: Location.
-                -n, --name=!: Name of the server.
-                -s, --source-server=!: The name or resource ID of the master server to the create replica for.
-            - name: list
-              description: List all the replicas for a given server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the master server.
-            - name: stop
-              description: Stop replication to a read replica and make it a read/write server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
-        - name: create
-          description: Create a server.
-          flags:
-            --assign-identity=: Generate and assign an Microsoft Entra Identity for this server for use with key management services like Azure KeyVault.
-            --auto-grow=: Enable or disable autogrow of the storage.
-            --backup-retention=: The number of days a backup is retained.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --geo-redundant-backup=: Enable or disable geo-redundant backups.
-            --minimal-tls-version=: Set the minimal TLS version for connections to server when SSL is enabled.
-            --public-network-access=: Enable or disable public network access to server.
-            --sku-name=: The name of the sku.
-            --ssl-enforcement=: Enable or disable ssl enforcement for connections to server.
-            --storage-size=: The storage capacity of the server (unit is megabytes).
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --version=: Server major version.
-            -g, --resource-group=: Name of resource group.
-            -i, --infrastructure-encryption=: Add an optional second layer of encryption for data using new encryption algorithm.
-            -l, --location=: Location.
-            -n, --name=: Name of the server.
-            -p, --admin-password=: The password of the administrator.
-            -u, --admin-user=: Administrator username for the server.
-          completion:
-            flag:
-                auto-grow:
-                    - Enabled
-                    - Disabled
-                geo-redundant-backup:
-                    - Enabled
-                    - Disabled
-                infrastructure-encryption:
-                    - Enabled
-                    - Disabled
-                minimal-tls-version:
-                    - TLS1_0
-                    - TLS1_1
-                    - TLS1_2
-                    - TLSEnforcementDisabled
-                ssl-enforcement:
-                    - Enabled
-                    - Disabled
-        - name: list
-          description: List available servers.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: restart
-          description: Restarts a server.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-        - name: configuration
-          commands:
-            - name: show
-              description: Gets information about a configuration of server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the server configuration.
-                -s, --server-name=: Name of the server.
-            - name: set
-              description: Update the configuration of a server.
-              flags:
-                --__SOURCE=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --value=: Value of the configuration.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the configuration
-                -s, --server-name=: Name of the server.
-            - name: list
-              description: List all the configurations in a given server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
         - name: private-link-resource
           commands:
             - name: list
@@ -1884,40 +1559,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -s, --server-name=: Name of the Server.
-        - name: list-skus
-          description: List all the performance tiers at specified location in a given subscription.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -l, --location=!: The name of the location.
-        - name: show-connection-string
-          description: Show the connection strings for a PostgreSQL server database.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -d, --database-name=: The name of a database.
-            -p, --admin-password=: The login password of the administrator.
-            -s, --server-name=: Name of the server.
-            -u, --admin-user=: The login username of the administrator.
-        - name: restore
-          description: Restore a server from backup.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --restore-point-in-time=!: The point in time in UTC to restore from (ISO8601 format), e.g., 2017-04-26T02:10:00+08:00
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-            -s, --source-server=!: The name or resource ID of the source server to restore from.
         - name: update
           description: Update a server.
           flags:
@@ -1965,6 +1606,298 @@ commands:
                 ssl-enforcement:
                     - Enabled
                     - Disabled
+        - name: key
+          commands:
+            - name: create
+              description: Create Server Key.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -k, --kid=!: The Azure Key Vault key identifier of the server key.
+                -s, --name=!: Name of the server.
+            - name: list
+              description: Gets a list of  Server keys.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --name=: Name of the server.
+            - name: show
+              description: Get Server Key.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -k, --kid=!: The Azure Key Vault key identifier of the server key.
+                -s, --name=: Name of the server.
+            - name: delete
+              description: Drop Server Key.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -k, --kid=!: The Azure Key Vault key identifier of the server key.
+                -s, --name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+        - name: restore
+          description: Restore a server from backup.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --restore-point-in-time=!: The point in time in UTC to restore from (ISO8601 format), e.g., 2017-04-26T02:10:00+08:00
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+            -s, --source-server=!: The name or resource ID of the source server to restore from.
+        - name: ad-admin
+          commands:
+            - name: wait
+              description: Place the CLI in a waiting state until a condition of the PostgreSQL server Active Directory Administrator is met.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: list
+              description: Returns a list of server Administrators.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: delete
+              description: Deletes server active directory administrator.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: show
+              description: Gets information about a AAD server administrator.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: create
+              description: Sets a server's AD admin.
+              flags:
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --object-id=: The unique ID of the Microsoft Entra administrator.
+                -s, --server-name=!: Name of the server.
+                -u, --display-name=: Display name of the Microsoft Entra administrator user or group.
+        - name: firewall-rule
+          commands:
+            - name: show
+              description: Gets information about a server firewall rule.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the firewall rule.
+                -s, --server-name=: Name of the server.
+            - name: create
+              description: Create a new firewall rule for a server.
+              flags:
+                --end-ip-address=!: The end IP address of the firewall rule.
+                --start-ip-address=!: The start IP address of the firewall rule.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the firewall rule.
+                -s, --server-name=!: Name of the server.
+            - name: update
+              description: Update a firewall rule.
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --end-ip-address=: The end IP address of the firewall rule.
+                --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --start-ip-address=: The start IP address of the firewall rule.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the firewall rule.
+                -s, --server-name=: Name of the server.
+            - name: list
+              description: List all the firewall rules in a given server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: delete
+              description: Deletes a server firewall rule.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the firewall rule.
+                -s, --server-name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+        - name: private-endpoint-connection
+          commands:
+            - name: delete
+              description: Deletes a private endpoint connection with a given name.
+              flags:
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: reject
+              description: Reject a private endpoint connection request for a server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=: Comments for reject operation.
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: show
+              description: Gets a private endpoint connection.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: approve
+              description: Approve a private endpoint connection request for a server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=: Comments for approve operation.
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+        - name: create
+          description: Create a server.
+          flags:
+            --assign-identity=: Generate and assign an Microsoft Entra Identity for this server for use with key management services like Azure KeyVault.
+            --auto-grow=: Enable or disable autogrow of the storage.
+            --backup-retention=: The number of days a backup is retained.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --geo-redundant-backup=: Enable or disable geo-redundant backups.
+            --minimal-tls-version=: Set the minimal TLS version for connections to server when SSL is enabled.
+            --public-network-access=: Enable or disable public network access to server.
+            --sku-name=: The name of the sku.
+            --ssl-enforcement=: Enable or disable ssl enforcement for connections to server.
+            --storage-size=: The storage capacity of the server (unit is megabytes).
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --version=: Server major version.
+            -g, --resource-group=: Name of resource group.
+            -i, --infrastructure-encryption=: Add an optional second layer of encryption for data using new encryption algorithm.
+            -l, --location=: Location.
+            -n, --name=: Name of the server.
+            -p, --admin-password=: The password of the administrator.
+            -u, --admin-user=: Administrator username for the server.
+          completion:
+            flag:
+                auto-grow:
+                    - Enabled
+                    - Disabled
+                geo-redundant-backup:
+                    - Enabled
+                    - Disabled
+                infrastructure-encryption:
+                    - Enabled
+                    - Disabled
+                minimal-tls-version:
+                    - TLS1_0
+                    - TLS1_1
+                    - TLS1_2
+                    - TLSEnforcementDisabled
+                ssl-enforcement:
+                    - Enabled
+                    - Disabled
         - name: delete
           description: Delete a server.
           flags:
@@ -1996,6 +1929,40 @@ commands:
             -l, --location=!: Location.
             -n, --name=: Name of the server.
             -s, --source-server=!: The name or ID of the source server to restore from.
+        - name: replica
+          commands:
+            - name: list
+              description: List all the replicas for a given server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the master server.
+            - name: stop
+              description: Stop replication to a read replica and make it a read/write server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: create
+              description: Create a read replica for a server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --sku-name=: The name of the sku.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -l, --location=: Location.
+                -n, --name=!: Name of the server.
+                -s, --source-server=!: The name or resource ID of the master server to the create replica for.
         - name: show
           description: Gets information about a server.
           flags:
@@ -2008,6 +1975,34 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the server.
+        - name: restart
+          description: Restarts a server.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+        - name: list
+          description: List available servers.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: show-connection-string
+          description: Show the connection strings for a PostgreSQL server database.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -d, --database-name=: The name of a database.
+            -p, --admin-password=: The login password of the administrator.
+            -s, --server-name=: Name of the server.
+            -u, --admin-user=: The login username of the administrator.
         - name: wait
           description: Wait for server to satisfy certain conditions.
           flags:
@@ -2033,17 +2028,13 @@ commands:
             --timeout=: maximum wait in seconds
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the server.
+        - name: list-skus
+          description: List all the performance tiers at specified location in a given subscription.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -l, --location=!: The name of the location.
     - name: server-logs
       commands:
-        - name: list
-          description: List log files for a server.
-          flags:
-            --file-last-written=: Integer in hours to indicate file last modify time, default value is 72.
-            --filename-contains=: The pattern that file name should match.
-            --max-file-size=: The file size limitation to filter files.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -s, --server-name=!: Name of the Server.
         - name: download
           description: Download log files.
           flags:
@@ -2056,3 +2047,12 @@ commands:
                 description: Space-separated list of log filenames on the server to download.
                 nargs: -1
             -s, --server-name=: Name of the server.
+        - name: list
+          description: List log files for a server.
+          flags:
+            --file-last-written=: Integer in hours to indicate file last modify time, default value is 72.
+            --filename-contains=: The pattern that file name should match.
+            --max-file-size=: The file size limitation to filter files.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -s, --server-name=!: Name of the Server.

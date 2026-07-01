@@ -4,19 +4,6 @@ description: Manage static apps.
 commands:
     - name: appsettings
       commands:
-        - name: delete
-          description: Delete app settings with given keys of the static app.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --environment-name=: Name of the environment of static site
-            --setting-names=!:
-                description: Space-separated app setting names.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the static site
         - name: list
           description: List app settings of the static app.
           flags:
@@ -40,23 +27,37 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the static site
+        - name: delete
+          description: Delete app settings with given keys of the static app.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --environment-name=: Name of the environment of static site
+            --setting-names=!:
+                description: Space-separated app setting names.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the static site
     - name: backends
       commands:
+        - name: unlink
+          description: Unlink backend from a static web app
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --environment-name=: Name of the environment of static site
+            --remove-backend-auth=: If set to true, removes the identity provider configured on the backend during the linking process.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the static site
         - name: validate
           description: Validate a backend for a static web app
           flags:
             --backend-region=: Region of the backend resource.
             --backend-resource-id=!: Resource ID of the backend to link.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --environment-name=: Name of the environment of static site
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the static site
-        - name: show
-          description: Show details on the backend linked to a static web app
-          flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
@@ -76,14 +77,13 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the static site
-        - name: unlink
-          description: Unlink backend from a static web app
+        - name: show
+          description: Show details on the backend linked to a static web app
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
             --environment-name=: Name of the environment of static site
-            --remove-backend-auth=: If set to true, removes the identity provider configured on the backend during the linking process.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the static site
@@ -142,6 +142,15 @@ commands:
         -n, --name=!: Name of the static site
     - name: enterprise-edge
       commands:
+        - name: disable
+          description: Disable the Azure Front Door CDN for a static webapp.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the static site
         - name: show
           description: Show the status (Enabled, Disabled, Enabling, Disabling) of the Azure Front Door CDN for a webapp.
           flags:
@@ -161,23 +170,15 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the static site
-        - name: disable
-          description: Disable the Azure Front Door CDN for a static webapp.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the static site
     - name: environment
       commands:
-        - name: list
-          description: List all environment of the static app including production.
+        - name: functions
+          description: Show information about functions.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
+            --environment-name=: Name of the environment of static site
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the static site
@@ -191,13 +192,12 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the static site
-        - name: functions
-          description: Show information about functions.
+        - name: list
+          description: List all environment of the static app including production.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --environment-name=: Name of the environment of static site
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the static site
@@ -214,15 +214,6 @@ commands:
             -y, --yes=: Do not prompt for confirmation.
     - name: functions
       commands:
-        - name: unlink
-          description: Unlink an Azure Function from a static webapp
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the static site
         - name: show
           description: Show details on the Azure Function linked to a static webapp
           flags:
@@ -244,6 +235,15 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the static site
+        - name: unlink
+          description: Unlink an Azure Function from a static webapp
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the static site
     - name: hostname
       commands:
         - name: list
@@ -255,6 +255,28 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the static site
+        - name: show
+          description: Get details for a staticwebapp custom domain.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --hostname=!: custom hostname such as www.example.com. Only support sub domain in preview.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the static site
+        - name: delete
+          description: Delete given hostname of the static app.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --hostname=!: custom hostname such as www.example.com. Only support sub domain in preview.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the static site
+            -y, --yes=: Do not prompt for confirmation.
         - name: set
           description: Set given sub-domain hostname to the static app.
           flags:
@@ -272,30 +294,21 @@ commands:
                 validation-method:
                     - cname-delegation
                     - dns-txt-token
-        - name: delete
-          description: Delete given hostname of the static app.
+    - name: identity
+      commands:
+        - name: remove
+          description: Disable static web app's managed identity
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --hostname=!: custom hostname such as www.example.com. Only support sub domain in preview.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the static site
-            -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Get details for a staticwebapp custom domain.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
+            --identities=:
+                description: Space-separated identities to assign.
                 nargs: -1
-            --hostname=!: custom hostname such as www.example.com. Only support sub domain in preview.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the static site
-    - name: identity
-      commands:
+            -y, --yes=: Do not prompt for confirmation.
         - name: show
           description: display static web app's managed identity
           flags:
@@ -319,19 +332,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the static site
-        - name: remove
-          description: Disable static web app's managed identity
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --identities=:
-                description: Space-separated identities to assign.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the static site
-            -y, --yes=: Do not prompt for confirmation.
     - name: list
       description: List all static app resources in a subscription, or in resource group if provided
       flags:
@@ -356,15 +356,6 @@ commands:
         -t, --token=: A user's GitHub or Azure Dev Ops repository token.
     - name: secrets
       commands:
-        - name: list
-          description: List the deployment token for the static app.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the static site
         - name: reset-api-key
           description: Reset the deployment token for the static app.
           flags:
@@ -372,6 +363,15 @@ commands:
                 description: ==SUPPRESS==
                 nargs: -1
             --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the static site
+        - name: list
+          description: List the deployment token for the static app.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the static site

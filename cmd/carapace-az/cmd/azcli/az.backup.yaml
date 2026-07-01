@@ -4,46 +4,6 @@ description: Manage Azure Backups.
 commands:
     - name: container
       commands:
-        - name: unregister
-          description: Unregister a Backup Container to make the underlying 'resource' be protected by another vault.
-          flags:
-            --backup-management-type=: Specify the backup management type.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -c, --container-name=: Name of the backup container.
-            -g, --resource-group=: Name of resource group.
-            -v, --vault-name=: Name of the Recovery services vault.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                backup-management-type:
-                    - AzureIaasVM
-                    - AzureStorage
-                    - AzureWorkload
-                    - MAB
-        - name: list
-          description: List containers registered to a Recovery services vault.
-          flags:
-            --__STATUS=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --backup-management-type=!: Specify the backup management type.
-            --subscription=: Name or ID of subscription.
-            --use-secondary-region=: Use this flag to list containers in secondary region.
-            -g, --resource-group=!: Name of resource group.
-            -v, --vault-name=!: Name of the Recovery services vault.
-          completion:
-            flag:
-                backup-management-type:
-                    - AzureIaasVM
-                    - AzureStorage
-                    - AzureWorkload
-                    - MAB
         - name: register
           description: Register a Resource to the given Recovery Services Vault.
           flags:
@@ -121,6 +81,46 @@ commands:
                     - SAPASE
                     - SAPHanaDatabase
                     - SQLDataBase
+        - name: list
+          description: List containers registered to a Recovery services vault.
+          flags:
+            --__STATUS=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --backup-management-type=!: Specify the backup management type.
+            --subscription=: Name or ID of subscription.
+            --use-secondary-region=: Use this flag to list containers in secondary region.
+            -g, --resource-group=!: Name of resource group.
+            -v, --vault-name=!: Name of the Recovery services vault.
+          completion:
+            flag:
+                backup-management-type:
+                    - AzureIaasVM
+                    - AzureStorage
+                    - AzureWorkload
+                    - MAB
+        - name: unregister
+          description: Unregister a Backup Container to make the underlying 'resource' be protected by another vault.
+          flags:
+            --backup-management-type=: Specify the backup management type.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -c, --container-name=: Name of the backup container.
+            -g, --resource-group=: Name of resource group.
+            -v, --vault-name=: Name of the Recovery services vault.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                backup-management-type:
+                    - AzureIaasVM
+                    - AzureStorage
+                    - AzureWorkload
+                    - MAB
     - name: item
       commands:
         - name: set-policy
@@ -215,20 +215,6 @@ commands:
                     - SQLDataBase
     - name: job
       commands:
-        - name: show
-          description: Show details of a particular job.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --use-secondary-region=: Use this flag to show recoverypoints in secondary region.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the job.
-            -v, --vault-name=: Name of the Recovery services vault.
         - name: list
           description: List all backup jobs of a Recovery Services vault.
           flags:
@@ -263,6 +249,20 @@ commands:
                     - CompletedWithWarnings
                     - Failed
                     - InProgress
+        - name: show
+          description: Show details of a particular job.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --use-secondary-region=: Use this flag to show recoverypoints in secondary region.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the job.
+            -v, --vault-name=: Name of the Recovery services vault.
         - name: stop
           description: Suspend or terminate a currently running job.
           flags:
@@ -304,23 +304,12 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the backup policy.
             -v, --vault-name=: Name of the Recovery services vault.
-        - name: list-associated-items
-          description: List all items protected by a backup policy.
+        - name: get-default-for-vm
+          description: Get the default policy with default values to backup a VM.
           flags:
-            --backup-management-type=: Specify the backup management type.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the backup policy.
-            -v, --vault-name=: Name of the Recovery services vault.
-          completion:
-            flag:
-                backup-management-type:
-                    - AzureIaasVM
-                    - AzureStorage
-                    - AzureWorkload
+            -g, --resource-group=!: Name of resource group.
+            -v, --vault-name=!: Name of the Recovery services vault.
         - name: create
           description: Create a new policy for the given BackupManagementType and workloadType.
           flags:
@@ -344,6 +333,62 @@ commands:
                     - MSSQL
                     - SAPHanaDatabase
                     - SQLDataBase
+        - name: delete
+          description: Delete a backup policy which doesn't have any associated backup items.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the backup policy.
+            -v, --vault-name=: Name of the Recovery services vault.
+        - name: set
+          description: Update the existing policy with the provided details.
+          flags:
+            --backup-management-type=: Specify the backup management type.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --fix-for-inconsistent-items=:
+                description: Specify whether or not to retry Policy Update for failed items.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --policy=: JSON encoded policy definition.
+            --subscription=: Name or ID of subscription.
+            --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Policy.
+            -v, --vault-name=: Name of the Recovery services vault.
+            -y, --yes=: Skip confirmation when updating Standard to Enhanced Policies.
+          completion:
+            flag:
+                backup-management-type:
+                    - AzureIaasVM
+                    - AzureStorage
+                    - AzureWorkload
+                fix-for-inconsistent-items:
+                    - "true"
+                    - "false"
+        - name: list-associated-items
+          description: List all items protected by a backup policy.
+          flags:
+            --backup-management-type=: Specify the backup management type.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the backup policy.
+            -v, --vault-name=: Name of the Recovery services vault.
+          completion:
+            flag:
+                backup-management-type:
+                    - AzureIaasVM
+                    - AzureStorage
+                    - AzureWorkload
         - name: list
           description: List all policies for a Recovery services vault.
           flags:
@@ -374,51 +419,6 @@ commands:
                     - MSSQL
                     - SAPHanaDatabase
                     - SQLDataBase
-        - name: delete
-          description: Delete a backup policy which doesn't have any associated backup items.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the backup policy.
-            -v, --vault-name=: Name of the Recovery services vault.
-        - name: get-default-for-vm
-          description: Get the default policy with default values to backup a VM.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -v, --vault-name=!: Name of the Recovery services vault.
-        - name: set
-          description: Update the existing policy with the provided details.
-          flags:
-            --backup-management-type=: Specify the backup management type.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --fix-for-inconsistent-items=:
-                description: Specify whether or not to retry Policy Update for failed items.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --policy=: JSON encoded policy definition.
-            --subscription=: Name or ID of subscription.
-            --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Policy.
-            -v, --vault-name=: Name of the Recovery services vault.
-            -y, --yes=: Skip confirmation when updating Standard to Enhanced Policies.
-          completion:
-            flag:
-                backup-management-type:
-                    - AzureIaasVM
-                    - AzureStorage
-                    - AzureWorkload
-                fix-for-inconsistent-items:
-                    - "true"
-                    - "false"
     - name: protectable-item
       commands:
         - name: initialize
@@ -503,45 +503,6 @@ commands:
                     - SQLDataBase
     - name: protection
       commands:
-        - name: check-vm
-          description: The command returns null/empty if the specified resource is not protected under any Recovery Services vault in the subscription.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --vm-id=: ID of the virtual machine to be checked for protection.
-            --vm=: Name or ID of the Virtual Machine to be protected.
-            -g, --resource-group=: Name of resource group.
-        - name: auto-disable-for-azurewl
-          description: Disable auto-protection for the specified protectable item.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --protectable-item-name=!: Specify the resource name to be protected by Azure Backup service.
-            --protectable-item-type=!: Specify the type of items within the Resource which should be discovered and protected by Azure Backup.
-            --server-name=!: Parent Server name of the item.
-            --subscription=: Name or ID of subscription.
-            --workload-type=!: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
-            -g, --resource-group=!: Name of resource group.
-            -v, --vault-name=!: Name of the Recovery services vault.
-          completion:
-            flag:
-                protectable-item-type:
-                    - SQLAG
-                    - SQLInstance
-                    - SQLDatabase
-                    - HANAInstance
-                    - SAPHanaDatabase
-                    - SAPHanaSystem
-                workload-type:
-                    - VM
-                    - AzureFileShare
-                    - SAPHANA
-                    - MSSQL
-                    - SAPHanaDatabase
-                    - SQLDataBase
         - name: enable-for-azurefileshare
           description: Start protecting a previously unprotected Azure File share within an Azure Storage account as per the specified policy to a Recovery services vault.
           flags:
@@ -591,32 +552,66 @@ commands:
                     - MSSQL
                     - SAPHanaDatabase
                     - SQLDataBase
-        - name: enable-for-vm
-          description: Start protecting a previously unprotected Azure VM as per the specified policy to a Recovery services vault.
+        - name: resume
+          description: Resume backup for the associated backup item.
+          flags:
+            --backup-management-type=: Specify the backup management type.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --workload-type=: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
+            -c, --container-name=: Name of the backup container.
+            -g, --resource-group=: Name of resource group.
+            -i, --item-name=: Name of the backed up item.
+            -p, --policy-name=!: Name of the backup policy.
+            -v, --vault-name=: Name of the Recovery services vault.
+          completion:
+            flag:
+                backup-management-type:
+                    - AzureIaasVM
+                    - AzureStorage
+                    - AzureWorkload
+                workload-type:
+                    - VM
+                    - AzureFileShare
+                    - SAPHANA
+                    - MSSQL
+                    - SAPHanaDatabase
+                    - SQLDataBase
+        - name: auto-enable-for-azurewl
+          description: Automatically protect all existing unprotected DBs and any DB which will be added later with the given policy.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --disk-list-setting=: option to decide whether to include or exclude the disk or reset any previous settings to default behavior
-            --diskslist=:
-                description: List of disks to be excluded or included.
-                nargs: -1
-            --exclude-all-data-disks=:
-                description: Option to specify to backup OS disk only.
-                nargs: -1
+            --protectable-item-name=!: Specify the resource name to be protected by Azure Backup service.
+            --protectable-item-type=!: Specify the type of items within the Resource which should be discovered and protected by Azure Backup.
+            --server-name=!: Parent Server name of the item.
             --subscription=: Name or ID of subscription.
-            --vm=!: Name or ID of the Virtual Machine to be protected.
+            --workload-type=!: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
             -g, --resource-group=!: Name of resource group.
             -p, --policy-name=!: Name of the backup policy.
             -v, --vault-name=!: Name of the Recovery services vault.
           completion:
             flag:
-                disk-list-setting:
-                    - include
-                    - exclude
-                exclude-all-data-disks:
-                    - "true"
-                    - "false"
+                protectable-item-type:
+                    - SQLAG
+                    - SQLInstance
+                    - SQLDatabase
+                    - HANAInstance
+                    - SAPHanaDatabase
+                    - SAPHanaSystem
+                workload-type:
+                    - VM
+                    - AzureFileShare
+                    - SAPHANA
+                    - MSSQL
+                    - SAPHanaDatabase
+                    - SQLDataBase
         - name: update-for-vm
           description: Update disk exclusion settings associated with a backed up VM item.
           flags:
@@ -644,6 +639,32 @@ commands:
                     - include
                     - exclude
                     - resetexclusionsettings
+                exclude-all-data-disks:
+                    - "true"
+                    - "false"
+        - name: enable-for-vm
+          description: Start protecting a previously unprotected Azure VM as per the specified policy to a Recovery services vault.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --disk-list-setting=: option to decide whether to include or exclude the disk or reset any previous settings to default behavior
+            --diskslist=:
+                description: List of disks to be excluded or included.
+                nargs: -1
+            --exclude-all-data-disks=:
+                description: Option to specify to backup OS disk only.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --vm=!: Name or ID of the Virtual Machine to be protected.
+            -g, --resource-group=!: Name of resource group.
+            -p, --policy-name=!: Name of the backup policy.
+            -v, --vault-name=!: Name of the Recovery services vault.
+          completion:
+            flag:
+                disk-list-setting:
+                    - include
+                    - exclude
                 exclude-all-data-disks:
                     - "true"
                     - "false"
@@ -677,8 +698,8 @@ commands:
                     - MSSQL
                     - SAPHanaDatabase
                     - SQLDataBase
-        - name: auto-enable-for-azurewl
-          description: Automatically protect all existing unprotected DBs and any DB which will be added later with the given policy.
+        - name: auto-disable-for-azurewl
+          description: Disable auto-protection for the specified protectable item.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -689,7 +710,6 @@ commands:
             --subscription=: Name or ID of subscription.
             --workload-type=!: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
             -g, --resource-group=!: Name of resource group.
-            -p, --policy-name=!: Name of the backup policy.
             -v, --vault-name=!: Name of the Recovery services vault.
           completion:
             flag:
@@ -750,36 +770,6 @@ commands:
                     - MSSQL
                     - SAPHanaDatabase
                     - SQLDataBase
-        - name: resume
-          description: Resume backup for the associated backup item.
-          flags:
-            --backup-management-type=: Specify the backup management type.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --workload-type=: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
-            -c, --container-name=: Name of the backup container.
-            -g, --resource-group=: Name of resource group.
-            -i, --item-name=: Name of the backed up item.
-            -p, --policy-name=!: Name of the backup policy.
-            -v, --vault-name=: Name of the Recovery services vault.
-          completion:
-            flag:
-                backup-management-type:
-                    - AzureIaasVM
-                    - AzureStorage
-                    - AzureWorkload
-                workload-type:
-                    - VM
-                    - AzureFileShare
-                    - SAPHANA
-                    - MSSQL
-                    - SAPHanaDatabase
-                    - SQLDataBase
         - name: undelete
           description: Rehydrate an item from softdeleted state to stop protection with retained data state.
           flags:
@@ -809,6 +799,16 @@ commands:
                     - MSSQL
                     - SAPHanaDatabase
                     - SQLDataBase
+        - name: check-vm
+          description: The command returns null/empty if the specified resource is not protected under any Recovery Services vault in the subscription.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --vm-id=: ID of the virtual machine to be checked for protection.
+            --vm=: Name or ID of the Virtual Machine to be protected.
+            -g, --resource-group=: Name of resource group.
     - name: recoveryconfig
       commands:
         - name: show
@@ -865,39 +865,6 @@ commands:
                     - SQLDataBase
     - name: recoverypoint
       commands:
-        - name: move
-          description: Move a particular recovery point of a backed up item from one tier to another tier.
-          flags:
-            --backup-management-type=: Specify the backup management type.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --destination-tier=!: The destination/target tier to which a particular recovery point has to be moved.
-            --source-tier=!: The source tier from which a particular recovery point has to be moved.
-            --subscription=: Name or ID of subscription.
-            --workload-type=: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
-            -c, --container-name=!: Name of the backup container.
-            -g, --resource-group=!: Name of resource group.
-            -i, --item-name=!: Name of the backed up item.
-            -n, --name=!: Name of the recovery point.
-            -v, --vault-name=!: Name of the Recovery services vault.
-          completion:
-            flag:
-                backup-management-type:
-                    - AzureIaasVM
-                    - AzureStorage
-                    - AzureWorkload
-                destination-tier:
-                    - VaultArchive
-                source-tier:
-                    - VaultStandard
-                workload-type:
-                    - VM
-                    - AzureFileShare
-                    - SAPHANA
-                    - MSSQL
-                    - SAPHanaDatabase
-                    - SQLDataBase
         - name: show
           description: Shows details of a particular recovery point.
           flags:
@@ -976,6 +943,39 @@ commands:
                     - MSSQL
                     - SAPHanaDatabase
                     - SQLDataBase
+        - name: move
+          description: Move a particular recovery point of a backed up item from one tier to another tier.
+          flags:
+            --backup-management-type=: Specify the backup management type.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --destination-tier=!: The destination/target tier to which a particular recovery point has to be moved.
+            --source-tier=!: The source tier from which a particular recovery point has to be moved.
+            --subscription=: Name or ID of subscription.
+            --workload-type=: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
+            -c, --container-name=!: Name of the backup container.
+            -g, --resource-group=!: Name of resource group.
+            -i, --item-name=!: Name of the backed up item.
+            -n, --name=!: Name of the recovery point.
+            -v, --vault-name=!: Name of the Recovery services vault.
+          completion:
+            flag:
+                backup-management-type:
+                    - AzureIaasVM
+                    - AzureStorage
+                    - AzureWorkload
+                destination-tier:
+                    - VaultArchive
+                source-tier:
+                    - VaultStandard
+                workload-type:
+                    - VM
+                    - AzureFileShare
+                    - SAPHANA
+                    - MSSQL
+                    - SAPHanaDatabase
+                    - SQLDataBase
         - name: show-log-chain
           description: List the start and end points of the unbroken log chain(s) of the given backup item.
           flags:
@@ -1007,38 +1007,36 @@ commands:
                     - SQLDataBase
     - name: restore
       commands:
-        - name: files
-          commands:
-            - name: mount-rp
-              description: Download a script which mounts files of a recovery point.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -c, --container-name=: Name of the backup container.
-                -g, --resource-group=: Name of resource group.
-                -i, --item-name=: Name of the backed up item.
-                -r, --rp-name=: Name of the recovery point.
-                -v, --vault-name=: Name of the Recovery services vault.
-            - name: unmount-rp
-              description: Close access to the recovery point.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -c, --container-name=: Name of the backup container.
-                -g, --resource-group=: Name of resource group.
-                -i, --item-name=: Name of the backed up item.
-                -r, --rp-name=: Name of the recovery point.
-                -v, --vault-name=: Name of the Recovery services vault.
+        - name: restore-azurefileshare
+          description: Restore backed up Azure file shares to the same file-share or another file-share in registered storage accounts.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --resolve-conflict=!: Instruction if there's a conflict with the restored data.
+            --restore-mode=!: Specify the restore mode.
+            --subscription=: Name or ID of subscription.
+            --target-file-share=: Destination file share to which content will be restored
+            --target-folder=: Destination folder to which content will be restored.
+            --target-resource-group-name=: Resource group of the destination storage account to which the content will be restored, needed if it is different from the vault resource group
+            --target-storage-account=: Destination storage account to which content will be restored
+            --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
+            -c, --container-name=: Name of the backup container.
+            -g, --resource-group=: Name of resource group.
+            -i, --item-name=: Name of the backed up item.
+            -r, --rp-name=: Name of the recovery point.
+            -v, --vault-name=: Name of the Recovery services vault.
+          completion:
+            flag:
+                resolve-conflict:
+                    - Overwrite
+                    - Skip
+                restore-mode:
+                    - OriginalLocation
+                    - AlternateLocation
         - name: restore-disks
           description: Restore disks of the backed VM from the specified recovery point.
           flags:
@@ -1117,36 +1115,57 @@ commands:
                     - "2"
                     - "3"
                     - NoZone
-        - name: restore-azurefileshare
-          description: Restore backed up Azure file shares to the same file-share or another file-share in registered storage accounts.
+        - name: files
+          commands:
+            - name: unmount-rp
+              description: Close access to the recovery point.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -c, --container-name=: Name of the backup container.
+                -g, --resource-group=: Name of resource group.
+                -i, --item-name=: Name of the backed up item.
+                -r, --rp-name=: Name of the recovery point.
+                -v, --vault-name=: Name of the Recovery services vault.
+            - name: mount-rp
+              description: Download a script which mounts files of a recovery point.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -c, --container-name=: Name of the backup container.
+                -g, --resource-group=: Name of resource group.
+                -i, --item-name=: Name of the backed up item.
+                -r, --rp-name=: Name of the recovery point.
+                -v, --vault-name=: Name of the Recovery services vault.
+        - name: restore-azurewl
+          description: Restore backed up Azure Workloads in a Recovery services vault to another registered container or to the same container.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --resolve-conflict=!: Instruction if there's a conflict with the restored data.
-            --restore-mode=!: Specify the restore mode.
+            --recovery-config=!: Specify the recovery configuration of a backed up item.
+            --rehydration-duration=: Set the maximum time, in days (between 10-30, both inclusive) for which the recovery point stays in hydrated state.
+            --rehydration-priority=: The type of priority to be maintained while rehydrating a recovery point
             --subscription=: Name or ID of subscription.
-            --target-file-share=: Destination file share to which content will be restored
-            --target-folder=: Destination folder to which content will be restored.
-            --target-resource-group-name=: Resource group of the destination storage account to which the content will be restored, needed if it is different from the vault resource group
-            --target-storage-account=: Destination storage account to which content will be restored
             --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
-            -c, --container-name=: Name of the backup container.
-            -g, --resource-group=: Name of resource group.
-            -i, --item-name=: Name of the backed up item.
-            -r, --rp-name=: Name of the recovery point.
-            -v, --vault-name=: Name of the Recovery services vault.
+            --use-secondary-region=: Use this flag to restore from a recoverypoint in secondary region.
+            -g, --resource-group=!: Name of resource group.
+            -v, --vault-name=!: Name of the Recovery services vault.
           completion:
             flag:
-                resolve-conflict:
-                    - Overwrite
-                    - Skip
-                restore-mode:
-                    - OriginalLocation
-                    - AlternateLocation
+                rehydration-priority:
+                    - Standard
+                    - High
         - name: restore-azurefiles
           description: Restore backed up Azure files within a file-share to the same file-share or another file-share in registered storage accounts.
           flags:
@@ -1183,41 +1202,52 @@ commands:
                 source-file-type:
                     - File
                     - Directory
-        - name: restore-azurewl
-          description: Restore backed up Azure Workloads in a Recovery services vault to another registered container or to the same container.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --recovery-config=!: Specify the recovery configuration of a backed up item.
-            --rehydration-duration=: Set the maximum time, in days (between 10-30, both inclusive) for which the recovery point stays in hydrated state.
-            --rehydration-priority=: The type of priority to be maintained while rehydrating a recovery point
-            --subscription=: Name or ID of subscription.
-            --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
-            --use-secondary-region=: Use this flag to restore from a recoverypoint in secondary region.
-            -g, --resource-group=!: Name of resource group.
-            -v, --vault-name=!: Name of the Recovery services vault.
-          completion:
-            flag:
-                rehydration-priority:
-                    - Standard
-                    - High
     - name: vault
       commands:
-        - name: resource-guard-mapping
+        - name: identity
           commands:
-            - name: show
-              description: Get resource guard mapping of the Recovery Services vault.
+            - name: assign
+              description: Assign Identities to Recovery Services vault.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
                     nargs: -1
+                --subscription=: Name or ID of subscription.
+                --system-assigned=: Provide this flag to enable system assigned identity for Recovery Services Vault.
+                --user-assigned=:
+                    description: Space-separated list of userassigned identities to be assigned to Recovery Services Vault.
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Recovery services vault.
+            - name: remove
+              description: Remove Identities of Recovery Services vault.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --system-assigned=: Provide this flag to remove system assigned identity for Recovery Services Vault.
+                --user-assigned=:
+                    description: Space-separated list of userassigned identities to be removed from Recovery Services Vault.
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Recovery services vault.
+            - name: show
+              description: Show Identities of Recovery Services vault.
+              flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the Recovery services vault.
+        - name: list
+          description: List Recovery service vaults within a subscription.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: resource-guard-mapping
+          commands:
             - name: update
               description: Create/Update resource guard mapping of the Recovery Services vault.
               flags:
@@ -1246,134 +1276,8 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the Recovery services vault.
                 -y, --yes=: Do not prompt for confirmation.
-        - name: identity
-          commands:
-            - name: remove
-              description: Remove Identities of Recovery Services vault.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --system-assigned=: Provide this flag to remove system assigned identity for Recovery Services Vault.
-                --user-assigned=:
-                    description: Space-separated list of userassigned identities to be removed from Recovery Services Vault.
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Recovery services vault.
             - name: show
-              description: Show Identities of Recovery Services vault.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Recovery services vault.
-            - name: assign
-              description: Assign Identities to Recovery Services vault.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --system-assigned=: Provide this flag to enable system assigned identity for Recovery Services Vault.
-                --user-assigned=:
-                    description: Space-separated list of userassigned identities to be assigned to Recovery Services Vault.
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Recovery services vault.
-        - name: show
-          description: Get the Vault details.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Recovery services vault.
-        - name: encryption
-          commands:
-            - name: update
-              description: Update encryption properties of a Recovery Services Vault.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --encryption-key-id=!: The encryption key id you want to use for encryption
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --infrastructure-encryption=: Use this parameter to enable/disable infrastructure encryption.
-                --mi-system-assigned=: Provide this flag to use system assigned identity for encryption.
-                --mi-user-assigned=: UserAssigned Identity Id to be used for CMK encryption, this will be applicable for encryption using userassigned identity
-                --subscription=: Name or ID of subscription.
-                --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Recovery services vault.
-              completion:
-                flag:
-                    infrastructure-encryption:
-                        - Enabled
-                        - Disabled
-            - name: show
-              description: Show details of encryption properties of a Recovery Services Vault.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Recovery services vault.
-        - name: backup-properties
-          commands:
-            - name: set
-              description: Sets backup related properties of the Recovery Services vault.
-              flags:
-                --backup-storage-redundancy=: Set backup storage properties for a Recovery Services vault.
-                --classic-alerts=: Use this property to specify whether backup alerts from the classic solution should be received.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --cross-region-restore-flag=: Set cross-region-restore feature state for a Recovery Services Vault.
-                --hybrid-backup-security-features=: Use this field to set the security features for hybrid backups in a Recovery Services Vault.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --job-failure-alerts=: Use this property to specify whether built-in Azure Monitor alerts should be received for every job failure.
-                --soft-delete-duration=: Set soft-delete retention duration time in days for a Recovery Services Vault.
-                --soft-delete-feature-state=: Set soft-delete feature state for a Recovery Services Vault.
-                --subscription=: Name or ID of subscription.
-                --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Recovery services vault.
-              completion:
-                flag:
-                    backup-storage-redundancy:
-                        - GeoRedundant
-                        - LocallyRedundant
-                        - ZoneRedundant
-                    classic-alerts:
-                        - Enable
-                        - Disable
-                    cross-region-restore-flag:
-                        - "True"
-                        - "False"
-                    hybrid-backup-security-features:
-                        - Enable
-                        - Disable
-                    job-failure-alerts:
-                        - Enable
-                        - Disable
-                    soft-delete-feature-state:
-                        - Enable
-                        - Disable
-                        - AlwaysOn
-            - name: show
-              description: Gets backup related properties of the Recovery Services vault.
+              description: Get resource guard mapping of the Recovery Services vault.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -1489,11 +1393,51 @@ commands:
                 public-network-access:
                     - Enable
                     - Disable
-        - name: list
-          description: List Recovery service vaults within a subscription.
+        - name: show
+          description: Get the Vault details.
           flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Recovery services vault.
+        - name: encryption
+          commands:
+            - name: update
+              description: Update encryption properties of a Recovery Services Vault.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --encryption-key-id=!: The encryption key id you want to use for encryption
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --infrastructure-encryption=: Use this parameter to enable/disable infrastructure encryption.
+                --mi-system-assigned=: Provide this flag to use system assigned identity for encryption.
+                --mi-user-assigned=: UserAssigned Identity Id to be used for CMK encryption, this will be applicable for encryption using userassigned identity
+                --subscription=: Name or ID of subscription.
+                --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Recovery services vault.
+              completion:
+                flag:
+                    infrastructure-encryption:
+                        - Enabled
+                        - Disabled
+            - name: show
+              description: Show details of encryption properties of a Recovery Services Vault.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Recovery services vault.
         - name: delete
           description: Delete an existing Recovery services vault.
           flags:
@@ -1508,3 +1452,59 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Recovery services vault.
             -y, --yes=: Do not prompt for confirmation.
+        - name: backup-properties
+          commands:
+            - name: set
+              description: Sets backup related properties of the Recovery Services vault.
+              flags:
+                --backup-storage-redundancy=: Set backup storage properties for a Recovery Services vault.
+                --classic-alerts=: Use this property to specify whether backup alerts from the classic solution should be received.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cross-region-restore-flag=: Set cross-region-restore feature state for a Recovery Services Vault.
+                --hybrid-backup-security-features=: Use this field to set the security features for hybrid backups in a Recovery Services Vault.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --job-failure-alerts=: Use this property to specify whether built-in Azure Monitor alerts should be received for every job failure.
+                --soft-delete-duration=: Set soft-delete retention duration time in days for a Recovery Services Vault.
+                --soft-delete-feature-state=: Set soft-delete feature state for a Recovery Services Vault.
+                --subscription=: Name or ID of subscription.
+                --tenant-id=: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Recovery services vault.
+              completion:
+                flag:
+                    backup-storage-redundancy:
+                        - GeoRedundant
+                        - LocallyRedundant
+                        - ZoneRedundant
+                    classic-alerts:
+                        - Enable
+                        - Disable
+                    cross-region-restore-flag:
+                        - "True"
+                        - "False"
+                    hybrid-backup-security-features:
+                        - Enable
+                        - Disable
+                    job-failure-alerts:
+                        - Enable
+                        - Disable
+                    soft-delete-feature-state:
+                        - Enable
+                        - Disable
+                        - AlwaysOn
+            - name: show
+              description: Gets backup related properties of the Recovery Services vault.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Recovery services vault.

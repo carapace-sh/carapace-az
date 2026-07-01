@@ -4,90 +4,6 @@ description: Manage Microsoft Entra ID (formerly known as Azure Active Directory
 commands:
     - name: app
       commands:
-        - name: federated-credential
-          commands:
-            - name: delete
-              description: Delete application federated identity credential.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --federated-credential-id=!: ID or name of the federated identity credential
-                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
-            - name: show
-              description: Show application federated identity credential.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --federated-credential-id=!: ID or name of the federated identity credential
-                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
-            - name: create
-              description: Create application federated identity credential.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
-                --parameters=!: Parameters for creating federated identity credential.
-            - name: list
-              description: List application federated identity credentials.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
-            - name: update
-              description: Update application federated identity credential.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --federated-credential-id=!: ID or name of the federated identity credential
-                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
-                --parameters=!: Parameters for creating federated identity credential.
-        - name: delete
-          description: Delete an application.
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --id=!: identifier uri, application id, or object id
-        - name: show
-          description: Get the details of an application.
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --id=!: identifier uri, application id, or object id
-        - name: owner
-          commands:
-            - name: remove
-              description: Remove an application owner.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: identifier uri, application id, or object id
-                --owner-object-id=!: owner's object id
-            - name: list
-              description: List application owners.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: identifier uri, application id, or object id of the application
-            - name: add
-              description: Add an application owner.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: identifier uri, application id, or object id
-                --owner-object-id=!: owner's object id
         - name: permission
           commands:
             - name: grant
@@ -111,6 +27,17 @@ commands:
                     consent-type:
                         - AllPrincipals
                         - Principal
+            - name: delete
+              description: Remove an API permission
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --api-permissions=:
+                    description: Specify `ResourceAccess.id` - The unique identifier for one of the OAuth2Permission or AppRole instances that the resource application exposes.
+                    nargs: -1
+                --api=!: requiredResourceAccess.resourceAppId - The unique identifier for the resource that the application requires access to.
+                --id=!: identifier uri, application id, or object id
             - name: list
               description: List API permissions the application has requested
               flags:
@@ -132,16 +59,6 @@ commands:
                     nargs: -1
                 --api=!: requiredResourceAccess.resourceAppId - The unique identifier for the resource that the application requires access to.
                 --id=!: identifier uri, application id, or object id
-            - name: admin-consent
-              description: Grant Application & Delegated permissions through admin-consent.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: identifier uri, application id, or object id
             - name: list-grants
               description: List Oauth2 permission grants
               flags:
@@ -158,32 +75,58 @@ commands:
                     show-resource-name:
                         - "true"
                         - "false"
-            - name: delete
-              description: Remove an API permission
+            - name: admin-consent
+              description: Grant Application & Delegated permissions through admin-consent.
               flags:
                 --___SUBSCRIPTION=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --api-permissions=:
-                    description: Specify `ResourceAccess.id` - The unique identifier for one of the OAuth2Permission or AppRole instances that the resource application exposes.
+                --cmd=:
+                    description: ==SUPPRESS==
                     nargs: -1
-                --api=!: requiredResourceAccess.resourceAppId - The unique identifier for the resource that the application requires access to.
                 --id=!: identifier uri, application id, or object id
-        - name: list
-          description: List applications.
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --all=: list all entities, expect long delay if under a big organization
-            --app-id=: application id
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --display-name=: the display name of the application
-            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
-            --identifier-uri=: graph application identifier, must be in uri format
-            --show-mine=: list entities owned by the current user
+        - name: federated-credential
+          commands:
+            - name: delete
+              description: Delete application federated identity credential.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --federated-credential-id=!: ID or name of the federated identity credential
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+            - name: update
+              description: Update application federated identity credential.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --federated-credential-id=!: ID or name of the federated identity credential
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+                --parameters=!: Parameters for creating federated identity credential.
+            - name: show
+              description: Show application federated identity credential.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --federated-credential-id=!: ID or name of the federated identity credential
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+            - name: create
+              description: Create application federated identity credential.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+                --parameters=!: Parameters for creating federated identity credential.
+            - name: list
+              description: List application federated identity credentials.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
         - name: create
           description: Create an application.
           flags:
@@ -248,8 +191,48 @@ commands:
                     - AzureADMultipleOrgs
                     - AzureADandPersonalMicrosoftAccount
                     - PersonalMicrosoftAccount
+        - name: show
+          description: Get the details of an application.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: identifier uri, application id, or object id
+        - name: delete
+          description: Delete an application.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: identifier uri, application id, or object id
         - name: credential
           commands:
+            - name: delete
+              description: Delete an application's password or certificate credentials
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cert=: Operate on certificate credentials
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+                --key-id=!: credential key id
+            - name: list
+              description: List an application's password or certificate credential metadata.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cert=: Operate on certificate credentials
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
             - name: reset
               description: Reset an application's password or certificate credentials
               flags:
@@ -267,29 +250,6 @@ commands:
                 --id=!: identifier uri, application id, or object id
                 --keyvault=: Name or ID of a KeyVault to use for creating or retrieving certificates.
                 --years=: Number of years for which the credentials will be valid.
-            - name: list
-              description: List an application's password or certificate credential metadata.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --cert=: Operate on certificate credentials
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: identifier uri, application id, or object id
-            - name: delete
-              description: Delete an application's password or certificate credentials
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --cert=: Operate on certificate credentials
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: identifier uri, application id, or object id
-                --key-id=!: credential key id
         - name: update
           description: Update an application.
           flags:
@@ -365,10 +325,71 @@ commands:
                     - AzureADMultipleOrgs
                     - AzureADandPersonalMicrosoftAccount
                     - PersonalMicrosoftAccount
+        - name: list
+          description: List applications.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --all=: list all entities, expect long delay if under a big organization
+            --app-id=: application id
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=: the display name of the application
+            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
+            --identifier-uri=: graph application identifier, must be in uri format
+            --show-mine=: list entities owned by the current user
+        - name: owner
+          commands:
+            - name: list
+              description: List application owners.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id of the application
+            - name: add
+              description: Add an application owner.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+                --owner-object-id=!: owner's object id
+            - name: remove
+              description: Remove an application owner.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+                --owner-object-id=!: owner's object id
     - name: group
       commands:
+        - name: show
+          description: Get the details of a group.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
         - name: member
           commands:
+            - name: add
+              description: Add a member to a group.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --member-id=!: The object ID of the contact, group, user, or service principal
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
             - name: check
               description: Check if a member is in a group.
               flags:
@@ -390,17 +411,6 @@ commands:
                     description: ==SUPPRESS==
                     nargs: -1
                 -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
-            - name: add
-              description: Add a member to a group.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --member-id=!: The object ID of the contact, group, user, or service principal
-                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
             - name: remove
               description: Remove a member from a group.
               flags:
@@ -412,18 +422,28 @@ commands:
                     nargs: -1
                 --member-id=!: The object ID of the contact, group, user, or service principal
                 -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+        - name: delete
+          description: Delete a group.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
         - name: owner
           commands:
-            - name: remove
-              description: Remove a group owner.
+            - name: add
+              description: Add a group owner.
               flags:
                 --___SUBSCRIPTION=:
                     description: ==SUPPRESS==
                     nargs: -1
                 --owner-object-id=!: owner's object id
                 -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
-            - name: add
-              description: Add a group owner.
+            - name: remove
+              description: Remove a group owner.
               flags:
                 --___SUBSCRIPTION=:
                     description: ==SUPPRESS==
@@ -445,16 +465,6 @@ commands:
                 nargs: -1
             --display-name=: object's display name or its prefix
             --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
-        - name: show
-          description: Get the details of a group.
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
         - name: get-member-groups
           description: Get a collection of object IDs of groups of which the specified group is a member.
           flags:
@@ -473,16 +483,6 @@ commands:
                 security-enabled-only:
                     - "true"
                     - "false"
-        - name: delete
-          description: Delete a group.
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
         - name: create
           description: Create a group.
           flags:
@@ -520,6 +520,16 @@ commands:
                 nargs: -1
     - name: sp
       commands:
+        - name: create
+          description: Create a service principal.
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: identifier uri, application id, or object id of the associated application
         - name: show
           description: Get the details of a service principal.
           flags:
@@ -532,17 +542,6 @@ commands:
             --id=!: service principal name, or object id
         - name: credential
           commands:
-            - name: list
-              description: List a service principal's password or certificate credential metadata.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --cert=: Operate on certificate credentials
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: service principal name, or object id
             - name: delete
               description: Delete a service principal's password or certificate credentials
               flags:
@@ -572,6 +571,37 @@ commands:
                 --id=!: service principal name, or object id
                 --keyvault=: Name or ID of a KeyVault to use for creating or retrieving certificates.
                 --years=: Number of years for which the credentials will be valid.
+            - name: list
+              description: List a service principal's password or certificate credential metadata.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cert=: Operate on certificate credentials
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: service principal name, or object id
+        - name: update
+          description: Update a service principal
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --id=!: service principal name, or object id
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
         - name: create-for-rbac
           description: Create a service principal and configure its access to Azure resources.
           flags:
@@ -604,15 +634,6 @@ commands:
                 skip-assignment:
                     - "true"
                     - "false"
-        - name: owner
-          commands:
-            - name: list
-              description: List service principal owners.
-              flags:
-                --___SUBSCRIPTION=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=!: service principal name, or object id or the service principal
         - name: delete
           description: Delete a service principal.
           flags:
@@ -623,6 +644,15 @@ commands:
                 description: ==SUPPRESS==
                 nargs: -1
             --id=!: service principal name, or object id
+        - name: owner
+          commands:
+            - name: list
+              description: List service principal owners.
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: service principal name, or object id or the service principal
         - name: list
           description: List service principals.
           flags:
@@ -637,47 +667,27 @@ commands:
             --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
             --show-mine=: list entities owned by the current user
             --spn=: service principal name
-        - name: update
-          description: Update a service principal
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --add=:
-                description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-            --id=!: service principal name, or object id
-            --remove=:
-                description: Remove a property or an element from a list.
-                nargs: -1
-            --set=:
-                description: Update an object by specifying a property path and value to set.
-                nargs: -1
-        - name: create
-          description: Create a service principal.
-          flags:
-            --___SUBSCRIPTION=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --id=!: identifier uri, application id, or object id of the associated application
     - name: user
       commands:
-        - name: list
-          description: List users.
+        - name: create
+          description: Create a user.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --display-name=: object's display name or its prefix
-            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
-            --upn=: user principal name, e.g. john.doe@contoso.com
+            --display-name=!: object's display name or its prefix
+            --force-change-password-next-sign-in=:
+                description: If the user must change her password on the next login.
+                nargs: -1
+            --immutable-id=: This property is used to associate an on-premises Active Directory user account to their Microsoft Entra user object.
+            --mail-nickname=: mail alias.
+            --password=!: user password
+            --user-principal-name=!: The user principal name (someuser@contoso.com).
+          completion:
+            flag:
+                force-change-password-next-sign-in:
+                    - "true"
+                    - "false"
         - name: delete
           description: Delete a user.
           flags:
@@ -700,25 +710,15 @@ commands:
                 security-enabled-only:
                     - "true"
                     - "false"
-        - name: create
-          description: Create a user.
+        - name: list
+          description: List users.
           flags:
             --___SUBSCRIPTION=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --display-name=!: object's display name or its prefix
-            --force-change-password-next-sign-in=:
-                description: If the user must change her password on the next login.
-                nargs: -1
-            --immutable-id=: This property is used to associate an on-premises Active Directory user account to their Microsoft Entra user object.
-            --mail-nickname=: mail alias.
-            --password=!: user password
-            --user-principal-name=!: The user principal name (someuser@contoso.com).
-          completion:
-            flag:
-                force-change-password-next-sign-in:
-                    - "true"
-                    - "false"
+            --display-name=: object's display name or its prefix
+            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
+            --upn=: user principal name, e.g. john.doe@contoso.com
         - name: show
           description: Get the details of a user.
           flags:

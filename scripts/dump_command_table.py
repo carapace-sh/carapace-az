@@ -102,6 +102,11 @@ def serialize_command(name, cmd, helps):
             description = ''
 
     if not description:
+        az_help = getattr(cmd, 'AZ_HELP', None) or getattr(cmd, 'help', None)
+        if isinstance(az_help, dict):
+            description = az_help.get('short-summary', '') or az_help.get('long-summary', '')
+
+    if not description:
         help_data = get_help(helps, name)
         description = help_data.get('short-summary', '') or help_data.get('long-summary', '')
 

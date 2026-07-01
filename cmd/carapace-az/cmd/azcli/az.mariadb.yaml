@@ -4,6 +4,23 @@ description: Manage Azure Database for MariaDB servers.
 commands:
     - name: db
       commands:
+        - name: list
+          description: List all the databases in a given server.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -s, --server-name=!: Name of the Server.
+        - name: delete
+          description: Deletes a database.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the database
+            -s, --server-name=: Name of the server.
+            -y, --yes=: Do not prompt for confirmation.
         - name: show
           description: Gets information about a database.
           flags:
@@ -26,43 +43,10 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the database
             -s, --server-name=!: Name of the server.
-        - name: list
-          description: List all the databases in a given server.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -s, --server-name=!: Name of the Server.
-        - name: delete
-          description: Deletes a database.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the database
-            -s, --server-name=: Name of the server.
-            -y, --yes=: Do not prompt for confirmation.
     - name: server
       commands:
-        - name: list
-          description: List available servers.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: firewall-rule
           commands:
-            - name: delete
-              description: Deletes a server firewall rule.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the firewall rule.
-                -s, --server-name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
             - name: update
               description: Update a firewall rule.
               flags:
@@ -88,19 +72,6 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the firewall rule.
                 -s, --server-name=: Name of the server.
-            - name: show
-              description: Gets information about a server firewall rule.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the firewall rule.
-                -s, --server-name=: Name of the server.
             - name: list
               description: List all the firewall rules in a given server.
               flags:
@@ -119,86 +90,89 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The name of the firewall rule.
                 -s, --server-name=!: Name of the server.
-        - name: show
-          description: Gets information about a server.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-        - name: restart
-          description: Restarts a server.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-        - name: private-endpoint-connection
-          commands:
-            - name: reject
-              description: Reject a private endpoint connection request for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=: Comments for reject operation.
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: show
-              description: Gets a private endpoint connection.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
-            - name: approve
-              description: Approve a private endpoint connection request for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --description=: Comments for approve operation.
-                --id=: The ID of the private endpoint connection associated with the Server.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
             - name: delete
-              description: Deletes a private endpoint connection with a given name.
+              description: Deletes a server firewall rule.
               flags:
-                --id=: The ID of the private endpoint connection associated with the Server.
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified server.
-                -n, --name=: The name of the private endpoint connection associated with the Server.
-                -s, --server-name=: Name of the Server.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the firewall rule.
+                -s, --server-name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: show
+              description: Gets information about a server firewall rule.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the firewall rule.
+                -s, --server-name=: Name of the server.
+        - name: configuration
+          commands:
+            - name: list
+              description: List all the configurations in a given server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
+            - name: set
+              description: Update the configuration of a server.
+              flags:
+                --__SOURCE=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --value=: Value of the configuration.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the configuration
+                -s, --server-name=: Name of the server.
+            - name: show
+              description: Gets information about a configuration of server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the server configuration.
+                -s, --server-name=: Name of the server.
         - name: vnet-rule
           commands:
+            - name: delete
+              description: Deletes the virtual network rule with the given name.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the vnet rule.
+                -s, --server-name=: Name of the server.
+            - name: list
+              description: Gets a list of virtual network rules in a server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the server.
             - name: update
               description: Update a virtual network rule.
               flags:
@@ -232,19 +206,6 @@ commands:
                     ignore-missing-endpoint:
                         - "true"
                         - "false"
-            - name: show
-              description: Gets a virtual network rule.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the vnet rule.
-                -s, --server-name=: Name of the server.
             - name: create
               description: Create a virtual network rule to allows access to a MariaDB server.
               flags:
@@ -262,24 +223,18 @@ commands:
                     ignore-missing-endpoint:
                         - "true"
                         - "false"
-            - name: delete
-              description: Deletes the virtual network rule with the given name.
+            - name: show
+              description: Gets a virtual network rule.
               flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the vnet rule.
-                -s, --server-name=: Name of the server.
-            - name: list
-              description: Gets a list of virtual network rules in a server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
                 -s, --server-name=: Name of the server.
         - name: restore
           description: Restore a server from backup.
@@ -296,44 +251,72 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the server.
             -s, --source-server=!: The name or resource ID of the source server to restore from.
-        - name: configuration
+        - name: private-endpoint-connection
           commands:
-            - name: set
-              description: Update the configuration of a server.
+            - name: delete
+              description: Deletes a private endpoint connection with a given name.
               flags:
-                --__SOURCE=:
-                    description: ==SUPPRESS==
-                    nargs: -1
+                --id=: The ID of the private endpoint connection associated with the Server.
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
                 --subscription=: Name or ID of subscription.
-                --value=: Value of the configuration.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the configuration
-                -s, --server-name=: Name of the server.
-            - name: list
-              description: List all the configurations in a given server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the server.
-            - name: show
-              description: Gets information about a configuration of server.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: approve
+              description: Approve a private endpoint connection request for a server.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
+                --description=: Comments for approve operation.
+                --id=: The ID of the private endpoint connection associated with the Server.
                 --ids=:
                     description: One or more resource IDs (space-delimited).
                     nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the server configuration.
-                -s, --server-name=: Name of the server.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: reject
+              description: Reject a private endpoint connection request for a server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=: Comments for reject operation.
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+            - name: show
+              description: Gets a private endpoint connection.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=: The ID of the private endpoint connection associated with the Server.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified server.
+                -n, --name=: The name of the private endpoint connection associated with the Server.
+                -s, --server-name=: Name of the Server.
+        - name: start
+          description: Starts a stopped server.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
         - name: show-connection-string
           description: Show the connection strings for a MariaDB server database.
           flags:
@@ -348,37 +331,24 @@ commands:
             -p, --admin-password=: The login password of the administrator.
             -s, --server-name=: Name of the server.
             -u, --admin-user=: The login username of the administrator.
-        - name: stop
-          description: Stop a running server.
+        - name: georestore
+          description: Geo-restore a server from backup.
           flags:
+            --backup-retention=: The number of days a backup is retained.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
+            --geo-redundant-backup=: Enable or disable geo-redundant backups.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --sku-name=: The name of the sku.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
+            -l, --location=!: Location.
             -n, --name=: Name of the server.
-        - name: list-skus
-          description: List all the performance tiers at specified location in a given subscription.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -l, --location=!: The name of the location.
-        - name: private-link-resource
-          commands:
-            - name: list
-              description: Gets the private link resources for MariaDB server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the Server.
+            -s, --source-server=!: The name or ID of the source server to restore from.
         - name: wait
           description: Wait for server to satisfy certain conditions.
           flags:
@@ -404,6 +374,88 @@ commands:
             --timeout=: maximum wait in seconds
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the server.
+        - name: replica
+          commands:
+            - name: stop
+              description: Stop replication to a read replica and make it a read/write server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the server.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: list
+              description: List all the replicas for a given server.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the master server.
+            - name: create
+              description: Create a read replica for a server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --no-wait=: Do not wait for the long-running operation to finish.
+                --sku-name=: The name of the sku.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -l, --location=: Location.
+                -n, --name=!: Name of the server.
+                -s, --source-server=!: The name or resource ID of the master server to the create replica for.
+        - name: delete
+          description: Deletes a server.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: stop
+          description: Stop a running server.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+        - name: show
+          description: Gets information about a server.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+        - name: restart
+          description: Restarts a server.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the server.
+        - name: list
+          description: List available servers.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: create
           description: Create a server.
           flags:
@@ -453,68 +505,11 @@ commands:
                 ssl-enforcement:
                     - Enabled
                     - Disabled
-        - name: georestore
-          description: Geo-restore a server from backup.
+        - name: list-skus
+          description: List all the performance tiers at specified location in a given subscription.
           flags:
-            --backup-retention=: The number of days a backup is retained.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --geo-redundant-backup=: Enable or disable geo-redundant backups.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --sku-name=: The name of the sku.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=!: Location.
-            -n, --name=: Name of the server.
-            -s, --source-server=!: The name or ID of the source server to restore from.
-        - name: delete
-          description: Deletes a server.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: replica
-          commands:
-            - name: create
-              description: Create a read replica for a server.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --no-wait=: Do not wait for the long-running operation to finish.
-                --sku-name=: The name of the sku.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -l, --location=: Location.
-                -n, --name=!: Name of the server.
-                -s, --source-server=!: The name or resource ID of the master server to the create replica for.
-            - name: list
-              description: List all the replicas for a given server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -s, --server-name=: Name of the master server.
-            - name: stop
-              description: Stop replication to a read replica and make it a read/write server.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the server.
-                -y, --yes=: Do not prompt for confirmation.
+            -l, --location=!: The name of the location.
         - name: update
           description: Update a server.
           flags:
@@ -564,15 +559,20 @@ commands:
                 ssl-enforcement:
                     - Enabled
                     - Disabled
-        - name: start
-          description: Starts a stopped server.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the server.
+        - name: private-link-resource
+          commands:
+            - name: list
+              description: Gets the private link resources for MariaDB server.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -s, --server-name=: Name of the Server.
     - name: server-logs
       commands:
         - name: download

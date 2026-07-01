@@ -4,50 +4,6 @@ description: Manage Batch AI resources.
 commands:
     - name: cluster
       commands:
-        - name: auto-scale
-          description: Set auto-scale parameters for a cluster.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --max=!: Maximum number of nodes.
-            --min=!: Minimum number of nodes.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of cluster.
-            -w, --workspace=: Name of workspace.
-        - name: node
-          commands:
-            - name: exec
-              description: Executes a command line on a cluster's node with optional ports forwarding.
-              flags:
-                --exec=: Optional command line to be executed on the node.
-                --subscription=: Name or ID of subscription.
-                -L, --address=: Specifies that connections to the given TCP port or Unix socket on the local (client) host are to be forwarded to the given host and port, or Unix socket, on the remote side.
-                -c, --cluster=!: Name of cluster.
-                -g, --resource-group=!: Name of resource group.
-                -k, --ssh-private-key=: Optional SSH private key path to establish SSH connection.
-                -n, --node-id=: ID of the node to forward the ports to.
-                -p, --password=: Optional password to establish SSH connection.
-                -w, --workspace=!: Name of workspace.
-            - name: list
-              description: Get the IP address, port of all the compute nodes in the Cluster.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -c, --cluster=!: Name of cluster.
-                -g, --resource-group=!: Name of resource group.
-                -w, --workspace=!: Name of workspace.
-        - name: resize
-          description: Resize a cluster.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of cluster.
-            -t, --target=!: Target number of compute nodes.
-            -w, --workspace=: Name of workspace.
         - name: file
           commands:
             - name: list
@@ -62,6 +18,19 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -p, --path=: Relative path of a subfolder inside of the node setup task output directory.
                 -w, --workspace=!: Name of workspace.
+        - name: show
+          description: Gets information about a Cluster.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of cluster.
+            -w, --workspace=: Name of workspace.
         - name: delete
           description: Deletes a Cluster.
           flags:
@@ -74,12 +43,50 @@ commands:
             -n, --name=: Name of cluster.
             -w, --workspace=: Name of workspace.
             -y, --yes=: Do not prompt for confirmation.
-        - name: list
-          description: List clusters.
+        - name: resize
+          description: Resize a cluster.
           flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -w, --workspace=!: Name of workspace.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of cluster.
+            -t, --target=!: Target number of compute nodes.
+            -w, --workspace=: Name of workspace.
+        - name: auto-scale
+          description: Set auto-scale parameters for a cluster.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --max=!: Maximum number of nodes.
+            --min=!: Minimum number of nodes.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of cluster.
+            -w, --workspace=: Name of workspace.
+        - name: node
+          commands:
+            - name: list
+              description: Get the IP address, port of all the compute nodes in the Cluster.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -c, --cluster=!: Name of cluster.
+                -g, --resource-group=!: Name of resource group.
+                -w, --workspace=!: Name of workspace.
+            - name: exec
+              description: Executes a command line on a cluster's node with optional ports forwarding.
+              flags:
+                --exec=: Optional command line to be executed on the node.
+                --subscription=: Name or ID of subscription.
+                -L, --address=: Specifies that connections to the given TCP port or Unix socket on the local (client) host are to be forwarded to the given host and port, or Unix socket, on the remote side.
+                -c, --cluster=!: Name of cluster.
+                -g, --resource-group=!: Name of resource group.
+                -k, --ssh-private-key=: Optional SSH private key path to establish SSH connection.
+                -n, --node-id=: ID of the node to forward the ports to.
+                -p, --password=: Optional password to establish SSH connection.
+                -w, --workspace=!: Name of workspace.
         - name: create
           description: Create a cluster.
           flags:
@@ -119,19 +126,12 @@ commands:
                 vm-priority:
                     - dedicated
                     - lowpriority
-        - name: show
-          description: Gets information about a Cluster.
+        - name: list
+          description: List clusters.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of cluster.
-            -w, --workspace=: Name of workspace.
+            -g, --resource-group=!: Name of resource group.
+            -w, --workspace=!: Name of workspace.
     - name: experiment
       commands:
         - name: show
@@ -159,13 +159,6 @@ commands:
             -n, --name=: Name of experiment.
             -w, --workspace=: Name of workspace.
             -y, --yes=: Do not prompt for confirmation.
-        - name: create
-          description: Creates an Experiment.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of experiment.
-            -w, --workspace=!: Name of workspace.
         - name: list
           description: Gets a list of Experiments within the specified Workspace.
           flags:
@@ -175,17 +168,15 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -w, --workspace=!: Name of workspace.
-    - name: file-server
-      commands:
-        - name: list
-          description: Gets a list of File Servers associated with the specified workspace.
+        - name: create
+          description: Creates an Experiment.
           flags:
-            --__FILE_SERVERS_LIST_BY_WORKSPACE_OPTIONS=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of experiment.
             -w, --workspace=!: Name of workspace.
+    - name: file-server
+      commands:
         - name: create
           description: Create a file server.
           flags:
@@ -214,6 +205,15 @@ commands:
                 storage-sku:
                     - Premium_LRS
                     - Standard_LRS
+        - name: list
+          description: Gets a list of File Servers associated with the specified workspace.
+          flags:
+            --__FILE_SERVERS_LIST_BY_WORKSPACE_OPTIONS=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -w, --workspace=!: Name of workspace.
     - name: job
       commands:
         - name: file
@@ -261,55 +261,6 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of job.
             -w, --workspace=!: Name of workspace.
-        - name: node
-          commands:
-            - name: exec
-              description: Executes a command line on a cluster's node used to execute the job with optional ports forwarding.
-              flags:
-                --exec=: Optional command line to be executed on the node.
-                --subscription=: Name or ID of subscription.
-                -L, --address=: Specifies that connections to the given TCP port or Unix socket on the local (client) host are to be forwarded to the given host and port, or Unix socket, on the remote side.
-                -e, --experiment=!: Name of experiment.
-                -g, --resource-group=!: Name of resource group.
-                -j, --job=!: Name of job.
-                -k, --ssh-private-key=: Optional SSH private key path to establish SSH connection.
-                -n, --node-id=: ID of the node to forward the ports to.
-                -p, --password=: Optional password to establish SSH connection.
-                -w, --workspace=!: Name of workspace.
-            - name: list
-              description: Gets a list of currently existing nodes which were used for the Job execution.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -e, --experiment=!: Name of experiment.
-                -g, --resource-group=!: Name of resource group.
-                -j, --job=!: Name of job.
-                -w, --workspace=!: Name of workspace.
-        - name: delete
-          description: Deletes a Job.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -e, --experiment=: Name of experiment.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of job.
-            -w, --workspace=: Name of workspace.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: terminate
-          description: Terminates a job.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -e, --experiment=: Name of experiment.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of job.
-            -w, --workspace=: Name of workspace.
-            -y, --yes=: Do not prompt for confirmation.
         - name: show
           description: Gets information about a Job.
           flags:
@@ -336,6 +287,42 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of job.
             -w, --workspace=: Name of workspace.
+        - name: delete
+          description: Deletes a Job.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -e, --experiment=: Name of experiment.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of job.
+            -w, --workspace=: Name of workspace.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: node
+          commands:
+            - name: list
+              description: Gets a list of currently existing nodes which were used for the Job execution.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -e, --experiment=!: Name of experiment.
+                -g, --resource-group=!: Name of resource group.
+                -j, --job=!: Name of job.
+                -w, --workspace=!: Name of workspace.
+            - name: exec
+              description: Executes a command line on a cluster's node used to execute the job with optional ports forwarding.
+              flags:
+                --exec=: Optional command line to be executed on the node.
+                --subscription=: Name or ID of subscription.
+                -L, --address=: Specifies that connections to the given TCP port or Unix socket on the local (client) host are to be forwarded to the given host and port, or Unix socket, on the remote side.
+                -e, --experiment=!: Name of experiment.
+                -g, --resource-group=!: Name of resource group.
+                -j, --job=!: Name of job.
+                -k, --ssh-private-key=: Optional SSH private key path to establish SSH connection.
+                -n, --node-id=: ID of the node to forward the ports to.
+                -p, --password=: Optional password to establish SSH connection.
+                -w, --workspace=!: Name of workspace.
         - name: list
           description: Gets a list of Jobs within the specified Experiment.
           flags:
@@ -346,6 +333,19 @@ commands:
             -e, --experiment=!: Name of experiment.
             -g, --resource-group=!: Name of resource group.
             -w, --workspace=!: Name of workspace.
+        - name: terminate
+          description: Terminates a job.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -e, --experiment=: Name of experiment.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of job.
+            -w, --workspace=: Name of workspace.
+            -y, --yes=: Do not prompt for confirmation.
     - name: list-usages
       description: Gets the current usage information as well as limits for Batch AI resources for given subscription.
       flags:
@@ -353,6 +353,18 @@ commands:
         -l, --location=!: Location.
     - name: workspace
       commands:
+        - name: show
+          description: Gets information about a Workspace.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --workspace=: Name of workspace.
         - name: list
           description: List workspaces.
           flags:
@@ -379,15 +391,3 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --workspace=: Name of workspace.
             -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Gets information about a Workspace.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --workspace=: Name of workspace.
