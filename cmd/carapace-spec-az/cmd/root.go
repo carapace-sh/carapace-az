@@ -138,7 +138,7 @@ func buildGroupSpec(topGroup string, cmdNames []string, data *CliData) command.C
 		Name: topGroup,
 	}
 
-	if group, ok := data.Groups[topGroup]; ok {
+	if group, ok := data.Groups[topGroup]; ok && group.Help != "" {
 		groupSpec.Description = group.Help
 	}
 	if groupSpec.Description == "" {
@@ -173,11 +173,18 @@ func convertCommand(fullName string, cmdData *CommandData) command.Command {
 	specCmd.Documentation.Flag = make(map[string]string)
 
 	for _, arg := range cmdData.Arguments {
+		if len(arg.Options) == 0 {
+			continue
+		}
 		f := convertArgument(arg)
 		specCmd.AddFlag(f)
 
 		if len(arg.Choices) > 0 {
-			specCmd.Completion.Flag[f.Name()] = arg.Choices
+			choices := make([]string, 0, len(arg.Choices))
+			for _, c := range arg.Choices {
+				choices = append(choices, fmt.Sprintf("%v", c))
+			}
+			specCmd.Completion.Flag[f.Name()] = choices
 		}
 		specCmd.Documentation.Flag[f.Name()] = arg.Help
 	}
@@ -191,12 +198,18 @@ func convertArgument(arg *ArgumentData) command.Flag {
 		Required:    arg.Required,
 	}
 
-	for _, opt := range arg.Options {
-		opt = strings.TrimSpace(opt)
-		if strings.HasPrefix(opt, "--") {
-			f.Longhand = strings.TrimPrefix(opt, "--")
-		} else if strings.HasPrefix(opt, "-") && len(opt) > 1 {
-			f.Shorthand = strings.TrimPrefix(opt, "-")
+	for _, rawOpt := range arg.Options {
+		for _, opt := range strings.Split(rawOpt, ", ") {
+			opt = strings.TrimSpace(opt)
+			if strings.HasPrefix(opt, "--") {
+				if f.Longhand == "" {
+					f.Longhand = strings.TrimPrefix(opt, "--")
+				}
+			} else if strings.HasPrefix(opt, "-") && len(opt) > 1 {
+				if f.Shorthand == "" {
+					f.Shorthand = strings.TrimPrefix(opt, "-")
+				}
+			}
 		}
 	}
 

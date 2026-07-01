@@ -5,7 +5,17 @@ Uses Knack's command_table API to extract all commands, arguments,
 and command groups with rich metadata.
 """
 import json
+import math
 import sys
+
+
+def sanitize_default(obj):
+    """Convert non-serializable values to strings, handling NaN/Inf."""
+    if isinstance(obj, float):
+        if math.isnan(obj) or math.isinf(obj):
+            return None
+        return obj
+    return str(obj)
 
 
 def serialize_argument(name, arg):
@@ -31,6 +41,10 @@ def serialize_argument(name, arg):
     if nargs is not None:
         nargs = str(nargs)
 
+    default = settings.get('default', None)
+    if isinstance(default, float) and (math.isnan(default) or math.isinf(default)):
+        default = None
+
     return {
         'name': name,
         'options': options,
@@ -39,7 +53,7 @@ def serialize_argument(name, arg):
         'choices': choices,
         'type': str(settings.get('type', '')),
         'nargs': nargs,
-        'default': settings.get('default', None),
+        'default': default,
         'metavar': settings.get('metavar', None),
     }
 
@@ -116,7 +130,7 @@ def main():
         'groups': groups,
     }
 
-    json.dump(output, sys.stdout, indent=2, default=str)
+    json.dump(output, sys.stdout, indent=2, allow_nan=False, default=sanitize_default)
     print()
 
 

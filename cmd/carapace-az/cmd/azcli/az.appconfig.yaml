@@ -1,0 +1,1043 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: appconfig
+description: appconfig
+commands:
+    - name: create
+      flags:
+        --arm-auth-mode=: The authentication mode for accessing the App Configuration Store via ARM.
+        --assign-identity=:
+            description: Space-separated list of managed identities to be assigned.
+            nargs: -1
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --disable-local-auth=:
+            description: Disable all authentication methods other than AAD authentication.
+            nargs: -1
+        --enable-arm-private-network-access=:
+            description: Enable access to the App Configuration store via ARM Private Link if resource is restricted to private network access.
+            nargs: -1
+        --no-replica=:
+            description: Proceed without replica creation for premium tier store.
+            nargs: -1
+        --replica-location=: The location of the replica of the App Configuration store.
+        --replica-name=: Name of the replica of the App Configuration store.
+        --retention-days=: Number of days to retain the soft delete enabled App Configuration store after deleting.
+        --sku=: The sku of the App Configuration store
+        --subscription=: Name or ID of subscription.
+        --tags=:
+            description: 'Space-separated tags: key[=value] [key[=value] ...].'
+            nargs: -1
+        -e, --enable-public-network=:
+            description: When true, requests coming from public networks have permission to access this store while private endpoint is enabled.
+            nargs: -1
+        -g, --resource-group=!: Name of resource group.
+        -l, --location=!: Location.
+        -n, --name=!: Name of the App Configuration store.
+        -p, --enable-purge-protection=:
+            description: Property specifying whether protection against purge is enabled for this App Configuration store.
+            nargs: -1
+      completion:
+        flag:
+            arm-auth-mode:
+                - local
+                - pass-through
+            disable-local-auth:
+                - "true"
+                - "false"
+            enable-arm-private-network-access:
+                - "true"
+                - "false"
+            enable-public-network:
+                - "true"
+                - "false"
+            enable-purge-protection:
+                - "true"
+                - "false"
+            no-replica:
+                - "true"
+                - "false"
+            sku:
+                - Free
+                - Premium
+                - Standard
+    - name: credential
+      commands:
+        - name: list
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the App Configuration store.
+        - name: regenerate
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: Id of the key to be regenerated.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the App Configuration store.
+    - name: delete
+      flags:
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -n, --name=!: Name of the App Configuration store.
+        -y, --yes=: Do not prompt for confirmation.
+    - name: feature
+      commands:
+        - name: show
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature flag to be retrieved.
+            --fields=:
+                description: Customize output fields for Feature Flags.
+                nargs: -1
+            --key=: Key of the feature flag.
+            --label=: If no label specified, show entry with null label.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                fields:
+                    - name
+                    - key
+                    - label
+                    - locked
+                    - last_modified
+                    - state
+                    - description
+                    - conditions
+        - name: filter
+          commands:
+            - name: add
+              flags:
+                --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --connection-string=: Combination of access key and endpoint of the App Configuration store.
+                --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+                --feature=: Name of the feature to which you want to add the filter.
+                --filter-name=!: Name of the filter to be added.
+                --filter-parameters=:
+                    description: Space-separated filter parameters in 'name[=value]' format.
+                    nargs: -1
+                --index=: Zero-based index in the list of filters where you want to insert the new filter.
+                --key=: Key of the feature flag.
+                --label=: If no label specified, add to the feature flag with null label by default.
+                --subscription=: Name or ID of subscription.
+                -n, --name=: Name of the App Configuration store.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    auth-mode:
+                        - login
+                        - key
+            - name: list
+              flags:
+                --all=: List all filters associated with a feature flag.
+                --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --connection-string=: Combination of access key and endpoint of the App Configuration store.
+                --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+                --feature=: Name of the feature whose filters you want to be displayed.
+                --key=: Key of the feature flag.
+                --label=: If no label specified, display filters from the feature flag with null label by default.
+                --subscription=: Name or ID of subscription.
+                -n, --name=: Name of the App Configuration store.
+                -t, --top=: Maximum number of items to return.
+              completion:
+                flag:
+                    auth-mode:
+                        - login
+                        - key
+            - name: update
+              flags:
+                --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --connection-string=: Combination of access key and endpoint of the App Configuration store.
+                --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+                --feature=: Name of the feature whose filter you want to update.
+                --filter-name=!: Name of the filter to be updated.
+                --filter-parameters=:
+                    description: Space-separated filter parameters in 'name[=value]' format.
+                    nargs: -1
+                --index=: Zero-based index of the filter to be updated in case there are multiple instances with same filter name.
+                --key=: Key of the feature flag.
+                --label=: If no label specified, update the feature flag with null label by default.
+                --subscription=: Name or ID of subscription.
+                -n, --name=: Name of the App Configuration store.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    auth-mode:
+                        - login
+                        - key
+            - name: delete
+              flags:
+                --all=: Delete all filters associated with a feature flag.
+                --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --connection-string=: Combination of access key and endpoint of the App Configuration store.
+                --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+                --feature=: Name of the feature from which you want to delete the filter.
+                --filter-name=: Name of the filter to be deleted.
+                --index=: Zero-based index of the filter to be deleted in case there are multiple instances with same filter name.
+                --key=: Key of the feature flag.
+                --label=: If no label specified, delete from the feature flag with null label by default.
+                --subscription=: Name or ID of subscription.
+                -n, --name=: Name of the App Configuration store.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    auth-mode:
+                        - login
+                        - key
+            - name: show
+              flags:
+                --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --connection-string=: Combination of access key and endpoint of the App Configuration store.
+                --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+                --feature=: Name of the feature which contains the filter.
+                --filter-name=!: Name of the filter to be displayed.
+                --index=: Zero-based index of the filter to be displayed in case there are multiple instances with same filter name.
+                --key=: Key of the feature flag.
+                --label=: If no label specified, show the feature flag with null label by default.
+                --subscription=: Name or ID of subscription.
+                -n, --name=: Name of the App Configuration store.
+              completion:
+                flag:
+                    auth-mode:
+                        - login
+                        - key
+        - name: delete
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature to be deleted.
+            --key=: Key of the feature flag.
+            --label=: If no label specified, delete the feature flag with null label by default.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: list
+          flags:
+            --all=: List all feature flags.
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature to be listed.
+            --fields=:
+                description: Customize output fields for Feature Flags.
+                nargs: -1
+            --key=: Key of the feature flag.
+            --label=: If no label specified, list all labels.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -t, --top=: Maximum number of items to return.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                fields:
+                    - name
+                    - key
+                    - label
+                    - locked
+                    - last_modified
+                    - state
+                    - description
+                    - conditions
+        - name: lock
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature to be locked.
+            --key=: Key of the feature flag.
+            --label=: If no label specified, lock the feature flag with null label by default.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: disable
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature to be disabled.
+            --key=: Key of the feature flag.
+            --label=: If no label specified, disable the feature flag with null label by default.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: set
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --description=: Description of the feature flag to be set.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature flag to be set.
+            --key=: Key of the feature flag.
+            --label=: If no label specified, set the feature flag with null label by default
+            --requirement-type=: Requirement type determines if filters should use "Any" or "All" logic when evaluating the state of a feature.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                requirement-type:
+                    - all
+                    - any
+        - name: enable
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature to be enabled.
+            --key=: Key of the feature flag.
+            --label=: If no label specified, enable the feature flag with null label by default.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: unlock
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --feature=: Name of the feature to be unlocked.
+            --key=: Key of the feature flag.
+            --label=: If no label specified, unlock the feature flag with null label by default.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+    - name: identity
+      commands:
+        - name: assign
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --identities=:
+                description: Accept system-assigned or user-assigned managed identities separated by spaces.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the App Configuration store.
+        - name: show
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the App Configuration store.
+        - name: remove
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --identities=:
+                description: Accept system-assigned or user-assigned managed identities separated by spaces.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the App Configuration store.
+    - name: kv
+      commands:
+        - name: delete
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --key=!: Support star sign as filters, for instance * means all key and abc* means keys with abc as prefix.
+            --label=: If no label specified, delete entry with null label.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: restore
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --datetime=!: 'Format: "YYYY-MM-DDThh:mm:ss["Z"/±hh:mm].'
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --key=: If no key specified, restore all keys by default.
+            --label=: If no label specified, restore all key-value pairs with all labels.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: export
+          flags:
+            --appservice-account=: ARM ID for AppService OR the name of the AppService, assuming it is in the same subscription and resource group as the App Configuration store.
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --dest-auth-mode=: Auth mode for connecting to the destination App Configuration store.
+            --dest-connection-string=: Combination of access key and endpoint of the destination store.
+            --dest-endpoint=: If --dest-auth-mode is "login", provide endpoint URL of the destination App Configuration store.
+            --dest-label=: Exported KVs will be labeled with this destination label.
+            --dest-name=: The name of the destination App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --format=: File format exporting to.
+            --key=: If no key specified, return all keys by default.
+            --label=: Only keys and feature flags with this label will be exported.
+            --naming-convention=: Naming convention to be used for "Feature Management" section of file.
+            --path=: Local configuration file path.
+            --prefix=: Prefix to be trimmed from keys.
+            --preserve-labels=:
+                description: Flag to preserve labels from source AppConfig.
+                nargs: -1
+            --profile=: Export profile to be used for exporting the key-values.
+            --resolve-keyvault=:
+                description: Resolve the content of key vault reference.
+                nargs: -1
+            --separator=: Delimiter for flattening the key-value pairs to json or yaml file.
+            --skip-features=:
+                description: Export items excluding all feature flags.
+                nargs: -1
+            --skip-keyvault=:
+                description: Export items excluding all key vault references.
+                nargs: -1
+            --snapshot=: Export all keys in a given snapshot of the App Configuration store.
+            --subscription=: Name or ID of subscription.
+            -d, --destination=!: The destination of exporting.
+            -n, --name=: Name of the App Configuration store.
+            -r, --export-as-reference=:
+                description: Export key-values as App Configuration references.
+                nargs: -1
+            -y, --yes=: Do not prompt for preview.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                dest-auth-mode:
+                    - login
+                    - key
+                destination:
+                    - file
+                    - appconfig
+                    - appservice
+                export-as-reference:
+                    - "true"
+                    - "false"
+                format:
+                    - json
+                    - yaml
+                    - properties
+                naming-convention:
+                    - pascal
+                    - camel
+                    - underscore
+                    - hyphen
+                preserve-labels:
+                    - "true"
+                    - "false"
+                profile:
+                    - appconfig/default
+                    - appconfig/kvset
+                resolve-keyvault:
+                    - "true"
+                    - "false"
+                skip-features:
+                    - "true"
+                    - "false"
+                skip-keyvault:
+                    - "true"
+                    - "false"
+        - name: show
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --datetime=: 'Format: "YYYY-MM-DDThh:mm:ss["Z"/±hh:mm].'
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --key=!: Key to be showed.
+            --label=: If no label specified, show entry with null label.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: lock
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --key=!: Key to be locked.
+            --label=: If no label specified, lock entry with null label.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: set-keyvault
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --key=!: Key to be set.
+            --label=: If no label specified, set the key with null label by default
+            --secret-identifier=!: ID of the Key Vault object.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: set
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --content-type=: Content type of the key-value to be set.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --key=!: Key to be set.
+            --label=: If no label specified, set the key with null label by default
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --value=: Value of the key-value to be set.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: import
+          flags:
+            --appservice-account=: ARM ID for AppService OR the name of the AppService, assuming it is in the same subscription and resource group as the App Configuration store.
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --content-type=: Content type of all imported items.
+            --depth=: Depth for flattening the json or yaml file to key-value pairs.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --format=: Imported file format.
+            --import-mode=: If import mode is "ignore-match", only source key-values that do not already exist or whose value, content-type or tags are different from that of an existing key-value with the same key and label, will be written.
+            --label=: Imported KVs and feature flags will be assigned with this label.
+            --path=: Local configuration file path.
+            --prefix=: This prefix will be appended to the front of imported keys.
+            --preserve-labels=:
+                description: Flag to preserve labels from source AppConfig.
+                nargs: -1
+            --profile=: Import profile to be used for importing the key-values.
+            --separator=: Delimiter for flattening the json or yaml file to key-value pairs.
+            --skip-features=:
+                description: Import only key values and exclude all feature flags.
+                nargs: -1
+            --src-auth-mode=: Auth mode for connecting to source App Configuration store.
+            --src-connection-string=: Combination of access key and endpoint of the source store.
+            --src-endpoint=: If --src-auth-mode is "login", provide endpoint URL of the source App Configuration store.
+            --src-key=: If no key specified, import all keys by default.
+            --src-label=: Only keys with this label in source AppConfig will be imported.
+            --src-name=: The name of the source App Configuration store.
+            --src-snapshot=: Import all keys in a given snapshot of the source App Configuration store.
+            --strict=:
+                description: Delete all other key-values in the store with specified prefix and label
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -s, --source=!: The source of importing.
+            -y, --yes=: Do not prompt for preview.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                format:
+                    - json
+                    - yaml
+                    - properties
+                import-mode:
+                    - all
+                    - ignore-match
+                preserve-labels:
+                    - "true"
+                    - "false"
+                profile:
+                    - appconfig/default
+                    - appconfig/kvset
+                skip-features:
+                    - "true"
+                    - "false"
+                source:
+                    - file
+                    - appconfig
+                    - appservice
+                src-auth-mode:
+                    - login
+                    - key
+                strict:
+                    - "true"
+                    - "false"
+        - name: unlock
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --key=!: Key to be unlocked.
+            --label=: If no label specified, unlock entry with null label.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: list
+          flags:
+            --all=: List all items.
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --datetime=: 'Format: "YYYY-MM-DDThh:mm:ss["Z"/±hh:mm].'
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --fields=:
+                description: Space-separated customized output fields.
+                nargs: -1
+            --key=: If no key specified, return all keys by default.
+            --label=: If no label specified, list all labels.
+            --resolve-keyvault=:
+                description: Resolve the content of key vault reference.
+                nargs: -1
+            --snapshot=: List all keys in a given snapshot of the App Configuration store.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -t, --top=: Maximum number of items to return.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                fields:
+                    - key
+                    - value
+                    - label
+                    - content_type
+                    - etag
+                    - tags
+                    - locked
+                    - last_modified
+                resolve-keyvault:
+                    - "true"
+                    - "false"
+    - name: list
+      flags:
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+    - name: list-deleted
+      flags:
+        --subscription=: Name or ID of subscription.
+    - name: purge
+      flags:
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --subscription=: Name or ID of subscription.
+        -l, --location=: Location of the deleted App Configuration store.
+        -n, --name=!: Name of the App Configuration store.
+        -y, --yes=: Do not prompt for confirmation.
+    - name: recover
+      flags:
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Resource group of the deleted App Configuration store.
+        -l, --location=: Location of the deleted App Configuration store.
+        -n, --name=!: Name of the App Configuration store.
+        -y, --yes=: Do not prompt for confirmation.
+    - name: replica
+      commands:
+        - name: show
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the replica of the App Configuration store.
+            -s, --store-name=!: Name of the App Configuration store.
+        - name: create
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=!: Location at which to create the replica.
+            -n, --name=!: Name of the replica of the App Configuration store.
+            -s, --store-name=!: Name of the App Configuration store.
+        - name: list
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -s, --store-name=!: Name of the App Configuration store.
+        - name: delete
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the replica of the App Configuration store.
+            -s, --store-name=!: Name of the App Configuration store.
+            -y, --yes=: Do not prompt for confirmation.
+    - name: revision
+      commands:
+        - name: list
+          flags:
+            --all=: List all items.
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --datetime=: 'Format: "YYYY-MM-DDThh:mm:ss["Z"/±hh:mm].'
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --fields=:
+                description: Space-separated customized output fields.
+                nargs: -1
+            --key=: If no key specified, return all keys by default.
+            --label=: If no label specified, list all labels.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -t, --top=: Maximum number of items to return.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                fields:
+                    - key
+                    - value
+                    - label
+                    - content_type
+                    - etag
+                    - tags
+                    - locked
+                    - last_modified
+    - name: show
+      flags:
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -n, --name=!: Name of the App Configuration store.
+    - name: show-deleted
+      flags:
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --subscription=: Name or ID of subscription.
+        -l, --location=: Location of the deleted App Configuration store.
+        -n, --name=!: Name of the App Configuration store.
+    - name: snapshot
+      commands:
+        - name: show
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --fields=:
+                description: Customize output fields for Snapshots
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -s, --snapshot-name=!: Name of the App Configuration snapshot.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                fields:
+                    - name
+                    - etag
+                    - retention_period
+                    - filters
+                    - status
+                    - created
+                    - expires
+                    - size
+                    - items_count
+                    - composition_type
+                    - tags
+        - name: archive
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -s, --snapshot-name=!: Name of the App Configuration snapshot.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: list
+          flags:
+            --all=: List all items.
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --fields=:
+                description: Customize output fields for Snapshots
+                nargs: -1
+            --status=:
+                description: Filter snapshots by their status.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -s, --snapshot-name=: If no name specified, return all snapshots by default.
+            -t, --top=: Maximum number of items to return.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                fields:
+                    - name
+                    - etag
+                    - retention_period
+                    - filters
+                    - status
+                    - created
+                    - expires
+                    - size
+                    - items_count
+                    - composition_type
+                    - tags
+                status:
+                    - archived
+                    - failed
+                    - provisioning
+                    - ready
+        - name: recover
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --subscription=: Name or ID of subscription.
+            -n, --name=: Name of the App Configuration store.
+            -s, --snapshot-name=!: Name of the App Configuration snapshot.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+        - name: create
+          flags:
+            --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --composition-type=: Composition type used in building App Configuration snapshots.
+            --connection-string=: Combination of access key and endpoint of the App Configuration store.
+            --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+            --filters=!:
+                description: Space-separated list of escaped JSON objects that represent the key and label filters used to build an App Configuration snapshot.
+                nargs: -1
+            --retention-period=: Duration in seconds for which a snapshot can remain archived before expiry.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'Space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -n, --name=: Name of the App Configuration store.
+            -s, --snapshot-name=!: Name of the App Configuration snapshot.
+          completion:
+            flag:
+                auth-mode:
+                    - login
+                    - key
+                composition-type:
+                    - key
+                    - key_label
+    - name: update
+      flags:
+        --arm-auth-mode=: The authentication mode for accessing the App Configuration Store via ARM.
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --disable-local-auth=:
+            description: Disable all authentication methods other than AAD authentication.
+            nargs: -1
+        --enable-arm-private-network-access=:
+            description: Enable access to the App Configuration store via ARM Private Link if resource is restricted to private network access.
+            nargs: -1
+        --encryption-key-name=: The name of the KeyVault key.
+        --encryption-key-vault=: The URI of the KeyVault.
+        --encryption-key-version=: The version of the KeyVault key.
+        --identity-client-id=: Client ID of the managed identity with wrap and unwrap access to encryption key.
+        --sku=: The sku of the App Configuration store
+        --subscription=: Name or ID of subscription.
+        --tags=:
+            description: 'space-separated tags: key[=value] [key[=value] ...].'
+            nargs: -1
+        -e, --enable-public-network=:
+            description: When true, requests coming from public networks have permission to access this store while private endpoint is enabled.
+            nargs: -1
+        -g, --resource-group=: Name of resource group.
+        -n, --name=!: Name of the App Configuration store.
+        -p, --enable-purge-protection=:
+            description: Property specifying whether protection against purge is enabled for this App Configuration store.
+            nargs: -1
+      completion:
+        flag:
+            arm-auth-mode:
+                - local
+                - pass-through
+            disable-local-auth:
+                - "true"
+                - "false"
+            enable-arm-private-network-access:
+                - "true"
+                - "false"
+            enable-public-network:
+                - "true"
+                - "false"
+            enable-purge-protection:
+                - "true"
+                - "false"
+            sku:
+                - Free
+                - Premium
+                - Standard

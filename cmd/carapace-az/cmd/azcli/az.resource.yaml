@@ -1,0 +1,344 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: resource
+description: resource
+commands:
+    - name: create
+      flags:
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --id=:
+            description: Resource ID.
+            nargs: -1
+        --is-full-object=: Indicate that the properties object includes other options such as location, tags, sku, and/or plan.
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -l, --location=: Location.
+        -n, --name=: The resource name.
+        -p, --properties=!: A JSON-formatted string containing resource properties.
+        -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+    - name: delete
+      description: Deletes the given resource(s).
+      flags:
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --ids=:
+            description: One or more resource IDs (space-delimited).
+            nargs: -1
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --no-wait=: do not wait for the long-running operation to finish
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -n, --name=: The resource name.
+        -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+    - name: invoke-action
+      description: Invokes the provided action on an existing resource.
+      flags:
+        --action=!: The action that will be invoked on the specified resource
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --ids=:
+            description: One or more resource IDs (space-delimited).
+            nargs: -1
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --no-wait=: do not wait for the long-running operation to finish
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --request-body=: JSON encoded parameter arguments for the action that will be passed along in the post request body.
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -n, --name=: The resource name.
+        -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+    - name: link
+      commands:
+        - name: list
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --filter=: Filter string for limiting results.
+            --scope=: Fully-qualified scope for retrieving links.
+            --subscription=: Name or ID of subscription.
+        - name: show
+          description: Gets a resource link with the specified ID.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --link=!: Fully-qualified resource ID of the resource link.
+            --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Deletes a resource link with the specified ID.
+          flags:
+            --link=!: Fully-qualified resource ID of the resource link.
+            --subscription=: Name or ID of subscription.
+        - name: update
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --link=!: Fully-qualified resource ID of the resource link.
+            --notes=: Notes for the link.
+            --subscription=: Name or ID of subscription.
+            --target=: Fully-qualified resource ID of the resource link target.
+        - name: create
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --link=!: Fully-qualified resource ID of the resource link.
+            --notes=: Notes for the link.
+            --subscription=: Name or ID of subscription.
+            --target=!: Fully-qualified resource ID of the resource link target.
+    - name: list
+      flags:
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        --tag=:
+            description: a single tag in 'key[=value]' format.
+            nargs: -1
+        -g, --resource-group=: Name of resource group.
+        -l, --location=: Location.
+        -n, --name=: The resource name.
+    - name: lock
+      commands:
+        - name: create
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --notes=: Notes about this lock.
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the lock
+            -t, --lock-type=!: The type of lock restriction.
+          completion:
+            flag:
+                lock-type:
+                    - CanNotDelete
+                    - ReadOnly
+        - name: update
+          description: Allows updates to the lock-type(level) and the notes of the lock
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --notes=: Notes about this lock.
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the lock
+            -t, --lock-type=: The type of lock restriction.
+          completion:
+            flag:
+                lock-type:
+                    - CanNotDelete
+                    - ReadOnly
+        - name: delete
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the lock
+        - name: show
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the lock
+        - name: list
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --filter-string=: A query filter to use to restrict the results.
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+    - name: move
+      description: Moves resources from one resource group to another(can be under different subscription)
+      flags:
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --destination-group=!: the destination resource group name
+        --destination-subscription-id=: the destination subscription identifier
+        --ids=!:
+            description: the space-separated resource ids to be moved
+            nargs: -1
+        --subscription=: Name or ID of subscription.
+    - name: patch
+      flags:
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --ids=:
+            description: One or more resource IDs (space-delimited).
+            nargs: -1
+        --is-full-object=: Indicate that the properties object includes other options such as location, tags, sku, and/or plan.
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -n, --name=: The resource name.
+        -p, --properties=!: A JSON-formatted string containing resource properties.
+        -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+    - name: show
+      flags:
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --ids=:
+            description: One or more resource IDs (space-delimited).
+            nargs: -1
+        --include-response-body=:
+            description: Use if the default command output doesn't capture all of the property data.
+            nargs: -1
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -n, --name=: The resource name.
+        -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+      completion:
+        flag:
+            include-response-body:
+                - "true"
+                - "false"
+    - name: tag
+      description: Updates the tags on an existing resource.
+      flags:
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --ids=:
+            description: One or more resource IDs (space-delimited).
+            nargs: -1
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        --tags=!:
+            description: 'space-separated tags: key[=value] [key[=value] ...].'
+            nargs: -1
+        -g, --resource-group=: Name of resource group.
+        -i, --is-incremental=: The option to add tags incrementally without deleting the original tags.
+        -n, --name=: The resource name.
+        -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+    - name: update
+      flags:
+        --add=:
+            description: Add an object to a list of objects by specifying a path and key value pairs.
+            nargs: -1
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+        --ids=:
+            description: One or more resource IDs (space-delimited).
+            nargs: -1
+        --include-response-body=:
+            description: Use if the default command output doesn't capture all of the property data.
+            nargs: -1
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --remove=:
+            description: Remove a property or an element from a list.
+            nargs: -1
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --set=:
+            description: Update an object by specifying a property path and value to set.
+            nargs: -1
+        --subscription=: Name or ID of subscription.
+        -g, --resource-group=: Name of resource group.
+        -n, --name=: The resource name.
+        -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+      completion:
+        flag:
+            include-response-body:
+                - "true"
+                - "false"
+    - name: wait
+      flags:
+        --__LATEST_INCLUDE_PREVIEW=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --api-version=: The api version of the resource (omit for the latest stable version)
+        --cmd=:
+            description: ==SUPPRESS==
+            nargs: -1
+        --created=: wait until created with 'provisioningState' at 'Succeeded'
+        --custom=: Wait until the condition satisfies a custom JMESPath query.
+        --deleted=: wait until deleted
+        --exists=: wait until the resource exists
+        --ids=:
+            description: One or more resource IDs (space-delimited).
+            nargs: -1
+        --include-response-body=:
+            description: Use if the default command output doesn't capture all of the property data.
+            nargs: -1
+        --interval=: polling interval in seconds
+        --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+        --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+        --resource-type=: 'The resource type (Ex: ''resC'').'
+        --subscription=: Name or ID of subscription.
+        --timeout=: maximum wait in seconds
+        --updated=: wait until updated with provisioningState at 'Succeeded'
+        -g, --resource-group=: Name of resource group.
+        -n, --name=: The resource name.
+      completion:
+        flag:
+            include-response-body:
+                - "true"
+                - "false"

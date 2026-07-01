@@ -22,7 +22,7 @@ type ArgumentData struct {
 	Options  []string `json:"options"`
 	Help     string   `json:"help"`
 	Required bool     `json:"required"`
-	Choices  []string `json:"choices"`
+	Choices  []any    `json:"choices"`
 	Type     string   `json:"type"`
 	Nargs    string   `json:"nargs"`
 	Default  any      `json:"default"`

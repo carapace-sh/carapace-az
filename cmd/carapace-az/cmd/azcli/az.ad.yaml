@@ -1,0 +1,704 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: ad
+description: ad
+commands:
+    - name: app
+      commands:
+        - name: delete
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: identifier uri, application id, or object id
+        - name: owner
+          commands:
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id of the application
+            - name: add
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+                --owner-object-id=!: owner's object id
+            - name: remove
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+                --owner-object-id=!: owner's object id
+        - name: permission
+          commands:
+            - name: admin-consent
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+            - name: add
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --api-permissions=!:
+                    description: Space-separated list of {id}={type}.
+                    nargs: -1
+                --api=!: requiredResourceAccess.resourceAppId - The unique identifier for the resource that the application requires access to.
+                --id=!: identifier uri, application id, or object id
+            - name: delete
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --api-permissions=:
+                    description: Specify `ResourceAccess.id` - The unique identifier for one of the OAuth2Permission or AppRole instances that the resource application exposes.
+                    nargs: -1
+                --api=!: requiredResourceAccess.resourceAppId - The unique identifier for the resource that the application requires access to.
+                --id=!: identifier uri, application id, or object id
+            - name: grant
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --api=!: The id of the resource service principal to which access is authorized.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --consent-type=: Indicates whether authorization is granted for the client application to impersonate all users or only a specific user.
+                --id=!: The id of the client service principal for the application which is authorized to act on behalf of a signed-in user when accessing an API.
+                --principal-id=: The id of the user on behalf of whom the client is authorized to access the resource, when consentType is 'Principal'.
+                --scope=!:
+                    description: A space-separated list of the claim values for delegated permissions which should be included in access tokens for the resource application (the API).
+                    nargs: -1
+              completion:
+                flag:
+                    consent-type:
+                        - AllPrincipals
+                        - Principal
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id of the associated application
+            - name: list-grants
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
+                --id=: identifier uri, application id, or object id
+                -r, --show-resource-name=:
+                    description: show resource's display name
+                    nargs: -1
+              completion:
+                flag:
+                    show-resource-name:
+                        - "true"
+                        - "false"
+        - name: federated-credential
+          commands:
+            - name: show
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --federated-credential-id=!: ID or name of the federated identity credential
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+            - name: delete
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --federated-credential-id=!: ID or name of the federated identity credential
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+            - name: create
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+                --parameters=!: Parameters for creating federated identity credential.
+            - name: update
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --federated-credential-id=!: ID or name of the federated identity credential
+                --id=!: Application's appId, identifierUri, or id (formerly known as objectId)
+                --parameters=!: Parameters for creating federated identity credential.
+        - name: credential
+          commands:
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cert=: Operate on certificate credentials
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+            - name: reset
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --append=: Append the new credential instead of overwriting.
+                --cert=: Certificate to use for credentials.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --create-cert=: Create a self-signed certificate to use for the credential.
+                --display-name=: Friendly name for the credential.
+                --end-date=: Finer grain of expiry time if '--years' is insufficient, e.g. '2020-12-31T11:59:59+00:00' or '2299-12-31'
+                --id=!: identifier uri, application id, or object id
+                --keyvault=: Name or ID of a KeyVault to use for creating or retrieving certificates.
+                --years=: Number of years for which the credentials will be valid.
+            - name: delete
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cert=: Operate on certificate credentials
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: identifier uri, application id, or object id
+                --key-id=!: credential key id
+        - name: list
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --all=: list all entities, expect long delay if under a big organization
+            --app-id=: application id
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=: the display name of the application
+            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
+            --identifier-uri=: graph application identifier, must be in uri format
+            --show-mine=: list entities owned by the current user
+        - name: update
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --app-roles=: The collection of roles assigned to the application.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=: the display name of the application
+            --enable-access-token-issuance=:
+                description: Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
+                nargs: -1
+            --enable-id-token-issuance=:
+                description: Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
+                nargs: -1
+            --end-date=: Date or datetime after which credentials expire (e.g. '2017-12-31T11:59:59+00:00' or '2017-12-31').
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --id=!: identifier uri, application id, or object id
+            --identifier-uris=:
+                description: space-separated values.
+                nargs: -1
+            --is-fallback-public-client=:
+                description: Specifies the fallback application type as public client, such as an installed application running on a mobile device.
+                nargs: -1
+            --key-display-name=: Friendly name for the key.
+            --key-type=: the type of the key credentials associated with the application
+            --key-usage=: the usage of the key credentials associated with the application.
+            --key-value=: the value for the key credentials associated with the application
+            --optional-claims=: Application developers can configure optional claims in their Microsoft Entra applications to specify the claims that are sent to their application by the Microsoft security token service.
+            --public-client-redirect-uris=:
+                description: Space-separated values.
+                nargs: -1
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --requested-access-token-version=: Specifies the access token version expected by this resource.
+            --required-resource-accesses=: Specifies the resources that the application needs to access.
+            --service-management-reference=: References application or service contact information from a Service or Asset Management database.
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+            --sign-in-audience=: Specifies the Microsoft accounts that are supported for the current application.
+            --start-date=: Date or datetime at which credentials become valid (e.g. '2017-01-01T01:00:00+00:00' or '2017-01-01').
+            --web-home-page-url=: Home page or landing page of the application.
+            --web-redirect-uris=:
+                description: Space-separated values.
+                nargs: -1
+          completion:
+            flag:
+                enable-access-token-issuance:
+                    - "true"
+                    - "false"
+                enable-id-token-issuance:
+                    - "true"
+                    - "false"
+                is-fallback-public-client:
+                    - "true"
+                    - "false"
+                key-type:
+                    - AsymmetricX509Cert
+                    - Password
+                    - Symmetric
+                key-usage:
+                    - Sign
+                    - Verify
+                sign-in-audience:
+                    - AzureADMyOrg
+                    - AzureADMultipleOrgs
+                    - AzureADandPersonalMicrosoftAccount
+                    - PersonalMicrosoftAccount
+        - name: create
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --app-roles=: The collection of roles assigned to the application.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=!: the display name of the application
+            --enable-access-token-issuance=:
+                description: Specifies whether this web application can request an access token using the OAuth 2.0 implicit flow.
+                nargs: -1
+            --enable-id-token-issuance=:
+                description: Specifies whether this web application can request an ID token using the OAuth 2.0 implicit flow.
+                nargs: -1
+            --end-date=: Date or datetime after which credentials expire (e.g. '2017-12-31T11:59:59+00:00' or '2017-12-31').
+            --identifier-uris=:
+                description: space-separated values.
+                nargs: -1
+            --is-fallback-public-client=:
+                description: Specifies the fallback application type as public client, such as an installed application running on a mobile device.
+                nargs: -1
+            --key-display-name=: Friendly name for the key.
+            --key-type=: the type of the key credentials associated with the application
+            --key-usage=: the usage of the key credentials associated with the application.
+            --key-value=: the value for the key credentials associated with the application
+            --optional-claims=: Application developers can configure optional claims in their Microsoft Entra applications to specify the claims that are sent to their application by the Microsoft security token service.
+            --public-client-redirect-uris=:
+                description: Space-separated values.
+                nargs: -1
+            --requested-access-token-version=: Specifies the access token version expected by this resource.
+            --required-resource-accesses=: Specifies the resources that the application needs to access.
+            --service-management-reference=: References application or service contact information from a Service or Asset Management database.
+            --sign-in-audience=: Specifies the Microsoft accounts that are supported for the current application.
+            --start-date=: Date or datetime at which credentials become valid (e.g. '2017-01-01T01:00:00+00:00' or '2017-01-01').
+            --web-home-page-url=: Home page or landing page of the application.
+            --web-redirect-uris=:
+                description: Space-separated values.
+                nargs: -1
+          completion:
+            flag:
+                enable-access-token-issuance:
+                    - "true"
+                    - "false"
+                enable-id-token-issuance:
+                    - "true"
+                    - "false"
+                is-fallback-public-client:
+                    - "true"
+                    - "false"
+                key-type:
+                    - AsymmetricX509Cert
+                    - Password
+                    - Symmetric
+                key-usage:
+                    - Sign
+                    - Verify
+                sign-in-audience:
+                    - AzureADMyOrg
+                    - AzureADMultipleOrgs
+                    - AzureADandPersonalMicrosoftAccount
+                    - PersonalMicrosoftAccount
+        - name: show
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: identifier uri, application id, or object id
+    - name: group
+      commands:
+        - name: member
+          commands:
+            - name: check
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --member-id=!: The object ID of the contact, group, user, or service principal
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+            - name: remove
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --member-id=!: The object ID of the contact, group, user, or service principal
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+            - name: add
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --member-id=!: The object ID of the contact, group, user, or service principal
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+        - name: owner
+          commands:
+            - name: add
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --owner-object-id=!: owner's object id
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+            - name: remove
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --owner-object-id=!: owner's object id
+                -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+        - name: show
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+        - name: create
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --description=: Group description
+            --display-name=!: object's display name or its prefix
+            --force=:
+                description: always create a new group instead of updating the one with same display and mail nickname
+                nargs: -1
+            --mail-nickname=!: Mail nickname
+          completion:
+            flag:
+                force:
+                    - "true"
+                    - "false"
+        - name: list
+          description: List groups in the directory
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=: object's display name or its prefix
+            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
+        - name: delete
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+        - name: get-member-groups
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --security-enabled-only=:
+                description: true to specify that only security groups that the entity is a member of should be returned; false to specify that all groups and directory roles that the entity is a member of should be returned.
+                nargs: -1
+            -g, --group=!: group's object id or display name(prefix also works if there is a unique match)
+          completion:
+            flag:
+                security-enabled-only:
+                    - "true"
+                    - "false"
+    - name: signed-in-user
+      commands:
+        - name: show
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+        - name: list-owned-objects
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            -t, --type=: object type filter, e.g. "application", "servicePrincipal"  "group", etc
+    - name: sp
+      commands:
+        - name: credential
+          commands:
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cert=: Operate on certificate credentials
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: service principal name, or object id
+            - name: delete
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --cert=: Operate on certificate credentials
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: service principal name, or object id
+                --key-id=!: credential key id
+            - name: reset
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --append=: Append the new credential instead of overwriting.
+                --cert=: Certificate to use for credentials.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --create-cert=: Create a self-signed certificate to use for the credential.
+                --display-name=: Friendly name for the credential.
+                --end-date=: Finer grain of expiry time if '--years' is insufficient, e.g. '2020-12-31T11:59:59+00:00' or '2299-12-31'
+                --id=!: service principal name, or object id
+                --keyvault=: Name or ID of a KeyVault to use for creating or retrieving certificates.
+                --years=: Number of years for which the credentials will be valid.
+        - name: update
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --add=:
+                description: Add an object to a list of objects by specifying a path and key value pairs.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+            --id=!: service principal name, or object id
+            --remove=:
+                description: Remove a property or an element from a list.
+                nargs: -1
+            --set=:
+                description: Update an object by specifying a property path and value to set.
+                nargs: -1
+        - name: create
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: identifier uri, application id, or object id of the associated application
+        - name: delete
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: service principal name, or object id
+        - name: owner
+          commands:
+            - name: list
+              flags:
+                --___SUBSCRIPTION=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --id=!: service principal name, or object id or the service principal
+        - name: list
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --all=: list all entities, expect long delay if under a big organization
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=: object's display name or its prefix
+            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
+            --show-mine=: list entities owned by the current user
+            --spn=: service principal name
+        - name: create-for-rbac
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cert=: Certificate to use for credentials.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --create-cert=: Create a self-signed certificate to use for the credential.
+            --keyvault=: Name or ID of a KeyVault to use for creating or retrieving certificates.
+            --role=: Role of the service principal.
+            --scopes=:
+                description: Space-separated list of scopes the service principal's role assignment applies to.
+                nargs: -1
+            --sdk-auth=:
+                description: Output service principal credential along with cloud endpoints in JSON format.
+                nargs: -1
+            --skip-assignment=:
+                description: No-op.
+                nargs: -1
+            --years=: Number of years for which the credentials will be valid.
+            -n, --display-name=: Display name of the service principal.
+          completion:
+            flag:
+                sdk-auth:
+                    - "true"
+                    - "false"
+                skip-assignment:
+                    - "true"
+                    - "false"
+        - name: show
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: service principal name, or object id
+    - name: user
+      commands:
+        - name: list
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=: object's display name or its prefix
+            --filter=: OData filter, e.g. --filter "displayname eq 'test' and servicePrincipalType eq 'Application'"
+            --upn=: user principal name, e.g. john.doe@contoso.com
+        - name: delete
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: The object ID or principal name of the user for which to get information
+        - name: get-member-groups
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: The object ID or principal name of the user for which to get information
+            --security-enabled-only=:
+                description: true to specify that only security groups that the entity is a member of should be returned; false to specify that all groups and directory roles that the entity is a member of should be returned.
+                nargs: -1
+          completion:
+            flag:
+                security-enabled-only:
+                    - "true"
+                    - "false"
+        - name: show
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=!: The object ID or principal name of the user for which to get information
+        - name: update
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --account-enabled=:
+                description: enable the user account
+                nargs: -1
+            --display-name=: object's display name or its prefix
+            --force-change-password-next-sign-in=:
+                description: If the user must change her password on the next login.
+                nargs: -1
+            --id=!: The object ID or principal name of the user for which to get information
+            --mail-nickname=: mail alias.
+            --password=: user password
+          completion:
+            flag:
+                account-enabled:
+                    - "true"
+                    - "false"
+                force-change-password-next-sign-in:
+                    - "true"
+                    - "false"
+        - name: create
+          flags:
+            --___SUBSCRIPTION=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --display-name=!: object's display name or its prefix
+            --force-change-password-next-sign-in=:
+                description: If the user must change her password on the next login.
+                nargs: -1
+            --immutable-id=: This property is used to associate an on-premises Active Directory user account to their Microsoft Entra user object.
+            --mail-nickname=: mail alias.
+            --password=!: user password
+            --user-principal-name=!: The user principal name (someuser@contoso.com).
+          completion:
+            flag:
+                force-change-password-next-sign-in:
+                    - "true"
+                    - "false"
