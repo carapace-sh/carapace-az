@@ -1,0 +1,57 @@
+name: dependabot
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  az:
+    runs-on: ubuntu-latest
+    container: ghcr.io/carapace-sh/go:1.25.4
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'carapace-sh/carapace-az'
+    steps:
+    - name: deep clone
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
+
+    - name: fix git safe.directory
+      run:  git config --global --add safe.directory '*'
+
+    - name: generate command table
+      run: docker compose build && docker compose run --rm az > az_commands.json
+
+    - name: generate specs
+      run: go run -C cmd/carapace-spec-az . --target cmd/carapace-az/cmd/azcli --no-doc az_commands.json
+
+    - name: generate code
+      run: go generate ./cmd/carapace-az
+
+    - name: push
+      run: |
+        if [ ! -z "$(git status --porcelain)" ]; then
+          git config user.name rsteube-bot
+          git config user.email rsteube-bot@users.noreply.github.com
+          git add -A
+          git commit -m "updated az specs"
+          git push https://rsteube-bot:${DEPENDABOT_TOKEN}@github.com/carapace-sh/carapace-az.git HEAD:${GITHUB_HEAD_REF}
+        fi
+      env:
+        DEPENDABOT_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
+
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'carapace-sh/carapace-az'
+    needs: az
+    steps:
+      - name: approve
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: merge
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.DEPENDABOT_TOKEN}}
