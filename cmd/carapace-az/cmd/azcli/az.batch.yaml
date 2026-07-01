@@ -5,74 +5,23 @@ commands:
     - name: account
       description: Manage Azure Batch accounts.
       commands:
-        - name: identity
-          description: Manage identities of a batch account.
-          commands:
-            - name: assign
-              description: Add managed identities to an existing batch account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --system-assigned=: Provide this flag to use system assigned identity for batch accounts.
-                --user-assigned=: User Assigned Identity ids to be used for batch account.
-                -g, --resource-group=!: Name of the resource group.
-                -n, --name=!: Name of the batch account to show.
-            - name: show
-              description: Display managed identities of a batch account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of the resource group.
-                -n, --name=!: Name of the batch account to show.
-            - name: remove
-              description: Remove managed identities from an existing batch account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --system-assigned=: Provide this flag to use system assigned identity for batch accounts.
-                --user-assigned=:
-                    description: User Assigned Identity ids to be used for batch account.
-                    nargs: -1
-                -g, --resource-group=!: Name of the resource group.
-                -n, --name=!: Name of the batch account to show.
-                -y, --yes=: Do not prompt for confirmation.
+        - name: delete
+          description: Deletes the specified Batch account.
+          flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of the resource group
+            -n, --name=!: Name of the Batch account.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: outbound-endpoints
+          description: Lists the endpoints that a Batch Compute Node under this Batch Account may call as part of Batch service administration.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of the resource group
+            -n, --name=!: Name of the Batch account.
         - name: network-profile
           description: Manage Batch account Network profiles.
           commands:
-            - name: show
-              description: Get information about the Network profile for Batch account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of the resource group.
-                -n, --name=: Name of the batch account to show.
-            - name: set
-              description: Set the Network profile for Batch account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --default-action=: Default action for endpoint access.
-                --profile=: Network profile to set.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of the resource group.
-                -n, --name=: Name of the batch account to show.
-              completion:
-                flag:
-                    default-action:
-                        - Allow
-                        - Deny
-                    profile:
-                        - BatchAccount
-                        - NodeManagement
             - name: network-rule
               description: Manage Batch account Network rules in Network Profile.
               commands:
@@ -118,6 +67,144 @@ commands:
                         profile:
                             - BatchAccount
                             - NodeManagement
+            - name: set
+              description: Set the Network profile for Batch account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --default-action=: Default action for endpoint access.
+                --profile=: Network profile to set.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of the resource group.
+                -n, --name=: Name of the batch account to show.
+              completion:
+                flag:
+                    default-action:
+                        - Allow
+                        - Deny
+                    profile:
+                        - BatchAccount
+                        - NodeManagement
+            - name: show
+              description: Get information about the Network profile for Batch account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of the resource group.
+                -n, --name=: Name of the batch account to show.
+        - name: identity
+          description: Manage identities of a batch account.
+          commands:
+            - name: assign
+              description: Add managed identities to an existing batch account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --system-assigned=: Provide this flag to use system assigned identity for batch accounts.
+                --user-assigned=: User Assigned Identity ids to be used for batch account.
+                -g, --resource-group=!: Name of the resource group.
+                -n, --name=!: Name of the batch account to show.
+            - name: show
+              description: Display managed identities of a batch account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of the resource group.
+                -n, --name=!: Name of the batch account to show.
+            - name: remove
+              description: Remove managed identities from an existing batch account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --system-assigned=: Provide this flag to use system assigned identity for batch accounts.
+                --user-assigned=:
+                    description: User Assigned Identity ids to be used for batch account.
+                    nargs: -1
+                -g, --resource-group=!: Name of the resource group.
+                -n, --name=!: Name of the batch account to show.
+                -y, --yes=: Do not prompt for confirmation.
+        - name: login
+          description: Log in to a Batch account through Azure Active Directory or Shared Key authentication.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --shared-key-auth=: Using Shared Key authentication, if not specified, it will use Azure Active Directory authentication.
+            --show=: Display the credential information for the Batch account.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of the resource group
+            -n, --name=!: Name of the Batch account.
+        - name: list
+          description: List the Batch accounts associated with a subscription or resource group.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of the resource group
+        - name: keys
+          description: Manage Batch account keys.
+          commands:
+            - name: renew
+              description: Renew keys for a Batch account.
+              flags:
+                --key-name=: Name of the batch account key.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of the resource group.
+                -n, --name=: Name of the batch account to show.
+              completion:
+                flag:
+                    key-name:
+                        - Primary
+                        - Secondary
+            - name: list
+              description: Gets the account keys for the specified Batch account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of the resource group
+                -n, --name=!: Name of the Batch account.
+        - name: show
+          description: Get a specified Batch account or the currently set account.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of the resource group.
+            -n, --name=: Name of the batch account to show.
+        - name: autostorage-keys
+          description: Manage the access keys for the auto storage account configured for a Batch account.
+          commands:
+            - name: sync
+              description: Synchronizes access keys for the auto-storage account configured for the specified Batch account, only if storage key authentication is being used.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of the resource group
+                -n, --name=!: Name of the Batch account.
+        - name: set
+          description: The properties related to the auto-storage account.
+          flags:
+            --encryption-key-identifier=: Part of the encryption configuration for the Batch account.
+            --encryption-key-source=: Part of the encryption configuration for the Batch account.
+            --public-network-access=: The network access type for accessing Azure Batch account.
+            --storage-account=: The storage account name or resource ID to be used for auto storage.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -g, --resource-group=!: Name of the resource group
+            -n, --name=!: Name of the Batch account.
+          completion:
+            flag:
+                public-network-access:
+                    - Enabled
+                    - Disabled
         - name: create
           description: The properties related to the auto-storage account.
           flags:
@@ -147,99 +234,40 @@ commands:
                 public-network-access:
                     - Enabled
                     - Disabled
-        - name: keys
-          description: Manage Batch account keys.
-          commands:
-            - name: list
-              description: Gets the account keys for the specified Batch account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of the resource group
-                -n, --name=!: Name of the Batch account.
-            - name: renew
-              description: Renew keys for a Batch account.
-              flags:
-                --key-name=: Name of the batch account key.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of the resource group.
-                -n, --name=: Name of the batch account to show.
-              completion:
-                flag:
-                    key-name:
-                        - Primary
-                        - Secondary
-        - name: delete
-          description: Deletes the specified Batch account.
-          flags:
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of the resource group
-            -n, --name=!: Name of the Batch account.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: login
-          description: Log in to a Batch account through Azure Active Directory or Shared Key authentication.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --shared-key-auth=: Using Shared Key authentication, if not specified, it will use Azure Active Directory authentication.
-            --show=: Display the credential information for the Batch account.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of the resource group
-            -n, --name=!: Name of the Batch account.
-        - name: show
-          description: Get a specified Batch account or the currently set account.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of the resource group.
-            -n, --name=: Name of the batch account to show.
-        - name: set
-          description: The properties related to the auto-storage account.
-          flags:
-            --encryption-key-identifier=: Part of the encryption configuration for the Batch account.
-            --encryption-key-source=: Part of the encryption configuration for the Batch account.
-            --public-network-access=: The network access type for accessing Azure Batch account.
-            --storage-account=: The storage account name or resource ID to be used for auto storage.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -g, --resource-group=!: Name of the resource group
-            -n, --name=!: Name of the Batch account.
-          completion:
-            flag:
-                public-network-access:
-                    - Enabled
-                    - Disabled
-        - name: outbound-endpoints
-          description: Lists the endpoints that a Batch Compute Node under this Batch Account may call as part of Batch service administration.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of the resource group
-            -n, --name=!: Name of the Batch account.
-        - name: list
-          description: List the Batch accounts associated with a subscription or resource group.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of the resource group
-        - name: autostorage-keys
-          description: Manage the access keys for the auto storage account configured for a Batch account.
-          commands:
-            - name: sync
-              description: Synchronizes access keys for the auto-storage account configured for the specified Batch account, only if storage key authentication is being used.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of the resource group
-                -n, --name=!: Name of the Batch account.
     - name: application
       description: Manage Batch applications.
       commands:
         - name: package
           description: Manage Batch application packages.
           commands:
+            - name: list
+              description: Lists all of the application packages in the specified application.
+              flags:
+                --application-name=!: The name of the application.
+                --maxresults=: The maximum number of items to return in the response.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of the resource group
+                -n, --name=!: Name of the Batch account.
+            - name: show
+              description: Gets information about the specified application package.
+              flags:
+                --application-name=!: The name of the application.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --version-name=!: The version of the application.
+                -g, --resource-group=!: Name of the resource group
+                -n, --name=!: Name of the Batch account.
+            - name: delete
+              description: Deletes an application package record and its associated binary file.
+              flags:
+                --application-name=!: The name of the application.
+                --subscription=: Name or ID of subscription.
+                --version-name=!: The version of the application.
+                -g, --resource-group=!: Name of the resource group
+                -n, --name=!: Name of the Batch account.
+                -y, --yes=: Do not prompt for confirmation.
             - name: activate
               description: Activates the specified application package.
               flags:
@@ -261,73 +289,10 @@ commands:
                 --version-name=!: The version name of the application.
                 -g, --resource-group=!: Name of the resource group
                 -n, --name=!: Name of the Batch account.
-            - name: delete
-              description: Deletes an application package record and its associated binary file.
-              flags:
-                --application-name=!: The name of the application.
-                --subscription=: Name or ID of subscription.
-                --version-name=!: The version of the application.
-                -g, --resource-group=!: Name of the resource group
-                -n, --name=!: Name of the Batch account.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: list
-              description: Lists all of the application packages in the specified application.
-              flags:
-                --application-name=!: The name of the application.
-                --maxresults=: The maximum number of items to return in the response.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of the resource group
-                -n, --name=!: Name of the Batch account.
-            - name: show
-              description: Gets information about the specified application package.
-              flags:
-                --application-name=!: The name of the application.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --version-name=!: The version of the application.
-                -g, --resource-group=!: Name of the resource group
-                -n, --name=!: Name of the Batch account.
-        - name: summary
-          description: View a summary of Batch application packages.
-          commands:
-            - name: show
-              description: Gets information about the specified Application.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --application-id=!: The ID of the Application.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-            - name: list
-              description: Lists all of the applications available in the specified Account.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-        - name: delete
-          description: Deletes an application.
+        - name: list
+          description: Lists all of the applications in the specified account.
           flags:
-            --application-name=!: The name of the application.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of the resource group
-            -n, --name=!: Name of the Batch account.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Gets information about the specified application.
-          flags:
-            --application-name=!: The name of the application.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --maxresults=: The maximum number of items to return in the response.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of the resource group
             -n, --name=!: Name of the Batch account.
@@ -341,6 +306,24 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of the resource group
             -n, --name=!: Name of the Batch account.
+        - name: show
+          description: Gets information about the specified application.
+          flags:
+            --application-name=!: The name of the application.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of the resource group
+            -n, --name=!: Name of the Batch account.
+        - name: delete
+          description: Deletes an application.
+          flags:
+            --application-name=!: The name of the application.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of the resource group
+            -n, --name=!: Name of the Batch account.
+            -y, --yes=: Do not prompt for confirmation.
         - name: create
           description: Adds an application to the specified Batch account.
           flags:
@@ -349,16 +332,47 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of the resource group
             -n, --name=!: Name of the Batch account.
-        - name: list
-          description: Lists all of the applications in the specified account.
-          flags:
-            --maxresults=: The maximum number of items to return in the response.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of the resource group
-            -n, --name=!: Name of the Batch account.
+        - name: summary
+          description: View a summary of Batch application packages.
+          commands:
+            - name: list
+              description: Lists all of the applications available in the specified Account.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+            - name: show
+              description: Gets information about the specified Application.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --application-id=!: The ID of the Application.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
     - name: job
       description: Manage Batch jobs.
       commands:
+        - name: task-counts
+          description: View the number of tasks and slots in a Batch job and their states.
+          commands:
+            - name: show
+              description: Gets the Task counts for the specified Job.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --job-id=!: The ID of the Job.
+                --subscription=: Name or ID of subscription.
         - name: prep-release-status
           description: View the status of Batch job preparation and release tasks.
           commands:
@@ -377,8 +391,56 @@ commands:
                     description: An OData $select clause.
                     nargs: -1
                 --subscription=: Name or ID of subscription.
-        - name: create
-          description: Creates a Job to the specified Account.
+        - name: list
+          description: List all of the jobs or job schedule in a Batch account.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: The Batch account key.
+            --account-name=: The Batch account name.
+            --expand=:
+                description: An OData $expand clause.
+                nargs: -1
+            --filter=: An OData $filter clause.
+            --job-schedule-id=: The ID of the job schedule from which you want to get a list of jobs.
+            --select=:
+                description: An OData $select clause.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+        - name: disable
+          description: Disables the specified Job, preventing new Tasks from running.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --disable-tasks=: What to do with active Tasks associated with the Job.
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-id=!: The ID of the Job to disable.
+            --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
+            --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Deletes a Job.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-id=!: The ID of the Job to delete.
+            --subscription=: Name or ID of subscription.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: reset
+          description: Updates the properties of the specified Job.
           flags:
             --account-endpoint=: Batch service endpoint.
             --account-key=: Batch account key.
@@ -387,18 +449,11 @@ commands:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --id=: A string that uniquely identifies the Job within the Account.
-            --job-manager-task-application-package-references=:
-                description: A list of Application Packages that the Batch service will deploy to the Compute Node before running the command line.Application Packages are downloaded and deployed to a shared directory, not the Task working directory.
-                nargs: -1
-            --job-manager-task-command-line=: The command line of the Job Manager Task.
-            --job-manager-task-environment-settings=:
-                description: A list of environment variable settings for the Job Manager Task.
-                nargs: -1
-            --job-manager-task-id=: A string that uniquely identifies the Job Manager Task within the Job.
-            --job-manager-task-resource-files=:
-                description: A list of files that the Batch service will download to the Compute Node before running the command line.
-                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-id=!: The ID of the Job whose properties you want to update.
             --job-max-task-retry-count=: The maximum number of times each Task may be retried.
             --job-max-wall-clock-time=: The maximum elapsed time that the Job may run, measured from the time the Job is created.
             --json-file=: A file containing the job specification in JSON (formatted to match the respective REST API body).
@@ -409,23 +464,7 @@ commands:
             --on-all-tasks-complete=: The action the Batch service should take when all Tasks in the Job are in the completed state.
             --pool-id=: The ID of an existing Pool.
             --priority=: The priority of the Job.
-            --required-slots=: The number of scheduling slots that the Task requires to run.
             --subscription=: Name or ID of subscription.
-            --uses-task-dependencies=: Whether Tasks in the Job can define dependencies on each other.
-        - name: task-counts
-          description: View the number of tasks and slots in a Batch job and their states.
-          commands:
-            - name: show
-              description: Gets the Task counts for the specified Job.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --job-id=!: The ID of the Job.
-                --subscription=: Name or ID of subscription.
         - name: set
           description: Updates the properties of the specified Job.
           flags:
@@ -467,8 +506,43 @@ commands:
             --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
             --job-id=!: The ID of the Job to enable.
             --subscription=: Name or ID of subscription.
-        - name: disable
-          description: Disables the specified Job, preventing new Tasks from running.
+        - name: create
+          description: Creates a Job to the specified Account.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --allow-task-preemption=: Whether Tasks in this job can be preempted by other high priority jobs.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --id=: A string that uniquely identifies the Job within the Account.
+            --job-manager-task-application-package-references=:
+                description: A list of Application Packages that the Batch service will deploy to the Compute Node before running the command line.Application Packages are downloaded and deployed to a shared directory, not the Task working directory.
+                nargs: -1
+            --job-manager-task-command-line=: The command line of the Job Manager Task.
+            --job-manager-task-environment-settings=:
+                description: A list of environment variable settings for the Job Manager Task.
+                nargs: -1
+            --job-manager-task-id=: A string that uniquely identifies the Job Manager Task within the Job.
+            --job-manager-task-resource-files=:
+                description: A list of files that the Batch service will download to the Compute Node before running the command line.
+                nargs: -1
+            --job-max-task-retry-count=: The maximum number of times each Task may be retried.
+            --job-max-wall-clock-time=: The maximum elapsed time that the Job may run, measured from the time the Job is created.
+            --json-file=: A file containing the job specification in JSON (formatted to match the respective REST API body).
+            --max-parallel-tasks=: The maximum number of tasks that can be executed in parallel for the job.
+            --metadata=:
+                description: A list of name-value pairs associated with the Job as metadata.
+                nargs: -1
+            --on-all-tasks-complete=: The action the Batch service should take when all Tasks in the Job are in the completed state.
+            --pool-id=: The ID of an existing Pool.
+            --priority=: The priority of the Job.
+            --required-slots=: The number of scheduling slots that the Task requires to run.
+            --subscription=: Name or ID of subscription.
+            --uses-task-dependencies=: Whether Tasks in the Job can define dependencies on each other.
+        - name: stop
+          description: Terminates the specified Job, marking it as completed.
           flags:
             --account-endpoint=: Batch service endpoint.
             --account-key=: Batch account key.
@@ -476,30 +550,13 @@ commands:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --disable-tasks=: What to do with active Tasks associated with the Job.
             --if-match=: An ETag value associated with the version of the resource known to the client.
             --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
             --if-none-match=: An ETag value associated with the version of the resource known to the client.
             --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-id=!: The ID of the Job to disable.
-            --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
+            --job-id=!: The ID of the Job to terminate.
             --subscription=: Name or ID of subscription.
-        - name: delete
-          description: Deletes a Job.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-id=!: The ID of the Job to delete.
-            --subscription=: Name or ID of subscription.
-            -y, --yes=: Do not prompt for confirmation.
+            --terminate-reason=: Termination reason.
         - name: show
           description: Gets information about the specified Job.
           flags:
@@ -521,159 +578,9 @@ commands:
                 description: An OData $select clause.
                 nargs: -1
             --subscription=: Name or ID of subscription.
-        - name: reset
-          description: Updates the properties of the specified Job.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --allow-task-preemption=: Whether Tasks in this job can be preempted by other high priority jobs.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-id=!: The ID of the Job whose properties you want to update.
-            --job-max-task-retry-count=: The maximum number of times each Task may be retried.
-            --job-max-wall-clock-time=: The maximum elapsed time that the Job may run, measured from the time the Job is created.
-            --json-file=: A file containing the job specification in JSON (formatted to match the respective REST API body).
-            --max-parallel-tasks=: The maximum number of tasks that can be executed in parallel for the job.
-            --metadata=:
-                description: A list of name-value pairs associated with the Job as metadata.
-                nargs: -1
-            --on-all-tasks-complete=: The action the Batch service should take when all Tasks in the Job are in the completed state.
-            --pool-id=: The ID of an existing Pool.
-            --priority=: The priority of the Job.
-            --subscription=: Name or ID of subscription.
-        - name: stop
-          description: Terminates the specified Job, marking it as completed.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-id=!: The ID of the Job to terminate.
-            --subscription=: Name or ID of subscription.
-            --terminate-reason=: Termination reason.
-        - name: list
-          description: List all of the jobs or job schedule in a Batch account.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: The Batch account key.
-            --account-name=: The Batch account name.
-            --expand=:
-                description: An OData $expand clause.
-                nargs: -1
-            --filter=: An OData $filter clause.
-            --job-schedule-id=: The ID of the job schedule from which you want to get a list of jobs.
-            --select=:
-                description: An OData $select clause.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
     - name: job-schedule
       description: Manage Batch job schedules.
       commands:
-        - name: list
-          description: Lists all of the Job Schedules in the specified Account.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --expand=:
-                description: An OData $expand clause.
-                nargs: -1
-            --filter=: An OData $filter clause.
-            --select=:
-                description: An OData $select clause.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: disable
-          description: Disables a Job Schedule.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-schedule-id=!: The ID of the Job Schedule to disable.
-            --subscription=: Name or ID of subscription.
-        - name: enable
-          description: Enables a Job Schedule.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-schedule-id=!: The ID of the Job Schedule to enable.
-            --subscription=: Name or ID of subscription.
-        - name: reset
-          description: Updates the properties of the specified Job Schedule.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --allow-task-preemption=: Whether Tasks in this job can be preempted by other high priority jobs.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --do-not-run-after=: A time after which no Job will be created under this Job Schedule.
-            --do-not-run-until=: The earliest time at which any Job may be created under this Job Schedule.
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-manager-task-application-package-references=:
-                description: A list of Application Packages that the Batch service will deploy to the Compute Node before running the command line.Application Packages are downloaded and deployed to a shared directory, not the Task working directory.
-                nargs: -1
-            --job-manager-task-command-line=: The command line of the Job Manager Task.
-            --job-manager-task-environment-settings=:
-                description: A list of environment variable settings for the Job Manager Task.
-                nargs: -1
-            --job-manager-task-id=: A string that uniquely identifies the Job Manager Task within the Job.
-            --job-manager-task-resource-files=:
-                description: A list of files that the Batch service will download to the Compute Node before running the command line.
-                nargs: -1
-            --job-max-task-retry-count=: The maximum number of times each Task may be retried.
-            --job-max-wall-clock-time=: The maximum elapsed time that the Job may run, measured from the time the Job is created.
-            --job-metadata=:
-                description: A list of name-value pairs associated with each Job created under this schedule as metadata.
-                nargs: -1
-            --job-schedule-id=!: The ID of the Job Schedule to update.
-            --json-file=: A file containing the job schedule specification in JSON (formatted to match the respective REST API body).
-            --max-parallel-tasks=: The maximum number of tasks that can be executed in parallel for the job.
-            --metadata=:
-                description: A list of name-value pairs associated with the schedule as metadata.
-                nargs: -1
-            --on-all-tasks-complete=: The action the Batch service should take when all Tasks in a Job created under this schedule are in the completed state.
-            --pool-id=: The ID of an existing Pool.
-            --priority=: The priority of Jobs created under this schedule.
-            --recurrence-interval=: The time interval between the start times of two successive Jobs under the Job Schedule.
-            --required-slots=: The number of scheduling slots that the Task requires to run.
-            --start-window=: The time interval, starting from the time at which the schedule indicates a Job should be created, within which a Job must be created.
-            --subscription=: Name or ID of subscription.
-            --uses-task-dependencies=: Whether Tasks in the Job can define dependencies on each other.
         - name: set
           description: Updates the properties of the specified Job Schedule.
           flags:
@@ -720,6 +627,53 @@ commands:
             --start-window=: The time interval, starting from the time at which the schedule indicates a Job should be created, within which a Job must be created.
             --subscription=: Name or ID of subscription.
             --uses-task-dependencies=: Whether Tasks in the Job can define dependencies on each other.
+        - name: enable
+          description: Enables a Job Schedule.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-schedule-id=!: The ID of the Job Schedule to enable.
+            --subscription=: Name or ID of subscription.
+        - name: list
+          description: Lists all of the Job Schedules in the specified Account.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --expand=:
+                description: An OData $expand clause.
+                nargs: -1
+            --filter=: An OData $filter clause.
+            --select=:
+                description: An OData $select clause.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+        - name: stop
+          description: Terminates a Job Schedule.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-schedule-id=!: The ID of the Job Schedule to terminates.
+            --subscription=: Name or ID of subscription.
         - name: show
           description: Gets information about the specified Job Schedule.
           flags:
@@ -740,37 +694,6 @@ commands:
             --select=:
                 description: An OData $select clause.
                 nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: delete
-          description: Deletes a Job Schedule from the specified Account.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-schedule-id=!: The ID of the Job Schedule to delete.
-            --subscription=: Name or ID of subscription.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: stop
-          description: Terminates a Job Schedule.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-schedule-id=!: The ID of the Job Schedule to terminates.
             --subscription=: Name or ID of subscription.
         - name: create
           description: Creates a Job Schedule to the specified Account.
@@ -814,19 +737,86 @@ commands:
             --start-window=: The time interval, starting from the time at which the schedule indicates a Job should be created, within which a Job must be created.
             --subscription=: Name or ID of subscription.
             --uses-task-dependencies=: Whether Tasks in the Job can define dependencies on each other.
-    - name: location
-      description: Manage Batch service options for a subscription at the region level.
-      commands:
-        - name: list-skus
-          description: Gets the list of Batch supported Virtual Machine VM sizes available at the given location.
+        - name: reset
+          description: Updates the properties of the specified Job Schedule.
           flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --allow-task-preemption=: Whether Tasks in this job can be preempted by other high priority jobs.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --filter=: OData filter expression.
-            --maxresults=: The maximum number of items to return in the response.
+            --do-not-run-after=: A time after which no Job will be created under this Job Schedule.
+            --do-not-run-until=: The earliest time at which any Job may be created under this Job Schedule.
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-manager-task-application-package-references=:
+                description: A list of Application Packages that the Batch service will deploy to the Compute Node before running the command line.Application Packages are downloaded and deployed to a shared directory, not the Task working directory.
+                nargs: -1
+            --job-manager-task-command-line=: The command line of the Job Manager Task.
+            --job-manager-task-environment-settings=:
+                description: A list of environment variable settings for the Job Manager Task.
+                nargs: -1
+            --job-manager-task-id=: A string that uniquely identifies the Job Manager Task within the Job.
+            --job-manager-task-resource-files=:
+                description: A list of files that the Batch service will download to the Compute Node before running the command line.
+                nargs: -1
+            --job-max-task-retry-count=: The maximum number of times each Task may be retried.
+            --job-max-wall-clock-time=: The maximum elapsed time that the Job may run, measured from the time the Job is created.
+            --job-metadata=:
+                description: A list of name-value pairs associated with each Job created under this schedule as metadata.
+                nargs: -1
+            --job-schedule-id=!: The ID of the Job Schedule to update.
+            --json-file=: A file containing the job schedule specification in JSON (formatted to match the respective REST API body).
+            --max-parallel-tasks=: The maximum number of tasks that can be executed in parallel for the job.
+            --metadata=:
+                description: A list of name-value pairs associated with the schedule as metadata.
+                nargs: -1
+            --on-all-tasks-complete=: The action the Batch service should take when all Tasks in a Job created under this schedule are in the completed state.
+            --pool-id=: The ID of an existing Pool.
+            --priority=: The priority of Jobs created under this schedule.
+            --recurrence-interval=: The time interval between the start times of two successive Jobs under the Job Schedule.
+            --required-slots=: The number of scheduling slots that the Task requires to run.
+            --start-window=: The time interval, starting from the time at which the schedule indicates a Job should be created, within which a Job must be created.
             --subscription=: Name or ID of subscription.
-            -l, --location=!: The region for which to display the available Batch VM SKUs.
+            --uses-task-dependencies=: Whether Tasks in the Job can define dependencies on each other.
+        - name: disable
+          description: Disables a Job Schedule.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-schedule-id=!: The ID of the Job Schedule to disable.
+            --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Deletes a Job Schedule from the specified Account.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-schedule-id=!: The ID of the Job Schedule to delete.
+            --subscription=: Name or ID of subscription.
+            -y, --yes=: Do not prompt for confirmation.
+    - name: location
+      description: Manage Batch service options for a subscription at the region level.
+      commands:
         - name: quotas
           description: Manage Batch service quotas at the region level.
           commands:
@@ -838,6 +828,16 @@ commands:
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -l, --location=!: The region for which to display the Batch service quotas.
+        - name: list-skus
+          description: Gets the list of Batch supported Virtual Machine VM sizes available at the given location.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --filter=: OData filter expression.
+            --maxresults=: The maximum number of items to return in the response.
+            --subscription=: Name or ID of subscription.
+            -l, --location=!: The region for which to display the available Batch VM SKUs.
     - name: node
       description: Manage Batch compute nodes.
       commands:
@@ -920,30 +920,26 @@ commands:
                     recursive:
                         - "true"
                         - "false"
-        - name: delete
-          description: Removes Compute Nodes from the specified Pool.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
-            --node-deallocation-option=: Determines what to do with a Compute Node and its running task(s) after it has been selected for deallocation.
-            --node-list=:
-                description: A list containing the IDs of the Compute Nodes to be removed from the specified Pool.
-                nargs: -1
-            --pool-id=!: The ID of the Pool to get.
-            --resize-timeout=: The timeout for removal of Compute Nodes to the Pool.
-            --subscription=: Name or ID of subscription.
         - name: user
           description: Manage the user accounts of a Batch compute node.
           commands:
+            - name: reset
+              description: Updates the password and expiration time of a user Account on the specified Compute Node.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --expiry-time=: The time at which the Account should expire.
+                --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
+                --node-id=!: The ID of the machine on which you want to update a user Account.
+                --password=: The password of the Account.
+                --pool-id=!: The ID of the Pool that contains the Compute Node.
+                --ssh-public-key=: The SSH public key that can be used for remote login to the Compute Node.
+                --subscription=: Name or ID of subscription.
+                --user-name=!: The name of the user Account to update.
             - name: create
               description: Adds a user Account to the specified Compute Node.
               flags:
@@ -976,23 +972,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 --user-name=!: The name of the user Account to delete.
                 -y, --yes=: Do not prompt for confirmation.
-            - name: reset
-              description: Updates the password and expiration time of a user Account on the specified Compute Node.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --expiry-time=: The time at which the Account should expire.
-                --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
-                --node-id=!: The ID of the machine on which you want to update a user Account.
-                --password=: The password of the Account.
-                --pool-id=!: The ID of the Pool that contains the Compute Node.
-                --ssh-public-key=: The SSH public key that can be used for remote login to the Compute Node.
-                --subscription=: Name or ID of subscription.
-                --user-name=!: The name of the user Account to update.
         - name: reboot
           description: Restarts the specified Compute Node.
           flags:
@@ -1006,6 +985,77 @@ commands:
             --node-id=!: The ID of the Compute Node that you want to restart.
             --node-reboot-option=: When to reboot the Compute Node and what to do with currently running Tasks.
             --pool-id=!: The ID of the Pool that contains the Compute Node.
+            --subscription=: Name or ID of subscription.
+        - name: show
+          description: Gets information about the specified Compute Node.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --node-id=!: The ID of the Compute Node that you want to get information about.
+            --pool-id=!: The ID of the Pool that contains the Compute Node.
+            --select=:
+                description: An OData $select clause.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Removes Compute Nodes from the specified Pool.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
+            --node-deallocation-option=: Determines what to do with a Compute Node and its running task(s) after it has been selected for deallocation.
+            --node-list=:
+                description: A list containing the IDs of the Compute Nodes to be removed from the specified Pool.
+                nargs: -1
+            --pool-id=!: The ID of the Pool to get.
+            --resize-timeout=: The timeout for removal of Compute Nodes to the Pool.
+            --subscription=: Name or ID of subscription.
+        - name: service-logs
+          description: Manage the service log files of a Batch compute node.
+          commands:
+            - name: upload
+              description: Upload Azure Batch service log files from the specified Compute Node to Azure Blob Storage.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --container-url=: The URL of the container within Azure Blob Storage to which to upload the Batch Service log file(s).
+                --end-time=: The end of the time range from which to upload Batch Service log file(s).
+                --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
+                --node-id=!: The ID of the Compute Node for which you want to get the Remote Desktop Protocol file.
+                --pool-id=!: The ID of the Pool that contains the Compute Node.
+                --resource-id=: The ARM resource id of the user assigned identity.
+                --start-time=: The start of the time range from which to upload Batch Service log file(s).
+                --subscription=: Name or ID of subscription.
+        - name: list
+          description: Lists the Compute Nodes in the specified Pool.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --filter=: An OData $filter clause.
+            --pool-id=!: The ID of the Pool from which you want to list Compute Nodes.
+            --select=:
+                description: An OData $select clause.
+                nargs: -1
             --subscription=: Name or ID of subscription.
         - name: scheduling
           description: Manage task scheduling for a Batch compute node.
@@ -1051,209 +1101,9 @@ commands:
                 --node-id=!: The ID of the Compute Node for which to obtain the remote login settings.
                 --pool-id=!: The ID of the Pool that contains the Compute Node.
                 --subscription=: Name or ID of subscription.
-        - name: show
-          description: Gets information about the specified Compute Node.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --node-id=!: The ID of the Compute Node that you want to get information about.
-            --pool-id=!: The ID of the Pool that contains the Compute Node.
-            --select=:
-                description: An OData $select clause.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: list
-          description: Lists the Compute Nodes in the specified Pool.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --filter=: An OData $filter clause.
-            --pool-id=!: The ID of the Pool from which you want to list Compute Nodes.
-            --select=:
-                description: An OData $select clause.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: service-logs
-          description: Manage the service log files of a Batch compute node.
-          commands:
-            - name: upload
-              description: Upload Azure Batch service log files from the specified Compute Node to Azure Blob Storage.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --container-url=: The URL of the container within Azure Blob Storage to which to upload the Batch Service log file(s).
-                --end-time=: The end of the time range from which to upload Batch Service log file(s).
-                --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
-                --node-id=!: The ID of the Compute Node for which you want to get the Remote Desktop Protocol file.
-                --pool-id=!: The ID of the Pool that contains the Compute Node.
-                --resource-id=: The ARM resource id of the user assigned identity.
-                --start-time=: The start of the time range from which to upload Batch Service log file(s).
-                --subscription=: Name or ID of subscription.
     - name: pool
       description: Manage Batch pools.
       commands:
-        - name: list
-          description: Lists all of the Pools in the specified Account.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --expand=:
-                description: An OData $expand clause.
-                nargs: -1
-            --filter=: An OData $filter clause.
-            --select=:
-                description: An OData $select clause.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: autoscale
-          description: Manage automatic scaling of Batch pools.
-          commands:
-            - name: evaluate
-              description: Gets the result of evaluating an automatic scaling formula on the Pool.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --auto-scale-formula=: The formula for the desired number of Compute Nodes in the Pool.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
-                --pool-id=!: The ID of the Pool on which to evaluate the automatic scaling formula.
-                --subscription=: Name or ID of subscription.
-            - name: enable
-              description: Enables automatic scaling for a Pool.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --auto-scale-evaluation-interval=: The time interval at which to automatically adjust the Pool size according to the autoscale formula.
-                --auto-scale-formula=: The formula for the desired number of Compute Nodes in the Pool.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --if-match=: An ETag value associated with the version of the resource known to the client.
-                --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-                --if-none-match=: An ETag value associated with the version of the resource known to the client.
-                --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-                --pool-id=!: The ID of the Pool to get.
-                --subscription=: Name or ID of subscription.
-            - name: disable
-              description: Disables automatic scaling for a Pool.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --pool-id=!: The ID of the Pool on which to disable automatic scaling.
-                --subscription=: Name or ID of subscription.
-        - name: set
-          description: Updates the properties of the specified Pool.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --application-package-references=:
-                description: A list of Packages to be installed on each Compute Node in the Pool.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --json-file=: A file containing the pool specification in JSON (formatted to match the respective REST API body).
-            --metadata=:
-                description: A list of name-value pairs associated with the Pool as metadata.
-                nargs: -1
-            --pool-id=!: The ID of the Pool to get.
-            --start-task-command-line=: The command line of the StartTask.
-            --start-task-environment-settings=:
-                description: A list of environment variable settings for the StartTask.
-                nargs: -1
-            --start-task-max-task-retry-count=: The maximum number of times the Task may be retried.
-            --start-task-resource-files=:
-                description: A list of files that the Batch service will download to the Compute Node before running the command line.
-                nargs: -1
-            --start-task-wait-for-success=: Whether the Batch service should wait for the StartTask to complete successfully (that is, to exit with exit code 0) before scheduling any Tasks on the Compute Node.
-            --subscription=: Name or ID of subscription.
-            --target-communication=: The desired node communication mode for the pool.
-          completion:
-            flag:
-                target-communication:
-                    - default
-                    - classic
-                    - simplified
-        - name: show
-          description: Gets information about the specified Pool.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --expand=:
-                description: An OData $expand clause.
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --pool-id=!: The ID of the Pool to get.
-            --select=:
-                description: An OData $select clause.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: supported-images
-          description: Query information on VM images supported by Azure Batch service.
-          commands:
-            - name: list
-              description: Lists all Virtual Machine Images supported by the Azure Batch service.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --filter=: An OData $filter clause.
-                --subscription=: Name or ID of subscription.
-        - name: delete
-          description: Deletes a Pool from the specified Account.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --pool-id=!: The ID of the Pool to get.
-            --subscription=: Name or ID of subscription.
-            -y, --yes=: Do not prompt for confirmation.
         - name: create
           description: Creates a Pool to the specified Account.
           flags:
@@ -1408,6 +1258,140 @@ commands:
                 use-rolling-upgrade-policy:
                     - "true"
                     - "false"
+        - name: set
+          description: Updates the properties of the specified Pool.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --application-package-references=:
+                description: A list of Packages to be installed on each Compute Node in the Pool.
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --json-file=: A file containing the pool specification in JSON (formatted to match the respective REST API body).
+            --metadata=:
+                description: A list of name-value pairs associated with the Pool as metadata.
+                nargs: -1
+            --pool-id=!: The ID of the Pool to get.
+            --start-task-command-line=: The command line of the StartTask.
+            --start-task-environment-settings=:
+                description: A list of environment variable settings for the StartTask.
+                nargs: -1
+            --start-task-max-task-retry-count=: The maximum number of times the Task may be retried.
+            --start-task-resource-files=:
+                description: A list of files that the Batch service will download to the Compute Node before running the command line.
+                nargs: -1
+            --start-task-wait-for-success=: Whether the Batch service should wait for the StartTask to complete successfully (that is, to exit with exit code 0) before scheduling any Tasks on the Compute Node.
+            --subscription=: Name or ID of subscription.
+            --target-communication=: The desired node communication mode for the pool.
+          completion:
+            flag:
+                target-communication:
+                    - default
+                    - classic
+                    - simplified
+        - name: list
+          description: Lists all of the Pools in the specified Account.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --expand=:
+                description: An OData $expand clause.
+                nargs: -1
+            --filter=: An OData $filter clause.
+            --select=:
+                description: An OData $select clause.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+        - name: supported-images
+          description: Query information on VM images supported by Azure Batch service.
+          commands:
+            - name: list
+              description: Lists all Virtual Machine Images supported by the Azure Batch service.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --filter=: An OData $filter clause.
+                --subscription=: Name or ID of subscription.
+        - name: show
+          description: Gets information about the specified Pool.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --expand=:
+                description: An OData $expand clause.
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --pool-id=!: The ID of the Pool to get.
+            --select=:
+                description: An OData $select clause.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+        - name: autoscale
+          description: Manage automatic scaling of Batch pools.
+          commands:
+            - name: evaluate
+              description: Gets the result of evaluating an automatic scaling formula on the Pool.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --auto-scale-formula=: The formula for the desired number of Compute Nodes in the Pool.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --json-file=: A file containing the content specification in JSON (formatted to match the respective REST API body).
+                --pool-id=!: The ID of the Pool on which to evaluate the automatic scaling formula.
+                --subscription=: Name or ID of subscription.
+            - name: enable
+              description: Enables automatic scaling for a Pool.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --auto-scale-evaluation-interval=: The time interval at which to automatically adjust the Pool size according to the autoscale formula.
+                --auto-scale-formula=: The formula for the desired number of Compute Nodes in the Pool.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --if-match=: An ETag value associated with the version of the resource known to the client.
+                --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+                --if-none-match=: An ETag value associated with the version of the resource known to the client.
+                --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+                --pool-id=!: The ID of the Pool to get.
+                --subscription=: Name or ID of subscription.
+            - name: disable
+              description: Disables automatic scaling for a Pool.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --pool-id=!: The ID of the Pool on which to disable automatic scaling.
+                --subscription=: Name or ID of subscription.
         - name: reset
           description: Update the properties of a Batch pool.
           flags:
@@ -1439,20 +1423,6 @@ commands:
                     - default
                     - classic
                     - simplified
-        - name: node-counts
-          description: Get node counts for Batch pools.
-          commands:
-            - name: list
-              description: Gets the number of Compute Nodes in each state, grouped by Pool.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --filter=: An OData $filter clause.
-                --subscription=: Name or ID of subscription.
         - name: usage-metrics
           description: View usage metrics of Batch pools.
           commands:
@@ -1469,6 +1439,22 @@ commands:
                 --filter=: An OData $filter clause.
                 --start-time=: The earliest time from which to include metrics.
                 --subscription=: Name or ID of subscription.
+        - name: delete
+          description: Deletes a Pool from the specified Account.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --pool-id=!: The ID of the Pool to get.
+            --subscription=: Name or ID of subscription.
+            -y, --yes=: Do not prompt for confirmation.
         - name: resize
           description: Parameters for changing the size of an Azure Batch Pool.
           flags:
@@ -1493,16 +1479,23 @@ commands:
                     - terminate
                     - taskcompletion
                     - retaineddata
+        - name: node-counts
+          description: Get node counts for Batch pools.
+          commands:
+            - name: list
+              description: Gets the number of Compute Nodes in each state, grouped by Pool.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --filter=: An OData $filter clause.
+                --subscription=: Name or ID of subscription.
     - name: private-endpoint-connection
       description: Manage Batch account private endpoint connections.
       commands:
-        - name: list
-          description: Lists all of the private endpoint connections in the specified account.
-          flags:
-            --account-name=!: The name of the Batch account.
-            --maxresults=: The maximum number of items to return in the response.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of the resource group
         - name: show
           description: Gets information about the specified private endpoint connection.
           flags:
@@ -1513,6 +1506,13 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of the resource group
             -n, --name=!: The private endpoint connection name.
+        - name: list
+          description: Lists all of the private endpoint connections in the specified account.
+          flags:
+            --account-name=!: The name of the Batch account.
+            --maxresults=: The maximum number of items to return in the response.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of the resource group
     - name: private-link-resource
       description: Manage Batch account private Link Resources.
       commands:
@@ -1536,107 +1536,9 @@ commands:
     - name: task
       description: Manage Batch tasks.
       commands:
-        - name: list
-          description: Lists all of the Tasks that are associated with the specified Job.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --expand=:
-                description: An OData $expand clause.
-                nargs: -1
-            --filter=: An OData $filter clause.
-            --job-id=!: The ID of the Job.
-            --select=:
-                description: An OData $select clause.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: stop
-          description: Terminates the specified Task.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: Batch account key.
-            --account-name=: Batch account name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-id=!: The ID of the Job containing the Task.
-            --subscription=: Name or ID of subscription.
-            --task-id=!: The ID of the Task to terminate.
-        - name: create
-          description: Parameters for creating an Azure Batch Task.
-          flags:
-            --account-endpoint=: Batch service endpoint.
-            --account-key=: The Batch account key.
-            --account-name=: The Batch account name.
-            --affinity-id=: Required.
-            --application-package-references=:
-                description: The space-separated list of IDs specifying the application packages to be installed.
-                nargs: -1
-            --command-line=: The command line of the task.
-            --environment-settings=:
-                description: A list of environment variable settings for the task.
-                nargs: -1
-            --job-id=!: The ID of the job containing the task.
-            --json-file=: The file containing the task(s) to create in JSON(formatted to match REST API request body).
-            --max-task-retry-count=: The maximum number of times the Task may be retried.
-            --max-wall-clock-time=: If this is not specified, there is no time limit on how long the Task may run.
-            --resource-files=:
-                description: A list of files that the Batch service will download to the compute node before running the command line.
-                nargs: -1
-            --retention-time=: The default is 7 days, i.e. the Task directory will be retained for 7 days unless the Compute Node is removed or the Job is deleted.
-            --subscription=: Name or ID of subscription.
-            --task-id=: The ID of the task.
-        - name: subtask
-          description: Manage subtask information of a Batch task.
-          commands:
-            - name: list
-              description: Lists all of the subtasks that are associated with the specified multi-instance Task.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --job-id=!: The ID of the Job.
-                --select=:
-                    description: An OData $select clause.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --task-id=!: The ID of the Task.
         - name: file
           description: Manage Batch task files.
           commands:
-            - name: delete
-              description: Deletes the specified Task file from the Compute Node where the Task ran.
-              flags:
-                --account-endpoint=: Batch service endpoint.
-                --account-key=: Batch account key.
-                --account-name=: Batch account name.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --file-path=!: The path to the Task file that you want to get the content of.
-                --job-id=!: The ID of the Job that contains the Task.
-                --recursive=:
-                    description: Whether to delete children of a directory.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --task-id=!: The ID of the Task whose file you want to retrieve.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    recursive:
-                        - "true"
-                        - "false"
             - name: download
               description: Returns the content of the specified Task file.
               flags:
@@ -1670,6 +1572,28 @@ commands:
                 --job-id=!: The ID of the Job that contains the Task.
                 --subscription=: Name or ID of subscription.
                 --task-id=!: The ID of the Task whose file you want to retrieve.
+            - name: delete
+              description: Deletes the specified Task file from the Compute Node where the Task ran.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --file-path=!: The path to the Task file that you want to get the content of.
+                --job-id=!: The ID of the Job that contains the Task.
+                --recursive=:
+                    description: Whether to delete children of a directory.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --task-id=!: The ID of the Task whose file you want to retrieve.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    recursive:
+                        - "true"
+                        - "false"
             - name: list
               description: Lists the files in a Task's directory on its Compute Node.
               flags:
@@ -1691,8 +1615,32 @@ commands:
                     recursive:
                         - "true"
                         - "false"
-        - name: show
-          description: Gets information about the specified Task.
+        - name: create
+          description: Parameters for creating an Azure Batch Task.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: The Batch account key.
+            --account-name=: The Batch account name.
+            --affinity-id=: Required.
+            --application-package-references=:
+                description: The space-separated list of IDs specifying the application packages to be installed.
+                nargs: -1
+            --command-line=: The command line of the task.
+            --environment-settings=:
+                description: A list of environment variable settings for the task.
+                nargs: -1
+            --job-id=!: The ID of the job containing the task.
+            --json-file=: The file containing the task(s) to create in JSON(formatted to match REST API request body).
+            --max-task-retry-count=: The maximum number of times the Task may be retried.
+            --max-wall-clock-time=: If this is not specified, there is no time limit on how long the Task may run.
+            --resource-files=:
+                description: A list of files that the Batch service will download to the compute node before running the command line.
+                nargs: -1
+            --retention-time=: The default is 7 days, i.e. the Task directory will be retained for 7 days unless the Compute Node is removed or the Job is deleted.
+            --subscription=: Name or ID of subscription.
+            --task-id=: The ID of the task.
+        - name: list
+          description: Lists all of the Tasks that are associated with the specified Job.
           flags:
             --account-endpoint=: Batch service endpoint.
             --account-key=: Batch account key.
@@ -1703,16 +1651,46 @@ commands:
             --expand=:
                 description: An OData $expand clause.
                 nargs: -1
-            --if-match=: An ETag value associated with the version of the resource known to the client.
-            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --if-none-match=: An ETag value associated with the version of the resource known to the client.
-            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
-            --job-id=!: The ID of the Job that contains the Task.
+            --filter=: An OData $filter clause.
+            --job-id=!: The ID of the Job.
             --select=:
                 description: An OData $select clause.
                 nargs: -1
             --subscription=: Name or ID of subscription.
-            --task-id=!: The ID of the Task to get information about.
+        - name: subtask
+          description: Manage subtask information of a Batch task.
+          commands:
+            - name: list
+              description: Lists all of the subtasks that are associated with the specified multi-instance Task.
+              flags:
+                --account-endpoint=: Batch service endpoint.
+                --account-key=: Batch account key.
+                --account-name=: Batch account name.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --job-id=!: The ID of the Job.
+                --select=:
+                    description: An OData $select clause.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --task-id=!: The ID of the Task.
+        - name: stop
+          description: Terminates the specified Task.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-id=!: The ID of the Job containing the Task.
+            --subscription=: Name or ID of subscription.
+            --task-id=!: The ID of the Task to terminate.
         - name: reactivate
           description: Reactivates a Task, allowing it to run again even if its retry count has been exhausted.
           flags:
@@ -1746,6 +1724,28 @@ commands:
             --subscription=: Name or ID of subscription.
             --task-id=!: The ID of the Task to delete.
             -y, --yes=: Do not prompt for confirmation.
+        - name: show
+          description: Gets information about the specified Task.
+          flags:
+            --account-endpoint=: Batch service endpoint.
+            --account-key=: Batch account key.
+            --account-name=: Batch account name.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --expand=:
+                description: An OData $expand clause.
+                nargs: -1
+            --if-match=: An ETag value associated with the version of the resource known to the client.
+            --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --if-none-match=: An ETag value associated with the version of the resource known to the client.
+            --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+            --job-id=!: The ID of the Job that contains the Task.
+            --select=:
+                description: An OData $select clause.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --task-id=!: The ID of the Task to get information about.
         - name: reset
           description: Reset the properties of a Batch task.
           flags:

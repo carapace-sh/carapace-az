@@ -125,6 +125,9 @@ func buildSpec(data *CliData) command.Command {
 	}
 
 	for topGroup, cmdNames := range groupCommands {
+		if len(cmdNames) == 1 && cmdNames[0] == topGroup {
+			continue
+		}
 		groupSpec := buildGroupSpec(topGroup, cmdNames, data)
 		root.Commands = append(root.Commands, groupSpec)
 	}

@@ -5,9 +5,53 @@ commands:
     - name: reservation
       description: Manage capacity reservation.
       commands:
+        - name: create
+          description: Create capacity reservation.
+          flags:
+            --capacity=: Specify the number of virtual machines in the scale set.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -c, --capacity-reservation-group=!: The name of the capacity reservation group.
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: Location.
+            -n, --capacity-reservation-name=!: The name of the capacity reservation.
+            -s, --sku=!: The SKU of the resource for which capacity needs be reserved.
+            -z, --zone=: Availability Zone to use for this capacity reservation.
+        - name: list
+          description: List all of the capacity reservations in the specified capacity reservation group.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --capacity-reservation-group=!: The name of the capacity reservation group.
+            -g, --resource-group=!: Name of resource group.
         - name: group
           description: Manage capacity reservation group.
           commands:
+            - name: show
+              description: Show capacity reservation group.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -i, --instance-view=: Retrieve the list of instance views of the capacity reservations under the capacity reservation group which is a snapshot of the runtime properties of a capacity reservation that is managed by the platform and can change outside of control plane operations.
+                -n, --capacity-reservation-group=!: The name of the capacity reservation group.
+            - name: delete
+              description: Delete operation to delete a capacity reservation group.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --capacity-reservation-group=: The name of the capacity reservation group.
+                -y, --yes=: Do not prompt for confirmation.
             - name: create
               description: Create capacity reservation group.
               flags:
@@ -27,16 +71,21 @@ commands:
                 -z, --zones=:
                     description: Availability Zones to use for this capacity reservation group.
                     nargs: -1
-            - name: delete
-              description: Delete operation to delete a capacity reservation group.
+            - name: update
+              description: Update capacity reservation group.
               flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --sharing-profile=:
+                    description: Space-separated subscription resource IDs or nothing.
                     nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --capacity-reservation-group=: The name of the capacity reservation group.
-                -y, --yes=: Do not prompt for confirmation.
+                --tags=:
+                    description: 'space-separated tags: key[=value] [key[=value] ...].'
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -n, --capacity-reservation-group=!: The name of the capacity reservation group.
             - name: list
               description: List the capacity reservation groups.
               flags:
@@ -79,31 +128,6 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: update
-              description: Update capacity reservation group.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --sharing-profile=:
-                    description: Space-separated subscription resource IDs or nothing.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: 'space-separated tags: key[=value] [key[=value] ...].'
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -n, --capacity-reservation-group=!: The name of the capacity reservation group.
-            - name: show
-              description: Show capacity reservation group.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -i, --instance-view=: Retrieve the list of instance views of the capacity reservations under the capacity reservation group which is a snapshot of the runtime properties of a capacity reservation that is managed by the platform and can change outside of control plane operations.
-                -n, --capacity-reservation-group=!: The name of the capacity reservation group.
         - name: delete
           description: Delete operation to delete a capacity reservation.
           flags:
@@ -131,30 +155,17 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: list
-          description: List all of the capacity reservations in the specified capacity reservation group.
+        - name: show
+          description: Show capacity reservation.
           flags:
-            --subscription=: Name or ID of subscription.
-            -c, --capacity-reservation-group=!: The name of the capacity reservation group.
-            -g, --resource-group=!: Name of resource group.
-        - name: create
-          description: Create capacity reservation.
-          flags:
-            --capacity=: Specify the number of virtual machines in the scale set.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
             -c, --capacity-reservation-group=!: The name of the capacity reservation group.
             -g, --resource-group=!: Name of resource group.
-            -l, --location=: Location.
+            -i, --instance-view=: Retrieve a snapshot of the runtime properties of the capacity reservation that is managed by the platform and can change outside of control plane operations.
             -n, --capacity-reservation-name=!: The name of the capacity reservation.
-            -s, --sku=!: The SKU of the resource for which capacity needs be reserved.
-            -z, --zone=: Availability Zone to use for this capacity reservation.
         - name: update
           description: Update capacity reservation.
           flags:
@@ -169,15 +180,4 @@ commands:
                 nargs: -1
             -c, --capacity-reservation-group=!: The name of the capacity reservation group.
             -g, --resource-group=!: Name of resource group.
-            -n, --capacity-reservation-name=!: The name of the capacity reservation.
-        - name: show
-          description: Show capacity reservation.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -c, --capacity-reservation-group=!: The name of the capacity reservation group.
-            -g, --resource-group=!: Name of resource group.
-            -i, --instance-view=: Retrieve a snapshot of the runtime properties of the capacity reservation that is managed by the platform and can change outside of control plane operations.
             -n, --capacity-reservation-name=!: The name of the capacity reservation.

@@ -5,16 +5,6 @@ commands:
     - name: admin-key
       description: Manage Azure Search admin keys.
       commands:
-        - name: renew
-          description: Regenerates either the primary or secondary admin API key.
-          flags:
-            --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --key-kind=!: The type (primary or secondary) of the admin key.
-            --service-name=!: The name of the search service.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: show
           description: Gets the primary and secondary admin API keys for the specified Azure Cognitive Search service.
           flags:
@@ -27,24 +17,21 @@ commands:
             --service-name=!: The name of the search service.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
+        - name: renew
+          description: Regenerates either the primary or secondary admin API key.
+          flags:
+            --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --key-kind=!: The type (primary or secondary) of the admin key.
+            --service-name=!: The name of the search service.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
     - name: private-endpoint-connection
       description: Manage Azure Search private endpoint connections.
       commands:
-        - name: update
-          description: Update an existing private endpoint connection in a Search service in the given resource group.
-          flags:
-            --actions-required=!: Custom 'actions required' message when updating the private endpoint connection resource.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --description=!: Custom description when updating the private endpoint connection resource.
-            --service-name=!: The name of the search service.
-            --status=!: The updated status of the private endpoint connection resource.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: 'Name of the private endpoint connection resource; for example: {the name of the private endpoint resource}.{guid}.'
-        - name: list
-          description: Gets a list of all private endpoint connections in the given service.
+        - name: delete
+          description: Disconnects the private endpoint connection and deletes it from the search service.
           flags:
             --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
                 description: ==SUPPRESS==
@@ -52,6 +39,8 @@ commands:
             --service-name=!: The name of the search service.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
+            -n, --private-endpoint-connection-name=!: The name of the private endpoint connection to the Azure Cognitive Search service with the specified resource group.
+            -y, --yes=: Do not prompt for confirmation.
         - name: show
           description: Gets the details of the private endpoint connection to the search service in the given resource group.
           flags:
@@ -65,8 +54,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --private-endpoint-connection-name=!: The name of the private endpoint connection to the Azure Cognitive Search service with the specified resource group.
-        - name: delete
-          description: Disconnects the private endpoint connection and deletes it from the search service.
+        - name: list
+          description: Gets a list of all private endpoint connections in the given service.
           flags:
             --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
                 description: ==SUPPRESS==
@@ -74,8 +63,19 @@ commands:
             --service-name=!: The name of the search service.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-            -n, --private-endpoint-connection-name=!: The name of the private endpoint connection to the Azure Cognitive Search service with the specified resource group.
-            -y, --yes=: Do not prompt for confirmation.
+        - name: update
+          description: Update an existing private endpoint connection in a Search service in the given resource group.
+          flags:
+            --actions-required=!: Custom 'actions required' message when updating the private endpoint connection resource.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --description=!: Custom description when updating the private endpoint connection resource.
+            --service-name=!: The name of the search service.
+            --status=!: The updated status of the private endpoint connection resource.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: 'Name of the private endpoint connection resource; for example: {the name of the private endpoint resource}.{guid}.'
     - name: private-link-resource
       description: Manage Azure Search private link resources.
       commands:
@@ -123,20 +123,31 @@ commands:
     - name: service
       description: Manage Azure Search services
       commands:
-        - name: wait
-          description: Place the CLI in a waiting state until a condition is met.
+        - name: list
+          description: Gets a list of all Search services in the given resource group.
           flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
+            --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: delete
+          description: Delete a search service in the given resource group, along with its associated resources.
+          flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the Azure Cognitive Search service associated with the specified resource group.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: show
+          description: Get the search service with the given name in the given resource group.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Azure Cognitive Search service associated with the specified resource group.
         - name: update
@@ -228,33 +239,22 @@ commands:
                     - disabled
                     - free
                     - standard
-        - name: delete
-          description: Delete a search service in the given resource group, along with its associated resources.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
           flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Azure Cognitive Search service associated with the specified resource group.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Get the search service with the given name in the given resource group.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Azure Cognitive Search service associated with the specified resource group.
-        - name: list
-          description: Gets a list of all Search services in the given resource group.
-          flags:
-            --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: create
           description: Create a search service in the given resource group.
           flags:
@@ -355,17 +355,19 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the shared private link resource managed by the Azure Cognitive Search service within the specified resource group.
-        - name: delete
-          description: Initiates the deletion of the shared private link resource from the search service.
+        - name: show
+          description: Gets the details of the shared private link resource managed by the search service in the given resource group.
           flags:
             --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
             --service-name=!: The name of the search service.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the shared private link resource managed by the Azure Cognitive Search service within the specified resource group.
-            -y, --yes=: Do not prompt for confirmation.
         - name: list
           description: Gets a list of all shared private link resources managed by the given service.
           flags:
@@ -389,19 +391,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the shared private link resource.
-        - name: show
-          description: Gets the details of the shared private link resource managed by the search service in the given resource group.
-          flags:
-            --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --service-name=!: The name of the search service.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the shared private link resource managed by the Azure Cognitive Search service within the specified resource group.
         - name: create
           description: Create shared privatelink resources in a Search service in the given resource group.
           flags:
@@ -416,3 +405,14 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the shared private link resource.
+        - name: delete
+          description: Initiates the deletion of the shared private link resource from the search service.
+          flags:
+            --__SEARCH_MANAGEMENT_REQUEST_OPTIONS=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --service-name=!: The name of the search service.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the shared private link resource managed by the Azure Cognitive Search service within the specified resource group.
+            -y, --yes=: Do not prompt for confirmation.

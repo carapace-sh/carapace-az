@@ -63,14 +63,6 @@ commands:
     - name: link
       description: Manage links between resources.
       commands:
-        - name: show
-          description: Gets a resource link with the specified ID.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --link=!: Fully-qualified resource ID of the resource link.
-            --subscription=: Name or ID of subscription.
         - name: update
           description: Update link between resources.
           flags:
@@ -84,6 +76,14 @@ commands:
         - name: delete
           description: Deletes a resource link with the specified ID.
           flags:
+            --link=!: Fully-qualified resource ID of the resource link.
+            --subscription=: Name or ID of subscription.
+        - name: show
+          description: Gets a resource link with the specified ID.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
             --link=!: Fully-qualified resource ID of the resource link.
             --subscription=: Name or ID of subscription.
         - name: create
@@ -123,6 +123,39 @@ commands:
     - name: lock
       description: Manage Azure resource level locks.
       commands:
+        - name: list
+          description: List lock information in the resource-level.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --filter-string=: A query filter to use to restrict the results.
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: create
+          description: Create a resource-level lock.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --notes=: Notes about this lock.
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the lock
+            -t, --lock-type=!: The type of lock restriction.
+          completion:
+            flag:
+                lock-type:
+                    - CanNotDelete
+                    - ReadOnly
         - name: update
           description: Allows updates to the lock-type(level) and the notes of the lock
           flags:
@@ -162,39 +195,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the lock
-        - name: list
-          description: List lock information in the resource-level.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --filter-string=: A query filter to use to restrict the results.
-            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
-            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
-            --resource-type=: 'The resource type (Ex: ''resC'').'
-            --resource=: If an ID is given, other resource arguments should not be given.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: create
-          description: Create a resource-level lock.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
-            --notes=: Notes about this lock.
-            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
-            --resource-type=: 'The resource type (Ex: ''resC'').'
-            --resource=: If an ID is given, other resource arguments should not be given.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the lock
-            -t, --lock-type=!: The type of lock restriction.
-          completion:
-            flag:
-                lock-type:
-                    - CanNotDelete
-                    - ReadOnly
         - name: show
           description: Show the details of a resource-level lock
           flags:

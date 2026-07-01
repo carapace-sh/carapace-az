@@ -72,6 +72,20 @@ func init() {
 		})
 	}
 
+	extensionDescriptions := map[string]string{
+		"configure":   "Manage Azure CLI configuration. This command is interactive.",
+		"feedback":    "Send feedback to the Azure CLI Team.",
+		"find":        "I'm an AI robot, my advice is based on Azure documentation.",
+		"init":        "Initialize a configuration file or local repo for use with Azure CLI.",
+		"interactive": "Start interactive mode. Installs the Interactive extension if needed.",
+		"login":       "Log in to access Azure subscriptions.",
+		"logout":      "Log out to remove access to Azure subscriptions.",
+		"rest":        "Invoke a custom request.",
+		"survey":      "Take Azure CLI survey.",
+		"upgrade":     "Upgrade Azure CLI and extensions.",
+		"version":     "Show the versions of Azure CLI modules and extensions.",
+	}
+
 	for _, extension := range []string{
 		"configure",
 		"feedback",
@@ -87,6 +101,7 @@ func init() {
 	} {
 		subCmd := &cobra.Command{
 			Use:                extension,
+			Short:              extensionDescriptions[extension],
 			Run:                func(cmd *cobra.Command, args []string) {},
 			DisableFlagParsing: true,
 		}

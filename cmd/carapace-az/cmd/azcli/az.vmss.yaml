@@ -569,20 +569,6 @@ commands:
     - name: disk
       description: Manage data disks of a VMSS.
       commands:
-        - name: detach
-          description: Detach managed data disks from a scale set or its instances.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --instance-id=: Scale set VM instance id
-            --lun=!: 0-based logical unit number (LUN).
-            --subscription=: Name or ID of subscription.
-            --vmss-name=: Scale set name.
-            -g, --resource-group=: Name of resource group.
         - name: attach
           description: Attach managed data disks to a scale set or its instances.
           flags:
@@ -615,9 +601,55 @@ commands:
                     - Premium_ZRS
                     - StandardSSD_ZRS
                     - PremiumV2_LRS
+        - name: detach
+          description: Detach managed data disks from a scale set or its instances.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --instance-id=: Scale set VM instance id
+            --lun=!: 0-based logical unit number (LUN).
+            --subscription=: Name or ID of subscription.
+            --vmss-name=: Scale set name.
+            -g, --resource-group=: Name of resource group.
     - name: encryption
       description: Manage encryption of VMSS.
       commands:
+        - name: show
+          description: Show encryption status.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
+        - name: disable
+          description: Disable the encryption on a VMSS with managed disks.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --force=: continue by ignoring client side validation errors
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --volume-type=: Type of volume that the encryption operation is performed on
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
+          completion:
+            flag:
+                volume-type:
+                    - DATA
+                    - OS
+                    - ALL
         - name: enable
           description: Encrypt a VMSS with managed disks.
           flags:
@@ -643,60 +675,59 @@ commands:
                     - DATA
                     - OS
                     - ALL
-        - name: disable
-          description: Disable the encryption on a VMSS with managed disks.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --force=: continue by ignoring client side validation errors
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --volume-type=: Type of volume that the encryption operation is performed on
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
-          completion:
-            flag:
-                volume-type:
-                    - DATA
-                    - OS
-                    - ALL
-        - name: show
-          description: Show encryption status.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
     - name: extension
       description: Manage extensions on a VM scale set.
       commands:
-        - name: upgrade
-          description: Upgrade all extensions for all VMSS instances to the latest version.
+        - name: set
+          description: Add an extension to a VMSS or update an existing extension.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
+            --enable-auto-upgrade=:
+                description: Indicate the extension should be automatically upgraded by the platform if there is a newer version of the extension available.
+                nargs: -1
+            --extension-instance-name=: Name of extension instance, which can be customized.
+            --force-update=: force to update even if the extension configuration has not changed.
+            --no-auto-upgrade-minor-version=:
+                description: If set, the extension service will not automatically pick or upgrade to the latest minor version, even if the extension is redeployed.
                 nargs: -1
             --no-wait=: Do not wait for the long-running operation to finish.
+            --protected-settings=: Protected settings in JSON format for sensitive information like credentials.
+            --provision-after-extensions=:
+                description: Space-separated list of extension names after which this extension should be provisioned.
+                nargs: -1
+            --publisher=!: The name of the extension publisher.
+            --settings=: Extension settings in JSON format.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
-        - name: show
-          description: Show details on a VMSS extension.
+            --version=: The version of the extension.
+            --vmss-name=!: Scale set name.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the extension.
+          completion:
+            flag:
+                enable-auto-upgrade:
+                    - "true"
+                    - "false"
+                no-auto-upgrade-minor-version:
+                    - "true"
+                    - "false"
+        - name: list
+          description: List extensions associated with a VMSS.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
+            --subscription=: Name or ID of subscription.
+            --vmss-name=!: Scale set name.
+            -g, --resource-group=!: Name of resource group.
+        - name: delete
+          description: Delete an extension from a VMSS.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             --vmss-name=!: Scale set name.
             -g, --resource-group=!: Name of resource group.
@@ -749,56 +780,25 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -l, --location=: Location.
                 -p, --publisher=: Image publisher name.
-        - name: list
-          description: List extensions associated with a VMSS.
+        - name: upgrade
+          description: Upgrade all extensions for all VMSS instances to the latest version.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --subscription=: Name or ID of subscription.
-            --vmss-name=!: Scale set name.
-            -g, --resource-group=!: Name of resource group.
-        - name: set
-          description: Add an extension to a VMSS or update an existing extension.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --enable-auto-upgrade=:
-                description: Indicate the extension should be automatically upgraded by the platform if there is a newer version of the extension available.
-                nargs: -1
-            --extension-instance-name=: Name of extension instance, which can be customized.
-            --force-update=: force to update even if the extension configuration has not changed.
-            --no-auto-upgrade-minor-version=:
-                description: If set, the extension service will not automatically pick or upgrade to the latest minor version, even if the extension is redeployed.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
                 nargs: -1
             --no-wait=: Do not wait for the long-running operation to finish.
-            --protected-settings=: Protected settings in JSON format for sensitive information like credentials.
-            --provision-after-extensions=:
-                description: Space-separated list of extension names after which this extension should be provisioned.
-                nargs: -1
-            --publisher=!: The name of the extension publisher.
-            --settings=: Extension settings in JSON format.
             --subscription=: Name or ID of subscription.
-            --version=: The version of the extension.
-            --vmss-name=!: Scale set name.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the extension.
-          completion:
-            flag:
-                enable-auto-upgrade:
-                    - "true"
-                    - "false"
-                no-auto-upgrade-minor-version:
-                    - "true"
-                    - "false"
-        - name: delete
-          description: Delete an extension from a VMSS.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
+        - name: show
+          description: Show details on a VMSS extension.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             --vmss-name=!: Scale set name.
             -g, --resource-group=!: Name of resource group.
@@ -827,6 +827,26 @@ commands:
     - name: identity
       description: manage service identities of a VM scaleset.
       commands:
+        - name: assign
+          description: Enable managed service identity on a VMSS.
+          flags:
+            --__IDENTITY_ROLE_ID=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --identities=:
+                description: Space-separated identities to assign.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --role=: Role name or id the system assigned identity will have.
+            --scope=: Scope that the system assigned identity can access.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
         - name: remove
           description: Remove user assigned identities from a VM scaleset.
           flags:
@@ -854,26 +874,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Virtual Machine.
-        - name: assign
-          description: Enable managed service identity on a VMSS.
-          flags:
-            --__IDENTITY_ROLE_ID=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --identities=:
-                description: Space-separated identities to assign.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --role=: Role name or id the system assigned identity will have.
-            --scope=: Scope that the system assigned identity can access.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
     - name: list
       description: List all VM scale sets under a resource group.
       flags:
@@ -1024,15 +1024,6 @@ commands:
     - name: rolling-upgrade
       description: Manage rolling upgrades.
       commands:
-        - name: get-latest
-          description: Get the status of the latest virtual machine scale set rolling upgrade.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
         - name: start
           description: Start a rolling upgrade to move all virtual machine scale set instances to the latest available Platform Image OS version.
           flags:
@@ -1058,6 +1049,15 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: get-latest
+          description: Get the status of the latest virtual machine scale set rolling upgrade.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
         - name: cancel
           description: Cancel the current virtual machine scale set rolling upgrade.
           flags:
@@ -1102,14 +1102,39 @@ commands:
             --subscription=: Name or ID of subscription.
             --vmss-name=: The name of the VM scale set.
             -g, --resource-group=: Name of resource group.
-        - name: list
-          description: The operation to get all run commands of an instance in Virtual Machine Scaleset.
+        - name: delete
+          description: The operation to delete the run command.
           flags:
-            --expand=: The expand expression to apply on the operation.
-            --instance-id=!: The instance ID of the virtual machine.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --instance-id=: The instance ID of the virtual machine.
+            --name=!: The name of the virtual machine run command.
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
-            --vmss-name=!: The name of the VM scale set.
-            -g, --resource-group=!: Name of resource group.
+            --vmss-name=: The name of the VM scale set.
+            -g, --resource-group=: Name of resource group.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: invoke
+          description: Execute a specific run command on a Virtual Machine Scale Set instance.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --command-id=!: The command id.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --instance-id=: Scale set VM instance id.
+            --parameters=:
+                description: space-separated parameters in the format of '[name=]value'
+                nargs: -1
+            --scripts=:
+                description: Space-separated script lines.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Scale set name.
         - name: update
           description: The operation to update the VMSS run command.
           flags:
@@ -1148,19 +1173,14 @@ commands:
                 async-execution:
                     - "true"
                     - "false"
-        - name: delete
-          description: The operation to delete the run command.
+        - name: list
+          description: The operation to get all run commands of an instance in Virtual Machine Scaleset.
           flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --instance-id=: The instance ID of the virtual machine.
-            --name=!: The name of the virtual machine run command.
-            --no-wait=: Do not wait for the long-running operation to finish.
+            --expand=: The expand expression to apply on the operation.
+            --instance-id=!: The instance ID of the virtual machine.
             --subscription=: Name or ID of subscription.
-            --vmss-name=: The name of the VM scale set.
-            -g, --resource-group=: Name of resource group.
-            -y, --yes=: Do not prompt for confirmation.
+            --vmss-name=!: The name of the VM scale set.
+            -g, --resource-group=!: Name of resource group.
         - name: create
           description: The operation to Create the VMSS VM run command.
           flags:
@@ -1196,26 +1216,6 @@ commands:
                 async-execution:
                     - "true"
                     - "false"
-        - name: invoke
-          description: Execute a specific run command on a Virtual Machine Scale Set instance.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --command-id=!: The command id.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --instance-id=: Scale set VM instance id.
-            --parameters=:
-                description: space-separated parameters in the format of '[name=]value'
-                nargs: -1
-            --scripts=:
-                description: Space-separated script lines.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Scale set name.
     - name: scale
       description: Change the number of VMs within a VMSS.
       flags:
