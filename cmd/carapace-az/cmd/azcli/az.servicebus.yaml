@@ -3,41 +3,22 @@ name: servicebus
 description: servicebus
 commands:
     - name: georecovery-alias
+      description: Manage Azure Service Bus Geo-Disaster Recovery Configuration Alias.
       commands:
-        - name: list
-          description: List all Alias(Disaster Recovery configurations)
-          flags:
-            --namespace-name=!: The namespace name
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: exists
-          description: Check the give namespace name availability.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --subscription=: Name or ID of subscription.
-            -a, --alias=!: The Name to check the namespace name availability and The namespace name can contain only letters, numbers, and hyphens.
-            -g, --resource-group=: Name of resource group.
-        - name: set
-          description: Sets Service Bus Geo-Disaster Recovery Configuration Alias for the give Namespace
-          flags:
-            --alternate-name=: Alternate Name (Post failover) for Primary Namespace, when Namespace name and Alias name are same
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: Name of Namespace
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --partner-namespace=!: Name (if within the same resource group) or ARM Id of Primary/Secondary Service Bus  namespace name, which is part of GEO DR pairing
-            --subscription=: Name or ID of subscription.
-            -a, --alias=!: Name of the Geo-Disaster Recovery Configuration Alias
-            -g, --resource-group=: Name of resource group.
         - name: authorization-rule
+          description: Manage Azure Service Bus Authorization Rule for Namespace with Geo-Disaster Recovery Configuration Alias.
           commands:
+            - name: keys
+              description: Manage Azure Authorization Rule keys for Service Bus Namespace.
+              commands:
+                - name: list
+                  description: Gets the primary and secondary connection strings for the namespace.
+                  flags:
+                    --namespace-name=!: The namespace name
+                    --subscription=: Name or ID of subscription.
+                    -a, --alias=!: The Disaster Recovery configuration name
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The authorization rule name.
             - name: show
               description: Get an authorization rule for a namespace by rule name.
               flags:
@@ -56,16 +37,45 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -a, --alias=!: The Disaster Recovery configuration name
                 -g, --resource-group=!: Name of resource group.
-            - name: keys
-              commands:
-                - name: list
-                  description: Gets the primary and secondary connection strings for the namespace.
-                  flags:
-                    --namespace-name=!: The namespace name
-                    --subscription=: Name or ID of subscription.
-                    -a, --alias=!: The Disaster Recovery configuration name
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The authorization rule name.
+        - name: show
+          description: Get Alias(Disaster Recovery configuration) for primary or secondary namespace
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --subscription=: Name or ID of subscription.
+            -a, --alias=: The Disaster Recovery configuration name
+            -g, --resource-group=: Name of resource group.
+        - name: delete
+          description: Delete an Alias(Disaster Recovery configuration)
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --subscription=: Name or ID of subscription.
+            -a, --alias=: The Disaster Recovery configuration name
+            -g, --resource-group=: Name of resource group.
+        - name: exists
+          description: Check the give namespace name availability.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --subscription=: Name or ID of subscription.
+            -a, --alias=!: The Name to check the namespace name availability and The namespace name can contain only letters, numbers, and hyphens.
+            -g, --resource-group=: Name of resource group.
+        - name: create
+          description: Create a new Alias(Disaster Recovery configuration)
+          flags:
+            --alternate-name=: Primary/Secondary eventhub namespace name, which is part of GEO DR pairing
+            --namespace-name=!: The namespace name
+            --partner-namespace=!: ARM Id of the Primary/Secondary eventhub namespace name, which is part of GEO DR pairing
+            --subscription=: Name or ID of subscription.
+            -a, --alias=!: The Disaster Recovery configuration name
+            -g, --resource-group=!: Name of resource group.
         - name: fail-over
           description: Invokes GEO DR failover and reconfigure the alias to point to the secondary namespace
           flags:
@@ -92,25 +102,6 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: show
-          description: Get Alias(Disaster Recovery configuration) for primary or secondary namespace
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --subscription=: Name or ID of subscription.
-            -a, --alias=: The Disaster Recovery configuration name
-            -g, --resource-group=: Name of resource group.
-        - name: create
-          description: Create a new Alias(Disaster Recovery configuration)
-          flags:
-            --alternate-name=: Primary/Secondary eventhub namespace name, which is part of GEO DR pairing
-            --namespace-name=!: The namespace name
-            --partner-namespace=!: ARM Id of the Primary/Secondary eventhub namespace name, which is part of GEO DR pairing
-            --subscription=: Name or ID of subscription.
-            -a, --alias=!: The Disaster Recovery configuration name
-            -g, --resource-group=!: Name of resource group.
         - name: break-pair
           description: This operation disables the Disaster Recovery and stops replicating changes from primary to secondary namespaces
           flags:
@@ -121,84 +112,33 @@ commands:
             --subscription=: Name or ID of subscription.
             -a, --alias=: The Disaster Recovery configuration name
             -g, --resource-group=: Name of resource group.
-        - name: delete
-          description: Delete an Alias(Disaster Recovery configuration)
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --subscription=: Name or ID of subscription.
-            -a, --alias=: The Disaster Recovery configuration name
-            -g, --resource-group=: Name of resource group.
-    - name: migration
-      commands:
-        - name: start
-          description: Create Migration configuration and starts migration of entities from Standard to Premium namespace
-          flags:
-            --config-name=: The configuration name.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --post-migration-name=: Name to access Standard Namespace after migration
-            --subscription=: Name or ID of subscription.
-            --target-namespace=: Existing premium Namespace ARM Id name which has no entities, will be used for migration
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The namespace name
-          completion:
-            flag:
-                config-name:
-                    - $default
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: list
-          description: List all migrationConfigurations
+          description: List all Alias(Disaster Recovery configurations)
           flags:
+            --namespace-name=!: The namespace name
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The namespace name
+        - name: set
+          description: Sets Service Bus Geo-Disaster Recovery Configuration Alias for the give Namespace
+          flags:
+            --alternate-name=: Alternate Name (Post failover) for Primary Namespace, when Namespace name and Alias name are same
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: Name of Namespace
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --partner-namespace=!: Name (if within the same resource group) or ARM Id of Primary/Secondary Service Bus  namespace name, which is part of GEO DR pairing
+            --subscription=: Name or ID of subscription.
+            -a, --alias=!: Name of the Geo-Disaster Recovery Configuration Alias
+            -g, --resource-group=: Name of resource group.
+    - name: migration
+      description: Manage Azure Service Bus Migration of Standard to Premium.
+      commands:
         - name: complete
           description: This operation Completes Migration of entities by pointing the connection strings to Premium namespace and any entities created after the operation will be under Premium Namespace.
-          flags:
-            --config-name=: The configuration name.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The namespace name
-          completion:
-            flag:
-                config-name:
-                    - $default
-        - name: delete
-          description: Delete a MigrationConfiguration
-          flags:
-            --config-name=: The configuration name.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The namespace name
-          completion:
-            flag:
-                config-name:
-                    - $default
-        - name: abort
-          description: This operation reverts Migration
           flags:
             --config-name=: The configuration name.
             --ids=:
@@ -232,6 +172,70 @@ commands:
             flag:
                 config-name:
                     - $default
+        - name: abort
+          description: This operation reverts Migration
+          flags:
+            --config-name=: The configuration name.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The namespace name
+          completion:
+            flag:
+                config-name:
+                    - $default
+        - name: list
+          description: List all migrationConfigurations
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The namespace name
+        - name: delete
+          description: Delete a MigrationConfiguration
+          flags:
+            --config-name=: The configuration name.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The namespace name
+          completion:
+            flag:
+                config-name:
+                    - $default
+        - name: start
+          description: Create Migration configuration and starts migration of entities from Standard to Premium namespace
+          flags:
+            --config-name=: The configuration name.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --post-migration-name=: Name to access Standard Namespace after migration
+            --subscription=: Name or ID of subscription.
+            --target-namespace=: Existing premium Namespace ARM Id name which has no entities, will be used for migration
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The namespace name
+          completion:
+            flag:
+                config-name:
+                    - $default
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: show
           description: Get Migration Config
           flags:
@@ -247,10 +251,13 @@ commands:
                 config-name:
                     - $default
     - name: namespace
+      description: servicebus namespace
       commands:
         - name: network-rule-set
+          description: servicebus namespace network-rule-set
           commands:
             - name: ip-rule
+              description: Manage Azure ServiceBus ip-rules in networkruleSet for namespace
               commands:
                 - name: remove
                   description: Remove Ip-Rule from network rule of namespace
@@ -276,12 +283,6 @@ commands:
                     --subscription=: Name or ID of subscription.
                     -g, --resource-group=!: Name of resource group.
                     -n, --namespace-name=!: Name of the Namespace
-            - name: list
-              description: List list of NetworkRuleSet for a Namespace.
-              flags:
-                --namespace-name=!: The namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
             - name: create
               description: Create NetworkRuleSet for a Namespace.
               flags:
@@ -318,6 +319,39 @@ commands:
                     public-network-access:
                         - Disabled
                         - Enabled
+            - name: virtual-network-rule
+              description: Manage Azure ServiceBus subnet-rule in networkruleSet for namespace
+              commands:
+                - name: add
+                  description: Add a Virtual-Network-Rule for network rule of namespace.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --namespace-name=!: Name of the Namespace
+                    --subnet=:
+                        description: List VirtualNetwork Rules.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                - name: remove
+                  description: Remove network rule for a namespace
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --namespace-name=!: Name of the Namespace
+                    --subnet=:
+                        description: List VirtualNetwork Rules.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+            - name: list
+              description: List list of NetworkRuleSet for a Namespace.
+              flags:
+                --namespace-name=!: The namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
             - name: update
               description: Update NetworkRuleSet for a Namespace.
               flags:
@@ -380,32 +414,6 @@ commands:
                     public-network-access:
                         - Disabled
                         - Enabled
-            - name: virtual-network-rule
-              commands:
-                - name: remove
-                  description: Remove network rule for a namespace
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --namespace-name=!: Name of the Namespace
-                    --subnet=:
-                        description: List VirtualNetwork Rules.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                - name: add
-                  description: Add a Virtual-Network-Rule for network rule of namespace.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --namespace-name=!: Name of the Namespace
-                    --subnet=:
-                        description: List VirtualNetwork Rules.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
             - name: show
               description: Get NetworkRuleSet for a Namespace.
               flags:
@@ -415,12 +423,125 @@ commands:
                 --namespace-name=: The namespace name
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-        - name: list
-          description: List all the available namespaces within the subscription by resource group & also irrespective of the resource groups.
+        - name: create
+          description: Create a Service Bus Namespace
           flags:
+            --alternate-name=: Alternate name specified when alias and namespace names are same.
+            --capacity=: Number of message units.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --disable-local-auth=:
+                description: A boolean value that indicates whether SAS authentication is enabled/disabled for the Service Bus
+                nargs: -1
+            --encryption-config=:
+                description: List of KeyVaultProperties objects.
+                nargs: -1
+            --geo-data-replication-config=:
+                description: A list of regions where replicas of the namespace are maintained Object
+                nargs: -1
+            --infra-encryption=:
+                description: A boolean value that indicates whether Infrastructure Encryption (Double Encryption)
+                nargs: -1
+            --max-replication-lag-duration-in-seconds=: The maximum acceptable lag for data replication operations from the primary replica to a quorum of secondary replicas
+            --mi-system-assigned=:
+                description: Enable System Assigned Identity
+                nargs: -1
+            --mi-user-assigned=:
+                description: List of User Assigned Identity ids.
+                nargs: -1
+            --minimum-tls-version=: The minimum TLS version for the cluster to support, e.g. 1.2
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --premium-messaging-partitions=: The number of partitions of a Service Bus namespace.
+            --public-network-access=: This determines if traffic is allowed over public network.
+            --sku=: Namespace SKU.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --zone-redundant=:
+                description: Enabling this property creates a ServiceBus Zone Redundant Namespace in regions supported availability zones
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: Location.
+            -n, --name=!: Name of Namespace
+          completion:
+            flag:
+                capacity:
+                    - "1"
+                    - "2"
+                    - "4"
+                    - "8"
+                    - "16"
+                disable-local-auth:
+                    - "true"
+                    - "false"
+                infra-encryption:
+                    - "true"
+                    - "false"
+                mi-system-assigned:
+                    - "true"
+                    - "false"
+                minimum-tls-version:
+                    - "1.0"
+                    - "1.1"
+                    - "1.2"
+                public-network-access:
+                    - Enabled
+                    - Disabled
+                sku:
+                    - Basic
+                    - Standard
+                    - Premium
+                zone-redundant:
+                    - "true"
+                    - "false"
+        - name: encryption
+          description: Manage servicebus namespace encryption properties.
+          commands:
+            - name: add
+              description: Add Encryption properties to a namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --encryption-config=!:
+                    description: List of KeyVaultProperties objects.
+                    nargs: -1
+                --infra-encryption=:
+                    description: A boolean value that indicates whether Infrastructure Encryption (Double Encryption)
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+              completion:
+                flag:
+                    infra-encryption:
+                        - "true"
+                        - "false"
+            - name: remove
+              description: Remove one or more Encryption properties from a namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --encryption-config=!:
+                    description: List of KeyVaultProperties objects.
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+        - name: show
+          description: Get a description for the specified namespace.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: The resourceGroup name
+            -n, --name=: The namespace name
         - name: replica
+          description: Manage servicebus namespace replicas.
           commands:
             - name: remove
               description: Remove one or more Replica properties to a namespace.
@@ -446,31 +567,8 @@ commands:
                 --namespace-name=!: Name of the Namespace
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
-        - name: wait
-          description: Place the CLI in a waiting state until a condition is met.
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The namespace name
-        - name: private-link-resource
-          commands:
-            - name: show
-              description: List lists of resources that supports Privatelinks.
-              flags:
-                --namespace-name=!: The namespace name
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
         - name: authorization-rule
+          description: servicebus namespace authorization-rule
           commands:
             - name: list
               description: List the authorization rules for a namespace.
@@ -478,8 +576,8 @@ commands:
                 --namespace-name=!: The namespace name
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
-            - name: show
-              description: Get an authorization rule for a namespace by rule name.
+            - name: delete
+              description: Delete a namespace authorization rule.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -488,34 +586,8 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The authorization rule name.
-            - name: keys
-              commands:
-                - name: renew
-                  description: Regenerates the primary or secondary connection strings for the namespace.
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --key-value=: Optional, if the key value provided, is reset for KeyType value or autogenerate Key value set for keyType
-                    --key=!: The access key to regenerate.
-                    --namespace-name=: The namespace name
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The authorization rule name.
-                  completion:
-                    flag:
-                        key:
-                            - PrimaryKey
-                            - SecondaryKey
-                - name: list
-                  description: Gets the primary and secondary connection strings for the namespace.
-                  flags:
-                    --namespace-name=!: The namespace name
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The authorization rule name.
-            - name: delete
-              description: Delete a namespace authorization rule.
+            - name: show
+              description: Get an authorization rule for a namespace by rule name.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -534,6 +606,33 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The authorization rule name.
+            - name: keys
+              description: servicebus namespace authorization-rule keys
+              commands:
+                - name: list
+                  description: Gets the primary and secondary connection strings for the namespace.
+                  flags:
+                    --namespace-name=!: The namespace name
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The authorization rule name.
+                - name: renew
+                  description: Regenerates the primary or secondary connection strings for the namespace.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --key-value=: Optional, if the key value provided, is reset for KeyType value or autogenerate Key value set for keyType
+                    --key=!: The access key to regenerate.
+                    --namespace-name=: The namespace name
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The authorization rule name.
+                  completion:
+                    flag:
+                        key:
+                            - PrimaryKey
+                            - SecondaryKey
             - name: update
               description: Update an authorization rule for a namespace.
               flags:
@@ -572,50 +671,73 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-        - name: show
-          description: Get a description for the specified namespace.
+        - name: failover
+          description: GeoDR Failover
+          flags:
+            --force=:
+                description: If Force is false then graceful failover is attempted after ensuring no data loss.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --primary-location=: Query parameter for the new primary location after failover.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+          completion:
+            flag:
+                force:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: delete
+          description: Delete an existing namespace.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: The resourceGroup name
             -n, --name=: The namespace name
-        - name: encryption
-          commands:
-            - name: remove
-              description: Remove one or more Encryption properties from a namespace.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --encryption-config=!:
-                    description: List of KeyVaultProperties objects.
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: add
-              description: Add Encryption properties to a namespace.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --encryption-config=!:
-                    description: List of KeyVaultProperties objects.
-                    nargs: -1
-                --infra-encryption=:
-                    description: A boolean value that indicates whether Infrastructure Encryption (Double Encryption)
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-              completion:
-                flag:
-                    infra-encryption:
-                        - "true"
-                        - "false"
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: private-endpoint-connection
+          description: Manage servicebus namespace private endpoint connection.
           commands:
             - name: show
               description: Get a description for the specified Private Endpoint Connection.
@@ -628,47 +750,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The PrivateEndpointConnection name
-            - name: wait
-              description: Place the CLI in a waiting state until a condition is met.
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --namespace-name=: The namespace name
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The PrivateEndpointConnection name
-            - name: create
-              description: Create PrivateEndpointConnections of service namespace.
-              flags:
-                --description=: Description of the connection state.
-                --namespace-name=!: The namespace name
-                --provisioning-state=: Provisioning state of the Private Endpoint Connection.
-                --status=: Status of the connection.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The PrivateEndpointConnection name
-              completion:
-                flag:
-                    provisioning-state:
-                        - Canceled
-                        - Creating
-                        - Deleting
-                        - Failed
-                        - Succeeded
-                        - Updating
-                    status:
-                        - Approved
-                        - Disconnected
-                        - Pending
-                        - Rejected
             - name: update
               description: Update PrivateEndpointConnections of service namespace.
               flags:
@@ -719,19 +800,23 @@ commands:
                         - Disconnected
                         - Pending
                         - Rejected
-            - name: delete
-              description: Delete a private endpoint connection request for servicebus namespace.
+            - name: wait
+              description: Place the CLI in a waiting state until a condition is met.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --description=: Comments for delete operation.
-                --id=: The ID of the private endpoint connection associated with the Service Bus Namespace.
-                --namespace-name=: The Service Bus namesapce name.
+                --interval=: polling interval in seconds
+                --namespace-name=: The namespace name
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: The resource group name of specified Service bus namespace.
-                -n, --name=: The name of the private endpoint connection associated with the Service Bus Namespace.
-                -y, --yes=: Do not prompt for confirmation.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The PrivateEndpointConnection name
             - name: reject
               description: Reject a private endpoint connection request for servicebus namespace.
               flags:
@@ -750,6 +835,19 @@ commands:
                 --namespace-name=!: The namespace name
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
+            - name: delete
+              description: Delete a private endpoint connection request for servicebus namespace.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --description=: Comments for delete operation.
+                --id=: The ID of the private endpoint connection associated with the Service Bus Namespace.
+                --namespace-name=: The Service Bus namesapce name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: The resource group name of specified Service bus namespace.
+                -n, --name=: The name of the private endpoint connection associated with the Service Bus Namespace.
+                -y, --yes=: Do not prompt for confirmation.
             - name: approve
               description: Approve a private endpoint connection request for servicebus namespace.
               flags:
@@ -762,68 +860,33 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: The resource group name of specified Service bus namespace.
                 -n, --name=: The name of the private endpoint connection associated with the Service Bus Namespace.
-        - name: failover
-          description: GeoDR Failover
-          flags:
-            --force=:
-                description: If Force is false then graceful failover is attempted after ensuring no data loss.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --primary-location=: Query parameter for the new primary location after failover.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-          completion:
-            flag:
-                force:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: identity
-          commands:
-            - name: remove
-              description: Removes System or User or System, User assigned identities from a namespace
+            - name: create
+              description: Create PrivateEndpointConnections of service namespace.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --namespace-name=!: Name of the Namespace
+                --description=: Description of the connection state.
+                --namespace-name=!: The namespace name
+                --provisioning-state=: Provisioning state of the Private Endpoint Connection.
+                --status=: Status of the connection.
                 --subscription=: Name or ID of subscription.
-                --system-assigned=:
-                    description: System Assigned Identity
-                    nargs: -1
-                --user-assigned=:
-                    description: User Assigned Identity
-                    nargs: -1
                 -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The PrivateEndpointConnection name
               completion:
                 flag:
-                    system-assigned:
-                        - "true"
-                        - "false"
+                    provisioning-state:
+                        - Canceled
+                        - Creating
+                        - Deleting
+                        - Failed
+                        - Succeeded
+                        - Updating
+                    status:
+                        - Approved
+                        - Disconnected
+                        - Pending
+                        - Rejected
+        - name: identity
+          description: Manage servicebus namespace identity.
+          commands:
             - name: assign
               description: Assign System or User or System, User assigned identities to a namespace
               flags:
@@ -844,11 +907,51 @@ commands:
                     system-assigned:
                         - "true"
                         - "false"
-        - name: exists
-          description: Check the give namespace name availability.
+            - name: remove
+              description: Removes System or User or System, User assigned identities from a namespace
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --namespace-name=!: Name of the Namespace
+                --subscription=: Name or ID of subscription.
+                --system-assigned=:
+                    description: System Assigned Identity
+                    nargs: -1
+                --user-assigned=:
+                    description: User Assigned Identity
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+              completion:
+                flag:
+                    system-assigned:
+                        - "true"
+                        - "false"
+        - name: private-link-resource
+          description: Manage servicebus namespace private link resources.
+          commands:
+            - name: show
+              description: List lists of resources that supports Privatelinks.
+              flags:
+                --namespace-name=!: The namespace name
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
           flags:
-            --name=!: The Name to check the namespace name availability and The namespace name can contain only letters, numbers, and hyphens.
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The namespace name
         - name: update
           description: Update a service namespace.
           flags:
@@ -950,223 +1053,19 @@ commands:
                     - Basic
                     - Premium
                     - Standard
-        - name: delete
-          description: Delete an existing namespace.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: The resourceGroup name
-            -n, --name=: The namespace name
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: create
-          description: Create a Service Bus Namespace
-          flags:
-            --alternate-name=: Alternate name specified when alias and namespace names are same.
-            --capacity=: Number of message units.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --disable-local-auth=:
-                description: A boolean value that indicates whether SAS authentication is enabled/disabled for the Service Bus
-                nargs: -1
-            --encryption-config=:
-                description: List of KeyVaultProperties objects.
-                nargs: -1
-            --geo-data-replication-config=:
-                description: A list of regions where replicas of the namespace are maintained Object
-                nargs: -1
-            --infra-encryption=:
-                description: A boolean value that indicates whether Infrastructure Encryption (Double Encryption)
-                nargs: -1
-            --max-replication-lag-duration-in-seconds=: The maximum acceptable lag for data replication operations from the primary replica to a quorum of secondary replicas
-            --mi-system-assigned=:
-                description: Enable System Assigned Identity
-                nargs: -1
-            --mi-user-assigned=:
-                description: List of User Assigned Identity ids.
-                nargs: -1
-            --minimum-tls-version=: The minimum TLS version for the cluster to support, e.g. 1.2
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --premium-messaging-partitions=: The number of partitions of a Service Bus namespace.
-            --public-network-access=: This determines if traffic is allowed over public network.
-            --sku=: Namespace SKU.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --zone-redundant=:
-                description: Enabling this property creates a ServiceBus Zone Redundant Namespace in regions supported availability zones
-                nargs: -1
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=: Location.
-            -n, --name=!: Name of Namespace
-          completion:
-            flag:
-                capacity:
-                    - "1"
-                    - "2"
-                    - "4"
-                    - "8"
-                    - "16"
-                disable-local-auth:
-                    - "true"
-                    - "false"
-                infra-encryption:
-                    - "true"
-                    - "false"
-                mi-system-assigned:
-                    - "true"
-                    - "false"
-                minimum-tls-version:
-                    - "1.0"
-                    - "1.1"
-                    - "1.2"
-                public-network-access:
-                    - Enabled
-                    - Disabled
-                sku:
-                    - Basic
-                    - Standard
-                    - Premium
-                zone-redundant:
-                    - "true"
-                    - "false"
-    - name: queue
-      commands:
         - name: list
-          description: List the queues within a namespace.
+          description: List all the available namespaces within the subscription by resource group & also irrespective of the resource groups.
           flags:
-            --namespace-name=!: The namespace name
-            --skip=: Skip is only used if a previous operation returned a partial result.
             --subscription=: Name or ID of subscription.
-            --top=: May be used to limit the number of results to the most recent N usageDetails.
-            -g, --resource-group=!: Name of resource group.
-        - name: authorization-rule
-          commands:
-            - name: list
-              description: List all authorization rules for a queue.
-              flags:
-                --namespace-name=!: The namespace name
-                --queue-name=!: The queue name.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: show
-              description: Get an authorization rule for a queue by rule name.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The namespace name
-                --queue-name=: The queue name.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
-            - name: keys
-              commands:
-                - name: renew
-                  description: Regenerates the primary or secondary connection strings to the queue.
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --key-value=: Optional, if the key value provided, is reset for KeyType value or autogenerate Key value set for keyType
-                    --key=!: The access key to regenerate.
-                    --namespace-name=: The namespace name
-                    --queue-name=: The queue name.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The authorization rule name.
-                  completion:
-                    flag:
-                        key:
-                            - PrimaryKey
-                            - SecondaryKey
-                - name: list
-                  description: Primary and secondary connection strings to the queue.
-                  flags:
-                    --namespace-name=!: The namespace name
-                    --queue-name=!: The queue name.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The authorization rule name.
-            - name: delete
-              description: Delete a queue authorization rule.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The namespace name
-                --queue-name=: The queue name.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
-            - name: create
-              description: Create an authorization rule for a queue.
-              flags:
-                --namespace-name=!: The namespace name
-                --queue-name=!: The queue name.
-                --rights=:
-                    description: The rights associated with the rule.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The authorization rule name.
-            - name: update
-              description: Update an authorization rule for a queue.
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The namespace name
-                --queue-name=: The queue name.
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --rights=:
-                    description: The rights associated with the rule.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
+            -g, --resource-group=: Name of resource group.
+        - name: exists
+          description: Check the give namespace name availability.
+          flags:
+            --name=!: The Name to check the namespace name availability and The namespace name can contain only letters, numbers, and hyphens.
+            --subscription=: Name or ID of subscription.
+    - name: queue
+      description: servicebus queue
+      commands:
         - name: create
           description: Create a Service Bus queue.
           flags:
@@ -1280,26 +1179,117 @@ commands:
                     - Restoring
                     - SendDisabled
                     - Unknown
-        - name: delete
-          description: Delete a queue from the specified namespace in a resource group.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The queue name.
-        - name: show
-          description: Get a description for the specified queue.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The queue name.
+        - name: authorization-rule
+          description: servicebus queue authorization-rule
+          commands:
+            - name: update
+              description: Update an authorization rule for a queue.
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The namespace name
+                --queue-name=: The queue name.
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --rights=:
+                    description: The rights associated with the rule.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: keys
+              description: servicebus queue authorization-rule keys
+              commands:
+                - name: list
+                  description: Primary and secondary connection strings to the queue.
+                  flags:
+                    --namespace-name=!: The namespace name
+                    --queue-name=!: The queue name.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The authorization rule name.
+                - name: renew
+                  description: Regenerates the primary or secondary connection strings to the queue.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --key-value=: Optional, if the key value provided, is reset for KeyType value or autogenerate Key value set for keyType
+                    --key=!: The access key to regenerate.
+                    --namespace-name=: The namespace name
+                    --queue-name=: The queue name.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The authorization rule name.
+                  completion:
+                    flag:
+                        key:
+                            - PrimaryKey
+                            - SecondaryKey
+            - name: create
+              description: Create an authorization rule for a queue.
+              flags:
+                --namespace-name=!: The namespace name
+                --queue-name=!: The queue name.
+                --rights=:
+                    description: The rights associated with the rule.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The authorization rule name.
+            - name: delete
+              description: Delete a queue authorization rule.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The namespace name
+                --queue-name=: The queue name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
+            - name: list
+              description: List all authorization rules for a queue.
+              flags:
+                --namespace-name=!: The namespace name
+                --queue-name=!: The queue name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: show
+              description: Get an authorization rule for a queue by rule name.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The namespace name
+                --queue-name=: The queue name.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
         - name: update
           description: Update a Service Bus queue.
           flags:
@@ -1397,20 +1387,62 @@ commands:
                     - Restoring
                     - SendDisabled
                     - Unknown
+        - name: show
+          description: Get a description for the specified queue.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The queue name.
+        - name: list
+          description: List the queues within a namespace.
+          flags:
+            --namespace-name=!: The namespace name
+            --skip=: Skip is only used if a previous operation returned a partial result.
+            --subscription=: Name or ID of subscription.
+            --top=: May be used to limit the number of results to the most recent N usageDetails.
+            -g, --resource-group=!: Name of resource group.
+        - name: delete
+          description: Delete a queue from the specified namespace in a resource group.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The queue name.
     - name: topic
+      description: servicebus topic
       commands:
+        - name: list
+          description: List all the topics in a namespace.
+          flags:
+            --namespace-name=!: The namespace name
+            --skip=: Skip is only used if a previous operation returned a partial result.
+            --subscription=: Name or ID of subscription.
+            --top=: May be used to limit the number of results to the most recent N usageDetails.
+            -g, --resource-group=!: Name of resource group.
         - name: authorization-rule
+          description: servicebus topic authorization-rule
           commands:
+            - name: show
+              description: Get the specified authorization rule.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The namespace name
+                --subscription=: Name or ID of subscription.
+                --topic-name=: The topic name.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The authorization rule name.
             - name: keys
+              description: servicebus topic authorization-rule keys
               commands:
-                - name: list
-                  description: Gets the primary and secondary connection strings for the topic.
-                  flags:
-                    --namespace-name=!: The namespace name
-                    --subscription=: Name or ID of subscription.
-                    --topic-name=!: The topic name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: The authorization rule name.
                 - name: renew
                   description: Regenerates primary or secondary connection strings for the topic.
                   flags:
@@ -1429,6 +1461,14 @@ commands:
                         key:
                             - PrimaryKey
                             - SecondaryKey
+                - name: list
+                  description: Gets the primary and secondary connection strings for the topic.
+                  flags:
+                    --namespace-name=!: The namespace name
+                    --subscription=: Name or ID of subscription.
+                    --topic-name=!: The topic name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: The authorization rule name.
             - name: delete
               description: Delete a topic authorization rule.
               flags:
@@ -1497,54 +1537,32 @@ commands:
                 --subscription=: Name or ID of subscription.
                 --topic-name=!: The topic name.
                 -g, --resource-group=!: Name of resource group.
-            - name: show
-              description: Get the specified authorization rule.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The namespace name
-                --subscription=: Name or ID of subscription.
-                --topic-name=: The topic name.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The authorization rule name.
+        - name: show
+          description: Get a description for the specified topic.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The topic name.
+        - name: delete
+          description: Delete a topic from the specified namespace and resource group.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --namespace-name=: The namespace name
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The topic name.
         - name: subscription
+          description: servicebus topic subscription
           commands:
-            - name: delete
-              description: Delete a subscription from the specified topic.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --namespace-name=: The namespace name
-                --subscription=: Name or ID of subscription.
-                --topic-name=: The topic name.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The subscription name.
             - name: rule
+              description: servicebus topic subscription rule
               commands:
-                - name: delete
-                  description: Delete an existing rule.
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --namespace-name=: The namespace name
-                    --subscription-name=: The subscription name.
-                    --subscription=: Name or ID of subscription.
-                    --topic-name=: The topic name.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The rule name.
-                - name: list
-                  description: List all the rules within given topic-subscription
-                  flags:
-                    --namespace-name=!: The namespace name
-                    --skip=: Skip is only used if a previous operation returned a partial result.
-                    --subscription-name=!: The subscription name.
-                    --subscription=: Name or ID of subscription.
-                    --top=: May be used to limit the number of results to the most recent N usageDetails.
-                    --topic-name=!: The topic name.
-                    -g, --resource-group=!: Name of resource group.
                 - name: create
                   description: Create the ServiceBus Rule for Subscription
                   flags:
@@ -1608,6 +1626,28 @@ commands:
                     --topic-name=: The topic name.
                     -g, --resource-group=: Name of resource group.
                     -n, --name=: The rule name.
+                - name: delete
+                  description: Delete an existing rule.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --namespace-name=: The namespace name
+                    --subscription-name=: The subscription name.
+                    --subscription=: Name or ID of subscription.
+                    --topic-name=: The topic name.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The rule name.
+                - name: list
+                  description: List all the rules within given topic-subscription
+                  flags:
+                    --namespace-name=!: The namespace name
+                    --skip=: Skip is only used if a previous operation returned a partial result.
+                    --subscription-name=!: The subscription name.
+                    --subscription=: Name or ID of subscription.
+                    --top=: May be used to limit the number of results to the most recent N usageDetails.
+                    --topic-name=!: The topic name.
+                    -g, --resource-group=!: Name of resource group.
                 - name: update
                   description: Update a new rule and updates an existing rule
                   flags:
@@ -1844,6 +1884,17 @@ commands:
                 -g, --resource-group=!: Name of resource group.
             - name: show
               description: Get a subscription description for the specified topic.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --namespace-name=: The namespace name
+                --subscription=: Name or ID of subscription.
+                --topic-name=: The topic name.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The subscription name.
+            - name: delete
+              description: Delete a subscription from the specified topic.
               flags:
                 --ids=:
                     description: One or more resource IDs (space-delimited).
@@ -2127,16 +2178,6 @@ commands:
                     - Restoring
                     - SendDisabled
                     - Unknown
-        - name: delete
-          description: Delete a topic from the specified namespace and resource group.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The topic name.
         - name: create
           description: Create a topic in the specified namespace.
           flags:
@@ -2232,21 +2273,3 @@ commands:
                     - Restoring
                     - SendDisabled
                     - Unknown
-        - name: list
-          description: List all the topics in a namespace.
-          flags:
-            --namespace-name=!: The namespace name
-            --skip=: Skip is only used if a previous operation returned a partial result.
-            --subscription=: Name or ID of subscription.
-            --top=: May be used to limit the number of results to the most recent N usageDetails.
-            -g, --resource-group=!: Name of resource group.
-        - name: show
-          description: Get a description for the specified topic.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --namespace-name=: The namespace name
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The topic name.

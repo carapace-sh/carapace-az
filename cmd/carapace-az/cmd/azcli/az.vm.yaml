@@ -3,16 +3,8 @@ name: vm
 description: Manage Linux or Windows virtual machines.
 commands:
     - name: application
+      description: Manage applications for VM
       commands:
-        - name: list
-          description: List applications for VM
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --vm-name=!: The name of the Virtual Machine.
         - name: set
           description: Set applications for VM.
           flags:
@@ -35,6 +27,15 @@ commands:
                 nargs: -1
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Virtual Machine.
+        - name: list
+          description: List applications for VM
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --vm-name=!: The name of the Virtual Machine.
     - name: assess-patches
       description: Assess patches on a VM.
       flags:
@@ -78,16 +79,8 @@ commands:
         -l, --location=: Location.
         -n, --name=: The name of the Virtual Machine.
     - name: availability-set
+      description: Group resources into availability sets.
       commands:
-        - name: show
-          description: Get information about an availability set.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the availability set.
         - name: list-sizes
           description: List all available virtual machine sizes that can be used to create a new virtual machine in an existing availability set.
           flags:
@@ -97,26 +90,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the availability set.
-        - name: convert
-          description: Convert an Azure Availability Set to contain VMs with managed disks.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the availability set
-        - name: list
-          description: List availability sets.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: create
           description: Create an Azure Availability Set.
           flags:
@@ -208,14 +181,45 @@ commands:
                 enable-user-redeploy-scheduled-events:
                     - "true"
                     - "false"
-    - name: boot-diagnostics
-      commands:
-        - name: get-boot-log
-          description: Get the boot diagnostics log from a VM.
+        - name: list
+          description: List availability sets.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: show
+          description: Get information about an availability set.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the availability set.
+        - name: convert
+          description: Convert an Azure Availability Set to contain VMs with managed disks.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the availability set
+    - name: boot-diagnostics
+      description: Troubleshoot the startup of an Azure Virtual Machine.
+      commands:
+        - name: get-boot-log-uris
+          description: Get SAS URIs for a virtual machine's boot diagnostic logs.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --expire=: Expiration duration in minutes for the SAS URIs with a value between 1 to 1440 minutes.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -234,13 +238,12 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Virtual Machine.
-        - name: get-boot-log-uris
-          description: Get SAS URIs for a virtual machine's boot diagnostic logs.
+        - name: get-boot-log
+          description: Get the boot diagnostics log from a VM.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --expire=: Expiration duration in minutes for the SAS URIs with a value between 1 to 1440 minutes.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -691,6 +694,7 @@ commands:
         -n, --name=: The name of the Virtual Machine.
         -y, --yes=: Do not prompt for confirmation.
     - name: diagnostics
+      description: Configure the Azure Virtual Machine diagnostics extension.
       commands:
         - name: get-default-config
           description: Get the default configuration settings for a VM.
@@ -721,7 +725,22 @@ commands:
                     - "true"
                     - "false"
     - name: disk
+      description: Manage the managed data disks attached to a VM.
       commands:
+        - name: detach
+          description: Detach a managed disk from a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --disk-ids=:
+                description: The disk IDs of the managed disk (space-delimited).
+                nargs: -1
+            --force-detach=: Force detach managed data disks from a VM.
+            --subscription=: Name or ID of subscription.
+            --vm-name=!: The name of the Virtual Machine.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=: The data disk name.
         - name: attach
           description: Attach a managed persistent disk to a VM.
           flags:
@@ -761,34 +780,9 @@ commands:
                     - Premium_ZRS
                     - StandardSSD_ZRS
                     - PremiumV2_LRS
-        - name: detach
-          description: Detach a managed disk from a VM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --disk-ids=:
-                description: The disk IDs of the managed disk (space-delimited).
-                nargs: -1
-            --force-detach=: Force detach managed data disks from a VM.
-            --subscription=: Name or ID of subscription.
-            --vm-name=!: The name of the Virtual Machine.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=: The data disk name.
     - name: encryption
+      description: Manage encryption of VM disks.
       commands:
-        - name: show
-          description: Show encryption status.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Virtual Machine.
         - name: enable
           description: Enable disk encryption on the OS disk and/or data disks.
           flags:
@@ -838,25 +832,8 @@ commands:
                     - DATA
                     - OS
                     - ALL
-    - name: extension
-      commands:
         - name: show
-          description: Display information about extensions attached to a VM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --expand=: The expand expression to apply on the operation.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --instance-view=: The instance view of a virtual machine extension.
-            --subscription=: Name or ID of subscription.
-            --vm-name=: The name of the Virtual Machine.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the extension.
-        - name: list
-          description: List the extensions attached to a VM.
+          description: Show encryption status.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -865,76 +842,11 @@ commands:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
-            --vm-name=: The name of the Virtual Machine.
             -g, --resource-group=: Name of resource group.
-        - name: wait
-          description: Place the CLI in a waiting state until a condition of a virtual machine extension is met.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --expand=: The expand expression to apply on the operation.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            --vm-name=: The name of the Virtual Machine.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the extension.
-        - name: image
-          commands:
-            - name: list-names
-              description: List the names of available extensions.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -l, --location=: Location.
-                -p, --publisher=: Image publisher name.
-            - name: list
-              description: List the information on available extensions.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --latest=: Show the latest version only.
-                --subscription=: Name or ID of subscription.
-                --version=: Extension version
-                -l, --location=: Image location.
-                -n, --name=: Image name
-                -p, --publisher=: Image publisher name
-            - name: show
-              description: Display information for an extension.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --version=: Extension version.
-                -l, --location=: Location.
-                -n, --name=: Name of the extension.
-                -p, --publisher=: Image publisher name.
-            - name: list-versions
-              description: List the versions for available extensions.
-              flags:
-                --filter=: The filter to apply on the operation.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --orderby=: The $orderby odata query option.
-                --subscription=: Name or ID of subscription.
-                --top=: The $top odata query option.
-                -l, --location=: Location.
-                -n, --name=: Name of the extension.
-                -p, --publisher=: Image publisher name.
+            -n, --name=: The name of the Virtual Machine.
+    - name: extension
+      description: Manage extensions on VMs.
+      commands:
         - name: set
           description: Set extensions for a VM.
           flags:
@@ -969,6 +881,102 @@ commands:
                 no-auto-upgrade-minor-version:
                     - "true"
                     - "false"
+        - name: image
+          description: Find the available VM extensions for a subscription and region.
+          commands:
+            - name: show
+              description: Display information for an extension.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --version=: Extension version.
+                -l, --location=: Location.
+                -n, --name=: Name of the extension.
+                -p, --publisher=: Image publisher name.
+            - name: list-names
+              description: List the names of available extensions.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -l, --location=: Location.
+                -p, --publisher=: Image publisher name.
+            - name: list
+              description: List the information on available extensions.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --latest=: Show the latest version only.
+                --subscription=: Name or ID of subscription.
+                --version=: Extension version
+                -l, --location=: Image location.
+                -n, --name=: Image name
+                -p, --publisher=: Image publisher name
+            - name: list-versions
+              description: List the versions for available extensions.
+              flags:
+                --filter=: The filter to apply on the operation.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --orderby=: The $orderby odata query option.
+                --subscription=: Name or ID of subscription.
+                --top=: The $top odata query option.
+                -l, --location=: Location.
+                -n, --name=: Name of the extension.
+                -p, --publisher=: Image publisher name.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of a virtual machine extension is met.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --expand=: The expand expression to apply on the operation.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            --vm-name=: The name of the Virtual Machine.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the extension.
+        - name: show
+          description: Display information about extensions attached to a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --expand=: The expand expression to apply on the operation.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --instance-view=: The instance view of a virtual machine extension.
+            --subscription=: Name or ID of subscription.
+            --vm-name=: The name of the Virtual Machine.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the extension.
+        - name: list
+          description: List the extensions attached to a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --vm-name=: The name of the Virtual Machine.
+            -g, --resource-group=: Name of resource group.
         - name: delete
           description: Delete operation to delete the extension.
           flags:
@@ -1020,7 +1028,97 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: The name of the Virtual Machine.
     - name: host
+      description: Manage Dedicated Hosts for Virtual Machines
       commands:
+        - name: group
+          description: Manage Dedicated Host Groups
+          commands:
+            - name: delete
+              description: Delete a dedicated host group.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Dedicated Host Group.
+                -y, --yes=: Do not prompt for confirmation.
+            - name: create
+              description: Create a dedicated host group.
+              flags:
+                --automatic-placement=:
+                    description: Specify whether virtual machines or virtual machine scale sets can be placed automatically on the dedicated host group.
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: 'space-separated tags: key[=value] [key[=value] ...].'
+                    nargs: -1
+                --ultra-ssd-enabled=:
+                    description: Enable a capability to have UltraSSD Enabled Virtual Machines on Dedicated Hosts of the Dedicated Host Group.
+                    nargs: -1
+                -c, --platform-fault-domain-count=!: Number of fault domains that the host group can span.
+                -g, --resource-group=!: Name of resource group.
+                -l, --location=: Location.
+                -n, --name=!: Name of the Dedicated Host Group
+                -z, --zone=: Availability zone into which to provision the resource.
+              completion:
+                flag:
+                    automatic-placement:
+                        - "true"
+                        - "false"
+                    ultra-ssd-enabled:
+                        - "true"
+                        - "false"
+            - name: list
+              description: List dedicated host groups.
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+            - name: get-instance-view
+              description: Get instance view of a dedicated host group.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Dedicated Host Group
+            - name: show
+              description: Get the details of a dedicated host group.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Dedicated Host Group.
+            - name: update
+              description: Update a dedicated host group.
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the Dedicated Host Group
         - name: show
           description: Get the details of a dedicated host.
           flags:
@@ -1037,6 +1135,110 @@ commands:
                 expand:
                     - instanceView
                     - userData
+        - name: restart
+          description: Restart the dedicated host.
+          flags:
+            --host-group=: The name of the dedicated host group.
+            --host-name=: The name of the dedicated host.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: list
+          description: List dedicated hosts.
+          flags:
+            --host-group=!: The name of the dedicated host group.
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: delete
+          description: Delete a dedicated host.
+          flags:
+            --host-group=: The name of the dedicated host group.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the dedicated host.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --expand=: The expand expression to apply on the operation.
+            --host-group=: The name of the dedicated host group.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the dedicated host.
+          completion:
+            flag:
+                expand:
+                    - instanceView
+                    - userData
+        - name: get-instance-view
+          description: Get instance information about a dedicated host.
+          flags:
+            --host-group=: Name of the Dedicated Host Group
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Dedicated Host
+        - name: list-resize-options
+          description: List all available dedicated host sizes to which the specified dedicated host can be resized.
+          flags:
+            --host-group=: The name of the dedicated host group.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the dedicated host.
         - name: update
           description: Update a dedicated host.
           flags:
@@ -1060,6 +1262,35 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Dedicated Host
+        - name: create
+          description: Create a dedicated host.
+          flags:
+            --auto-replace=:
+                description: Replace the host automatically if a failure occurs
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --host-group=!: Name of the Dedicated Host Group
+            --license-type=: The software license type that will be applied to the VMs deployed on the dedicated host.
+            --sku=!: SKU of the dedicated host.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -d, --platform-fault-domain=: Fault domain of the host within a group.
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: Location.
+            -n, --name=!: Name of the Dedicated Host
+          completion:
+            flag:
+                auto-replace:
+                    - "true"
+                    - "false"
+                license-type:
+                    - None
+                    - Windows_Server_Hybrid
+                    - Windows_Server_Perpetual
         - name: redeploy
           description: Redeploy the dedicated host.
           flags:
@@ -1113,249 +1344,14 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: delete
-          description: Delete a dedicated host.
-          flags:
-            --host-group=: The name of the dedicated host group.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the dedicated host.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: restart
-          description: Restart the dedicated host.
-          flags:
-            --host-group=: The name of the dedicated host group.
-            --host-name=: The name of the dedicated host.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: list
-          description: List dedicated hosts.
-          flags:
-            --host-group=!: The name of the dedicated host group.
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: wait
-          description: Place the CLI in a waiting state until a condition is met.
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --expand=: The expand expression to apply on the operation.
-            --host-group=: The name of the dedicated host group.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the dedicated host.
-          completion:
-            flag:
-                expand:
-                    - instanceView
-                    - userData
-        - name: group
-          commands:
-            - name: show
-              description: Get the details of a dedicated host group.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Dedicated Host Group.
-            - name: get-instance-view
-              description: Get instance view of a dedicated host group.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Dedicated Host Group
-            - name: list
-              description: List dedicated host groups.
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-            - name: delete
-              description: Delete a dedicated host group.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Dedicated Host Group.
-                -y, --yes=: Do not prompt for confirmation.
-            - name: create
-              description: Create a dedicated host group.
-              flags:
-                --automatic-placement=:
-                    description: Specify whether virtual machines or virtual machine scale sets can be placed automatically on the dedicated host group.
-                    nargs: -1
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: 'space-separated tags: key[=value] [key[=value] ...].'
-                    nargs: -1
-                --ultra-ssd-enabled=:
-                    description: Enable a capability to have UltraSSD Enabled Virtual Machines on Dedicated Hosts of the Dedicated Host Group.
-                    nargs: -1
-                -c, --platform-fault-domain-count=!: Number of fault domains that the host group can span.
-                -g, --resource-group=!: Name of resource group.
-                -l, --location=: Location.
-                -n, --name=!: Name of the Dedicated Host Group
-                -z, --zone=: Availability zone into which to provision the resource.
-              completion:
-                flag:
-                    automatic-placement:
-                        - "true"
-                        - "false"
-                    ultra-ssd-enabled:
-                        - "true"
-                        - "false"
-            - name: update
-              description: Update a dedicated host group.
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the Dedicated Host Group
-        - name: get-instance-view
-          description: Get instance information about a dedicated host.
-          flags:
-            --host-group=: Name of the Dedicated Host Group
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Dedicated Host
-        - name: list-resize-options
-          description: List all available dedicated host sizes to which the specified dedicated host can be resized.
-          flags:
-            --host-group=: The name of the dedicated host group.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the dedicated host.
-        - name: create
-          description: Create a dedicated host.
-          flags:
-            --auto-replace=:
-                description: Replace the host automatically if a failure occurs
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --host-group=!: Name of the Dedicated Host Group
-            --license-type=: The software license type that will be applied to the VMs deployed on the dedicated host.
-            --sku=!: SKU of the dedicated host.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -d, --platform-fault-domain=: Fault domain of the host within a group.
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=: Location.
-            -n, --name=!: Name of the Dedicated Host
-          completion:
-            flag:
-                auto-replace:
-                    - "true"
-                    - "false"
-                license-type:
-                    - None
-                    - Windows_Server_Hybrid
-                    - Windows_Server_Perpetual
     - name: identity
+      description: manage service identities of a VM
       commands:
         - name: show
           description: display VM's managed identity info.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Virtual Machine.
-        - name: remove
-          description: Remove managed service identities from a VM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --identities=:
-                description: Space-separated identities to remove.
                 nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1383,47 +1379,24 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Virtual Machine.
+        - name: remove
+          description: Remove managed service identities from a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --identities=:
+                description: Space-separated identities to remove.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the Virtual Machine.
     - name: image
+      description: Information on available virtual machine images.
       commands:
-        - name: list
-          description: List the VM/VMSS images available in the Azure Marketplace.
-          flags:
-            --all=: Retrieve image list from live Azure service rather using an offline image list
-            --architecture=: The name of architecture.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --edge-zone=: The name of edge zone.
-            --subscription=: Name or ID of subscription.
-            -f, --offer=: image offer
-            -l, --location=: Location.
-            -p, --publisher=: image publisher
-            -s, --sku=: image sku
-          completion:
-            flag:
-                architecture:
-                    - x64
-                    - Arm64
-        - name: list-skus
-          description: List the VM image SKUs available in the Azure Marketplace.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --edge-zone=: The name of edge zone.
-            --subscription=: Name or ID of subscription.
-            -f, --offer=!: image offer
-            -l, --location=!: Location.
-            -p, --publisher=!: image publisher
-        - name: list-publishers
-          description: List the VM image publishers available in the Azure Marketplace.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --edge-zone=: The name of edge zone.
-            --subscription=: Name or ID of subscription.
-            -l, --location=!: Location.
         - name: show
           description: Get the details for a VM image available in the Azure Marketplace.
           flags:
@@ -1439,9 +1412,10 @@ commands:
             -p, --publisher=: image publisher
             -s, --sku=: image sku
         - name: terms
+          description: Manage Azure Marketplace image terms.
           commands:
-            - name: show
-              description: Get the details of Azure Marketplace image terms.
+            - name: accept
+              description: Accept Azure Marketplace image terms so that the image can be used to create VMs.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -1451,8 +1425,8 @@ commands:
                 --urn=: URN, in the format of 'publisher:offer:sku:version'.
                 -f, --offer=: Image offer
                 -p, --publisher=: Image publisher
-            - name: accept
-              description: Accept Azure Marketplace image terms so that the image can be used to create VMs.
+            - name: show
+              description: Get the details of Azure Marketplace image terms.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -1473,6 +1447,55 @@ commands:
                 --urn=: URN, in the format of 'publisher:offer:sku:version'.
                 -f, --offer=: Image offer
                 -p, --publisher=: Image publisher
+        - name: list-publishers
+          description: List the VM image publishers available in the Azure Marketplace.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --edge-zone=: The name of edge zone.
+            --subscription=: Name or ID of subscription.
+            -l, --location=!: Location.
+        - name: list-offers
+          description: List the VM image offers available in the Azure Marketplace.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --edge-zone=: The name of edge zone.
+            --subscription=: Name or ID of subscription.
+            -l, --location=!: Location.
+            -p, --publisher=!: image publisher
+        - name: list-skus
+          description: List the VM image SKUs available in the Azure Marketplace.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --edge-zone=: The name of edge zone.
+            --subscription=: Name or ID of subscription.
+            -f, --offer=!: image offer
+            -l, --location=!: Location.
+            -p, --publisher=!: image publisher
+        - name: list
+          description: List the VM/VMSS images available in the Azure Marketplace.
+          flags:
+            --all=: Retrieve image list from live Azure service rather using an offline image list
+            --architecture=: The name of architecture.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --edge-zone=: The name of edge zone.
+            --subscription=: Name or ID of subscription.
+            -f, --offer=: image offer
+            -l, --location=: Location.
+            -p, --publisher=: image publisher
+            -s, --sku=: image sku
+          completion:
+            flag:
+                architecture:
+                    - x64
+                    - Arm64
         - name: accept-terms
           description: Accept Azure Marketplace term so that the image can be used to create VMs
           flags:
@@ -1484,16 +1507,6 @@ commands:
             --urn=: URN, in format of 'publisher:offer:sku:version' or 'publisher:offer:sku:edge_zone:version'.
             -f, --offer=: image offer
             -p, --publisher=: image publisher
-        - name: list-offers
-          description: List the VM image offers available in the Azure Marketplace.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --edge-zone=: The name of edge zone.
-            --subscription=: Name or ID of subscription.
-            -l, --location=!: Location.
-            -p, --publisher=!: image publisher
     - name: install-patches
       description: Install patches on a VM.
       flags:
@@ -1624,9 +1637,18 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: The name of the Virtual Machine.
     - name: monitor
+      description: Manage monitor aspect for a vm.
       commands:
         - name: metrics
+          description: Manage metrics for a vm.
           commands:
+            - name: list-definitions
+              description: Lists the metric definitions for the resource.
+              flags:
+                --namespace=: Namespace to query metric definitions for.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name or ID of a virtual machine
             - name: tail
               description: List the metric values for a VM.
               flags:
@@ -1667,14 +1689,8 @@ commands:
                         - Minimum
                         - Maximum
                         - Total
-            - name: list-definitions
-              description: Lists the metric definitions for the resource.
-              flags:
-                --namespace=: Namespace to query metric definitions for.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name or ID of a virtual machine
         - name: log
+          description: Manage log analytics workspace for a vm.
           commands:
             - name: show
               description: Executes a query against the Log Analytics workspace linked with a vm.
@@ -1691,9 +1707,36 @@ commands:
                 -n, --name=: The name of the Virtual Machine.
                 -q, --analytics-query=!: Query to execute over Log Analytics data.
     - name: nic
+      description: Manage network interfaces. See also `az network nic`.
       commands:
+        - name: set
+          description: Configure settings of a NIC attached to a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --nics=!:
+                description: Names or IDs of NICs.
+                nargs: -1
+            --primary-nic=: Name or ID of the primary NIC.
+            --subscription=: Name or ID of subscription.
+            --vm-name=!: The name of the Virtual Machine.
+            -g, --resource-group=!: Name of resource group.
         - name: add
           description: Add existing NICs to a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --nics=!:
+                description: Names or IDs of NICs.
+                nargs: -1
+            --primary-nic=: Name or ID of the primary NIC.
+            --subscription=: Name or ID of subscription.
+            --vm-name=!: The name of the Virtual Machine.
+            -g, --resource-group=!: Name of resource group.
+        - name: remove
+          description: Remove NICs from a VM.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -1714,19 +1757,6 @@ commands:
             --subscription=: Name or ID of subscription.
             --vm-name=!: The name of the Virtual Machine.
             -g, --resource-group=!: Name of resource group.
-        - name: set
-          description: Configure settings of a NIC attached to a VM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --nics=!:
-                description: Names or IDs of NICs.
-                nargs: -1
-            --primary-nic=: Name or ID of the primary NIC.
-            --subscription=: Name or ID of subscription.
-            --vm-name=!: The name of the Virtual Machine.
-            -g, --resource-group=!: Name of resource group.
         - name: show
           description: Display information for a NIC attached to a VM.
           flags:
@@ -1734,19 +1764,6 @@ commands:
                 description: ==SUPPRESS==
                 nargs: -1
             --nic=!: NIC name or ID.
-            --subscription=: Name or ID of subscription.
-            --vm-name=!: The name of the Virtual Machine.
-            -g, --resource-group=!: Name of resource group.
-        - name: remove
-          description: Remove NICs from a VM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --nics=!:
-                description: Names or IDs of NICs.
-                nargs: -1
-            --primary-nic=: Name or ID of the primary NIC.
             --subscription=: Name or ID of subscription.
             --vm-name=!: The name of the Virtual Machine.
             -g, --resource-group=!: Name of resource group.
@@ -1912,6 +1929,7 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: The name of the Virtual Machine.
     - name: run-command
+      description: Manage run commands on a Virtual Machine.
       commands:
         - name: show
           description: Get specific run command
@@ -1930,26 +1948,60 @@ commands:
             --vm-name=: The name of the virtual machine
             -g, --resource-group=: Name of resource group.
             -l, --location=: Location.
-        - name: invoke
-          description: Execute a specific run command on a vm.
+        - name: list
+          description: List run commands from a VM or a location
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
+            --expand=: The expand expression to apply on the operation.
+            --subscription=: Name or ID of subscription.
+            --vm-name=: The name of the virtual machine
+            -g, --resource-group=: Name of resource group.
+            -l, --location=: Location.
+        - name: create
+          description: The operation to create the run command.
+          flags:
+            --async-execution=:
+                description: Optional.
                 nargs: -1
-            --command-id=!: The command id.
+            --command-id=: Specify a command id of predefined script.
+            --error-blob-uri=: Specify the Azure storage blob where script error stream will be uploaded.
+            --name=!: The name of the virtual machine run command.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --output-blob-uri=: Specify the Azure storage blob (SAS URI) where script output stream will be uploaded.
+            --parameters=:
+                description: Set custom parameters in a name-value pair.
+                nargs: -1
+            --protected-parameters=:
+                description: Set custom parameters in a name-value pair.
+                nargs: -1
+            --run-as-password=: Password if needed for using run-as-user parameter.
+            --run-as-user=: By default script process runs under system/root user.
+            --script-uri=: Contain a uri to the script to execute on the VM.
+            --script=: Contain the powershell or bash script to execute on the VM.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --timeout-in-seconds=: The timeout in seconds to execute the run command.
+            --vm-name=!: The name of the virtual machine
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: Location.
+          completion:
+            flag:
+                async-execution:
+                    - "true"
+                    - "false"
+        - name: delete
+          description: The operation to delete the run command.
+          flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --name=!: The name of the virtual machine run command.
             --no-wait=: Do not wait for the long-running operation to finish.
-            --parameters=:
-                description: space-separated parameters in the format of '[name=]value'
-                nargs: -1
-            --scripts=:
-                description: Space-separated script lines.
-                nargs: -1
             --subscription=: Name or ID of subscription.
+            --vm-name=: The name of the virtual machine
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Virtual Machine.
+            -y, --yes=: Do not prompt for confirmation.
         - name: update
           description: The operation to update the run command.
           flags:
@@ -1987,52 +2039,26 @@ commands:
                 async-execution:
                     - "true"
                     - "false"
-        - name: delete
-          description: The operation to delete the run command.
+        - name: invoke
+          description: Execute a specific run command on a vm.
           flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --command-id=!: The command id.
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --name=!: The name of the virtual machine run command.
             --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            --vm-name=: The name of the virtual machine
-            -g, --resource-group=: Name of resource group.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: create
-          description: The operation to create the run command.
-          flags:
-            --async-execution=:
-                description: Optional.
-                nargs: -1
-            --command-id=: Specify a command id of predefined script.
-            --error-blob-uri=: Specify the Azure storage blob where script error stream will be uploaded.
-            --name=!: The name of the virtual machine run command.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --output-blob-uri=: Specify the Azure storage blob (SAS URI) where script output stream will be uploaded.
             --parameters=:
-                description: Set custom parameters in a name-value pair.
+                description: space-separated parameters in the format of '[name=]value'
                 nargs: -1
-            --protected-parameters=:
-                description: Set custom parameters in a name-value pair.
+            --scripts=:
+                description: Space-separated script lines.
                 nargs: -1
-            --run-as-password=: Password if needed for using run-as-user parameter.
-            --run-as-user=: By default script process runs under system/root user.
-            --script-uri=: Contain a uri to the script to execute on the VM.
-            --script=: Contain the powershell or bash script to execute on the VM.
             --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --timeout-in-seconds=: The timeout in seconds to execute the run command.
-            --vm-name=!: The name of the virtual machine
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=: Location.
-          completion:
-            flag:
-                async-execution:
-                    - "true"
-                    - "false"
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the Virtual Machine.
         - name: wait
           description: Place the CLI in a waiting state until a condition of the res virtual-machine-run-command is met.
           flags:
@@ -2057,16 +2083,32 @@ commands:
             --vm-name=: The name of the virtual machine
             -g, --resource-group=: Name of resource group.
             -l, --location=: Location.
-        - name: list
-          description: List run commands from a VM or a location
-          flags:
-            --expand=: The expand expression to apply on the operation.
-            --subscription=: Name or ID of subscription.
-            --vm-name=: The name of the virtual machine
-            -g, --resource-group=: Name of resource group.
-            -l, --location=: Location.
     - name: secret
+      description: Manage VM secrets.
       commands:
+        - name: remove
+          description: Remove a secret from a VM.
+          flags:
+            --certificate=: key vault certificate name or its full secret URL
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --keyvault=!: Name or ID of the key vault.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the Virtual Machine.
+        - name: list
+          description: List secrets on a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the Virtual Machine.
         - name: format
           description: Transform secrets into a form that can be used by VMs and VMSSes.
           flags:
@@ -2080,34 +2122,11 @@ commands:
             -s, --secrets=!:
                 description: Space-separated list of key vault secret URIs.
                 nargs: -1
-        - name: list
-          description: List secrets on a VM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the Virtual Machine.
         - name: add
           description: Add a secret to a VM.
           flags:
             --certificate-store=: Windows certificate store names.
             --certificate=!: key vault certificate name or its full secret URL
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --keyvault=!: Name or ID of the key vault.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the Virtual Machine.
-        - name: remove
-          description: Remove a secret from a VM.
-          flags:
-            --certificate=: key vault certificate name or its full secret URL
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
@@ -2178,7 +2197,17 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: The name of the Virtual Machine.
     - name: unmanaged-disk
+      description: Manage the unmanaged data disks attached to a VM.
       commands:
+        - name: list
+          description: List unmanaged disks of a VM.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --vm-name=!: The name of the Virtual Machine.
         - name: attach
           description: Attach an unmanaged persistent disk to a VM.
           flags:
@@ -2200,15 +2229,6 @@ commands:
                     - None
                     - ReadOnly
                     - ReadWrite
-        - name: list
-          description: List unmanaged disks of a VM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --vm-name=!: The name of the Virtual Machine.
         - name: detach
           description: Detach an unmanaged disk from a VM.
           flags:
@@ -2352,9 +2372,10 @@ commands:
                 - "true"
                 - "false"
     - name: user
+      description: Manage user accounts for a VM.
       commands:
-        - name: reset-ssh
-          description: Reset the SSH configuration on a VM.
+        - name: delete
+          description: Delete a user account from a VM.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -2366,6 +2387,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Virtual Machine.
+            -u, --username=!: The user name
         - name: update
           description: Update a user account for VM.
           flags:
@@ -2382,8 +2404,8 @@ commands:
             -n, --name=: The name of the Virtual Machine.
             -p, --password=: The user password
             -u, --username=!: The user name
-        - name: delete
-          description: Delete a user account from a VM.
+        - name: reset-ssh
+          description: Reset the SSH configuration on a VM.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
@@ -2395,7 +2417,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the Virtual Machine.
-            -u, --username=!: The user name
     - name: wait
       description: Place the CLI in a waiting state until a condition of the VM is met.
       flags:

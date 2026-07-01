@@ -152,7 +152,7 @@ func buildGroupSpec(topGroup string, cmdNames []string, data *CliData) command.C
 	for _, cmdName := range cmdNames {
 		cmdData := data.Commands[cmdName]
 		specCmd := convertCommand(cmdName, &cmdData)
-		insertCommand(root, cmdName, specCmd)
+		insertCommand(root, cmdName, specCmd, data)
 	}
 
 	groupSpec.Commands = root.Commands
@@ -226,7 +226,7 @@ func convertArgument(arg *ArgumentData) command.Flag {
 	return f
 }
 
-func insertCommand(root *command.Command, fullName string, specCmd command.Command) {
+func insertCommand(root *command.Command, fullName string, specCmd command.Command, data *CliData) {
 	parts := strings.Split(fullName, " ")
 	if len(parts) <= 1 {
 		root.Commands = append(root.Commands, specCmd)
@@ -246,6 +246,10 @@ func insertCommand(root *command.Command, fullName string, specCmd command.Comma
 		}
 		if !found {
 			newGroup := command.Command{Name: groupName}
+			groupPath := strings.Join(parts[:i+1], " ")
+			if group, ok := data.Groups[groupPath]; ok && group.Help != "" {
+				newGroup.Description = group.Help
+			}
 			current.Commands = append(current.Commands, newGroup)
 			current = &current.Commands[len(current.Commands)-1]
 		}

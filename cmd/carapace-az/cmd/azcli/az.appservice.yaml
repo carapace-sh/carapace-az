@@ -3,44 +3,8 @@ name: appservice
 description: Manage App Service plans.
 commands:
     - name: ase
+      description: Manage App Service Environments
       commands:
-        - name: list-addresses
-          description: List VIPs associated with an app service environment v2.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
-        - name: create-inbound-services
-          description: Private DNS Zone for Internal (ILB) App Service Environments.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --skip-dns=:
-                description: Do not create Private DNS Zone and DNS records.
-                nargs: -1
-            --subnet=!: Name or ID of existing subnet for DNS Zone link.
-            --subscription=: Name or ID of subscription.
-            --vnet-name=: Name of the vNet.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the app service environment
-          completion:
-            flag:
-                skip-dns:
-                    - "true"
-                    - "false"
-        - name: send-test-notification
-          description: Send a test upgrade notification in app service environment v3.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
         - name: create
           description: Create app service environment.
           flags:
@@ -110,6 +74,62 @@ commands:
                 zone-redundant:
                     - "true"
                     - "false"
+        - name: send-test-notification
+          description: Send a test upgrade notification in app service environment v3.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
+        - name: list-addresses
+          description: List VIPs associated with an app service environment v2.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
+        - name: create-inbound-services
+          description: Private DNS Zone for Internal (ILB) App Service Environments.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --skip-dns=:
+                description: Do not create Private DNS Zone and DNS records.
+                nargs: -1
+            --subnet=!: Name or ID of existing subnet for DNS Zone link.
+            --subscription=: Name or ID of subscription.
+            --vnet-name=: Name of the vNet.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the app service environment
+          completion:
+            flag:
+                skip-dns:
+                    - "true"
+                    - "false"
+        - name: upgrade
+          description: Upgrade app service environment v3.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
+            -y, --yes=: Do not prompt for confirmation.
+        - name: list
+          description: List app service environments.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: update
           description: Update app service environment.
           flags:
@@ -146,6 +166,24 @@ commands:
                     - I1
                     - I2
                     - I3
+        - name: list-plans
+          description: List app service plans associated with an app service environment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
+        - name: show
+          description: Show details of an app service environment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the app service environment
         - name: delete
           description: Delete app service environment.
           flags:
@@ -157,44 +195,8 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name of the app service environment
             -y, --yes=: Do not prompt for confirmation.
-        - name: list-plans
-          description: List app service plans associated with an app service environment.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
-        - name: upgrade
-          description: Upgrade app service environment v3.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
-            -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Show details of an app service environment.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the app service environment
-        - name: list
-          description: List app service environments.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
     - name: domain
+      description: Manage custom domains.
       commands:
         - name: create
           description: Create and purchase a custom domain.
@@ -222,6 +224,7 @@ commands:
             --subscription=: Name or ID of subscription.
             -n, --hostname=!: Name of the custom domain
     - name: hybrid-connection
+      description: a method that sets the key a hybrid-connection uses
       commands:
         - name: set-key
           description: set the key that all apps in an appservice plan use to connect to the hybrid-connections in that appservice plan
@@ -288,6 +291,7 @@ commands:
                 - WS2
                 - WS3
     - name: plan
+      description: Manage app service plans.
       commands:
         - name: show
           description: Get the app service plans for a resource group or a set of resource groups.
@@ -301,16 +305,14 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The name of the app service plan
-        - name: delete
-          description: Delete an App Service plan.
+        - name: list
+          description: List app service plans.
           flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
+            --cmd=:
+                description: ==SUPPRESS==
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the app service plan
-            -y, --yes=: Do not prompt for confirmation.
         - name: update
           description: Update an app service plan.
           flags:
@@ -385,14 +387,6 @@ commands:
                     - WS1
                     - WS2
                     - WS3
-        - name: list
-          description: List app service plans.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: create
           description: Create an app service plan.
           flags:
@@ -456,7 +450,18 @@ commands:
                     - WS1
                     - WS2
                     - WS3
+        - name: delete
+          description: Delete an App Service plan.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the app service plan
+            -y, --yes=: Do not prompt for confirmation.
     - name: vnet-integration
+      description: a method that lists the virtual network integrations used in an appservice plan
       commands:
         - name: list
           description: list the virtual network integrations used in an appservice plan

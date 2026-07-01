@@ -3,11 +3,123 @@ name: cosmosdb
 description: Manage Azure Cosmos DB database accounts.
 commands:
     - name: cassandra
+      description: Manage Cassandra resources of Azure Cosmos DB account.
       commands:
-        - name: keyspace
+        - name: table
+          description: Manage Azure Cosmos DB Cassandra tables.
           commands:
             - name: throughput
+              description: Manage throughput of Cassandra table under an Azure Cosmos DB account.
               commands:
+                - name: migrate
+                  description: Migrate an Azure Cosmos DB Cassandra table throughput
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -k, --keyspace-name=!: Keyspace name
+                    -n, --name=!: Table name
+                    -t, --throughput-type=!: The type of throughput to migrate to.
+                  completion:
+                    flag:
+                        throughput-type:
+                            - autoscale
+                            - manual
+                - name: show
+                  description: Gets the RUs per second of the Cassandra table under an existing Azure Cosmos DB database account with the provided name.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -k, --keyspace-name=!: Keyspace name
+                    -n, --name=!: Table name
+                - name: update
+                  description: Update an Azure Cosmos DB Cassandra table throughput
+                  flags:
+                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                    --subscription=: Name or ID of subscription.
+                    --throughput=: The throughput of Cassandra table (RU/s).
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -k, --keyspace-name=!: Keyspace name
+                    -n, --name=!: Table name
+            - name: show
+              description: Gets the Cassandra table under an existing Azure Cosmos DB database account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -k, --keyspace-name=!: Keyspace name
+                -n, --name=!: Table name
+            - name: create
+              description: Create an Azure Cosmos DB Cassandra table
+              flags:
+                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
+                --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                --schema=!: 'Schema, you can enter it as a string or as a file, e.g., --schema @schema-file.json or --schema "{\"columns\": [{\"name\": \"columnA\",\"type\": \"uuid\"}, {\"name\": \"columnB\",\"type\": \"Ascii\"}],\"partitionKeys\": [{\"name\": \"columnA\"}]}"'
+                --subscription=: Name or ID of subscription.
+                --throughput=: The throughput of Cassandra table (RU/s).
+                --ttl=: Default TTL.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -k, --keyspace-name=!: Keyspace name
+                -n, --name=!: Table name
+            - name: delete
+              description: Deletes an existing Azure Cosmos DB Cassandra table.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -k, --keyspace-name=!: Keyspace name
+                -n, --name=!: Table name
+                -y, --yes=: Do not prompt for confirmation.
+            - name: exists
+              description: Checks if an Azure Cosmos DB Cassandra table exists
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -k, --keyspace-name=!: Keyspace name
+                -n, --name=!: Table name
+            - name: list
+              description: Lists the Cassandra table under an existing Azure Cosmos DB database account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -k, --keyspace-name=!: Keyspace name
+            - name: update
+              description: Update an Azure Cosmos DB Cassandra table
+              flags:
+                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
+                --schema=: 'Schema, you can enter it as a string or as a file, e.g., --schema @schema-file.json or --schema "{\"columns\": [{\"name\": \"columnA\",\"type\": \"uuid\"}, {\"name\": \"columnB\",\"type\": \"Ascii\"}],\"partitionKeys\": [{\"name\": \"columnA\"}]}"'
+                --subscription=: Name or ID of subscription.
+                --ttl=: Default TTL.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -k, --keyspace-name=!: Keyspace name
+                -n, --name=!: Table name
+        - name: keyspace
+          description: Manage Azure Cosmos DB Cassandra keyspaces.
+          commands:
+            - name: throughput
+              description: Manage throughput of Cassandra keyspace under an Azure Cosmos DB account.
+              commands:
+                - name: update
+                  description: Update an Azure Cosmos DB Cassandra keyspace throughput
+                  flags:
+                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                    --subscription=: Name or ID of subscription.
+                    --throughput=: The throughput of Cassandra keyspace (RU/s).
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Keyspace name
                 - name: migrate
                   description: Migrate an Azure Cosmos DB Cassandra keyspace throughput
                   flags:
@@ -21,15 +133,6 @@ commands:
                         throughput-type:
                             - autoscale
                             - manual
-                - name: update
-                  description: Update an Azure Cosmos DB Cassandra keyspace throughput
-                  flags:
-                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                    --subscription=: Name or ID of subscription.
-                    --throughput=: The throughput of Cassandra keyspace (RU/s).
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Keyspace name
                 - name: show
                   description: Gets the RUs per second of the Cassandra Keyspace under an existing Azure Cosmos DB database account with the provided name.
                   flags:
@@ -49,14 +152,6 @@ commands:
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Keyspace name
-            - name: delete
-              description: Deletes an existing Azure Cosmos DB Cassandra keyspace.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Keyspace name
-                -y, --yes=: Do not prompt for confirmation.
             - name: show
               description: Gets the Cassandra keyspaces under an existing Azure Cosmos DB database account with the provided name.
               flags:
@@ -80,104 +175,14 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
-        - name: table
-          commands:
-            - name: exists
-              description: Checks if an Azure Cosmos DB Cassandra table exists
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -k, --keyspace-name=!: Keyspace name
-                -n, --name=!: Table name
-            - name: list
-              description: Lists the Cassandra table under an existing Azure Cosmos DB database account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -k, --keyspace-name=!: Keyspace name
-            - name: throughput
-              commands:
-                - name: update
-                  description: Update an Azure Cosmos DB Cassandra table throughput
-                  flags:
-                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                    --subscription=: Name or ID of subscription.
-                    --throughput=: The throughput of Cassandra table (RU/s).
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -k, --keyspace-name=!: Keyspace name
-                    -n, --name=!: Table name
-                - name: show
-                  description: Gets the RUs per second of the Cassandra table under an existing Azure Cosmos DB database account with the provided name.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -k, --keyspace-name=!: Keyspace name
-                    -n, --name=!: Table name
-                - name: migrate
-                  description: Migrate an Azure Cosmos DB Cassandra table throughput
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -k, --keyspace-name=!: Keyspace name
-                    -n, --name=!: Table name
-                    -t, --throughput-type=!: The type of throughput to migrate to.
-                  completion:
-                    flag:
-                        throughput-type:
-                            - autoscale
-                            - manual
-            - name: create
-              description: Create an Azure Cosmos DB Cassandra table
-              flags:
-                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
-                --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                --schema=!: 'Schema, you can enter it as a string or as a file, e.g., --schema @schema-file.json or --schema "{\"columns\": [{\"name\": \"columnA\",\"type\": \"uuid\"}, {\"name\": \"columnB\",\"type\": \"Ascii\"}],\"partitionKeys\": [{\"name\": \"columnA\"}]}"'
-                --subscription=: Name or ID of subscription.
-                --throughput=: The throughput of Cassandra table (RU/s).
-                --ttl=: Default TTL.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -k, --keyspace-name=!: Keyspace name
-                -n, --name=!: Table name
             - name: delete
-              description: Deletes an existing Azure Cosmos DB Cassandra table.
+              description: Deletes an existing Azure Cosmos DB Cassandra keyspace.
               flags:
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
-                -k, --keyspace-name=!: Keyspace name
-                -n, --name=!: Table name
+                -n, --name=!: Keyspace name
                 -y, --yes=: Do not prompt for confirmation.
-            - name: update
-              description: Update an Azure Cosmos DB Cassandra table
-              flags:
-                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
-                --schema=: 'Schema, you can enter it as a string or as a file, e.g., --schema @schema-file.json or --schema "{\"columns\": [{\"name\": \"columnA\",\"type\": \"uuid\"}, {\"name\": \"columnB\",\"type\": \"Ascii\"}],\"partitionKeys\": [{\"name\": \"columnA\"}]}"'
-                --subscription=: Name or ID of subscription.
-                --ttl=: Default TTL.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -k, --keyspace-name=!: Keyspace name
-                -n, --name=!: Table name
-            - name: show
-              description: Gets the Cassandra table under an existing Azure Cosmos DB database account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -k, --keyspace-name=!: Keyspace name
-                -n, --name=!: Table name
     - name: check-name-exists
       description: Checks that the Azure Cosmos DB account name already exists.
       flags:
@@ -187,7 +192,18 @@ commands:
         --subscription=: Name or ID of subscription.
         -n, --name=: Name of the Cosmos DB database account
     - name: collection
+      description: Manage Azure Cosmos DB collections.
       commands:
+        - name: show
+          description: Shows an Azure Cosmos DB collection and its offer
+          flags:
+            --key=: Cosmos DB account key.
+            --subscription=: Name or ID of subscription.
+            --url-connection=: Cosmos DB account url connection.
+            -c, --collection-name=!: Collection Name
+            -d, --db-name=!: Database Name
+            -g, --resource-group-name=: name of the resource group.
+            -n, --name=: Cosmos DB account name.
         - name: update
           description: Updates an Azure Cosmos DB collection
           flags:
@@ -217,22 +233,22 @@ commands:
             -d, --db-name=!: Database Name
             -g, --resource-group-name=: name of the resource group.
             -n, --name=: Cosmos DB account name.
+        - name: exists
+          description: Returns a boolean indicating whether the collection exists
+          flags:
+            --key=: Cosmos DB account key.
+            --subscription=: Name or ID of subscription.
+            --url-connection=: Cosmos DB account url connection.
+            -c, --collection-name=!: Collection Name
+            -d, --db-name=!: Database Name
+            -g, --resource-group-name=: name of the resource group.
+            -n, --name=: Cosmos DB account name.
         - name: list
           description: Lists all Azure Cosmos DB collections
           flags:
             --key=: Cosmos DB account key.
             --subscription=: Name or ID of subscription.
             --url-connection=: Cosmos DB account url connection.
-            -d, --db-name=!: Database Name
-            -g, --resource-group-name=: name of the resource group.
-            -n, --name=: Cosmos DB account name.
-        - name: show
-          description: Shows an Azure Cosmos DB collection and its offer
-          flags:
-            --key=: Cosmos DB account key.
-            --subscription=: Name or ID of subscription.
-            --url-connection=: Cosmos DB account url connection.
-            -c, --collection-name=!: Collection Name
             -d, --db-name=!: Database Name
             -g, --resource-group-name=: name of the resource group.
             -n, --name=: Cosmos DB account name.
@@ -247,16 +263,6 @@ commands:
             -g, --resource-group-name=: name of the resource group.
             -n, --name=: Cosmos DB account name.
             -y, --yes=: Do not prompt for confirmation.
-        - name: exists
-          description: Returns a boolean indicating whether the collection exists
-          flags:
-            --key=: Cosmos DB account key.
-            --subscription=: Name or ID of subscription.
-            --url-connection=: Cosmos DB account url connection.
-            -c, --collection-name=!: Collection Name
-            -d, --db-name=!: Database Name
-            -g, --resource-group-name=: name of the resource group.
-            -n, --name=: Cosmos DB account name.
     - name: create
       description: Create a new Azure Cosmos DB database account.
       flags:
@@ -419,6 +425,7 @@ commands:
                 - "6.0"
                 - "7.0"
     - name: database
+      description: Manage Azure Cosmos DB databases.
       commands:
         - name: list
           description: Lists all Azure Cosmos DB databases
@@ -428,30 +435,11 @@ commands:
             --url-connection=: Cosmos DB account url connection.
             -g, --resource-group-name=: name of the resource group.
             -n, --name=: Cosmos DB account name.
-        - name: show
-          description: Shows an Azure Cosmos DB database
-          flags:
-            --key=: Cosmos DB account key.
-            --subscription=: Name or ID of subscription.
-            --url-connection=: Cosmos DB account url connection.
-            -d, --db-name=!: Database Name
-            -g, --resource-group-name=: name of the resource group.
-            -n, --name=: Cosmos DB account name.
         - name: exists
           description: Returns a boolean indicating whether the database exists
           flags:
             --key=: Cosmos DB account key.
             --subscription=: Name or ID of subscription.
-            --url-connection=: Cosmos DB account url connection.
-            -d, --db-name=!: Database Name
-            -g, --resource-group-name=: name of the resource group.
-            -n, --name=: Cosmos DB account name.
-        - name: create
-          description: Creates an Azure Cosmos DB database
-          flags:
-            --key=: Cosmos DB account key.
-            --subscription=: Name or ID of subscription.
-            --throughput=: Offer Throughput (RU/s)
             --url-connection=: Cosmos DB account url connection.
             -d, --db-name=!: Database Name
             -g, --resource-group-name=: name of the resource group.
@@ -466,6 +454,25 @@ commands:
             -g, --resource-group-name=: name of the resource group.
             -n, --name=: Cosmos DB account name.
             -y, --yes=: Do not prompt for confirmation.
+        - name: create
+          description: Creates an Azure Cosmos DB database
+          flags:
+            --key=: Cosmos DB account key.
+            --subscription=: Name or ID of subscription.
+            --throughput=: Offer Throughput (RU/s)
+            --url-connection=: Cosmos DB account url connection.
+            -d, --db-name=!: Database Name
+            -g, --resource-group-name=: name of the resource group.
+            -n, --name=: Cosmos DB account name.
+        - name: show
+          description: Shows an Azure Cosmos DB database
+          flags:
+            --key=: Cosmos DB account key.
+            --subscription=: Name or ID of subscription.
+            --url-connection=: Cosmos DB account url connection.
+            -d, --db-name=!: Database Name
+            -g, --resource-group-name=: name of the resource group.
+            -n, --name=: Cosmos DB account name.
     - name: delete
       description: Deletes an Azure Cosmos DB database account.
       flags:
@@ -490,130 +497,20 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: Name of the Cosmos DB database account
     - name: gremlin
+      description: Manage Gremlin resources of Azure Cosmos DB account.
       commands:
-        - name: database
-          commands:
-            - name: create
-              description: Creates an Azure Cosmos DB Gremlin database
-              flags:
-                --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                --subscription=: Name or ID of subscription.
-                --throughput=: The throughput Gremlin database (RU/s).
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-            - name: throughput
-              commands:
-                - name: migrate
-                  description: Migrate an Azure Cosmos DB Gremlin database throughput
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Database name
-                    -t, --throughput-type=!: The type of throughput to migrate to.
-                  completion:
-                    flag:
-                        throughput-type:
-                            - autoscale
-                            - manual
-                - name: update
-                  description: Update an Azure Cosmos DB Gremlin database throughput
-                  flags:
-                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                    --subscription=: Name or ID of subscription.
-                    --throughput=: The throughput of Gremlin database (RU/s).
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Database name
-                - name: show
-                  description: Gets the RUs per second of the Gremlin database under an existing Azure Cosmos DB database account with the provided name.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Database name
-            - name: list
-              description: Lists the Gremlin databases under an existing Azure Cosmos DB database account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-            - name: show
-              description: Gets the Gremlin databases under an existing Azure Cosmos DB database account with the provided name.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-            - name: restore
-              description: Restore a deleted gremlin database within the same account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --disable-ttl=: Flag to restore with TTL disabled
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Name of the CosmosDB Gremlin database name
-                -t, --restore-timestamp=: The timestamp to which the database needs to be restored to.
-            - name: exists
-              description: Checks if an Azure Cosmos DB Gremlin database exists
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-            - name: delete
-              description: Deletes an existing Azure Cosmos DB Gremlin database.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-                -y, --yes=: Do not prompt for confirmation.
-        - name: restorable-graph
+        - name: restorable-database
+          description: Manage different versions of gremlin databases that are restorable in a Azure Cosmos DB account.
           commands:
             - name: list
-              description: Show the event feed of all mutations done on all the Azure Cosmos DB Gremlin graphs under a specific database.
+              description: Show the event feed of all mutations done on all the Azure Cosmos DB Gremlin databases under the restorable account.
               flags:
                 --subscription=: Name or ID of subscription.
-                -d, --database-rid=!: Rid of the gremlin database
-                -e, --end-time=: End time of restorable Gremlin graph event feed
                 -i, --instance-id=!: InstanceId of the Account
                 -l, --location=!: Location
-                -s, --start-time=: Start time of restorable Gremlin graph event feed
         - name: graph
+          description: Manage Azure Cosmos DB Gremlin graphs.
           commands:
-            - name: create
-              description: Creates an Azure Cosmos DB Gremlin graph
-              flags:
-                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
-                --idx=: 'Indexing Policy, you can enter it as a string or as a file, e.g., --idx @policy-file.json or --idx "{\"indexingMode\": \"consistent\", \"automatic\": true, \"includedPaths\": [{\"path\": \"/*\"}], \"excludedPaths\": [{ \"path\": \"/headquarters/employees/?\"}, { \"path\": \"/\\"_etag\\"/?\"}]}"'
-                --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                --subscription=: Name or ID of subscription.
-                --throughput=: The throughput of Gremlin graph (RU/s).
-                --ttl=: Default TTL.
-                -a, --account-name=!: Cosmosdb account name.
-                -c, --conflict-resolution-policy=: 'Conflict Resolution Policy, you can enter it as a string or as a file, e.g., --conflict-resolution-policy @policy-file.json or --conflict-resolution-policy "{\"mode\": \"lastWriterWins\", \"conflictResolutionPath\": \"/path\"}"'
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Graph name
-                -p, --partition-key-path=!: Partition Key Path, e.g., '/address/zipcode'
-            - name: list
-              description: Lists the Gremlin graph under an existing Azure Cosmos DB database account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
             - name: delete
               description: Deletes an existing Azure Cosmos DB Gremlin graph.
               flags:
@@ -623,25 +520,6 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Graph name
                 -y, --yes=: Do not prompt for confirmation.
-            - name: update
-              description: Updates an Azure Cosmos DB Gremlin graph
-              flags:
-                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
-                --idx=: 'Indexing Policy, you can enter it as a string or as a file, e.g., --idx @policy-file.json or --idx "{\"indexingMode\": \"consistent\", \"automatic\": true, \"includedPaths\": [{\"path\": \"/*\"}], \"excludedPaths\": [{ \"path\": \"/headquarters/employees/?\"}, { \"path\": \"/\\"_etag\\"/?\"}]}"'
-                --subscription=: Name or ID of subscription.
-                --ttl=: Default TTL.
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Graph name
-            - name: exists
-              description: Checks if an Azure Cosmos DB Gremlin graph exists
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Graph name
             - name: restore
               description: Restore a deleted gremlin graph within the same account.
               flags:
@@ -656,18 +534,8 @@ commands:
                 -n, --name=!: Name of the CosmosDB Gremlin graph name
                 -t, --restore-timestamp=: The timestamp to which the graph needs to be restored to.
             - name: throughput
+              description: Manage throughput of Gremlin graph under an Azure Cosmos DB account.
               commands:
-                - name: show
-                  description: Gets the Gremlin graph throughput under an existing Azure Cosmos DB database account with the provided name.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -d, --database-name=!: Database name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Graph name
                 - name: update
                   description: Update an Azure Cosmos DB Gremlin graph throughput
                   flags:
@@ -692,6 +560,51 @@ commands:
                         throughput-type:
                             - autoscale
                             - manual
+                - name: show
+                  description: Gets the Gremlin graph throughput under an existing Azure Cosmos DB database account with the provided name.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -d, --database-name=!: Database name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Graph name
+            - name: exists
+              description: Checks if an Azure Cosmos DB Gremlin graph exists
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Graph name
+            - name: create
+              description: Creates an Azure Cosmos DB Gremlin graph
+              flags:
+                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
+                --idx=: 'Indexing Policy, you can enter it as a string or as a file, e.g., --idx @policy-file.json or --idx "{\"indexingMode\": \"consistent\", \"automatic\": true, \"includedPaths\": [{\"path\": \"/*\"}], \"excludedPaths\": [{ \"path\": \"/headquarters/employees/?\"}, { \"path\": \"/\\"_etag\\"/?\"}]}"'
+                --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                --subscription=: Name or ID of subscription.
+                --throughput=: The throughput of Gremlin graph (RU/s).
+                --ttl=: Default TTL.
+                -a, --account-name=!: Cosmosdb account name.
+                -c, --conflict-resolution-policy=: 'Conflict Resolution Policy, you can enter it as a string or as a file, e.g., --conflict-resolution-policy @policy-file.json or --conflict-resolution-policy "{\"mode\": \"lastWriterWins\", \"conflictResolutionPath\": \"/path\"}"'
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Graph name
+                -p, --partition-key-path=!: Partition Key Path, e.g., '/address/zipcode'
+            - name: update
+              description: Updates an Azure Cosmos DB Gremlin graph
+              flags:
+                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
+                --idx=: 'Indexing Policy, you can enter it as a string or as a file, e.g., --idx @policy-file.json or --idx "{\"indexingMode\": \"consistent\", \"automatic\": true, \"includedPaths\": [{\"path\": \"/*\"}], \"excludedPaths\": [{ \"path\": \"/headquarters/employees/?\"}, { \"path\": \"/\\"_etag\\"/?\"}]}"'
+                --subscription=: Name or ID of subscription.
+                --ttl=: Default TTL.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Graph name
             - name: show
               description: Gets the Gremlin graph under an existing Azure Cosmos DB database account.
               flags:
@@ -703,7 +616,117 @@ commands:
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Graph name
+            - name: list
+              description: Lists the Gremlin graph under an existing Azure Cosmos DB database account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+        - name: database
+          description: Manage Azure Cosmos DB Gremlin databases.
+          commands:
+            - name: restore
+              description: Restore a deleted gremlin database within the same account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --disable-ttl=: Flag to restore with TTL disabled
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Name of the CosmosDB Gremlin database name
+                -t, --restore-timestamp=: The timestamp to which the database needs to be restored to.
+            - name: throughput
+              description: Manage throughput of Gremlin database under an Azure Cosmos DB account.
+              commands:
+                - name: show
+                  description: Gets the RUs per second of the Gremlin database under an existing Azure Cosmos DB database account with the provided name.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Database name
+                - name: update
+                  description: Update an Azure Cosmos DB Gremlin database throughput
+                  flags:
+                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                    --subscription=: Name or ID of subscription.
+                    --throughput=: The throughput of Gremlin database (RU/s).
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Database name
+                - name: migrate
+                  description: Migrate an Azure Cosmos DB Gremlin database throughput
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Database name
+                    -t, --throughput-type=!: The type of throughput to migrate to.
+                  completion:
+                    flag:
+                        throughput-type:
+                            - autoscale
+                            - manual
+            - name: delete
+              description: Deletes an existing Azure Cosmos DB Gremlin database.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+                -y, --yes=: Do not prompt for confirmation.
+            - name: show
+              description: Gets the Gremlin databases under an existing Azure Cosmos DB database account with the provided name.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+            - name: list
+              description: Lists the Gremlin databases under an existing Azure Cosmos DB database account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+            - name: create
+              description: Creates an Azure Cosmos DB Gremlin database
+              flags:
+                --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                --subscription=: Name or ID of subscription.
+                --throughput=: The throughput Gremlin database (RU/s).
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+            - name: exists
+              description: Checks if an Azure Cosmos DB Gremlin database exists
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+        - name: restorable-graph
+          description: Manage different versions of gremlin graphs that are restorable in a database of a Azure Cosmos DB account.
+          commands:
+            - name: list
+              description: Show the event feed of all mutations done on all the Azure Cosmos DB Gremlin graphs under a specific database.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -d, --database-rid=!: Rid of the gremlin database
+                -e, --end-time=: End time of restorable Gremlin graph event feed
+                -i, --instance-id=!: InstanceId of the Account
+                -l, --location=!: Location
+                -s, --start-time=: Start time of restorable Gremlin graph event feed
         - name: restorable-resource
+          description: Manage the databases and its graphs that can be restored in the given account at the given timestamp and region.
           commands:
             - name: list
               description: Return a list of gremlin database and graphs combo that exist on the account at the given timestamp and location.
@@ -722,15 +745,8 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -l, --location=!: Location of the account
             -n, --graph-name=!: Name of the CosmosDB Gremlin graph name
-        - name: restorable-database
-          commands:
-            - name: list
-              description: Show the event feed of all mutations done on all the Azure Cosmos DB Gremlin databases under the restorable account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -i, --instance-id=!: InstanceId of the Account
-                -l, --location=!: Location
     - name: identity
+      description: Manage Azure Cosmos DB managed service identities.
       commands:
         - name: assign
           description: Update the identities associated with a Cosmos DB account
@@ -769,7 +785,21 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Cosmos DB database account
     - name: keys
+      description: Manage Azure Cosmos DB keys.
       commands:
+        - name: list
+          description: List the access keys or connection strings for a Azure Cosmos DB database account.
+          flags:
+            --subscription=: Name or ID of subscription.
+            --type=: The type of account key.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Cosmosdb account name
+          completion:
+            flag:
+                type:
+                    - keys
+                    - read-only-keys
+                    - connection-strings
         - name: regenerate
           description: Regenerate an access key for a Azure Cosmos DB database account.
           flags:
@@ -787,19 +817,6 @@ commands:
                     - secondary
                     - primaryReadonly
                     - secondaryReadonly
-        - name: list
-          description: List the access keys or connection strings for a Azure Cosmos DB database account.
-          flags:
-            --subscription=: Name or ID of subscription.
-            --type=: The type of account key.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Cosmosdb account name
-          completion:
-            flag:
-                type:
-                    - keys
-                    - read-only-keys
-                    - connection-strings
     - name: list
       description: Lists all Azure Cosmos DB database accounts within a given resource group or subscription.
       flags:
@@ -833,6 +850,7 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: Name of the Cosmos DB database account
     - name: locations
+      description: Manage Azure Cosmos DB location properties.
       commands:
         - name: list
           description: List Cosmos DB locations and their properties.
@@ -847,11 +865,20 @@ commands:
             --subscription=: Name or ID of subscription.
             -l, --location=!: Name of the location
     - name: mongodb
+      description: Manage MongoDB resources of Azure Cosmos DB account.
       commands:
         - name: role
+          description: Manage Azure Cosmos DB Mongo role resources.
           commands:
             - name: definition
+              description: Manage Azure Cosmos DB Mongo role definitions.
               commands:
+                - name: list
+                  description: Retrieves the list of all Azure Cosmos DB Mongo Role Definitions.
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
                 - name: delete
                   description: Deletes an existing Azure Cosmos DB Mongo Role Definition.
                   flags:
@@ -860,26 +887,6 @@ commands:
                     -g, --resource-group=!: Name of resource group.
                     -i, --id=!: Unique ID for the Mongo Role Definition.
                     -y, --yes=: Do not prompt for confirmation.
-                - name: create
-                  description: Creates an Azure Cosmos DB Mongo Role Definition
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -b, --body=!: Role Definition body with Id (Optional for create), Type (Default is CustomRole), DatabaseName, Privileges, Roles.
-                    -g, --resource-group=!: Name of resource group.
-                - name: list
-                  description: Retrieves the list of all Azure Cosmos DB Mongo Role Definitions.
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                - name: update
-                  description: Update an existing Azure Cosmos DB Mongo Role Definition
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -b, --body=!: Role Definition body with Id (Optional for create), Type (Default is CustomRole), DatabaseName, Privileges, Roles.
-                    -g, --resource-group=!: Name of resource group.
                 - name: show
                   description: Retrieves the properties of an existing Azure Cosmos DB Mongo Role Definition with the given Id.
                   flags:
@@ -890,6 +897,20 @@ commands:
                     -a, --account-name=!: Cosmosdb account name.
                     -g, --resource-group=!: Name of resource group.
                     -i, --id=!: Unique ID for the Mongo Role Definition.
+                - name: update
+                  description: Update an existing Azure Cosmos DB Mongo Role Definition
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -b, --body=!: Role Definition body with Id (Optional for create), Type (Default is CustomRole), DatabaseName, Privileges, Roles.
+                    -g, --resource-group=!: Name of resource group.
+                - name: create
+                  description: Creates an Azure Cosmos DB Mongo Role Definition
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -b, --body=!: Role Definition body with Id (Optional for create), Type (Default is CustomRole), DatabaseName, Privileges, Roles.
+                    -g, --resource-group=!: Name of resource group.
                 - name: exists
                   description: Checks if an Azure Cosmos DB Mongo Role Definition exists
                   flags:
@@ -898,36 +919,10 @@ commands:
                     -g, --resource-group=!: Name of resource group.
                     -i, --id=!: Unique ID for the Mongo Role Definition.
         - name: collection
+          description: Manage Azure Cosmos DB MongoDB collections.
           commands:
-            - name: exists
-              description: Checks if an Azure Cosmos DB MongoDB collection exists
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Collection name
-            - name: list
-              description: Lists the MongoDB collection under an existing Azure Cosmos DB database account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-            - name: create
-              description: Create an Azure Cosmos DB MongoDB collection
-              flags:
-                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
-                --idx=: 'Indexes, you can enter it as a string or as a file, e.g., --idx @indexes-file.json or --idx "[{\"key\": {\"keys\": [\"_ts\"]},\"options\": {\"expireAfterSeconds\": 1000}}, {\"key\": {\"keys\": [\"user_id\", \"user_address\"]}, \"options\": {\"unique\": \"true\"}}]"'
-                --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                --shard=: Sharding key path.
-                --subscription=: Name or ID of subscription.
-                --throughput=: The throughput of MongoDB collection (RU/s).
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Collection name
             - name: throughput
+              description: Manage throughput of MongoDB collection under an Azure Cosmos DB account.
               commands:
                 - name: update
                   description: Update an Azure Cosmos DB MongoDB collection throughput
@@ -935,6 +930,17 @@ commands:
                     --max-throughput=: The maximum throughput resource can scale to (RU/s).
                     --subscription=: Name or ID of subscription.
                     --throughput=: The throughput of MongoDB collection (RU/s).
+                    -a, --account-name=!: Cosmosdb account name.
+                    -d, --database-name=!: Database name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Collection name
+                - name: show
+                  description: Gets the RUs per second of the MongoDB collection under an existing Azure Cosmos DB database account with the provided name.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
                     -a, --account-name=!: Cosmosdb account name.
                     -d, --database-name=!: Database name.
                     -g, --resource-group=!: Name of resource group.
@@ -953,27 +959,41 @@ commands:
                         throughput-type:
                             - autoscale
                             - manual
-                - name: show
-                  description: Gets the RUs per second of the MongoDB collection under an existing Azure Cosmos DB database account with the provided name.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -d, --database-name=!: Database name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Collection name
-            - name: update
-              description: Updates an Azure Cosmos DB MongoDB collection
+            - name: delete
+              description: Deletes an existing Azure Cosmos DB MongoDB Collection.
               flags:
-                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
-                --idx=: 'Indexes, you can enter it as a string or as a file, e.g., --idx @indexes-file.json or --idx "[{\"key\": {\"keys\": [\"_ts\"]},\"options\": {\"expireAfterSeconds\": 1000}}, {\"key\": {\"keys\": [\"user_id\", \"user_address\"]}, \"options\": {\"unique\": \"true\"}}]"'
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Collection name
+                -y, --yes=: Do not prompt for confirmation.
+            - name: exists
+              description: Checks if an Azure Cosmos DB MongoDB collection exists
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Collection name
+            - name: show
+              description: Gets the MongoDB collection under an existing Azure Cosmos DB database account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Collection name
+            - name: list
+              description: Lists the MongoDB collection under an existing Azure Cosmos DB database account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
             - name: restore
               description: Restore a deleted mongodb collection within the same account.
               flags:
@@ -987,51 +1007,91 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Collection name
                 -t, --restore-timestamp=: The timestamp to which the collection needs to be restored to.
-            - name: delete
-              description: Deletes an existing Azure Cosmos DB MongoDB Collection.
+            - name: create
+              description: Create an Azure Cosmos DB MongoDB collection
               flags:
+                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
+                --idx=: 'Indexes, you can enter it as a string or as a file, e.g., --idx @indexes-file.json or --idx "[{\"key\": {\"keys\": [\"_ts\"]},\"options\": {\"expireAfterSeconds\": 1000}}, {\"key\": {\"keys\": [\"user_id\", \"user_address\"]}, \"options\": {\"unique\": \"true\"}}]"'
+                --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                --shard=: Sharding key path.
+                --subscription=: Name or ID of subscription.
+                --throughput=: The throughput of MongoDB collection (RU/s).
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Collection name
+            - name: update
+              description: Updates an Azure Cosmos DB MongoDB collection
+              flags:
+                --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
+                --idx=: 'Indexes, you can enter it as a string or as a file, e.g., --idx @indexes-file.json or --idx "[{\"key\": {\"keys\": [\"_ts\"]},\"options\": {\"expireAfterSeconds\": 1000}}, {\"key\": {\"keys\": [\"user_id\", \"user_address\"]}, \"options\": {\"unique\": \"true\"}}]"'
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Collection name
-                -y, --yes=: Do not prompt for confirmation.
-            - name: show
-              description: Gets the MongoDB collection under an existing Azure Cosmos DB database account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Collection name
-        - name: database
+        - name: user
+          description: Manage Azure Cosmos DB Mongo user resources.
           commands:
-            - name: show
-              description: Gets the MongoDB databases under an existing Azure Cosmos DB database account with the provided name.
+            - name: definition
+              description: Manage Azure Cosmos DB Mongo user definitions.
+              commands:
+                - name: exists
+                  description: Checks if an Azure Cosmos DB Mongo User Definition exists
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --id=!: Unique ID for the Mongo User Definition.
+                - name: list
+                  description: Retrieves the list of all Azure Cosmos DB Mongo User Definition.
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                - name: update
+                  description: Update an existing Azure Cosmos DB Mongo User Definition
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -b, --body=!: User Definition body with Id (Optional for create), UserName, Password, DatabaseName, CustomData, Mechanisms, Roles.
+                    -g, --resource-group=!: Name of resource group.
+                - name: create
+                  description: Creates an Azure Cosmos DB Mongo User Definition
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -b, --body=!: User Definition body with Id (Optional for create), UserName, Password, DatabaseName, CustomData, Mechanisms, Roles.
+                    -g, --resource-group=!: Name of resource group.
+                - name: show
+                  description: Retrieves the properties of an existing Azure Cosmos DB Mongo User Definition with the given Id.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --id=!: Unique ID for the Mongo User Definition.
+                - name: delete
+                  description: Deletes an existing Azure Cosmos DB Mongo User Definition.
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --id=!: Unique ID for the Mongo User Definition.
+                    -y, --yes=: Do not prompt for confirmation.
+        - name: database
+          description: Manage Azure Cosmos DB MongoDB databases.
+          commands:
+            - name: list
+              description: Lists the MongoDB databases under an existing Azure Cosmos DB database account.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-            - name: restore
-              description: Restore a deleted mongodb database within the same account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --disable-ttl=: Flag to restore with TTL disabled
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-                -t, --restore-timestamp=: The timestamp to which the database needs to be restored to.
             - name: throughput
+              description: Manage throughput of MongoDB database under an Azure Cosmos DB account.
               commands:
                 - name: show
                   description: Gets the RUs per second of the MongoDB database under an existing Azure Cosmos DB database account with the provided name.
@@ -1065,9 +1125,20 @@ commands:
                         throughput-type:
                             - autoscale
                             - manual
-            - name: exists
-              description: Checks if an Azure Cosmos DB MongoDB database exists
+            - name: delete
+              description: Deletes an existing Azure Cosmos DB MongoDB database.
               flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+                -y, --yes=: Do not prompt for confirmation.
+            - name: show
+              description: Gets the MongoDB databases under an existing Azure Cosmos DB database account with the provided name.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
@@ -1081,77 +1152,25 @@ commands:
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Database name
-            - name: list
-              description: Lists the MongoDB databases under an existing Azure Cosmos DB database account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-            - name: delete
-              description: Deletes an existing Azure Cosmos DB MongoDB database.
+            - name: exists
+              description: Checks if an Azure Cosmos DB MongoDB database exists
               flags:
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Database name
-                -y, --yes=: Do not prompt for confirmation.
-        - name: user
-          commands:
-            - name: definition
-              commands:
-                - name: list
-                  description: Retrieves the list of all Azure Cosmos DB Mongo User Definition.
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                - name: create
-                  description: Creates an Azure Cosmos DB Mongo User Definition
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -b, --body=!: User Definition body with Id (Optional for create), UserName, Password, DatabaseName, CustomData, Mechanisms, Roles.
-                    -g, --resource-group=!: Name of resource group.
-                - name: show
-                  description: Retrieves the properties of an existing Azure Cosmos DB Mongo User Definition with the given Id.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --id=!: Unique ID for the Mongo User Definition.
-                - name: update
-                  description: Update an existing Azure Cosmos DB Mongo User Definition
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -b, --body=!: User Definition body with Id (Optional for create), UserName, Password, DatabaseName, CustomData, Mechanisms, Roles.
-                    -g, --resource-group=!: Name of resource group.
-                - name: exists
-                  description: Checks if an Azure Cosmos DB Mongo User Definition exists
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --id=!: Unique ID for the Mongo User Definition.
-                - name: delete
-                  description: Deletes an existing Azure Cosmos DB Mongo User Definition.
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --id=!: Unique ID for the Mongo User Definition.
-                    -y, --yes=: Do not prompt for confirmation.
-        - name: restorable-database
-          commands:
-            - name: list
-              description: Show the event feed of all mutations done on all the Azure Cosmos DB MongoDB databases under the restorable account.
+            - name: restore
+              description: Restore a deleted mongodb database within the same account.
               flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --disable-ttl=: Flag to restore with TTL disabled
                 --subscription=: Name or ID of subscription.
-                -i, --instance-id=!: InstanceId of the Account
-                -l, --location=!: Location
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+                -t, --restore-timestamp=: The timestamp to which the database needs to be restored to.
         - name: retrieve-latest-backup-time
           description: Retrieves latest restorable timestamp for the given mongodb collection in given region.
           flags:
@@ -1161,7 +1180,28 @@ commands:
             -d, --database-name=!: Name of the CosmosDB MongoDB database name
             -g, --resource-group=!: Name of resource group.
             -l, --location=!: Location of the account
+        - name: restorable-resource
+          description: Manage the databases and its collections that can be restored in the given account at the given timesamp and region.
+          commands:
+            - name: list
+              description: Return a list of database and collection combo that exist on the account at the given timestamp and location.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -i, --instance-id=!: InstanceId of the Account
+                -l, --location=!: Azure Location of the account
+                -r, --restore-location=!: The region of the restore.
+                -t, --restore-timestamp=!: The timestamp of the restore
+        - name: restorable-database
+          description: Manage different versions of mongodb databases that are restorable in a Azure Cosmos DB account.
+          commands:
+            - name: list
+              description: Show the event feed of all mutations done on all the Azure Cosmos DB MongoDB databases under the restorable account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -i, --instance-id=!: InstanceId of the Account
+                -l, --location=!: Location
         - name: restorable-collection
+          description: Manage different versions of mongodb collections that are restorable in a database of a Azure Cosmos DB account.
           commands:
             - name: list
               description: Show the event feed of all mutations done on all the Azure Cosmos DB MongoDB collections under a specific database.
@@ -1172,24 +1212,9 @@ commands:
                 -i, --instance-id=!: InstanceId of the Account
                 -l, --location=!: Location
                 -s, --start-time=: Start time of restorable MongoDB collections event feed
-        - name: restorable-resource
-          commands:
-            - name: list
-              description: Return a list of database and collection combo that exist on the account at the given timestamp and location.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -i, --instance-id=!: InstanceId of the Account
-                -l, --location=!: Azure Location of the account
-                -r, --restore-location=!: The region of the restore.
-                -t, --restore-timestamp=!: The timestamp of the restore
     - name: network-rule
+      description: Manage Azure Cosmos DB network rules.
       commands:
-        - name: list
-          description: Lists the virtual network accounts associated with a Cosmos DB account
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the Cosmos DB database account
         - name: add
           description: Adds a virtual network rule to an existing Cosmos DB database account
           flags:
@@ -1212,6 +1237,12 @@ commands:
                 ignore-missing-endpoint:
                     - "true"
                     - "false"
+        - name: list
+          description: Lists the virtual network accounts associated with a Cosmos DB account
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the Cosmos DB database account
         - name: remove
           description: Remove a virtual network rule from an existing Cosmos DB database account
           flags:
@@ -1237,154 +1268,13 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: Name of the Cosmos DB database account
     - name: postgres
+      description: Manage Azure Cosmos DB for PostgreSQL resources.
       commands:
-        - name: configuration
-          commands:
-            - name: coordinator
-              commands:
-                - name: update
-                  description: Updates configuration of coordinator in a cluster
-                  flags:
-                    --cluster-name=: The name of the cluster.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --no-wait=:
-                        description: Do not wait for the long-running operation to finish.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --value=: Value of the configuration.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the cluster configuration.
-                  completion:
-                    flag:
-                        no-wait:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-                - name: wait
-                  description: Place the CLI in a waiting state until a condition is met.
-                  flags:
-                    --cluster-name=: The name of the cluster.
-                    --created=: wait until created with 'provisioningState' at 'Succeeded'
-                    --custom=: Wait until the condition satisfies a custom JMESPath query.
-                    --deleted=: wait until deleted
-                    --exists=: wait until the resource exists
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --interval=: polling interval in seconds
-                    --subscription=: Name or ID of subscription.
-                    --timeout=: maximum wait in seconds
-                    --updated=: wait until updated with provisioningState at 'Succeeded'
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the cluster configuration.
-                - name: show
-                  description: Get information of a configuration for coordinator.
-                  flags:
-                    --cluster-name=: The name of the cluster.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the cluster configuration.
-            - name: show
-              description: Get information of a configuration for coordinator and nodes.
-              flags:
-                --cluster-name=: The name of the cluster.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster configuration.
-            - name: node
-              commands:
-                - name: wait
-                  description: Place the CLI in a waiting state until a condition is met.
-                  flags:
-                    --cluster-name=: The name of the cluster.
-                    --created=: wait until created with 'provisioningState' at 'Succeeded'
-                    --custom=: Wait until the condition satisfies a custom JMESPath query.
-                    --deleted=: wait until deleted
-                    --exists=: wait until the resource exists
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --interval=: polling interval in seconds
-                    --subscription=: Name or ID of subscription.
-                    --timeout=: maximum wait in seconds
-                    --updated=: wait until updated with provisioningState at 'Succeeded'
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the cluster configuration.
-                - name: show
-                  description: Get information of a configuration for worker nodes.
-                  flags:
-                    --cluster-name=: The name of the cluster.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the cluster configuration.
-                - name: update
-                  description: Updates configuration of worker nodes in a cluster
-                  flags:
-                    --cluster-name=: The name of the cluster.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --no-wait=:
-                        description: Do not wait for the long-running operation to finish.
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    --value=: Value of the configuration.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The name of the cluster configuration.
-                  completion:
-                    flag:
-                        no-wait:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
-            - name: server
-              commands:
-                - name: list
-                  description: List all the configurations of a server in cluster.
-                  flags:
-                    --cluster-name=!: The name of the cluster.
-                    --server-name=!: The name of the server.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=!: Name of resource group.
-            - name: list
-              description: List all the configurations of a cluster.
-              flags:
-                --cluster-name=!: The name of the cluster.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
         - name: cluster
+          description: Manage Azure Cosmos DB for PostgreSQL clusters.
           commands:
-            - name: list
-              description: List all clusters in a subscription or a resource group.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
             - name: server
+              description: Manage Azure Cosmos DB for PostgreSQL cluster servers.
               commands:
                 - name: list
                   description: List nodes of a cluster.
@@ -1402,31 +1292,6 @@ commands:
                     --subscription=: Name or ID of subscription.
                     -g, --resource-group=: Name of resource group.
                     -n, --name=: The name of the server.
-            - name: promote
-              description: Promotes read replica cluster to an independent read-write cluster.
-              flags:
-                --cluster-name=: The name of the cluster.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
             - name: start
               description: Starts stopped compute on all cluster nodes.
               flags:
@@ -1452,193 +1317,6 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: delete
-              description: Delete a cluster together with nodes in it.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: show
-              description: Get information about a cluster such as compute and storage configuration and cluster lifecycle metadata such as cluster creation date and time.
-              flags:
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster.
-            - name: update
-              description: Update an existing cluster.
-              flags:
-                --citus-version=: The Citus extension version on all cluster servers.
-                --coord-public-ip-access=:
-                    description: If public access is enabled on coordinator.
-                    nargs: -1
-                --coord-server-edition=: 'The edition of a coordinator server (default: GeneralPurpose).'
-                --coordinator-storage=: The storage of a server in MB.
-                --coordinator-v-cores=: 'The vCores count of a server (max: 96).'
-                --enable-ha=:
-                    description: If high availability (HA) is enabled or not for the cluster.
-                    nargs: -1
-                --enable-shards-on-coord=:
-                    description: If shards on coordinator is enabled or not for the cluster.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --login-password=:
-                    description: The password of the administrator login.
-                    nargs: -1
-                --maintenance-window=:
-                    description: Maintenance window of a cluster.
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --node-count=: Worker node count of the cluster.
-                --node-server-edition=: 'The edition of a node server (default: MemoryOptimized).'
-                --node-storage=: The storage in MB on each worker node.
-                --node-v-cores=: 'The compute in vCores on each worker node (max: 104).'
-                --postgresql-version=: The major PostgreSQL version on all cluster servers.
-                --preferred-primary-zone=: Preferred primary availability zone (AZ) for all cluster servers.
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: Application-specific metadata in the form of key-value pairs.
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster.
-              completion:
-                flag:
-                    coord-public-ip-access:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    enable-ha:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    enable-shards-on-coord:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: restart
-              description: Restarts all nodes in the cluster.
-              flags:
-                --cluster-name=: The name of the cluster.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: stop
-              description: Stops compute on all cluster nodes.
-              flags:
-                --cluster-name=: The name of the cluster.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: wait
-              description: Place the CLI in a waiting state until a condition is met.
-              flags:
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster.
             - name: create
               description: Create a new cluster with nodes.
               flags:
@@ -1740,8 +1418,257 @@ commands:
                         - "no"
                         - "n"
                         - "0"
+            - name: promote
+              description: Promotes read replica cluster to an independent read-write cluster.
+              flags:
+                --cluster-name=: The name of the cluster.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: wait
+              description: Place the CLI in a waiting state until a condition is met.
+              flags:
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --interval=: polling interval in seconds
+                --subscription=: Name or ID of subscription.
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster.
+            - name: list
+              description: List all clusters in a subscription or a resource group.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+            - name: show
+              description: Get information about a cluster such as compute and storage configuration and cluster lifecycle metadata such as cluster creation date and time.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster.
+            - name: delete
+              description: Delete a cluster together with nodes in it.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: restart
+              description: Restarts all nodes in the cluster.
+              flags:
+                --cluster-name=: The name of the cluster.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: update
+              description: Update an existing cluster.
+              flags:
+                --citus-version=: The Citus extension version on all cluster servers.
+                --coord-public-ip-access=:
+                    description: If public access is enabled on coordinator.
+                    nargs: -1
+                --coord-server-edition=: 'The edition of a coordinator server (default: GeneralPurpose).'
+                --coordinator-storage=: The storage of a server in MB.
+                --coordinator-v-cores=: 'The vCores count of a server (max: 96).'
+                --enable-ha=:
+                    description: If high availability (HA) is enabled or not for the cluster.
+                    nargs: -1
+                --enable-shards-on-coord=:
+                    description: If shards on coordinator is enabled or not for the cluster.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --login-password=:
+                    description: The password of the administrator login.
+                    nargs: -1
+                --maintenance-window=:
+                    description: Maintenance window of a cluster.
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --node-count=: Worker node count of the cluster.
+                --node-server-edition=: 'The edition of a node server (default: MemoryOptimized).'
+                --node-storage=: The storage in MB on each worker node.
+                --node-v-cores=: 'The compute in vCores on each worker node (max: 104).'
+                --postgresql-version=: The major PostgreSQL version on all cluster servers.
+                --preferred-primary-zone=: Preferred primary availability zone (AZ) for all cluster servers.
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: Application-specific metadata in the form of key-value pairs.
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster.
+              completion:
+                flag:
+                    coord-public-ip-access:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    enable-ha:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    enable-shards-on-coord:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: stop
+              description: Stops compute on all cluster nodes.
+              flags:
+                --cluster-name=: The name of the cluster.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
         - name: firewall-rule
+          description: Manage Azure Cosmos DB for PostgreSQL firewall rules.
           commands:
+            - name: list
+              description: List all the firewall rules on cluster.
+              flags:
+                --cluster-name=!: The name of the cluster.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: create
+              description: Create a new cluster firewall rule or updates an existing cluster firewall rule.
+              flags:
+                --cluster-name=!: The name of the cluster.
+                --end-ip-address=!: The end IP address of the cluster firewall rule.
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --start-ip-address=!: The start IP address of the cluster firewall rule.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the cluster firewall rule.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
             - name: delete
               description: Delete a cluster firewall rule.
               flags:
@@ -1769,23 +1696,6 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: wait
-              description: Place the CLI in a waiting state until a condition is met.
-              flags:
-                --cluster-name=: The name of the cluster.
-                --created=: wait until created with 'provisioningState' at 'Succeeded'
-                --custom=: Wait until the condition satisfies a custom JMESPath query.
-                --deleted=: wait until deleted
-                --exists=: wait until the resource exists
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --interval=: polling interval in seconds
-                --subscription=: Name or ID of subscription.
-                --timeout=: maximum wait in seconds
-                --updated=: wait until updated with provisioningState at 'Succeeded'
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster firewall rule.
             - name: show
               description: Get information about a cluster firewall rule.
               flags:
@@ -1796,12 +1706,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: The name of the cluster firewall rule.
-            - name: list
-              description: List all the firewall rules on cluster.
-              flags:
-                --cluster-name=!: The name of the cluster.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
             - name: update
               description: Update an existing cluster firewall rule.
               flags:
@@ -1853,46 +1757,193 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: create
-              description: Create a new cluster firewall rule or updates an existing cluster firewall rule.
+            - name: wait
+              description: Place the CLI in a waiting state until a condition is met.
               flags:
-                --cluster-name=!: The name of the cluster.
-                --end-ip-address=!: The end IP address of the cluster firewall rule.
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
+                --cluster-name=: The name of the cluster.
+                --created=: wait until created with 'provisioningState' at 'Succeeded'
+                --custom=: Wait until the condition satisfies a custom JMESPath query.
+                --deleted=: wait until deleted
+                --exists=: wait until the resource exists
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
                     nargs: -1
-                --start-ip-address=!: The start IP address of the cluster firewall rule.
+                --interval=: polling interval in seconds
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the cluster firewall rule.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-        - name: role
+                --timeout=: maximum wait in seconds
+                --updated=: wait until updated with provisioningState at 'Succeeded'
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster firewall rule.
+        - name: configuration
+          description: Manage Azure Cosmos DB for PostgreSQL configurations.
           commands:
-            - name: create
-              description: Create a new role or updates an existing role.
+            - name: list
+              description: List all the configurations of a cluster.
               flags:
                 --cluster-name=!: The name of the cluster.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: node
+              description: Manage Azure Cosmos DB for PostgreSQL node configurations.
+              commands:
+                - name: show
+                  description: Get information of a configuration for worker nodes.
+                  flags:
+                    --cluster-name=: The name of the cluster.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the cluster configuration.
+                - name: wait
+                  description: Place the CLI in a waiting state until a condition is met.
+                  flags:
+                    --cluster-name=: The name of the cluster.
+                    --created=: wait until created with 'provisioningState' at 'Succeeded'
+                    --custom=: Wait until the condition satisfies a custom JMESPath query.
+                    --deleted=: wait until deleted
+                    --exists=: wait until the resource exists
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --interval=: polling interval in seconds
+                    --subscription=: Name or ID of subscription.
+                    --timeout=: maximum wait in seconds
+                    --updated=: wait until updated with provisioningState at 'Succeeded'
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the cluster configuration.
+                - name: update
+                  description: Updates configuration of worker nodes in a cluster
+                  flags:
+                    --cluster-name=: The name of the cluster.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --no-wait=:
+                        description: Do not wait for the long-running operation to finish.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --value=: Value of the configuration.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the cluster configuration.
+                  completion:
+                    flag:
+                        no-wait:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+            - name: coordinator
+              description: Manage Azure Cosmos DB for PostgreSQL coordinator configurations.
+              commands:
+                - name: wait
+                  description: Place the CLI in a waiting state until a condition is met.
+                  flags:
+                    --cluster-name=: The name of the cluster.
+                    --created=: wait until created with 'provisioningState' at 'Succeeded'
+                    --custom=: Wait until the condition satisfies a custom JMESPath query.
+                    --deleted=: wait until deleted
+                    --exists=: wait until the resource exists
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --interval=: polling interval in seconds
+                    --subscription=: Name or ID of subscription.
+                    --timeout=: maximum wait in seconds
+                    --updated=: wait until updated with provisioningState at 'Succeeded'
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the cluster configuration.
+                - name: update
+                  description: Updates configuration of coordinator in a cluster
+                  flags:
+                    --cluster-name=: The name of the cluster.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --no-wait=:
+                        description: Do not wait for the long-running operation to finish.
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    --value=: Value of the configuration.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the cluster configuration.
+                  completion:
+                    flag:
+                        no-wait:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: show
+                  description: Get information of a configuration for coordinator.
+                  flags:
+                    --cluster-name=: The name of the cluster.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The name of the cluster configuration.
+            - name: server
+              description: Manage Azure Cosmos DB for PostgreSQL server configurations.
+              commands:
+                - name: list
+                  description: List all the configurations of a server in cluster.
+                  flags:
+                    --cluster-name=!: The name of the cluster.
+                    --server-name=!: The name of the server.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=!: Name of resource group.
+            - name: show
+              description: Get information of a configuration for coordinator and nodes.
+              flags:
+                --cluster-name=: The name of the cluster.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster configuration.
+        - name: role
+          description: Manage Azure Cosmos DB for PostgreSQL roles.
+          commands:
+            - name: show
+              description: Get information about a cluster role.
+              flags:
+                --cluster-name=: The name of the cluster.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster role.
+            - name: delete
+              description: Delete a cluster role.
+              flags:
+                --cluster-name=: The name of the cluster.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
                 --no-wait=:
                     description: Do not wait for the long-running operation to finish.
                     nargs: -1
-                --password=!:
-                    description: The password of the cluster role.
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the cluster role.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The name of the cluster role.
+                -y, --yes=: Do not prompt for confirmation.
               completion:
                 flag:
                     no-wait:
@@ -1906,12 +1957,6 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: list
-              description: List all the roles in a given cluster.
-              flags:
-                --cluster-name=!: The name of the cluster.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
             - name: wait
               description: Place the CLI in a waiting state until a condition is met.
               flags:
@@ -1981,30 +2026,19 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: show
-              description: Get information about a cluster role.
+            - name: create
+              description: Create a new role or updates an existing role.
               flags:
-                --cluster-name=: The name of the cluster.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster role.
-            - name: delete
-              description: Delete a cluster role.
-              flags:
-                --cluster-name=: The name of the cluster.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
+                --cluster-name=!: The name of the cluster.
                 --no-wait=:
                     description: Do not wait for the long-running operation to finish.
                     nargs: -1
+                --password=!:
+                    description: The password of the cluster role.
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The name of the cluster role.
-                -y, --yes=: Do not prompt for confirmation.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the cluster role.
               completion:
                 flag:
                     no-wait:
@@ -2018,6 +2052,12 @@ commands:
                         - "no"
                         - "n"
                         - "0"
+            - name: list
+              description: List all the roles in a given cluster.
+              flags:
+                --cluster-name=!: The name of the cluster.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
         - name: check-name-availability
           description: Checks availability of a cluster name.
           flags:
@@ -2029,7 +2069,31 @@ commands:
                 type:
                     - Microsoft.DBforPostgreSQL/serverGroupsv2
     - name: private-endpoint-connection
+      description: Manage Azure Cosmos DB private endpoint connections.
       commands:
+        - name: reject
+          description: Reject a private endpoint connection request for Azure Cosmos DB.
+          flags:
+            --description=: Comments for the reject operation.
+            --id=: The ID of the private endpoint connection associated with Azure Cosmos DB.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: Name of the Cosmos DB database account.
+            -g, --resource-group=: The resource group name of specified Cosmos DB account.
+            -n, --name=: The name of the private endpoint connection associated with Azure Cosmos DB.
+        - name: delete
+          description: Deletes a private endpoint connection with a given name.
+          flags:
+            --id=: The ID of the private endpoint connection associated with Azure Cosmos DB.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=: Name of the Cosmos DB database account.
+            -g, --resource-group=: The resource group name of specified Cosmos DB account.
+            -n, --name=: The name of the private endpoint connection associated with Azure Cosmos DB.
         - name: show
           description: Gets a private endpoint connection.
           flags:
@@ -2056,30 +2120,8 @@ commands:
             -a, --account-name=: Name of the Cosmos DB database account.
             -g, --resource-group=: The resource group name of specified Cosmos DB account.
             -n, --name=: The name of the private endpoint connection associated with Azure Cosmos DB.
-        - name: delete
-          description: Deletes a private endpoint connection with a given name.
-          flags:
-            --id=: The ID of the private endpoint connection associated with Azure Cosmos DB.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: Name of the Cosmos DB database account.
-            -g, --resource-group=: The resource group name of specified Cosmos DB account.
-            -n, --name=: The name of the private endpoint connection associated with Azure Cosmos DB.
-        - name: reject
-          description: Reject a private endpoint connection request for Azure Cosmos DB.
-          flags:
-            --description=: Comments for the reject operation.
-            --id=: The ID of the private endpoint connection associated with Azure Cosmos DB.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=: Name of the Cosmos DB database account.
-            -g, --resource-group=: The resource group name of specified Cosmos DB account.
-            -n, --name=: The name of the private endpoint connection associated with Azure Cosmos DB.
     - name: private-link-resource
+      description: Manage Azure Cosmos DB private link resources.
       commands:
         - name: list
           description: Gets the private link resources that need to be created for a Cosmos DB account.
@@ -2108,6 +2150,7 @@ commands:
                 - primaryReadonly
                 - secondaryReadonly
     - name: restorable-database-account
+      description: Manage restorable Azure Cosmos DB accounts.
       commands:
         - name: show
           description: Retrieves the properties of an existing Azure Cosmos DB restorable database account.
@@ -2162,7 +2205,18 @@ commands:
                 - ENABLED
                 - DISABLED
     - name: service
+      description: Commands to perform operations on Service.
       commands:
+        - name: update
+          description: Update a cosmosdb service resource.
+          flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --size=: Instance Size.
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: Name of the Cosmos DB database account.
+            -c, --count=!: Instance Count.
+            -g, --resource-group-name=!: Name of the resource group of the database account.
+            -n, --name=!: Service Name.
         - name: create
           description: Create a cosmosdb service resource.
           flags:
@@ -2179,16 +2233,15 @@ commands:
                 gateway-type:
                     - IntegratedCache
                     - DistributedQuery
-        - name: update
-          description: Update a cosmosdb service resource.
+        - name: delete
+          description: Deletes service with the given serviceName.
           flags:
             --no-wait=: Do not wait for the long-running operation to finish.
-            --size=: Instance Size.
             --subscription=: Name or ID of subscription.
             -a, --account-name=!: Name of the Cosmos DB database account.
-            -c, --count=!: Instance Count.
             -g, --resource-group-name=!: Name of the resource group of the database account.
             -n, --name=!: Service Name.
+            -y, --yes=: Do not prompt for confirmation.
         - name: list
           description: Gets the status of service.
           flags:
@@ -2205,15 +2258,6 @@ commands:
             -a, --account-name=!: Name of the Cosmos DB database account.
             -g, --resource-group-name=!: Name of the resource group of the database account.
             -n, --name=!: Service Name.
-        - name: delete
-          description: Deletes service with the given serviceName.
-          flags:
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: Name of the Cosmos DB database account.
-            -g, --resource-group-name=!: Name of the resource group of the database account.
-            -n, --name=!: Service Name.
-            -y, --yes=: Do not prompt for confirmation.
     - name: show
       description: Retrieves the properties of an existing Azure Cosmos DB database account.
       flags:
@@ -2227,11 +2271,133 @@ commands:
         -g, --resource-group=: Name of resource group.
         -n, --name=: Name of the Cosmos DB database account
     - name: sql
+      description: Manage SQL resources of Azure Cosmos DB account.
       commands:
-        - name: container
+        - name: stored-procedure
+          description: Manage Azure Cosmos DB SQL stored procedures.
           commands:
+            - name: update
+              description: Creates or Updates an Azure Cosmos DB SQL stored procedure
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -b, --body=!: StoredProcedure body, you can enter it as a string or as a file, e.g., --body @sprocbody-file.json
+                -c, --container-name=!: Container name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: StoredProcedure name
+            - name: list
+              description: Lists the SQL storedProcedure under an existing Azure Cosmos DB database account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -c, --container-name=!: Container name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+            - name: show
+              description: Gets the SQL storedProcedure under an existing Azure Cosmos DB database account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -c, --container-name=!: Container name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: StoredProcedure name
+            - name: create
+              description: Creates or Updates an Azure Cosmos DB SQL stored procedure
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -b, --body=!: StoredProcedure body, you can enter it as a string or as a file, e.g., --body @sprocbody-file.json
+                -c, --container-name=!: Container name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: StoredProcedure name
+            - name: delete
+              description: Deletes an existing Azure Cosmos DB SQL storedProcedure.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -c, --container-name=!: Container name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: StoredProcedure name
+                -y, --yes=: Do not prompt for confirmation.
+        - name: database
+          description: Manage Azure Cosmos DB SQL databases.
+          commands:
+            - name: list
+              description: Lists the SQL databases under an existing Azure Cosmos DB database account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+            - name: show
+              description: Gets the SQL database under an existing Azure Cosmos DB database account with the provided name.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+            - name: throughput
+              description: Manage throughput of SQL database under an Azure Cosmos DB account.
+              commands:
+                - name: update
+                  description: Update an Azure Cosmos DB SQL database throughput
+                  flags:
+                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                    --subscription=: Name or ID of subscription.
+                    --throughput=: The throughput of SQL database (RU/s).
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Database name
+                - name: show
+                  description: Gets the RUs per second of the SQL database under an existing Azure Cosmos DB database account with the provided name.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Database name
+                - name: migrate
+                  description: Migrate the throughput of the SQL database between autoscale and manually provisioned.
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -n, --name=!: Database name
+                    -t, --throughput-type=!: The type of throughput to migrate to.
+                  completion:
+                    flag:
+                        throughput-type:
+                            - autoscale
+                            - manual
+            - name: exists
+              description: Checks if an Azure Cosmos DB SQL database exists
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+            - name: create
+              description: Creates an Azure Cosmos DB SQL database
+              flags:
+                --max-throughput=: The maximum throughput resource can scale to (RU/s).
+                --subscription=: Name or ID of subscription.
+                --throughput=: The throughput of SQL database (RU/s).
+                -a, --account-name=!: Cosmosdb account name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
             - name: restore
-              description: Restore a deleted sql container within the same account.
+              description: Restore a deleted sql database within the same account.
               flags:
                 --cmd=:
                     description: ==SUPPRESS==
@@ -2239,18 +2405,169 @@ commands:
                 --disable-ttl=: Flag to restore with TTL disabled
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Container name
-                -t, --restore-timestamp=: The timestamp to which the container needs to be restored to.
-            - name: list
-              description: Lists the SQL container under an existing Azure Cosmos DB database account.
+                -n, --name=!: Database name
+                -t, --restore-timestamp=: The timestamp to which the database needs to be restored to.
+            - name: delete
+              description: Deletes an existing Azure Cosmos DB SQL database.
               flags:
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Database name
+                -y, --yes=: Do not prompt for confirmation.
+        - name: role
+          description: Manage Azure Cosmos DB SQL role resources.
+          commands:
+            - name: definition
+              description: Manage Azure Cosmos DB SQL role definitions.
+              commands:
+                - name: update
+                  description: Update an existing Azure Cosmos DB Sql Role Definition
+                  flags:
+                    --no-wait=: Do not wait for the long-running operation to finish.
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -b, --body=!: Role Definition body with Id (Optional for create), DataActions or Permissions, Type (Default is CustomRole), and AssignableScopes.
+                    -g, --resource-group=!: Name of resource group.
+                - name: create
+                  description: Creates an Azure Cosmos DB SQL Role Definition
+                  flags:
+                    --no-wait=: Do not wait for the long-running operation to finish.
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -b, --body=!: Role Definition body with Id (Optional for create), DataActions or Permissions, Type (Default is CustomRole), and AssignableScopes.
+                    -g, --resource-group=!: Name of resource group.
+                - name: list
+                  description: Retrieves the list of all Azure Cosmos DB SQL Role Definitions.
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                - name: show
+                  description: Retrieves the properties of an existing Azure Cosmos DB SQL Role Definition with the given Id.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --id=!: Unique ID for the Role Definition.
+                - name: delete
+                  description: Deletes an existing Azure Cosmos DB SQL Role Definition.
+                  flags:
+                    --no-wait=: Do not wait for the long-running operation to finish.
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --id=!: Unique ID for the Role Definition.
+                    -y, --yes=: Do not prompt for confirmation.
+                - name: exists
+                  description: Checks if an Azure Cosmos DB Sql Role Definition exists
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --id=!: Unique ID for the Role Definition.
+                - name: wait
+                  description: Poll on a SQL role definition until a specific condition is met.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --created=: wait until created with 'provisioningState' at 'Succeeded'
+                    --custom=: Wait until the condition satisfies a custom JMESPath query.
+                    --deleted=: wait until deleted
+                    --exists=: wait until the resource exists
+                    --interval=: polling interval in seconds
+                    --subscription=: Name or ID of subscription.
+                    --timeout=: maximum wait in seconds
+                    --updated=: wait until updated with provisioningState at 'Succeeded'
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --id=!: Unique ID for the Role Definition.
+            - name: assignment
+              description: Manage Azure Cosmos DB SQL role assignments.
+              commands:
+                - name: wait
+                  description: Poll on a SQL role assignment until a specific condition is met.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --created=: wait until created with 'provisioningState' at 'Succeeded'
+                    --custom=: Wait until the condition satisfies a custom JMESPath query.
+                    --deleted=: wait until deleted
+                    --exists=: wait until the resource exists
+                    --interval=: polling interval in seconds
+                    --subscription=: Name or ID of subscription.
+                    --timeout=: maximum wait in seconds
+                    --updated=: wait until updated with provisioningState at 'Succeeded'
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --role-assignment-id=!: Optional for Create.
+                - name: create
+                  description: Creates an Azure Cosmos DB Sql Role Assignment
+                  flags:
+                    --no-wait=: Do not wait for the long-running operation to finish.
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -d, --role-definition-id=: Unique ID of the Role Definition that this Role Assignment refers to.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --role-assignment-id=: Optional for Create.
+                    -n, --role-definition-name=: Unique Name of the Role Definition that this Role Assignment refers to.
+                    -p, --principal-id=!: AAD Object ID of the principal to which this Role Assignment is being granted.
+                    -s, --scope=!: Data plane resource path at which this Role Assignment is being granted.
+                - name: update
+                  description: Updates an Azure Cosmos DB Sql Role Assignment
+                  flags:
+                    --no-wait=: Do not wait for the long-running operation to finish.
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -d, --role-definition-id=: Unique ID of the Role Definition that this Role Assignment refers to.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --role-assignment-id=!: Optional for Create.
+                    -n, --role-definition-name=: Unique Name of the Role Definition that this Role Assignment refers to.
+                    -p, --principal-id=: AAD Object ID of the principal to which this Role Assignment is being granted.
+                    -s, --scope=: Data plane resource path at which this Role Assignment is being granted.
+                - name: list
+                  description: Retrieves the list of all Azure Cosmos DB SQL Role Assignments.
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                - name: delete
+                  description: Deletes an existing Azure Cosmos DB SQL Role Assignment.
+                  flags:
+                    --no-wait=: Do not wait for the long-running operation to finish.
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --role-assignment-id=!: Optional for Create.
+                    -y, --yes=: Do not prompt for confirmation.
+                - name: show
+                  description: Retrieves the properties of an existing Azure Cosmos DB SQL Role Assignment with the given Id.
+                  flags:
+                    --cmd=:
+                        description: ==SUPPRESS==
+                        nargs: -1
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --role-assignment-id=!: Optional for Create.
+                - name: exists
+                  description: Checks if an Azure Cosmos DB Sql Role Assignment exists
+                  flags:
+                    --subscription=: Name or ID of subscription.
+                    -a, --account-name=!: Cosmosdb account name.
+                    -g, --resource-group=!: Name of resource group.
+                    -i, --role-assignment-id=!: Optional for Create.
+        - name: container
+          description: Manage Azure Cosmos DB SQL containers.
+          commands:
             - name: throughput
+              description: Manage throughput of SQL container under an Azure Cosmos DB account.
               commands:
                 - name: migrate
                   description: Migrate an Azure Cosmos DB SQL container throughput
@@ -2287,6 +2604,15 @@ commands:
                     -d, --database-name=!: Database name.
                     -g, --resource-group=!: Name of resource group.
                     -n, --name=!: Container name
+            - name: delete
+              description: Deletes an existing Azure Cosmos DB SQL container.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Container name
+                -y, --yes=: Do not prompt for confirmation.
             - name: update
               description: Updates an Azure Cosmos DB SQL container
               flags:
@@ -2299,6 +2625,19 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Container name
                 -t, --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
+            - name: restore
+              description: Restore a deleted sql container within the same account.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --disable-ttl=: Flag to restore with TTL disabled
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: Container name
+                -t, --restore-timestamp=: The timestamp to which the container needs to be restored to.
             - name: exists
               description: Checks if an Azure Cosmos DB SQL container exists
               flags:
@@ -2318,6 +2657,13 @@ commands:
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Container name
+            - name: list
+              description: Lists the SQL container under an existing Azure Cosmos DB database account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -a, --account-name=!: Cosmosdb account name.
+                -d, --database-name=!: Database name.
+                -g, --resource-group=!: Name of resource group.
             - name: create
               description: Creates an Azure Cosmos DB SQL container
               flags:
@@ -2337,23 +2683,17 @@ commands:
                 -p, --partition-key-path=!: Partition Key Path, e.g., '/address/zipcode'
                 -t, --analytical-storage-ttl=: Analytical TTL, when analytical storage is enabled.
                 -u, --unique-key-policy=: 'Unique Key Policy, you can enter it as a string or as a file, e.g., --unique-key-policy @policy-file.json or --unique-key-policy "{\"uniqueKeys\": [{\"paths\": [\"/path/to/key1\"]}, {\"paths\": [\"/path/to/key2\"]}]}"'
-            - name: delete
-              description: Deletes an existing Azure Cosmos DB SQL container.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Container name
-                -y, --yes=: Do not prompt for confirmation.
         - name: user-defined-function
+          description: Manage Azure Cosmos DB SQL user defined functions.
           commands:
-            - name: create
-              description: Creates or Updates an Azure Cosmos DB SQL user defined function
+            - name: show
+              description: Gets the SQL userDefinedFunction under an existing Azure Cosmos DB database account.
               flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
-                -b, --body=!: UserDefinedFunction body, you can enter it as a string or as a file, e.g., --body @udfbody-file.json
                 -c, --container-name=!: Container name.
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
@@ -2368,14 +2708,12 @@ commands:
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: UserDefinedFunction name
-            - name: show
-              description: Gets the SQL userDefinedFunction under an existing Azure Cosmos DB database account.
+            - name: create
+              description: Creates or Updates an Azure Cosmos DB SQL user defined function
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
+                -b, --body=!: UserDefinedFunction body, you can enter it as a string or as a file, e.g., --body @udfbody-file.json
                 -c, --container-name=!: Container name.
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
@@ -2398,31 +2736,29 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: UserDefinedFunction name
                 -y, --yes=: Do not prompt for confirmation.
-        - name: trigger
+        - name: restorable-resource
+          description: Manage the databases and its containers that can be restored in the given account at the given timesamp and region.
           commands:
-            - name: create
-              description: Creates an Azure Cosmos DB SQL trigger
+            - name: list
+              description: Return a list of database and container combo that exist on the account at the given timestamp and location.
               flags:
-                --operation=: The operation of the trigger.
                 --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -b, --body=!: Trigger body, you can enter it as a string or as a file, e.g., --body @triggerbody-file.json
-                -c, --container-name=!: Container name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Trigger name
-                -t, --type=: Trigger type
-              completion:
-                flag:
-                    operation:
-                        - All
-                        - Create
-                        - Update
-                        - Delete
-                        - Replace
-                    type:
-                        - Pre
-                        - Post
+                -i, --instance-id=!: InstanceId of the Account
+                -l, --location=!: Azure Location of the account
+                -r, --restore-location=!: The region of the restore.
+                -t, --restore-timestamp=!: The timestamp of the restore
+        - name: restorable-database
+          description: Manage different versions of sql databases that are restorable in a Azure Cosmos DB account.
+          commands:
+            - name: list
+              description: Show the event feed of all mutations done on all the Azure Cosmos DB SQL databases under the restorable account.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -i, --instance-id=!: InstanceId of the Account
+                -l, --location=!: Location
+        - name: trigger
+          description: Manage Azure Cosmos DB SQL triggers.
+          commands:
             - name: show
               description: Gets the SQL trigger under an existing Azure Cosmos DB database account.
               flags:
@@ -2435,13 +2771,13 @@ commands:
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Trigger name
-            - name: update
-              description: Updates an Azure Cosmos DB SQL trigger
+            - name: create
+              description: Creates an Azure Cosmos DB SQL trigger
               flags:
                 --operation=: The operation of the trigger.
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
-                -b, --body=: Trigger body, you can enter it as a string or as a file, e.g., --body @triggerbody-file.json
+                -b, --body=!: Trigger body, you can enter it as a string or as a file, e.g., --body @triggerbody-file.json
                 -c, --container-name=!: Container name.
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
@@ -2476,291 +2812,40 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Trigger name
                 -y, --yes=: Do not prompt for confirmation.
-        - name: stored-procedure
-          commands:
-            - name: list
-              description: Lists the SQL storedProcedure under an existing Azure Cosmos DB database account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -c, --container-name=!: Container name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-            - name: create
-              description: Creates or Updates an Azure Cosmos DB SQL stored procedure
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -b, --body=!: StoredProcedure body, you can enter it as a string or as a file, e.g., --body @sprocbody-file.json
-                -c, --container-name=!: Container name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: StoredProcedure name
-            - name: show
-              description: Gets the SQL storedProcedure under an existing Azure Cosmos DB database account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -c, --container-name=!: Container name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: StoredProcedure name
-            - name: delete
-              description: Deletes an existing Azure Cosmos DB SQL storedProcedure.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -c, --container-name=!: Container name.
-                -d, --database-name=!: Database name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: StoredProcedure name
-                -y, --yes=: Do not prompt for confirmation.
             - name: update
-              description: Creates or Updates an Azure Cosmos DB SQL stored procedure
+              description: Updates an Azure Cosmos DB SQL trigger
               flags:
+                --operation=: The operation of the trigger.
                 --subscription=: Name or ID of subscription.
                 -a, --account-name=!: Cosmosdb account name.
-                -b, --body=!: StoredProcedure body, you can enter it as a string or as a file, e.g., --body @sprocbody-file.json
+                -b, --body=: Trigger body, you can enter it as a string or as a file, e.g., --body @triggerbody-file.json
                 -c, --container-name=!: Container name.
                 -d, --database-name=!: Database name.
                 -g, --resource-group=!: Name of resource group.
-                -n, --name=!: StoredProcedure name
-        - name: role
-          commands:
-            - name: assignment
-              commands:
-                - name: wait
-                  description: Poll on a SQL role assignment until a specific condition is met.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --created=: wait until created with 'provisioningState' at 'Succeeded'
-                    --custom=: Wait until the condition satisfies a custom JMESPath query.
-                    --deleted=: wait until deleted
-                    --exists=: wait until the resource exists
-                    --interval=: polling interval in seconds
-                    --subscription=: Name or ID of subscription.
-                    --timeout=: maximum wait in seconds
-                    --updated=: wait until updated with provisioningState at 'Succeeded'
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --role-assignment-id=!: Optional for Create.
-                - name: exists
-                  description: Checks if an Azure Cosmos DB Sql Role Assignment exists
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --role-assignment-id=!: Optional for Create.
-                - name: show
-                  description: Retrieves the properties of an existing Azure Cosmos DB SQL Role Assignment with the given Id.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --role-assignment-id=!: Optional for Create.
-                - name: update
-                  description: Updates an Azure Cosmos DB Sql Role Assignment
-                  flags:
-                    --no-wait=: Do not wait for the long-running operation to finish.
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -d, --role-definition-id=: Unique ID of the Role Definition that this Role Assignment refers to.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --role-assignment-id=!: Optional for Create.
-                    -n, --role-definition-name=: Unique Name of the Role Definition that this Role Assignment refers to.
-                    -p, --principal-id=: AAD Object ID of the principal to which this Role Assignment is being granted.
-                    -s, --scope=: Data plane resource path at which this Role Assignment is being granted.
-                - name: delete
-                  description: Deletes an existing Azure Cosmos DB SQL Role Assignment.
-                  flags:
-                    --no-wait=: Do not wait for the long-running operation to finish.
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --role-assignment-id=!: Optional for Create.
-                    -y, --yes=: Do not prompt for confirmation.
-                - name: create
-                  description: Creates an Azure Cosmos DB Sql Role Assignment
-                  flags:
-                    --no-wait=: Do not wait for the long-running operation to finish.
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -d, --role-definition-id=: Unique ID of the Role Definition that this Role Assignment refers to.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --role-assignment-id=: Optional for Create.
-                    -n, --role-definition-name=: Unique Name of the Role Definition that this Role Assignment refers to.
-                    -p, --principal-id=!: AAD Object ID of the principal to which this Role Assignment is being granted.
-                    -s, --scope=!: Data plane resource path at which this Role Assignment is being granted.
-                - name: list
-                  description: Retrieves the list of all Azure Cosmos DB SQL Role Assignments.
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-            - name: definition
-              commands:
-                - name: wait
-                  description: Poll on a SQL role definition until a specific condition is met.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --created=: wait until created with 'provisioningState' at 'Succeeded'
-                    --custom=: Wait until the condition satisfies a custom JMESPath query.
-                    --deleted=: wait until deleted
-                    --exists=: wait until the resource exists
-                    --interval=: polling interval in seconds
-                    --subscription=: Name or ID of subscription.
-                    --timeout=: maximum wait in seconds
-                    --updated=: wait until updated with provisioningState at 'Succeeded'
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --id=!: Unique ID for the Role Definition.
-                - name: show
-                  description: Retrieves the properties of an existing Azure Cosmos DB SQL Role Definition with the given Id.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --id=!: Unique ID for the Role Definition.
-                - name: list
-                  description: Retrieves the list of all Azure Cosmos DB SQL Role Definitions.
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                - name: delete
-                  description: Deletes an existing Azure Cosmos DB SQL Role Definition.
-                  flags:
-                    --no-wait=: Do not wait for the long-running operation to finish.
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --id=!: Unique ID for the Role Definition.
-                    -y, --yes=: Do not prompt for confirmation.
-                - name: update
-                  description: Update an existing Azure Cosmos DB Sql Role Definition
-                  flags:
-                    --no-wait=: Do not wait for the long-running operation to finish.
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -b, --body=!: Role Definition body with Id (Optional for create), DataActions or Permissions, Type (Default is CustomRole), and AssignableScopes.
-                    -g, --resource-group=!: Name of resource group.
-                - name: exists
-                  description: Checks if an Azure Cosmos DB Sql Role Definition exists
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -i, --id=!: Unique ID for the Role Definition.
-                - name: create
-                  description: Creates an Azure Cosmos DB SQL Role Definition
-                  flags:
-                    --no-wait=: Do not wait for the long-running operation to finish.
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -b, --body=!: Role Definition body with Id (Optional for create), DataActions or Permissions, Type (Default is CustomRole), and AssignableScopes.
-                    -g, --resource-group=!: Name of resource group.
-        - name: database
-          commands:
-            - name: throughput
-              commands:
-                - name: update
-                  description: Update an Azure Cosmos DB SQL database throughput
-                  flags:
-                    --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                    --subscription=: Name or ID of subscription.
-                    --throughput=: The throughput of SQL database (RU/s).
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Database name
-                - name: show
-                  description: Gets the RUs per second of the SQL database under an existing Azure Cosmos DB database account with the provided name.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Database name
-                - name: migrate
-                  description: Migrate the throughput of the SQL database between autoscale and manually provisioned.
-                  flags:
-                    --subscription=: Name or ID of subscription.
-                    -a, --account-name=!: Cosmosdb account name.
-                    -g, --resource-group=!: Name of resource group.
-                    -n, --name=!: Database name
-                    -t, --throughput-type=!: The type of throughput to migrate to.
-                  completion:
-                    flag:
-                        throughput-type:
-                            - autoscale
-                            - manual
-            - name: delete
-              description: Deletes an existing Azure Cosmos DB SQL database.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-                -y, --yes=: Do not prompt for confirmation.
-            - name: show
-              description: Gets the SQL database under an existing Azure Cosmos DB database account with the provided name.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-            - name: create
-              description: Creates an Azure Cosmos DB SQL database
-              flags:
-                --max-throughput=: The maximum throughput resource can scale to (RU/s).
-                --subscription=: Name or ID of subscription.
-                --throughput=: The throughput of SQL database (RU/s).
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-            - name: restore
-              description: Restore a deleted sql database within the same account.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --disable-ttl=: Flag to restore with TTL disabled
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
-                -t, --restore-timestamp=: The timestamp to which the database needs to be restored to.
-            - name: list
-              description: Lists the SQL databases under an existing Azure Cosmos DB database account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-            - name: exists
-              description: Checks if an Azure Cosmos DB SQL database exists
-              flags:
-                --subscription=: Name or ID of subscription.
-                -a, --account-name=!: Cosmosdb account name.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: Database name
+                -n, --name=!: Trigger name
+                -t, --type=: Trigger type
+              completion:
+                flag:
+                    operation:
+                        - All
+                        - Create
+                        - Update
+                        - Delete
+                        - Replace
+                    type:
+                        - Pre
+                        - Post
+        - name: retrieve-latest-backup-time
+          description: Retrieves latest restorable timestamp for the given sql container in given region.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: Name of the CosmosDB database account
+            -c, --container-name=!: Name of the CosmosDB Sql container name
+            -d, --database-name=!: Name of the CosmosDB Sql database name
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=!: Location of the account
         - name: restorable-container
+          description: Manage different versions of sql containers that are restorable in a database of a Azure Cosmos DB account.
           commands:
             - name: list
               description: Show the event feed of all mutations done on all the Azure Cosmos DB SQL containers under a specific database.
@@ -2771,54 +2856,11 @@ commands:
                 -i, --instance-id=!: InstanceId of the Account
                 -l, --location=!: Location
                 -s, --start-time=: Start time of restorable Sql container event feed
-        - name: restorable-database
-          commands:
-            - name: list
-              description: Show the event feed of all mutations done on all the Azure Cosmos DB SQL databases under the restorable account.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -i, --instance-id=!: InstanceId of the Account
-                -l, --location=!: Location
-        - name: retrieve-latest-backup-time
-          description: Retrieves latest restorable timestamp for the given sql container in given region.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: Name of the CosmosDB database account
-            -c, --container-name=!: Name of the CosmosDB Sql container name
-            -d, --database-name=!: Name of the CosmosDB Sql database name
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=!: Location of the account
-        - name: restorable-resource
-          commands:
-            - name: list
-              description: Return a list of database and container combo that exist on the account at the given timestamp and location.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -i, --instance-id=!: InstanceId of the Account
-                -l, --location=!: Azure Location of the account
-                -r, --restore-location=!: The region of the restore.
-                -t, --restore-timestamp=!: The timestamp of the restore
     - name: table
+      description: Manage Table resources of Azure Cosmos DB account.
       commands:
-        - name: delete
-          description: Deletes an existing Azure Cosmos DB Table.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: Cosmosdb account name.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Table name
-            -y, --yes=: Do not prompt for confirmation.
-        - name: restorable-resource
-          commands:
-            - name: list
-              description: Return a list of tables that exist on the account at the given timestamp and location.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -i, --instance-id=!: InstanceId of the Account
-                -l, --location=!: Azure Location of the account
-                -r, --restore-location=!: The region of the restore.
-                -t, --restore-timestamp=!: The timestamp of the restore
         - name: throughput
+          description: Manage throughput of Table under an Azure Cosmos DB account.
           commands:
             - name: migrate
               description: Migrate an Azure Cosmos DB table throughput
@@ -2852,37 +2894,14 @@ commands:
                 -a, --account-name=!: Cosmosdb account name.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: Table name
-        - name: list
-          description: Lists the Tables under an existing Azure Cosmos DB database account.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: Cosmosdb account name.
-            -g, --resource-group=!: Name of resource group.
-        - name: retrieve-latest-backup-time
-          description: Retrieves latest restorable timestamp for the given table in given region.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -a, --account-name=!: Name of the CosmosDB database account
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=!: Location of the account
-            -n, --table-name=!: Name of the CosmosDB Table name
-        - name: restorable-table
-          commands:
-            - name: list
-              description: Show the event feed of all mutations done on all the Azure Cosmos DB Tables.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -e, --end-time=: End time of restorable tables event feed
-                -i, --instance-id=!: InstanceId of the Account
-                -l, --location=!: Location
-                -s, --start-time=: Start time of restorable tables event feed
-        - name: exists
-          description: Checks if an Azure Cosmos DB table exists
+        - name: delete
+          description: Deletes an existing Azure Cosmos DB Table.
           flags:
             --subscription=: Name or ID of subscription.
             -a, --account-name=!: Cosmosdb account name.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Table name
+            -y, --yes=: Do not prompt for confirmation.
         - name: restore
           description: Restore a deleted table within the same account.
           flags:
@@ -2895,6 +2914,32 @@ commands:
             -g, --resource-group=!: Name of resource group.
             -n, --table-name=!: Name of the CosmosDB Table name
             -t, --restore-timestamp=: The timestamp to which the Table needs to be restored to.
+        - name: restorable-table
+          description: Manage different versions of tables that are restorable in Azure Cosmos DB account.
+          commands:
+            - name: list
+              description: Show the event feed of all mutations done on all the Azure Cosmos DB Tables.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -e, --end-time=: End time of restorable tables event feed
+                -i, --instance-id=!: InstanceId of the Account
+                -l, --location=!: Location
+                -s, --start-time=: Start time of restorable tables event feed
+        - name: create
+          description: Create an Azure Cosmos DB table
+          flags:
+            --max-throughput=: The maximum throughput resource can scale to (RU/s).
+            --subscription=: Name or ID of subscription.
+            --throughput=: The throughput of Table (RU/s).
+            -a, --account-name=!: Cosmosdb account name.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Table name
+        - name: list
+          description: Lists the Tables under an existing Azure Cosmos DB database account.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: Cosmosdb account name.
+            -g, --resource-group=!: Name of resource group.
         - name: show
           description: Gets the Tables under an existing Azure Cosmos DB database account with the provided name.
           flags:
@@ -2905,15 +2950,32 @@ commands:
             -a, --account-name=!: Cosmosdb account name.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Table name
-        - name: create
-          description: Create an Azure Cosmos DB table
+        - name: exists
+          description: Checks if an Azure Cosmos DB table exists
           flags:
-            --max-throughput=: The maximum throughput resource can scale to (RU/s).
             --subscription=: Name or ID of subscription.
-            --throughput=: The throughput of Table (RU/s).
             -a, --account-name=!: Cosmosdb account name.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Table name
+        - name: retrieve-latest-backup-time
+          description: Retrieves latest restorable timestamp for the given table in given region.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -a, --account-name=!: Name of the CosmosDB database account
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=!: Location of the account
+            -n, --table-name=!: Name of the CosmosDB Table name
+        - name: restorable-resource
+          description: Manage the tables that can be restored in the given account at the given timestamp and region.
+          commands:
+            - name: list
+              description: Return a list of tables that exist on the account at the given timestamp and location.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -i, --instance-id=!: InstanceId of the Account
+                -l, --location=!: Azure Location of the account
+                -r, --restore-location=!: The region of the restore.
+                -t, --restore-timestamp=!: The timestamp of the restore
     - name: update
       description: Update an existing Azure Cosmos DB database account.
       flags:

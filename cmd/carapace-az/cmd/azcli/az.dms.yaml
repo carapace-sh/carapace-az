@@ -46,9 +46,47 @@ commands:
       flags:
         --subscription=: Name or ID of subscription.
     - name: project
+      description: Manage projects for an instance of the Azure Database Migration Service (classic).
       commands:
         - name: task
+          description: Manage tasks for an Azure Database Migration Service (classic) instance's project.
           commands:
+            - name: cutover
+              description: For an online migration task, complete the migration by performing a cutover.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --object-name=!: The name of the database on the source you wish to cutover.
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Task.
+            - name: cancel
+              description: Cancel a task.
+              flags:
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Task.
+            - name: list
+              description: Get tasks in a service.
+              flags:
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                --task-type=: Filter tasks by task type.
+                -g, --resource-group=!: Name of resource group.
+            - name: check-name
+              description: Check if a given task name is available within a given instance of DMS as well as the name's validity.
+              flags:
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Task.
             - name: delete
               description: Delete task.
               flags:
@@ -59,9 +97,13 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The name of the Task.
                 -y, --yes=: Do not prompt for confirmation.
-            - name: check-name
-              description: Check if a given task name is available within a given instance of DMS as well as the name's validity.
+            - name: show
+              description: Get task information.
               flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --expand=: Expand the response.
                 --project-name=!: The name of the Project.
                 --service-name=!: The name of the Service.
                 --subscription=: Name or ID of subscription.
@@ -85,65 +127,12 @@ commands:
                 --task-type=: The type of data movement the task will support.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The name of the Task.
-            - name: list
-              description: Get tasks in a service.
-              flags:
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                --task-type=: Filter tasks by task type.
-                -g, --resource-group=!: Name of resource group.
-            - name: cancel
-              description: Cancel a task.
-              flags:
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Task.
-            - name: cutover
-              description: For an online migration task, complete the migration by performing a cutover.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --object-name=!: The name of the database on the source you wish to cutover.
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Task.
-            - name: show
-              description: Get task information.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --expand=: Expand the response.
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Task.
-        - name: list
-          description: Get projects in a service.
-          flags:
-            --service-name=!: The name of the Service.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: show
           description: Get project information.
           flags:
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --service-name=!: The name of the Service.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the Project.
-        - name: check-name
-          description: Check if a given project name is available within a given instance of DMS as well as the name's validity.
-          flags:
             --service-name=!: The name of the Service.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
@@ -169,6 +158,19 @@ commands:
             --target-platform=!: The type of service for the target database.
             -g, --resource-group=!: Name of resource group.
             -l, --location=!: Location.
+            -n, --name=!: The name of the Project.
+        - name: list
+          description: Get projects in a service.
+          flags:
+            --service-name=!: The name of the Service.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: check-name
+          description: Check if a given project name is available within a given instance of DMS as well as the name's validity.
+          flags:
+            --service-name=!: The name of the Service.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the Project.
     - name: show
       description: Get DMS Service Instance.

@@ -3,46 +3,10 @@ name: sf
 description: Manage and administer Azure Service Fabric clusters.
 commands:
     - name: application
+      description: Manage applications running on an Azure Service Fabric cluster. Only support ARM deployed applications.
       commands:
-        - name: list
-          description: Gets the list of application resources created in the specified Service Fabric cluster resource.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: show
-          description: Gets a Service Fabric application resource.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --name=!: Specify the application name.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: delete
-          description: Deletes a Service Fabric application resource.
-          flags:
-            --name=!: Specify the application name.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: create
-          description: Create a new application on an Azure Service Fabric cluster.
-          flags:
-            --max-nodes=: Specify the maximum number of nodes on which to place an application.
-            --min-nodes=: Specify the minimum number of nodes where Service Fabric will reserve capacity for this application, this does not mean that the application is guaranteed to have replicas on all those nodes.
-            --name=!: Specify the application name.
-            --package-url=: Specify the url of the application package sfpkg file.
-            --parameters=:
-                description: Specify the application parameters as key/value pairs.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --type-name=!: Specify the application type name.
-            --version=!: Specify the application type version.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
         - name: certificate
+          description: Manage the certificate of an application.
           commands:
             - name: add
               description: Add a new certificate to the Virtual Machine Scale Sets that make up the cluster to be used by hosted applications.
@@ -60,6 +24,23 @@ commands:
                 --vault-rg=: Key vault resource group name, if not given it will be cluster resource group name
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
+        - name: delete
+          description: Deletes a Service Fabric application resource.
+          flags:
+            --name=!: Specify the application name.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: show
+          description: Gets a Service Fabric application resource.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --name=!: Specify the application name.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
         - name: update
           description: Update a Azure Service Fabric application.
           flags:
@@ -102,10 +83,58 @@ commands:
                 warning-as-error:
                     - "true"
                     - "false"
+        - name: create
+          description: Create a new application on an Azure Service Fabric cluster.
+          flags:
+            --max-nodes=: Specify the maximum number of nodes on which to place an application.
+            --min-nodes=: Specify the minimum number of nodes where Service Fabric will reserve capacity for this application, this does not mean that the application is guaranteed to have replicas on all those nodes.
+            --name=!: Specify the application name.
+            --package-url=: Specify the url of the application package sfpkg file.
+            --parameters=:
+                description: Specify the application parameters as key/value pairs.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --type-name=!: Specify the application type name.
+            --version=!: Specify the application type version.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: list
+          description: Gets the list of application resources created in the specified Service Fabric cluster resource.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
     - name: application-type
+      description: Manage application types on an Azure Service Fabric cluster.
       commands:
+        - name: delete
+          description: Deletes a Service Fabric application type name resource.
+          flags:
+            --name=!: Specify the application type name.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
         - name: version
+          description: Manage application type versions on an Azure Service Fabric cluster. Only support ARM deployed application type versions.
           commands:
+            - name: list
+              description: Gets the list of application type version resources created in the specified Service Fabric application type name resource.
+              flags:
+                --name=!: Specify the application type name.
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+            - name: show
+              description: Gets a Service Fabric application type version resource.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --name=!: Specify the application type name.
+                --subscription=: Name or ID of subscription.
+                --version=!: Specify the application type version.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
             - name: delete
               description: Deletes a Service Fabric application type version resource.
               flags:
@@ -123,31 +152,9 @@ commands:
                 --version=!: Specify the application type version.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
-            - name: show
-              description: Gets a Service Fabric application type version resource.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --name=!: Specify the application type name.
-                --subscription=: Name or ID of subscription.
-                --version=!: Specify the application type version.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-            - name: list
-              description: Gets the list of application type version resources created in the specified Service Fabric application type name resource.
-              flags:
-                --name=!: Specify the application type name.
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-        - name: show
-          description: Gets a Service Fabric application type name resource.
+        - name: list
+          description: Gets the list of application type name resources created in the specified Service Fabric cluster resource.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --name=!: Specify the application type name.
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
@@ -158,63 +165,74 @@ commands:
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
-        - name: delete
-          description: Deletes a Service Fabric application type name resource.
+        - name: show
+          description: Gets a Service Fabric application type name resource.
           flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
             --name=!: Specify the application type name.
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
-        - name: list
-          description: Gets the list of application type name resources created in the specified Service Fabric cluster resource.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
     - name: cluster
+      description: Manage an Azure Service Fabric cluster.
       commands:
+        - name: node-type
+          description: Manage the node-type of a cluster.
+          commands:
+            - name: add
+              description: Add a new node type to a cluster.
+              flags:
+                --capacity=!: The capacity tag applied to nodes in the node type.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --durability-level=: durability level.
+                --node-type=!: the Node type name.
+                --subscription=: Name or ID of subscription.
+                --vm-password=!: The password of the Vm
+                --vm-sku=: VM Sku
+                --vm-tier=: VM tier.
+                --vm-user-name=!: The user name for logging to Vm.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+              completion:
+                flag:
+                    durability-level:
+                        - Bronze
+                        - Silver
+                        - Gold
+        - name: node
+          description: Manage the node instance of a cluster.
+          commands:
+            - name: remove
+              description: Remove nodes from a node type in a cluster.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --node-type=!: the Node type name.
+                --number-of-nodes-to-remove=!: number of nodes to remove.
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+            - name: add
+              description: Add nodes to a node type in a cluster.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --node-type=!: the Node type name.
+                --number-of-nodes-to-add=!: number of nodes to add.
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
         - name: list
           description: List cluster resources.
           flags:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: The resource group name
-        - name: client-certificate
-          commands:
-            - name: add
-              description: Add a common name or certificate thumbprint to the cluster for client authentication.
-              flags:
-                --admin-client-thumbprints=:
-                    description: client certificate thumbprint that only has admin permission.
-                    nargs: -1
-                --certificate-common-name=: client certificate common name.
-                --certificate-issuer-thumbprint=: client certificate issuer thumbprint.
-                --client-certificate-common-names=: JSON encoded parameters configuration.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --is-admin=: Client authentication type.
-                --readonly-client-thumbprints=:
-                    description: Space-separated list of client certificate thumbprint that has read only permission.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --thumbprint=: client certificate thumbprint.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-            - name: remove
-              description: Remove client certificates or subject names used for authentication.
-              flags:
-                --certificate-common-name=: client certificate common name.
-                --certificate-issuer-thumbprint=: client certificate issuer thumbprint.
-                --client-certificate-common-names=: JSON encoded parameters configuration.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --thumbprints=:
-                    description: A single or Space-separated list of client certificate thumbprint(s) to be remove.
-                    nargs: -1
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
         - name: create
           description: Create a new Azure Service Fabric cluster.
           flags:
@@ -252,101 +270,46 @@ commands:
                     - WindowsServer1809withContainers
                     - WindowsServer2019Datacenter
                     - WindowsServer2019DatacenterwithContainers
-        - name: durability
-          commands:
-            - name: update
-              description: Update the durability tier or VM SKU of a node type in the cluster.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --durability-level=!: durability level.
-                --node-type=!: the Node type name.
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-              completion:
-                flag:
-                    durability-level:
-                        - Bronze
-                        - Silver
-                        - Gold
-        - name: upgrade-type
-          commands:
-            - name: set
-              description: Change the  upgrade type for a cluster.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --upgrade-mode=!: cluster upgrade mode
-                --version=: cluster code version
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-              completion:
-                flag:
-                    upgrade-mode:
-                        - manual
-                        - automatic
-        - name: node-type
-          commands:
-            - name: add
-              description: Add a new node type to a cluster.
-              flags:
-                --capacity=!: The capacity tag applied to nodes in the node type.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --durability-level=: durability level.
-                --node-type=!: the Node type name.
-                --subscription=: Name or ID of subscription.
-                --vm-password=!: The password of the Vm
-                --vm-sku=: VM Sku
-                --vm-tier=: VM tier.
-                --vm-user-name=!: The user name for logging to Vm.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-              completion:
-                flag:
-                    durability-level:
-                        - Bronze
-                        - Silver
-                        - Gold
-        - name: node
+        - name: client-certificate
+          description: Manage the client certificate of a cluster.
           commands:
             - name: remove
-              description: Remove nodes from a node type in a cluster.
+              description: Remove client certificates or subject names used for authentication.
               flags:
+                --certificate-common-name=: client certificate common name.
+                --certificate-issuer-thumbprint=: client certificate issuer thumbprint.
+                --client-certificate-common-names=: JSON encoded parameters configuration.
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --node-type=!: the Node type name.
-                --number-of-nodes-to-remove=!: number of nodes to remove.
                 --subscription=: Name or ID of subscription.
+                --thumbprints=:
+                    description: A single or Space-separated list of client certificate thumbprint(s) to be remove.
+                    nargs: -1
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
             - name: add
-              description: Add nodes to a node type in a cluster.
+              description: Add a common name or certificate thumbprint to the cluster for client authentication.
               flags:
+                --admin-client-thumbprints=:
+                    description: client certificate thumbprint that only has admin permission.
+                    nargs: -1
+                --certificate-common-name=: client certificate common name.
+                --certificate-issuer-thumbprint=: client certificate issuer thumbprint.
+                --client-certificate-common-names=: JSON encoded parameters configuration.
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --node-type=!: the Node type name.
-                --number-of-nodes-to-add=!: number of nodes to add.
+                --is-admin=: Client authentication type.
+                --readonly-client-thumbprints=:
+                    description: Space-separated list of client certificate thumbprint that has read only permission.
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
+                --thumbprint=: client certificate thumbprint.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
-        - name: show
-          description: Gets a Service Fabric cluster resource.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
         - name: reliability
+          description: Manage the reliability of a cluster.
           commands:
             - name: update
               description: Update the reliability tier for the primary node in a cluster.
@@ -366,7 +329,36 @@ commands:
                         - Silver
                         - Gold
                         - Platinum
+        - name: upgrade-type
+          description: Manage the upgrade type of a cluster.
+          commands:
+            - name: set
+              description: Change the  upgrade type for a cluster.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --upgrade-mode=!: cluster upgrade mode
+                --version=: cluster code version
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+              completion:
+                flag:
+                    upgrade-mode:
+                        - manual
+                        - automatic
+        - name: show
+          description: Gets a Service Fabric cluster resource.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
         - name: setting
+          description: Manage a cluster's settings.
           commands:
             - name: remove
               description: Remove settings from a cluster.
@@ -393,7 +385,28 @@ commands:
                 --value=: Specify the value
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
+        - name: durability
+          description: Manage the durability of a cluster.
+          commands:
+            - name: update
+              description: Update the durability tier or VM SKU of a node type in the cluster.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --durability-level=!: durability level.
+                --node-type=!: the Node type name.
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+              completion:
+                flag:
+                    durability-level:
+                        - Bronze
+                        - Silver
+                        - Gold
     - name: managed-application
+      description: Manage applications running on an Azure Service Fabric managed cluster. Only support ARM deployed applications.
       commands:
         - name: create
           description: Create a new managed application on an Azure Service Fabric managed cluster.
@@ -412,22 +425,6 @@ commands:
                 nargs: -1
             --type-name=!: Specify the application type name.
             --version=!: Specify the application type version.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: show
-          description: Gets a Service Fabric managed application resource.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --name=!: Specify the application name.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: list
-          description: Gets the list of managed application resources created in the specified Service Fabric cluster resource.
-          flags:
-            --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
         - name: delete
@@ -496,9 +493,27 @@ commands:
                 warning-as-error:
                     - "true"
                     - "false"
+        - name: show
+          description: Gets a Service Fabric managed application resource.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --name=!: Specify the application name.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: list
+          description: Gets the list of managed application resources created in the specified Service Fabric cluster resource.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
     - name: managed-application-type
+      description: Manage application types on an Azure Service Fabric cluster.
       commands:
         - name: version
+          description: Manage application type versions on an Azure Service Fabric managed cluster. Only support ARM deployed application type versions.
           commands:
             - name: create
               description: Create a new managed application type on an Azure Service Fabric managed cluster.
@@ -523,6 +538,17 @@ commands:
                 --version=!: Specify the application type version.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
+            - name: show
+              description: Gets a Service Fabric managed application type version resource.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --name=!: Specify the application type name.
+                --subscription=: Name or ID of subscription.
+                --version=!: Specify the application type version.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
             - name: update
               description: Update a managed application type version.
               flags:
@@ -542,40 +568,6 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
-            - name: show
-              description: Gets a Service Fabric managed application type version resource.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --name=!: Specify the application type name.
-                --subscription=: Name or ID of subscription.
-                --version=!: Specify the application type version.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-        - name: delete
-          description: Deletes a Service Fabric managed application type name resource.
-          flags:
-            --name=!: Specify the application type name.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: update
-          description: Update an managed application type.
-          flags:
-            --name=!: Specify the application type name.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: list
-          description: Gets the list of application type name resources created in the specified Service Fabric managed cluster resource.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
         - name: create
           description: Create a new managed application type on an Azure Service Fabric managed cluster.
           flags:
@@ -589,6 +581,29 @@ commands:
                 nargs: -1
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
+        - name: list
+          description: Gets the list of application type name resources created in the specified Service Fabric managed cluster resource.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: update
+          description: Update an managed application type.
+          flags:
+            --name=!: Specify the application type name.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: delete
+          description: Deletes a Service Fabric managed application type name resource.
+          flags:
+            --name=!: Specify the application type name.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
         - name: show
           description: Gets a Service Fabric managed application type name resource.
           flags:
@@ -600,129 +615,20 @@ commands:
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
     - name: managed-cluster
+      description: Manage an Azure Service Fabric managed cluster.
       commands:
-        - name: client-certificate
-          commands:
-            - name: add
-              description: Add a new client certificate to the managed cluster.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --common-name=: Client certificate common name.
-                --is-admin=:
-                    description: Client authentication type.
-                    nargs: -1
-                --issuer-thumbprint=:
-                    description: Space-separated list of issuer thumbprints.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --thumbprint=: Client certificate thumbprint.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-              completion:
-                flag:
-                    is-admin:
-                        - "true"
-                        - "false"
-            - name: delete
-              description: Delete a client certificate from the managed cluster.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --common-name=:
-                    description: A single or Space-separated list of client certificate common name(s) to be remove.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --thumbprint=:
-                    description: A single or Space-separated list of client certificate thumbprint(s) to be remove.
-                    nargs: -1
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-        - name: delete
-          description: Deletes a Service Fabric managed cluster resource.
+        - name: show
+          description: Gets a Service Fabric managed cluster resource.
           flags:
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: update
-          description: Update a managed cluster.
-          flags:
-            --client-connection-port=: Port used for client connections to the cluster.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
-            --dns-name=: Cluster's dns name
-            --gateway-connection-port=: Port used for http connections to the cluster.
             --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
-        - name: create
-          description: Delete a managed cluster.
-          flags:
-            --admin-password=!: Admin password used for the virtual machines.
-            --admin-user-name=: Admin user used for the virtual machines.
-            --client-cert-common-name=: Client certificate common name.
-            --client-cert-is-admin=:
-                description: Client authentication type.
-                nargs: -1
-            --client-cert-issuer-thumbprint=:
-                description: Space-separated list of issuer thumbprints.
-                nargs: -1
-            --client-cert-thumbprint=: Client certificate thumbprint.
-            --client-connection-port=: Port used for client connections to the cluster.
-            --cluster-code-version=: Cluster service fabric code version.
-            --cluster-upgrade-cadence=: 'The upgrade mode of the cluster when new Service Fabric runtime version is available Wave0: Cluster upgrade starts immediately after a new version is rolled out.'
-            --cluster-upgrade-mode=: 'The upgrade mode of the cluster when new Service Fabric runtime version is available Automatic: The cluster will be automatically upgraded to the latest Service Fabric runtime version, upgrade_cadence will determine when the upgrade starts after the new version becomes available.Manual: The cluster will not be automatically upgraded to the latest Service Fabric runtime version.'
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --dns-name=: Cluster's dns name.
-            --gateway-connection-port=: Port used for http connections to the cluster.
-            --sku=: 'Cluster''s Sku, the options are Basic: it will have a minimum of 3 seed nodes and only allows 1 node type and Standard: it will have a minimum of 5 seed nodes and allows multiple node types.'
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-            -l, --location=: Location.
-          completion:
-            flag:
-                client-cert-is-admin:
-                    - "true"
-                    - "false"
-                cluster-upgrade-cadence:
-                    - Wave0
-                    - Wave1
-                    - Wave2
-                cluster-upgrade-mode:
-                    - Automatic
-                    - Manual
-        - name: list
-          description: List managed clusters.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Specify the resource group name.
         - name: network-security-rule
+          description: network security rule of a managed cluster.
           commands:
-            - name: list
-              description: list of network security rules in a cluster.
-              flags:
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-            - name: get
-              description: Get a network security rule to a managed cluster.
-              flags:
-                --name=!: Network security rule name
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
             - name: update
               description: Update a network security rule to a managed cluster.
               flags:
@@ -767,16 +673,6 @@ commands:
                         - ah
                         - esp
                         - any
-            - name: delete
-              description: Delete a network security rule to a managed cluster.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --name=!: Network security rule name
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
             - name: add
               description: Add a network security rule to a managed cluster.
               flags:
@@ -821,19 +717,161 @@ commands:
                         - ah
                         - esp
                         - any
-        - name: show
-          description: Gets a Service Fabric managed cluster resource.
+            - name: list
+              description: list of network security rules in a cluster.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+            - name: delete
+              description: Delete a network security rule to a managed cluster.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --name=!: Network security rule name
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+            - name: get
+              description: Get a network security rule to a managed cluster.
+              flags:
+                --name=!: Network security rule name
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+        - name: client-certificate
+          description: Manage client certificates of a manged cluster.
+          commands:
+            - name: delete
+              description: Delete a client certificate from the managed cluster.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --common-name=:
+                    description: A single or Space-separated list of client certificate common name(s) to be remove.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --thumbprint=:
+                    description: A single or Space-separated list of client certificate thumbprint(s) to be remove.
+                    nargs: -1
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+            - name: add
+              description: Add a new client certificate to the managed cluster.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --common-name=: Client certificate common name.
+                --is-admin=:
+                    description: Client authentication type.
+                    nargs: -1
+                --issuer-thumbprint=:
+                    description: Space-separated list of issuer thumbprints.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --thumbprint=: Client certificate thumbprint.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+              completion:
+                flag:
+                    is-admin:
+                        - "true"
+                        - "false"
+        - name: create
+          description: Delete a managed cluster.
           flags:
+            --admin-password=!: Admin password used for the virtual machines.
+            --admin-user-name=: Admin user used for the virtual machines.
+            --client-cert-common-name=: Client certificate common name.
+            --client-cert-is-admin=:
+                description: Client authentication type.
+                nargs: -1
+            --client-cert-issuer-thumbprint=:
+                description: Space-separated list of issuer thumbprints.
+                nargs: -1
+            --client-cert-thumbprint=: Client certificate thumbprint.
+            --client-connection-port=: Port used for client connections to the cluster.
+            --cluster-code-version=: Cluster service fabric code version.
+            --cluster-upgrade-cadence=: 'The upgrade mode of the cluster when new Service Fabric runtime version is available Wave0: Cluster upgrade starts immediately after a new version is rolled out.'
+            --cluster-upgrade-mode=: 'The upgrade mode of the cluster when new Service Fabric runtime version is available Automatic: The cluster will be automatically upgraded to the latest Service Fabric runtime version, upgrade_cadence will determine when the upgrade starts after the new version becomes available.Manual: The cluster will not be automatically upgraded to the latest Service Fabric runtime version.'
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
+            --dns-name=: Cluster's dns name.
+            --gateway-connection-port=: Port used for http connections to the cluster.
+            --sku=: 'Cluster''s Sku, the options are Basic: it will have a minimum of 3 seed nodes and only allows 1 node type and Standard: it will have a minimum of 5 seed nodes and allows multiple node types.'
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+            -l, --location=: Location.
+          completion:
+            flag:
+                client-cert-is-admin:
+                    - "true"
+                    - "false"
+                cluster-upgrade-cadence:
+                    - Wave0
+                    - Wave1
+                    - Wave2
+                cluster-upgrade-mode:
+                    - Automatic
+                    - Manual
+        - name: delete
+          description: Deletes a Service Fabric managed cluster resource.
+          flags:
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
+        - name: update
+          description: Update a managed cluster.
+          flags:
+            --client-connection-port=: Port used for client connections to the cluster.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --dns-name=: Cluster's dns name
+            --gateway-connection-port=: Port used for http connections to the cluster.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: list
+          description: List managed clusters.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Specify the resource group name.
     - name: managed-node-type
+      description: Manage a node type of an Azure Service Fabric managed cluster.
       commands:
+        - name: delete
+          description: Deletes a Service Fabric node type.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+            -n, --name=!: node type name.
         - name: vm-extension
+          description: Managed vm extension on a node type on managed clusters.
           commands:
+            - name: delete
+              description: Delete an extension to the node type.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --extension-name=!: extension name.
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+                -n, --name=!: node type name.
             - name: add
               description: Add an extension to the node type.
               flags:
@@ -860,88 +898,6 @@ commands:
                     auto-upgrade-minor-version:
                         - "true"
                         - "false"
-            - name: delete
-              description: Delete an extension to the node type.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --extension-name=!: extension name.
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-                -n, --name=!: node type name.
-        - name: node
-          commands:
-            - name: delete
-              description: Delete nodes of a node type.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --force=:
-                    description: Using this flag will force the operation even if service fabric is unable to disable the nodes.
-                    nargs: -1
-                --node-name=!:
-                    description: list of target nodes to perform the operation.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-                -n, --name=!: node type name.
-              completion:
-                flag:
-                    force:
-                        - "true"
-                        - "false"
-            - name: reimage
-              description: Reimage nodes of a node type.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --force=:
-                    description: Using this flag will force the operation even if service fabric is unable to disable the nodes.
-                    nargs: -1
-                --node-name=!:
-                    description: list of target nodes to perform the operation.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-                -n, --name=!: node type name.
-              completion:
-                flag:
-                    force:
-                        - "true"
-                        - "false"
-            - name: restart
-              description: Restart nodes of a node type.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --force=:
-                    description: Using this flag will force the operation even if service fabric is unable to disable the nodes.
-                    nargs: -1
-                --node-name=!:
-                    description: list of target nodes to perform the operation.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-                -n, --name=!: node type name.
-              completion:
-                flag:
-                    force:
-                        - "true"
-                        - "false"
-        - name: list
-          description: Gets the list of Node types of the specified managed cluster.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
         - name: create
           description: Create node type on a managed cluster.
           flags:
@@ -994,38 +950,72 @@ commands:
                 primary:
                     - "true"
                     - "false"
-        - name: show
-          description: Gets a Service Fabric node type.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-            -n, --name=!: node type name.
-        - name: vm-secret
+        - name: node
+          description: Perform operations on nodes of a node type on managed clusters.
           commands:
-            - name: add
-              description: Add a secret to the node type.
+            - name: delete
+              description: Delete nodes of a node type.
               flags:
-                --certificate-store=!: Specifies the certificate store on the Virtual Machine to which the certificate should be added.
-                --certificate-url=!: This is the URL of a certificate that has been uploaded to Key Vault as a secret.
                 --cmd=:
                     description: ==SUPPRESS==
                     nargs: -1
-                --source-vault-id=!: Key Vault resource id containing the certificates.
+                --force=:
+                    description: Using this flag will force the operation even if service fabric is unable to disable the nodes.
+                    nargs: -1
+                --node-name=!:
+                    description: list of target nodes to perform the operation.
+                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
                 -n, --name=!: node type name.
-        - name: delete
-          description: Deletes a Service Fabric node type.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-            -n, --name=!: node type name.
+              completion:
+                flag:
+                    force:
+                        - "true"
+                        - "false"
+            - name: restart
+              description: Restart nodes of a node type.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --force=:
+                    description: Using this flag will force the operation even if service fabric is unable to disable the nodes.
+                    nargs: -1
+                --node-name=!:
+                    description: list of target nodes to perform the operation.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+                -n, --name=!: node type name.
+              completion:
+                flag:
+                    force:
+                        - "true"
+                        - "false"
+            - name: reimage
+              description: Reimage nodes of a node type.
+              flags:
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --force=:
+                    description: Using this flag will force the operation even if service fabric is unable to disable the nodes.
+                    nargs: -1
+                --node-name=!:
+                    description: list of target nodes to perform the operation.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+                -n, --name=!: node type name.
+              completion:
+                flag:
+                    force:
+                        - "true"
+                        - "false"
         - name: update
           description: Update node type on a managed cluster.
           flags:
@@ -1047,23 +1037,46 @@ commands:
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
             -n, --name=!: node type name.
-    - name: managed-service
-      commands:
-        - name: show
-          description: Gets a Service Fabric managed service resource.
+        - name: list
+          description: Gets the list of Node types of the specified managed cluster.
           flags:
-            --application=!: Specify the name of the service.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --name=!: Specify the name of the service.
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
-        - name: correlation-scheme
+        - name: show
+          description: Gets a Service Fabric node type.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+            -n, --name=!: node type name.
+        - name: vm-secret
+          description: Managed vm secrets on a node type on managed clusters.
           commands:
-            - name: update
-              description: Update a managed service correlation scheme.
+            - name: add
+              description: Add a secret to the node type.
+              flags:
+                --certificate-store=!: Specifies the certificate store on the Virtual Machine to which the certificate should be added.
+                --certificate-url=!: This is the URL of a certificate that has been uploaded to Key Vault as a secret.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --source-vault-id=!: Key Vault resource id containing the certificates.
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
+                -n, --name=!: node type name.
+    - name: managed-service
+      description: Manage services running on an Azure Service Fabric managed cluster. Only support ARM deployed services.
+      commands:
+        - name: correlation-scheme
+          description: Manage correlation schemes of services running on an Azure Service Fabric managed cluster. Only support ARM deployed services.
+          commands:
+            - name: create
+              description: Create a new managed service correlation scheme on an Azure Service Fabric managed cluster.
               flags:
                 --application=!: Specify the name of the service.
                 --cmd=:
@@ -1087,8 +1100,8 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
-            - name: create
-              description: Create a new managed service correlation scheme on an Azure Service Fabric managed cluster.
+            - name: update
+              description: Update a managed service correlation scheme.
               flags:
                 --application=!: Specify the name of the service.
                 --cmd=:
@@ -1100,55 +1113,21 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
-        - name: update
-          description: Update a managed service.
-          flags:
-            --application=!: Specify the name of the service.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --default-move-cost=: Specify the default cost for a move.
-            --instance-count=: Specify the instance count for the stateless service.
-            --min-instance-count=: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node.
-            --min-instance-percentage=: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node.
-            --min-replica-set-size=: Specify the min replica set size for the stateful service.
-            --name=!: Specify the name of the service.
-            --placement-constraints=: Specify the placement constraints as a string.
-            --quorum-loss-wait-duration=: Specify the maximum duration for which a partition is allowed to be in a state of quorum loss, represented in ISO 8601 format "hh:mm:ss".
-            --replica-restart-wait-duration=: Specify the duration between when a replica goes down and when a new replica is created, represented in ISO 8601 format "hh:mm:ss".
-            --service-placement-time-limit=: Specify the duration for which replicas can stay InBuild before reporting that build is stuck, represented in ISO 8601 format "hh:mm:ss".
-            --stand-by-replica-keep-duration=: Specify the definition on how long StandBy replicas should be maintained before being removed, represented in ISO 8601 format "hh:mm:ss".
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --target-replica-set-size=: Specify the target replica set size for the stateful service.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-          completion:
-            flag:
-                default-move-cost:
-                    - Zero
-                    - Low
-                    - Medium
-                    - High
-        - name: delete
-          description: Deletes a Service Fabric managed service resource.
-          flags:
-            --application=!: Specify the name of the service.
-            --name=!: Specify the name of the service.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
-        - name: list
-          description: Gets the list of service resources created in the specified Service Fabric managed application resource.
-          flags:
-            --application=!: Specify the name of the service.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
         - name: load-metrics
+          description: Manage service load metrics running on an Azure Service Fabric managed cluster. Only support ARM deployed services.
           commands:
+            - name: delete
+              description: Delete a managed service.
+              flags:
+                --application=!: Specify the name of the service.
+                --cmd=:
+                    description: ==SUPPRESS==
+                    nargs: -1
+                --metric-name=!: Specify the name of the metric.
+                --name=!: Specify the name of the service.
+                --subscription=: Name or ID of subscription.
+                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+                -g, --resource-group=!: Specify the resource group name.
             - name: create
               description: Create a new managed service load metric on an Azure Service Fabric managed cluster.
               flags:
@@ -1163,18 +1142,6 @@ commands:
                 --secondary-default-load=: Specify the default amount of load, as a number, that this service creates for this metric when it is a Secondary replica.
                 --subscription=: Name or ID of subscription.
                 --weight=: Specify the service load metric relative weight, compared to other metrics configured for this service, as a number.
-                -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-                -g, --resource-group=!: Specify the resource group name.
-            - name: delete
-              description: Delete a managed service.
-              flags:
-                --application=!: Specify the name of the service.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --metric-name=!: Specify the name of the metric.
-                --name=!: Specify the name of the service.
-                --subscription=: Name or ID of subscription.
                 -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
                 -g, --resource-group=!: Specify the resource group name.
             - name: update
@@ -1246,20 +1213,10 @@ commands:
                 state:
                     - Stateless
                     - Stateful
-    - name: service
-      commands:
-        - name: delete
-          description: Deletes a Service Fabric service resource.
-          flags:
-            --application-name=!: The name of the application resource.
-            --name=!: Specify the name of the service.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
-            -g, --resource-group=!: Specify the resource group name.
         - name: show
-          description: Gets a Service Fabric service resource.
+          description: Gets a Service Fabric managed service resource.
           flags:
-            --application-name=!: The name of the application resource.
+            --application=!: Specify the name of the service.
             --cmd=:
                 description: ==SUPPRESS==
                 nargs: -1
@@ -1267,6 +1224,56 @@ commands:
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.
+        - name: list
+          description: Gets the list of service resources created in the specified Service Fabric managed application resource.
+          flags:
+            --application=!: Specify the name of the service.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: update
+          description: Update a managed service.
+          flags:
+            --application=!: Specify the name of the service.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --default-move-cost=: Specify the default cost for a move.
+            --instance-count=: Specify the instance count for the stateless service.
+            --min-instance-count=: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node.
+            --min-instance-percentage=: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node.
+            --min-replica-set-size=: Specify the min replica set size for the stateful service.
+            --name=!: Specify the name of the service.
+            --placement-constraints=: Specify the placement constraints as a string.
+            --quorum-loss-wait-duration=: Specify the maximum duration for which a partition is allowed to be in a state of quorum loss, represented in ISO 8601 format "hh:mm:ss".
+            --replica-restart-wait-duration=: Specify the duration between when a replica goes down and when a new replica is created, represented in ISO 8601 format "hh:mm:ss".
+            --service-placement-time-limit=: Specify the duration for which replicas can stay InBuild before reporting that build is stuck, represented in ISO 8601 format "hh:mm:ss".
+            --stand-by-replica-keep-duration=: Specify the definition on how long StandBy replicas should be maintained before being removed, represented in ISO 8601 format "hh:mm:ss".
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --target-replica-set-size=: Specify the target replica set size for the stateful service.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+          completion:
+            flag:
+                default-move-cost:
+                    - Zero
+                    - Low
+                    - Medium
+                    - High
+        - name: delete
+          description: Deletes a Service Fabric managed service resource.
+          flags:
+            --application=!: Specify the name of the service.
+            --name=!: Specify the name of the service.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+    - name: service
+      description: Manage services running on an Azure Service Fabric cluster. Only support ARM deployed services.
+      commands:
         - name: create
           description: Create a new service on an Azure Service Fabric cluster.
           flags:
@@ -1303,6 +1310,25 @@ commands:
           description: Gets the list of service resources created in the specified Service Fabric application resource.
           flags:
             --application-name=!: The name of the application resource.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: show
+          description: Gets a Service Fabric service resource.
+          flags:
+            --application-name=!: The name of the application resource.
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --name=!: Specify the name of the service.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+            -g, --resource-group=!: Specify the resource group name.
+        - name: delete
+          description: Deletes a Service Fabric service resource.
+          flags:
+            --application-name=!: The name of the application resource.
+            --name=!: Specify the name of the service.
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
             -g, --resource-group=!: Specify the resource group name.

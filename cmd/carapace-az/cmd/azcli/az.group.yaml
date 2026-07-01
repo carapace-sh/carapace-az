@@ -30,36 +30,8 @@ commands:
                 - Microsoft.Compute/virtualMachineScaleSets
                 - Microsoft.Databricks/workspaces
     - name: deployment
+      description: Manage Azure Resource Manager deployments.
       commands:
-        - name: validate
-          description: Validate whether a template is syntactically correct.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --mode=: Incremental (only add resources to resource group) or Complete (remove extra resources from resource group)
-            --no-prompt=:
-                description: The option to disable the prompt of missing parameters for ARM template.
-                nargs: -1
-            --rollback-on-error=:
-                description: The name of a deployment to roll back to on error, or use as a flag to roll back to the last successful deployment.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -f, --template-file=: a path to a template file or Bicep file in the file system
-            -g, --resource-group=!: Name of resource group.
-            -j, --handle-extended-json-format=: Support to handle extended template content including multiline and comments in deployment
-            -p, --parameters=:
-                description: the deployment parameters
-                nargs: -1
-            -u, --template-uri=: a uri to a remote template file
-          completion:
-            flag:
-                mode:
-                    - Incremental
-                    - Complete
-                no-prompt:
-                    - "true"
-                    - "false"
         - name: create
           description: Start a deployment.
           flags:
@@ -97,7 +69,14 @@ commands:
                 no-prompt:
                     - "true"
                     - "false"
+        - name: cancel
+          description: Cancels a currently running template deployment.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The deployment name.
         - name: operation
+          description: Manage deployment operations.
           commands:
             - name: list
               description: Gets all deployments operations for a deployment.
@@ -118,10 +97,57 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The deployment name.
+        - name: export
+          description: Export the template used for a deployment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The deployment name.
+        - name: validate
+          description: Validate whether a template is syntactically correct.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --mode=: Incremental (only add resources to resource group) or Complete (remove extra resources from resource group)
+            --no-prompt=:
+                description: The option to disable the prompt of missing parameters for ARM template.
+                nargs: -1
+            --rollback-on-error=:
+                description: The name of a deployment to roll back to on error, or use as a flag to roll back to the last successful deployment.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -f, --template-file=: a path to a template file or Bicep file in the file system
+            -g, --resource-group=!: Name of resource group.
+            -j, --handle-extended-json-format=: Support to handle extended template content including multiline and comments in deployment
+            -p, --parameters=:
+                description: the deployment parameters
+                nargs: -1
+            -u, --template-uri=: a uri to a remote template file
+          completion:
+            flag:
+                mode:
+                    - Incremental
+                    - Complete
+                no-prompt:
+                    - "true"
+                    - "false"
         - name: delete
           description: Deletes a deployment from the deployment history.
           flags:
             --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The deployment name.
+        - name: show
+          description: Gets a deployment.
+          flags:
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
@@ -141,24 +167,6 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
-        - name: show
-          description: Gets a deployment.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The deployment name.
-        - name: export
-          description: Export the template used for a deployment.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The deployment name.
         - name: list
           description: Get all the deployments for a resource group.
           flags:
@@ -166,12 +174,6 @@ commands:
             --subscription=: Name or ID of subscription.
             --top=: The number of results to get.
             -g, --resource-group=!: Name of resource group.
-        - name: cancel
-          description: Cancels a currently running template deployment.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The deployment name.
     - name: exists
       description: Checks whether a resource group exists.
       flags:
@@ -203,7 +205,84 @@ commands:
             description: a single tag in 'key[=value]' format.
             nargs: -1
     - name: lock
+      description: Manage Azure resource group locks.
       commands:
+        - name: show
+          description: Show the details of a resource group lock
+          flags:
+            --__PARENT_RESOURCE_PATH=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_NAME=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_PROVIDER_NAMESPACE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_TYPE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the lock
+        - name: create
+          description: Create a resource group lock.
+          flags:
+            --__PARENT_RESOURCE_PATH=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_NAME=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_PROVIDER_NAMESPACE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_TYPE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --notes=: Notes about this lock.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the lock
+            -t, --lock-type=!: The type of lock restriction.
+          completion:
+            flag:
+                lock-type:
+                    - CanNotDelete
+                    - ReadOnly
+        - name: delete
+          description: Delete a resource group lock.
+          flags:
+            --__PARENT_RESOURCE_PATH=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_NAME=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_PROVIDER_NAMESPACE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --__RESOURCE_TYPE=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --cmd=:
+                description: ==SUPPRESS==
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the lock
         - name: update
           description: Allows updates to the lock-type(level) and the notes of the lock
           flags:
@@ -235,34 +314,6 @@ commands:
                 lock-type:
                     - CanNotDelete
                     - ReadOnly
-        - name: create
-          description: Create a resource group lock.
-          flags:
-            --__PARENT_RESOURCE_PATH=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_NAME=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_PROVIDER_NAMESPACE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_TYPE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --notes=: Notes about this lock.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the lock
-            -t, --lock-type=!: The type of lock restriction.
-          completion:
-            flag:
-                lock-type:
-                    - CanNotDelete
-                    - ReadOnly
         - name: list
           description: List lock information in the resource-group.
           flags:
@@ -284,54 +335,6 @@ commands:
             --filter-string=: A query filter to use to restrict the results.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-        - name: show
-          description: Show the details of a resource group lock
-          flags:
-            --__PARENT_RESOURCE_PATH=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_NAME=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_PROVIDER_NAMESPACE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_TYPE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the lock
-        - name: delete
-          description: Delete a resource group lock.
-          flags:
-            --__PARENT_RESOURCE_PATH=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_NAME=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_PROVIDER_NAMESPACE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --__RESOURCE_TYPE=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the lock
     - name: show
       description: Gets a resource group.
       flags:
