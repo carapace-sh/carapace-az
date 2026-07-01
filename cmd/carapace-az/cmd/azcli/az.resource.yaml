@@ -6,9 +6,6 @@ commands:
       description: create a resource.
       flags:
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --id=:
             description: Resource ID.
             nargs: -1
@@ -26,9 +23,6 @@ commands:
       description: Deletes the given resource(s).
       flags:
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --ids=:
             description: One or more resource IDs (space-delimited).
             nargs: -1
@@ -45,9 +39,6 @@ commands:
       flags:
         --action=!: The action that will be invoked on the specified resource
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --ids=:
             description: One or more resource IDs (space-delimited).
             nargs: -1
@@ -63,54 +54,39 @@ commands:
     - name: link
       description: Manage links between resources.
       commands:
-        - name: update
-          description: Update link between resources.
+        - name: create
+          description: Create a new link between resources.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --link=!: Fully-qualified resource ID of the resource link.
             --notes=: Notes for the link.
             --subscription=: Name or ID of subscription.
-            --target=: Fully-qualified resource ID of the resource link target.
+            --target=!: Fully-qualified resource ID of the resource link target.
         - name: delete
           description: Deletes a resource link with the specified ID.
           flags:
             --link=!: Fully-qualified resource ID of the resource link.
             --subscription=: Name or ID of subscription.
-        - name: show
-          description: Gets a resource link with the specified ID.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --link=!: Fully-qualified resource ID of the resource link.
-            --subscription=: Name or ID of subscription.
-        - name: create
-          description: Create a new link between resources.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --link=!: Fully-qualified resource ID of the resource link.
-            --notes=: Notes for the link.
-            --subscription=: Name or ID of subscription.
-            --target=!: Fully-qualified resource ID of the resource link target.
         - name: list
           description: List resource links.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --filter=: Filter string for limiting results.
             --scope=: Fully-qualified scope for retrieving links.
+            --subscription=: Name or ID of subscription.
+        - name: update
+          description: Update link between resources.
+          flags:
+            --link=!: Fully-qualified resource ID of the resource link.
+            --notes=: Notes for the link.
+            --subscription=: Name or ID of subscription.
+            --target=: Fully-qualified resource ID of the resource link target.
+        - name: show
+          description: Gets a resource link with the specified ID.
+          flags:
+            --link=!: Fully-qualified resource ID of the resource link.
             --subscription=: Name or ID of subscription.
     - name: list
       description: List resources.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
         --resource-type=: 'The resource type (Ex: ''resC'').'
         --subscription=: Name or ID of subscription.
@@ -123,45 +99,9 @@ commands:
     - name: lock
       description: Manage Azure resource level locks.
       commands:
-        - name: list
-          description: List lock information in the resource-level.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --filter-string=: A query filter to use to restrict the results.
-            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
-            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
-            --resource-type=: 'The resource type (Ex: ''resC'').'
-            --resource=: If an ID is given, other resource arguments should not be given.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: create
-          description: Create a resource-level lock.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
-            --notes=: Notes about this lock.
-            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
-            --resource-type=: 'The resource type (Ex: ''resC'').'
-            --resource=: If an ID is given, other resource arguments should not be given.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name of the lock
-            -t, --lock-type=!: The type of lock restriction.
-          completion:
-            flag:
-                lock-type:
-                    - CanNotDelete
-                    - ReadOnly
         - name: update
           description: Allows updates to the lock-type(level) and the notes of the lock
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -179,12 +119,19 @@ commands:
                 lock-type:
                     - CanNotDelete
                     - ReadOnly
+        - name: list
+          description: List lock information in the resource-level.
+          flags:
+            --filter-string=: A query filter to use to restrict the results.
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: delete
           description: Delete a resource-level lock.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -198,9 +145,6 @@ commands:
         - name: show
           description: Show the details of a resource-level lock
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -211,12 +155,26 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the lock
+        - name: create
+          description: Create a resource-level lock.
+          flags:
+            --namespace=: 'Provider namespace (Ex: ''Microsoft.Provider'')'
+            --notes=: Notes about this lock.
+            --parent=: 'The parent path (Ex: ''resA/myA/resB/myB'')'
+            --resource-type=: 'The resource type (Ex: ''resC'').'
+            --resource=: If an ID is given, other resource arguments should not be given.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name of the lock
+            -t, --lock-type=!: The type of lock restriction.
+          completion:
+            flag:
+                lock-type:
+                    - CanNotDelete
+                    - ReadOnly
     - name: move
       description: Moves resources from one resource group to another(can be under different subscription)
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --destination-group=!: the destination resource group name
         --destination-subscription-id=: the destination subscription identifier
         --ids=!:
@@ -227,9 +185,6 @@ commands:
       description: Update a resource by PATCH request.
       flags:
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --ids=:
             description: One or more resource IDs (space-delimited).
             nargs: -1
@@ -246,9 +201,6 @@ commands:
       description: Get the details of a resource.
       flags:
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --ids=:
             description: One or more resource IDs (space-delimited).
             nargs: -1
@@ -271,9 +223,6 @@ commands:
       description: Updates the tags on an existing resource.
       flags:
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --ids=:
             description: One or more resource IDs (space-delimited).
             nargs: -1
@@ -295,9 +244,6 @@ commands:
             description: Add an object to a list of objects by specifying a path and key value pairs.
             nargs: -1
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
         --ids=:
             description: One or more resource IDs (space-delimited).
@@ -326,13 +272,7 @@ commands:
     - name: wait
       description: Place the CLI in a waiting state until a condition of a resources is met.
       flags:
-        --__LATEST_INCLUDE_PREVIEW=:
-            description: ==SUPPRESS==
-            nargs: -1
         --api-version=: The api version of the resource (omit for the latest stable version)
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --created=: wait until created with 'provisioningState' at 'Succeeded'
         --custom=: Wait until the condition satisfies a custom JMESPath query.
         --deleted=: wait until deleted

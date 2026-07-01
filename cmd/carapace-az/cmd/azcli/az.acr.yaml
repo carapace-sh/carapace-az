@@ -5,35 +5,32 @@ commands:
     - name: agentpool
       description: Manage private Tasks agent pools with Azure Container Registries.
       commands:
-        - name: show
-          description: Get the properties of a specified agent pool for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --queue-count=: Get only the queue count
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the agent pool.
-            -r, --registry=!: The name of the container registry.
         - name: delete
           description: Delete an agent pool.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-wait=: Do not wait for the Agent Pool to complete action and return immediately after queuing the request.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the agent pool.
             -r, --registry=!: The name of the container registry.
             -y, --yes=: Do not prompt for confirmation.
+        - name: show
+          description: Get the properties of a specified agent pool for an Azure Container Registry.
+          flags:
+            --queue-count=: Get only the queue count
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the agent pool.
+            -r, --registry=!: The name of the container registry.
+        - name: list
+          description: List the agent pools for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
         - name: create
           description: Create an agent pool for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-wait=: Do not wait for the Agent Pool to complete action and return immediately after queuing the request.
             --os=: The os of the agent pool.
             --subnet-id=: The Virtual Network Subnet Resource Id of the agent machine.
@@ -43,21 +40,9 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the agent pool.
             -r, --registry=!: The name of the container registry.
-        - name: list
-          description: List the agent pools for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
         - name: update
           description: Update an agent pool for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-wait=: Do not wait for the Agent Pool to complete action and return immediately after queuing the request.
             --subscription=: Name or ID of subscription.
             -c, --count=: The count of the agent pool.
@@ -67,12 +52,53 @@ commands:
     - name: artifact-streaming
       description: Manage artifact streaming for any repositories or supported images in an ACR.
       commands:
+        - name: operation
+          description: Manage the streaming artifact creation operations for ACR.
+          commands:
+            - name: cancel
+              description: Cancel the given streaming artifact operation for ACR.
+              flags:
+                --id=: The ID returned when creating a streaming artifact.
+                --repository=: The name of the repository.
+                --subscription=: Name or ID of subscription.
+                --suffix=: The tenant suffix in registry login server.
+                -n, --name=!: The name of the container registry.
+                -p, --password=: The password used to log into a container registry
+                -t, --image=: The name of the image.
+                -u, --username=: The username used to log into a container registry
+            - name: show
+              description: Check the operation status for artifact streaming in an ACR.
+              flags:
+                --id=: The ID returned when creating a streaming artifact.
+                --repository=: The name of the repository.
+                --subscription=: Name or ID of subscription.
+                --suffix=: The tenant suffix in registry login server.
+                -n, --name=!: The name of the container registry.
+                -p, --password=: The password used to log into a container registry
+                -t, --image=: The name of the image.
+                -u, --username=: The username used to log into a container registry
+        - name: show
+          description: Show if artifact streaming is enabled in a repository for an Azure Container Registry.
+          flags:
+            --repository=!: The name of the repository.
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -n, --name=!: The name of the container registry.
+            -p, --password=: The password used to log into a container registry
+            -u, --username=: The username used to log into a container registry
+        - name: create
+          description: Create a referrers streaming artifact for a specific image in an ACR.
+          flags:
+            --no-wait=: Do not wait for the run to complete and return immediately after queuing the run.
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -n, --name=!: The name of the container registry.
+            -p, --password=: The password used to log into a container registry
+            -t, --image=!: The name of the image.
+            -u, --username=: The username used to log into a container registry
         - name: update
           description: Enable or disable auto-creation of streaming artifacts for newly pushed images under a given registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --enable-streaming=!:
                 description: Indicates whether artifact streaming is enabled for a repository.
                 nargs: -1
@@ -87,68 +113,9 @@ commands:
                 enable-streaming:
                     - "true"
                     - "false"
-        - name: operation
-          description: Manage the streaming artifact creation operations for ACR.
-          commands:
-            - name: cancel
-              description: Cancel the given streaming artifact operation for ACR.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=: The ID returned when creating a streaming artifact.
-                --repository=: The name of the repository.
-                --subscription=: Name or ID of subscription.
-                --suffix=: The tenant suffix in registry login server.
-                -n, --name=!: The name of the container registry.
-                -p, --password=: The password used to log into a container registry
-                -t, --image=: The name of the image.
-                -u, --username=: The username used to log into a container registry
-            - name: show
-              description: Check the operation status for artifact streaming in an ACR.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --id=: The ID returned when creating a streaming artifact.
-                --repository=: The name of the repository.
-                --subscription=: Name or ID of subscription.
-                --suffix=: The tenant suffix in registry login server.
-                -n, --name=!: The name of the container registry.
-                -p, --password=: The password used to log into a container registry
-                -t, --image=: The name of the image.
-                -u, --username=: The username used to log into a container registry
-        - name: show
-          description: Show if artifact streaming is enabled in a repository for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --repository=!: The name of the repository.
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -n, --name=!: The name of the container registry.
-            -p, --password=: The password used to log into a container registry
-            -u, --username=: The username used to log into a container registry
-        - name: create
-          description: Create a referrers streaming artifact for a specific image in an ACR.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-wait=: Do not wait for the run to complete and return immediately after queuing the run.
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -n, --name=!: The name of the container registry.
-            -p, --password=: The password used to log into a container registry
-            -t, --image=!: The name of the image.
-            -u, --username=: The username used to log into a container registry
     - name: build
       description: Queues a quick build, providing streaming logs for an Azure Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --agent-pool=: The name of the agent pool.
         --auth-mode=: Auth mode of the source registry.
         --build-arg=: Build argument in '--build-arg name[=value]' format.
@@ -174,31 +141,9 @@ commands:
     - name: cache
       description: Manage cache rules in Azure Container Registries.
       commands:
-        - name: show
-          description: Show a cache rule.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the cache rule.
-            -r, --registry=!: The name of the container registry.
-        - name: list
-          description: List the cache rules in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
         - name: create
           description: Create a cache rule.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -c, --cred-set=: The name of the credential set.
             -g, --resource-group=: Name of resource group.
@@ -206,12 +151,30 @@ commands:
             -r, --registry=!: The name of the container registry.
             -s, --source-repo=!: The full source repository path such as 'docker.io/library/ubuntu'.
             -t, --target-repo=!: The target repository namespace such as 'ubuntu'.
+        - name: delete
+          description: Delete a cache rule.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the cache rule.
+            -r, --registry=!: The name of the container registry.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: list
+          description: List the cache rules in an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
+        - name: show
+          description: Show a cache rule.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the cache rule.
+            -r, --registry=!: The name of the container registry.
         - name: update
           description: Update the credential set on a cache rule.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
                 nargs: -1
@@ -228,23 +191,9 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the cache rule.
             -r, --registry=!: The name of the container registry.
-        - name: delete
-          description: Delete a cache rule.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the cache rule.
-            -r, --registry=!: The name of the container registry.
-            -y, --yes=: Do not prompt for confirmation.
     - name: check-health
       description: Gets health information on the environment and optionally a target registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --ignore-errors=: Provide all health checks, even if errors are found
         --subscription=: Name or ID of subscription.
         --vnet=: Virtual network ID so to run this command inside a VNET to verify the DNS routing to private endpoints
@@ -258,42 +207,33 @@ commands:
     - name: config
       description: Configure policies for Azure Container Registries.
       commands:
-        - name: soft-delete
-          description: Manage soft-delete policy for Azure Container Registries.
+        - name: authentication-as-arm
+          description: Manage 'Azure AD authenticate as ARM' policy for Azure Container Registries.
           commands:
-            - name: update
-              description: Update soft-delete policy for an Azure Container Registry.
+            - name: show
+              description: Show the configured 'Azure AD authenticate as ARM' policy for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --days=: 'The number of days to retain a soft-deleted manifest or tag after which it gets purged (Range: 1 to 90).'
-                --status=: Indicates whether soft-delete policy is enabled.
                 --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
                 -r, --registry=!: The name of the container registry.
-                -y, --yes=: Do not prompt for confirmation.
+            - name: update
+              description: Update 'Azure AD authenticate as ARM' policy for an Azure Container Registry.
+              flags:
+                --status=: Indicate whether authentication-as-arm is enabled.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -r, --registry=!: The name of the container registry.
               completion:
                 flag:
                     status:
                         - enabled
                         - disabled
-            - name: show
-              description: Show the configured soft-delete policy for an Azure Container Registry.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -r, --registry=!: The name of the container registry.
         - name: retention
           description: Manage retention policy for Azure Container Registries.
           commands:
             - name: update
               description: Update retention policy for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --days=: 'The number of days to retain an untagged manifest after which it gets purged (Range: 0 to 365).'
                 --status=: Indicates whether retention policy is enabled.
                 --subscription=: Name or ID of subscription.
@@ -310,9 +250,6 @@ commands:
             - name: show
               description: Show the configured retention policy for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -r, --registry=!: The name of the container registry.
@@ -322,9 +259,6 @@ commands:
             - name: update
               description: Update content-trust policy for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --status=: Indicates whether content-trust is enabled.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
@@ -337,181 +271,36 @@ commands:
             - name: show
               description: Show the configured content-trust policy for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -r, --registry=!: The name of the container registry.
-        - name: authentication-as-arm
-          description: Manage 'Azure AD authenticate as ARM' policy for Azure Container Registries.
+        - name: soft-delete
+          description: Manage soft-delete policy for Azure Container Registries.
           commands:
             - name: update
-              description: Update 'Azure AD authenticate as ARM' policy for an Azure Container Registry.
+              description: Update soft-delete policy for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --status=: Indicate whether authentication-as-arm is enabled.
+                --days=: 'The number of days to retain a soft-deleted manifest or tag after which it gets purged (Range: 1 to 90).'
+                --status=: Indicates whether soft-delete policy is enabled.
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
                 -r, --registry=!: The name of the container registry.
+                -y, --yes=: Do not prompt for confirmation.
               completion:
                 flag:
                     status:
                         - enabled
                         - disabled
             - name: show
-              description: Show the configured 'Azure AD authenticate as ARM' policy for an Azure Container Registry.
+              description: Show the configured soft-delete policy for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
                 -r, --registry=!: The name of the container registry.
     - name: connected-registry
       description: Manage connected registry resources with Azure Container Registries.
       commands:
-        - name: list
-          description: List all the connected registries under the current parent registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-children=: Used to remove all children from the list.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -p, --parent=: The name of the parent connected registry.
-            -r, --registry=!: The login server of the Cloud ACR registry.
-        - name: list-client-tokens
-          description: List all the client tokens associated to a specific connected registries.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name for the connected registry.
-            -r, --registry=!: The login server of the Cloud ACR registry.
-        - name: permissions
-          description: Manage the repository permissions accross multiple connected registries. Please see https://aka.ms/acr/connected-registry for more information.
-          commands:
-            - name: update
-              description: Add and remove repository permissions accross all the necessary connected registry sync scope maps.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --add=:
-                    description: repository permissions to be added to the targeted connected registry and it's ancestors sync scope maps.
-                    nargs: -1
-                --remove=:
-                    description: repository permissions to be removed from the targeted connected registry and it's succesors sync scope maps.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: Name for the connected registry.
-                -r, --registry=!: The login server of the Cloud ACR registry.
-            - name: show
-              description: Show the connected registry sync scope map information.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: Name for the connected registry.
-                -r, --registry=!: The login server of the Cloud ACR registry.
-        - name: get-settings
-          description: Retrieve information required to activate a connected registry, and creates or rotates the sync token credentials.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --generate-password=: Select which password you want to generate, and it is required to retrieve the password from the sync token.
-            --parent-protocol=!: Specify the protocol used to communicate with its parent.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name for the connected registry.
-            -r, --registry=!: The login server of the Cloud ACR registry.
-            -y, --yes=: Do not prompt for confirmation.
-          completion:
-            flag:
-                generate-password:
-                    - "1"
-                    - "2"
-                parent-protocol:
-                    - http
-                    - https
-        - name: repo
-          description: Update all the necessary connected registry sync scope maps repository permissions.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --add=:
-                description: repository permissions to be added to the targeted connected registry and it's ancestors sync scope maps.
-                nargs: -1
-            --remove=:
-                description: repository permissions to be removed from the targeted connected registry and it's succesors sync scope maps.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name for the connected registry.
-            -r, --registry=!: The login server of the Cloud ACR registry.
-        - name: show
-          description: Show connected registry details.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name for the connected registry.
-            -r, --registry=!: The login server of the Cloud ACR registry.
-        - name: install
-          description: Help to access the necessary information for installing a connected registry. Please see https://aka.ms/acr/connected-registry for more information.
-          commands:
-            - name: info
-              description: Retrieve information required to activate a connected registry.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --parent-protocol=!: Specify the protocol used to communicate with its parent.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: Name for the connected registry.
-                -r, --registry=!: The login server of the Cloud ACR registry.
-              completion:
-                flag:
-                    parent-protocol:
-                        - http
-                        - https
-            - name: renew-credentials
-              description: Retrieve information required to activate a connected registry, and renews the sync token credentials.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --parent-protocol=!: Specify the protocol used to communicate with its parent.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: Name for the connected registry.
-                -r, --registry=!: The login server of the Cloud ACR registry.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    parent-protocol:
-                        - http
-                        - https
         - name: create
           description: Create a connected registry for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --audit-logs-enabled=:
                 description: Indicate whether audit log synchronization is enabled.
                 nargs: -1
@@ -544,24 +333,62 @@ commands:
                 mode:
                     - ReadOnly
                     - ReadWrite
-        - name: delete
-          description: Delete a connected registry from Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --cleanup=: It will aslo delete the sync token and the scope map resources.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: Name for the connected registry.
-            -r, --registry=!: The login server of the Cloud ACR registry.
-            -y, --yes=: Do not prompt for confirmation.
+        - name: permissions
+          description: Manage the repository permissions accross multiple connected registries. Please see https://aka.ms/acr/connected-registry for more information.
+          commands:
+            - name: update
+              description: Add and remove repository permissions accross all the necessary connected registry sync scope maps.
+              flags:
+                --add=:
+                    description: repository permissions to be added to the targeted connected registry and it's ancestors sync scope maps.
+                    nargs: -1
+                --remove=:
+                    description: repository permissions to be removed from the targeted connected registry and it's succesors sync scope maps.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: Name for the connected registry.
+                -r, --registry=!: The login server of the Cloud ACR registry.
+            - name: show
+              description: Show the connected registry sync scope map information.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: Name for the connected registry.
+                -r, --registry=!: The login server of the Cloud ACR registry.
+        - name: install
+          description: Help to access the necessary information for installing a connected registry. Please see https://aka.ms/acr/connected-registry for more information.
+          commands:
+            - name: info
+              description: Retrieve information required to activate a connected registry.
+              flags:
+                --parent-protocol=!: Specify the protocol used to communicate with its parent.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: Name for the connected registry.
+                -r, --registry=!: The login server of the Cloud ACR registry.
+              completion:
+                flag:
+                    parent-protocol:
+                        - http
+                        - https
+            - name: renew-credentials
+              description: Retrieve information required to activate a connected registry, and renews the sync token credentials.
+              flags:
+                --parent-protocol=!: Specify the protocol used to communicate with its parent.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: Name for the connected registry.
+                -r, --registry=!: The login server of the Cloud ACR registry.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    parent-protocol:
+                        - http
+                        - https
         - name: update
           description: Update a connected registry for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --add-client-tokens=:
                 description: Client tokens to be added.
                 nargs: -1
@@ -590,23 +417,79 @@ commands:
                 audit-logs-enabled:
                     - "true"
                     - "false"
-        - name: deactivate
-          description: Deactivate a connected registry from Azure Container Registry.
+        - name: delete
+          description: Delete a connected registry from Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --cleanup=: It will aslo delete the sync token and the scope map resources.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: Name for the connected registry.
             -r, --registry=!: The login server of the Cloud ACR registry.
             -y, --yes=: Do not prompt for confirmation.
+        - name: deactivate
+          description: Deactivate a connected registry from Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name for the connected registry.
+            -r, --registry=!: The login server of the Cloud ACR registry.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: list
+          description: List all the connected registries under the current parent registry.
+          flags:
+            --no-children=: Used to remove all children from the list.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -p, --parent=: The name of the parent connected registry.
+            -r, --registry=!: The login server of the Cloud ACR registry.
+        - name: list-client-tokens
+          description: List all the client tokens associated to a specific connected registries.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name for the connected registry.
+            -r, --registry=!: The login server of the Cloud ACR registry.
+        - name: repo
+          description: Update all the necessary connected registry sync scope maps repository permissions.
+          flags:
+            --add=:
+                description: repository permissions to be added to the targeted connected registry and it's ancestors sync scope maps.
+                nargs: -1
+            --remove=:
+                description: repository permissions to be removed from the targeted connected registry and it's succesors sync scope maps.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name for the connected registry.
+            -r, --registry=!: The login server of the Cloud ACR registry.
+        - name: show
+          description: Show connected registry details.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name for the connected registry.
+            -r, --registry=!: The login server of the Cloud ACR registry.
+        - name: get-settings
+          description: Retrieve information required to activate a connected registry, and creates or rotates the sync token credentials.
+          flags:
+            --generate-password=: Select which password you want to generate, and it is required to retrieve the password from the sync token.
+            --parent-protocol=!: Specify the protocol used to communicate with its parent.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: Name for the connected registry.
+            -r, --registry=!: The login server of the Cloud ACR registry.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                generate-password:
+                    - "1"
+                    - "2"
+                parent-protocol:
+                    - http
+                    - https
     - name: create
       description: Create an Azure Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --admin-enabled=:
             description: Indicates whether the admin user is enabled
             nargs: -1
@@ -665,21 +548,9 @@ commands:
     - name: credential
       description: Manage login credentials for Azure Container Registries.
       commands:
-        - name: show
-          description: Get the login credentials for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the container registry.
         - name: renew
           description: Regenerate login credentials for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --password-name=!: The name of password to regenerate
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
@@ -689,15 +560,18 @@ commands:
                 password-name:
                     - password
                     - password2
+        - name: show
+          description: Get the login credentials for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the container registry.
     - name: credential-set
       description: Manage credential sets in Azure Container Registries.
       commands:
         - name: update
           description: Update the username or password Azure Key Vault secret ID on a credential set.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
                 nargs: -1
@@ -714,12 +588,16 @@ commands:
             -p, --password-id=: The Azure Key Vault secret ID of the secret containing the password to the upstream registry.
             -r, --registry=!: The name of the container registry.
             -u, --username-id=: The Azure Key Vault secret ID of the secret containing the username to the upstream registry.
+        - name: show
+          description: Show a credential set.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the credential set.
+            -r, --registry=!: The name of the container registry.
         - name: create
           description: Create a credential set.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -l, --login-server=!: The login server address of the upstream registry such as 'docker.io'
@@ -730,28 +608,12 @@ commands:
         - name: list
           description: List the credential sets in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
-        - name: show
-          description: Show a credential set.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the credential set.
             -r, --registry=!: The name of the container registry.
         - name: delete
           description: Delete a credential set.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the credential set.
@@ -760,9 +622,6 @@ commands:
     - name: delete
       description: Deletes an Azure Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -g, --resource-group=: Name of resource group.
         -n, --name=!: The name of the container registry.
@@ -773,9 +632,6 @@ commands:
         - name: rotate-key
           description: Rotate (update) the container registry's encryption key
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --identity=: client id of managed identity, resource name or id of user assigned identity.
             --key-encryption-key=: Key vault key uri.
             --subscription=: Name or ID of subscription.
@@ -784,45 +640,37 @@ commands:
         - name: show
           description: Show the container registry's encryption details
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the container registry.
     - name: helm
       description: Manage helm charts for Azure Container Registries.
       commands:
-        - name: install-cli
-          description: Install Helm command-line tool.
-          flags:
-            --client-version=: The target Helm CLI version.
-            --install-location=: Path at which to install Helm CLI (Existing one at the same path will be overwritten)
-            --subscription=: Name or ID of subscription.
-            -y, --yes=: Agree to the license of Helm, and do not prompt for confirmation.
         - name: repo
           description: Manage helm chart repositories for Azure Container Registries.
           commands:
             - name: add
               description: Add a helm chart repository from an Azure Container Registry through the Helm CLI.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --repository=: ==SUPPRESS==
                 --subscription=: Name or ID of subscription.
                 --suffix=: The tenant suffix in registry login server.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=!: The name of the container registry.
                 -p, --password=: The password used to log into a container registry
                 -u, --username=: The username used to log into a container registry
+        - name: push
+          description: Push a helm chart package to an Azure Container Registry.
+          flags:
+            --force=: Overwrite the existing chart package.
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the container registry.
+            -p, --password=: The password used to log into a container registry
+            -u, --username=: The username used to log into a container registry
         - name: show
           description: Describe a helm chart in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --repository=: ==SUPPRESS==
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
             --version=: The helm chart version.
@@ -830,14 +678,26 @@ commands:
             -n, --name=!: The name of the container registry.
             -p, --password=: The password used to log into a container registry
             -u, --username=: The username used to log into a container registry
+        - name: list
+          description: List all helm charts in an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the container registry.
+            -p, --password=: The password used to log into a container registry
+            -u, --username=: The username used to log into a container registry
+        - name: install-cli
+          description: Install Helm command-line tool.
+          flags:
+            --client-version=: The target Helm CLI version.
+            --install-location=: Path at which to install Helm CLI (Existing one at the same path will be overwritten)
+            --subscription=: Name or ID of subscription.
+            -y, --yes=: Agree to the license of Helm, and do not prompt for confirmation.
         - name: delete
           description: Delete a helm chart version in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --prov=: Only delete the provenance file.
-            --repository=: ==SUPPRESS==
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
             --version=: The helm chart version.
@@ -846,42 +706,21 @@ commands:
             -p, --password=: The password used to log into a container registry
             -u, --username=: The username used to log into a container registry
             -y, --yes=: Do not prompt for confirmation.
-        - name: list
-          description: List all helm charts in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --repository=: ==SUPPRESS==
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the container registry.
-            -p, --password=: The password used to log into a container registry
-            -u, --username=: The username used to log into a container registry
-        - name: push
-          description: Push a helm chart package to an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --force=: Overwrite the existing chart package.
-            --repository=: ==SUPPRESS==
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the container registry.
-            -p, --password=: The password used to log into a container registry
-            -u, --username=: The username used to log into a container registry
     - name: identity
       description: Manage service (managed) identities for a container registry
       commands:
+        - name: assign
+          description: Assign a managed identity to a container registry
+          flags:
+            --identities=!:
+                description: Space-separated identities.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the container registry.
         - name: remove
           description: Remove a managed identity from a container registry
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --identities=!:
                 description: Space-separated identities.
                 nargs: -1
@@ -891,30 +730,12 @@ commands:
         - name: show
           description: Show the container registry's identity details
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the container registry.
-        - name: assign
-          description: Assign a managed identity to a container registry
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --identities=!:
-                description: Space-separated identities.
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the container registry.
     - name: import
       description: Imports an image to an Azure Container Registry from another Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --force=: Overwrite the existing tag of the image to be imported.
         --no-wait=: Do not wait for the import to complete and return immediately after queuing the import.
         --repository=: The repository name for a manifest-only copy of images.
@@ -934,9 +755,6 @@ commands:
     - name: login
       description: Log in to an Azure Container Registry through the Docker CLI.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         --suffix=: The tenant suffix in registry login server.
         -g, --resource-group=: Name of resource group.
@@ -947,29 +765,72 @@ commands:
     - name: manifest
       description: Manage artifact manifests in Azure Container Registries.
       commands:
-        - name: list-referrers
-          description: List the referrers to a manifest in an Azure Container Registry.
+        - name: list-deleted
+          description: List the soft-deleted manifests in a repository in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --artifact-type=: Filter referrers based on artifact type.
-            --recursive=: Recursively include referrer artifacts.
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -n, --name=: The name of the repository.
+            -p, --password=: The password used to log into a container registry
+            -r, --registry=: The name of the container registry.
+            -u, --username=: The username used to log into a container registry
+        - name: show
+          description: Get a manifest in an Azure Container Registry.
+          flags:
+            --raw=: Output the raw manifest text with no formatting.
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
             -n, --name=: The name of the artifact.
             -p, --password=: The password used to log into a container registry
             -r, --registry=: The name of the container registry.
             -u, --username=: The username used to log into a container registry
+        - name: list-metadata
+          description: List the metadata of the manifests in a repository in an Azure Container Registry.
+          flags:
+            --orderby=: Order the items in the results.
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            --top=: Limit the number of items in the results.
+            -n, --name=: The name of the repository.
+            -p, --password=: The password used to log into a container registry
+            -r, --registry=: The name of the container registry.
+            -u, --username=: The username used to log into a container registry
+          completion:
+            flag:
+                orderby:
+                    - time_asc
+                    - time_desc
         - name: metadata
           description: Manage artifact manifest metadata in Azure Container Registries.
           commands:
+            - name: show
+              description: Get the metadata of an artifact in an Azure Container Registry.
+              flags:
+                --subscription=: Name or ID of subscription.
+                --suffix=: The tenant suffix in registry login server.
+                -n, --name=: The name of the artifact.
+                -p, --password=: The password used to log into a container registry
+                -r, --registry=: The name of the container registry.
+                -u, --username=: The username used to log into a container registry
+            - name: list
+              description: List the metadata of the manifests in a repository in an Azure Container Registry.
+              flags:
+                --orderby=: Order the items in the results.
+                --subscription=: Name or ID of subscription.
+                --suffix=: The tenant suffix in registry login server.
+                --top=: Limit the number of items in the results.
+                -n, --name=: The name of the repository.
+                -p, --password=: The password used to log into a container registry
+                -r, --registry=: The name of the container registry.
+                -u, --username=: The username used to log into a container registry
+              completion:
+                flag:
+                    orderby:
+                        - time_asc
+                        - time_desc
             - name: update
               description: Update the manifest metadata of an artifact in an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --delete-enabled=:
                     description: Indicate whether delete operation is allowed.
                     nargs: -1
@@ -1002,96 +863,20 @@ commands:
                     write-enabled:
                         - "true"
                         - "false"
-            - name: list
-              description: List the metadata of the manifests in a repository in an Azure Container Registry.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --orderby=: Order the items in the results.
-                --subscription=: Name or ID of subscription.
-                --suffix=: The tenant suffix in registry login server.
-                --top=: Limit the number of items in the results.
-                -n, --name=: The name of the repository.
-                -p, --password=: The password used to log into a container registry
-                -r, --registry=: The name of the container registry.
-                -u, --username=: The username used to log into a container registry
-              completion:
-                flag:
-                    orderby:
-                        - time_asc
-                        - time_desc
-            - name: show
-              description: Get the metadata of an artifact in an Azure Container Registry.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --suffix=: The tenant suffix in registry login server.
-                -n, --name=: The name of the artifact.
-                -p, --password=: The password used to log into a container registry
-                -r, --registry=: The name of the container registry.
-                -u, --username=: The username used to log into a container registry
-        - name: restore
-          description: Restore a soft-deleted artifact and tag in an Azure Container Registry.
+        - name: list-referrers
+          description: List the referrers to a manifest in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -d, --digest=: The digest of the manifest such as 'sha256@abc123'.
-            -f, --force=: Overwrite the existing tag.
-            -n, --name=: The name of the artifact.
-            -p, --password=: The password used to log into a container registry
-            -r, --registry=: The name of the container registry.
-            -u, --username=: The username used to log into a container registry
-            -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Get a manifest in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --raw=: Output the raw manifest text with no formatting.
+            --artifact-type=: Filter referrers based on artifact type.
+            --recursive=: Recursively include referrer artifacts.
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
             -n, --name=: The name of the artifact.
-            -p, --password=: The password used to log into a container registry
-            -r, --registry=: The name of the container registry.
-            -u, --username=: The username used to log into a container registry
-        - name: delete
-          description: Delete a manifest in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -n, --name=: The name of the artifact.
-            -p, --password=: The password used to log into a container registry
-            -r, --registry=: The name of the container registry.
-            -u, --username=: The username used to log into a container registry
-            -y, --yes=: Do not prompt for confirmation.
-        - name: list-deleted-tags
-          description: List the soft-deleted tags in a repository in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -n, --name=: The name of the repository.
             -p, --password=: The password used to log into a container registry
             -r, --registry=: The name of the container registry.
             -u, --username=: The username used to log into a container registry
         - name: update-metadata
           description: Update the manifest metadata of an artifact in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --delete-enabled=:
                 description: Indicate whether delete operation is allowed.
                 nargs: -1
@@ -1124,43 +909,9 @@ commands:
                 write-enabled:
                     - "true"
                     - "false"
-        - name: list-deleted
-          description: List the soft-deleted manifests in a repository in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            -n, --name=: The name of the repository.
-            -p, --password=: The password used to log into a container registry
-            -r, --registry=: The name of the container registry.
-            -u, --username=: The username used to log into a container registry
         - name: list
           description: List the manifests in a repository in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --orderby=: Order the items in the results.
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            --top=: Limit the number of items in the results.
-            -n, --name=: The name of the repository.
-            -p, --password=: The password used to log into a container registry
-            -r, --registry=: The name of the container registry.
-            -u, --username=: The username used to log into a container registry
-          completion:
-            flag:
-                orderby:
-                    - time_asc
-                    - time_desc
-        - name: list-metadata
-          description: List the metadata of the manifests in a repository in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --orderby=: Order the items in the results.
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
@@ -1177,33 +928,55 @@ commands:
         - name: show-metadata
           description: Get the metadata of an artifact in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
             -n, --name=: The name of the artifact.
             -p, --password=: The password used to log into a container registry
             -r, --registry=: The name of the container registry.
             -u, --username=: The username used to log into a container registry
+        - name: list-deleted-tags
+          description: List the soft-deleted tags in a repository in an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -n, --name=: The name of the repository.
+            -p, --password=: The password used to log into a container registry
+            -r, --registry=: The name of the container registry.
+            -u, --username=: The username used to log into a container registry
+        - name: restore
+          description: Restore a soft-deleted artifact and tag in an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -d, --digest=: The digest of the manifest such as 'sha256@abc123'.
+            -f, --force=: Overwrite the existing tag.
+            -n, --name=: The name of the artifact.
+            -p, --password=: The password used to log into a container registry
+            -r, --registry=: The name of the container registry.
+            -u, --username=: The username used to log into a container registry
+            -y, --yes=: Do not prompt for confirmation.
+        - name: delete
+          description: Delete a manifest in an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            -n, --name=: The name of the artifact.
+            -p, --password=: The password used to log into a container registry
+            -r, --registry=: The name of the container registry.
+            -u, --username=: The username used to log into a container registry
+            -y, --yes=: Do not prompt for confirmation.
     - name: network-rule
       description: Manage network rules for Azure Container Registries.
       commands:
         - name: list
           description: List network rules.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the container registry.
         - name: remove
           description: Remove a network rule.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ip-address=: IPv4 address or CIDR range.
             --subnet=: Name or ID of subnet.
             --subscription=: Name or ID of subscription.
@@ -1213,9 +986,6 @@ commands:
         - name: add
           description: Add a network rule.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ip-address=: IPv4 address or CIDR range.
             --subnet=: Name or ID of subnet.
             --subscription=: Name or ID of subscription.
@@ -1228,9 +998,6 @@ commands:
         - name: build
           description: Queues a quick build task that builds an app and pushes it into an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --agent-pool=: The name of the agent pool.
             --auth-mode=: Auth mode of the source registry.
             --no-format=: Indicates whether the logs should be displayed in raw format
@@ -1253,12 +1020,9 @@ commands:
     - name: private-endpoint-connection
       description: Manage container registry private endpoint connections
       commands:
-        - name: delete
-          description: Delete a private endpoint connection request for a container registry
+        - name: show
+          description: Show details of a container registry's private endpoint connection
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the private endpoint connection
@@ -1266,29 +1030,13 @@ commands:
         - name: list
           description: List all private endpoint connections to a container registry
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -r, --registry-name=!: The name of the container registry.
         - name: approve
           description: Approve a private endpoint connection request for a container registry
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --description=: Approval description.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the private endpoint connection
-            -r, --registry-name=!: The name of the container registry.
-        - name: show
-          description: Show details of a container registry's private endpoint connection
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the private endpoint connection
@@ -1296,10 +1044,14 @@ commands:
         - name: reject
           description: Reject a private endpoint connection request for a container registry
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --description=: Rejection description.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the private endpoint connection
+            -r, --registry-name=!: The name of the container registry.
+        - name: delete
+          description: Delete a private endpoint connection request for a container registry
+          flags:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the private endpoint connection
@@ -1310,21 +1062,44 @@ commands:
         - name: list
           description: list the private link resources supported for a registry
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the container registry.
     - name: replication
       description: Manage geo-replicated regions of Azure Container Registries.
       commands:
+        - name: list
+          description: List all of the regions for a geo-replicated Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
+        - name: create
+          description: Create a replicated region for an Azure Container Registry.
+          flags:
+            --region-endpoint-enabled=:
+                description: Allow routing to this replication.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --zone-redundancy=: Indicates whether or not zone redundancy should be enabled for this registry or replication.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=!: Location.
+            -n, --name=: The name of the replication.
+            -r, --registry=!: The name of the container registry.
+          completion:
+            flag:
+                region-endpoint-enabled:
+                    - "true"
+                    - "false"
+                zone-redundancy:
+                    - Enabled
+                    - Disabled
         - name: delete
           description: Delete a replicated region from an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the replication.
@@ -1332,9 +1107,6 @@ commands:
         - name: update
           description: Updates a replication.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
                 nargs: -1
@@ -1360,47 +1132,9 @@ commands:
                 region-endpoint-enabled:
                     - "true"
                     - "false"
-        - name: create
-          description: Create a replicated region for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --region-endpoint-enabled=:
-                description: Allow routing to this replication.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --zone-redundancy=: Indicates whether or not zone redundancy should be enabled for this registry or replication.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=!: Location.
-            -n, --name=: The name of the replication.
-            -r, --registry=!: The name of the container registry.
-          completion:
-            flag:
-                region-endpoint-enabled:
-                    - "true"
-                    - "false"
-                zone-redundancy:
-                    - Enabled
-                    - Disabled
-        - name: list
-          description: List all of the regions for a geo-replicated Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
         - name: show
           description: Get the details of a replicated region.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the replication.
@@ -1408,23 +1142,27 @@ commands:
     - name: repository
       description: Manage repositories (image names) for Azure Container Registries.
       commands:
-        - name: list-deleted
-          description: List soft-deleted repositories in an Azure Container Registry.
+        - name: show-manifests
+          description: Show manifests of a repository in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --detail=: Show detailed information.
+            --orderby=: Order the items in the results.
+            --repository=!: The name of the repository.
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
+            --top=: Limit the number of items in the results.
+            -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the container registry.
             -p, --password=: The password used to log into a container registry
             -u, --username=: The username used to log into a container registry
-        - name: show
-          description: Get the attributes of a repository or image in an Azure Container Registry.
+          completion:
+            flag:
+                orderby:
+                    - time_asc
+                    - time_desc
+        - name: delete
+          description: Delete a repository or image in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --repository=: The name of the repository.
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
@@ -1433,12 +1171,28 @@ commands:
             -p, --password=: The password used to log into a container registry
             -t, --image=: The name of the image.
             -u, --username=: The username used to log into a container registry
+            -y, --yes=: Do not prompt for confirmation.
+        - name: show-tags
+          description: Show tags for a repository in an Azure Container Registry.
+          flags:
+            --detail=: Show detailed information.
+            --orderby=: Order the items in the results.
+            --repository=!: The name of the repository.
+            --subscription=: Name or ID of subscription.
+            --suffix=: The tenant suffix in registry login server.
+            --top=: Limit the number of items in the results.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the container registry.
+            -p, --password=: The password used to log into a container registry
+            -u, --username=: The username used to log into a container registry
+          completion:
+            flag:
+                orderby:
+                    - time_asc
+                    - time_desc
         - name: update
           description: Update the attributes of a repository or image in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --delete-enabled=:
                 description: Indicates whether delete operation is allowed.
                 nargs: -1
@@ -1473,46 +1227,17 @@ commands:
                 write-enabled:
                     - "true"
                     - "false"
-        - name: list
-          description: List repositories in an Azure Container Registry.
+        - name: list-deleted
+          description: List soft-deleted repositories in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
-            --top=: Limit the number of items in the results.
-            -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the container registry.
             -p, --password=: The password used to log into a container registry
             -u, --username=: The username used to log into a container registry
-        - name: show-manifests
-          description: Show manifests of a repository in an Azure Container Registry.
+        - name: show
+          description: Get the attributes of a repository or image in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --detail=: Show detailed information.
-            --orderby=: Order the items in the results.
-            --repository=!: The name of the repository.
-            --subscription=: Name or ID of subscription.
-            --suffix=: The tenant suffix in registry login server.
-            --top=: Limit the number of items in the results.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the container registry.
-            -p, --password=: The password used to log into a container registry
-            -u, --username=: The username used to log into a container registry
-          completion:
-            flag:
-                orderby:
-                    - time_asc
-                    - time_desc
-        - name: delete
-          description: Delete a repository or image in an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --repository=: The name of the repository.
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
@@ -1521,13 +1246,9 @@ commands:
             -p, --password=: The password used to log into a container registry
             -t, --image=: The name of the image.
             -u, --username=: The username used to log into a container registry
-            -y, --yes=: Do not prompt for confirmation.
         - name: untag
           description: Untag an image in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
             -g, --resource-group=: Name of resource group.
@@ -1535,15 +1256,9 @@ commands:
             -p, --password=: The password used to log into a container registry
             -t, --image=!: The name of the image.
             -u, --username=: The username used to log into a container registry
-        - name: show-tags
-          description: Show tags for a repository in an Azure Container Registry.
+        - name: list
+          description: List repositories in an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --detail=: Show detailed information.
-            --orderby=: Order the items in the results.
-            --repository=!: The name of the repository.
             --subscription=: Name or ID of subscription.
             --suffix=: The tenant suffix in registry login server.
             --top=: Limit the number of items in the results.
@@ -1551,20 +1266,11 @@ commands:
             -n, --name=!: The name of the container registry.
             -p, --password=: The password used to log into a container registry
             -u, --username=: The username used to log into a container registry
-          completion:
-            flag:
-                orderby:
-                    - time_asc
-                    - time_desc
     - name: run
       description: Queues a quick run providing streamed logs for an Azure Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --agent-pool=: The name of the agent pool.
         --auth-mode=: Auth mode of the source registry.
-        --cmd=: Commands to execute.
         --log-template=: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}'').'
         --no-format=: Indicates whether the logs should be displayed in raw format
         --no-logs=: Do not show logs after successfully queuing the build.
@@ -1586,11 +1292,15 @@ commands:
     - name: scope-map
       description: Manage scope access maps for Azure Container Registries.
       commands:
-        - name: show
-          description: Show details and attributes of a scope map for an Azure Container Registry.
+        - name: create
+          description: Create a scope map for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
+            --description=: Description for the scope map.
+            --gateway=:
+                description: gateway permissions.
+                nargs: -1
+            --repository=:
+                description: repository permissions.
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
@@ -1599,9 +1309,6 @@ commands:
         - name: update
           description: Update a scope map for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --add-gateway=:
                 description: gateway permissions to be added.
                 nargs: -1
@@ -1619,152 +1326,51 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the scope map.
             -r, --registry=!: The name of the container registry.
-        - name: list
-          description: List all scope maps for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
-        - name: create
-          description: Create a scope map for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --description=: Description for the scope map.
-            --gateway=:
-                description: gateway permissions.
-                nargs: -1
-            --repository=:
-                description: repository permissions.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the scope map.
-            -r, --registry=!: The name of the container registry.
         - name: delete
           description: Delete a scope map for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the scope map.
             -r, --registry=!: The name of the container registry.
             -y, --yes=: Do not prompt for confirmation.
+        - name: list
+          description: List all scope maps for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
+        - name: show
+          description: Show details and attributes of a scope map for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the scope map.
+            -r, --registry=!: The name of the container registry.
     - name: show
       description: Get the details of an Azure Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -g, --resource-group=: Name of resource group.
         -n, --name=!: The name of the container registry.
     - name: show-endpoints
       description: Display registry endpoints
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -g, --resource-group=: Name of resource group.
         -n, --name=!: The name of the container registry.
     - name: show-usage
       description: Get the storage usage for an Azure Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -g, --resource-group=: Name of resource group.
         -n, --name=!: The name of the container registry.
     - name: task
       description: Manage a collection of steps for building, testing and OS & Framework patching container images using Azure Container Registries.
       commands:
-        - name: cancel-run
-          description: Cancel a specified run of an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --run-id=!: The unique run identifier.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
-        - name: delete
-          description: Delete a task from an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the task.
-            -r, --registry=!: The name of the container registry.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: credential
-          description: Manage credentials for a task. Please see https://aka.ms/acr/tasks/cross-registry-authentication for more information.
-          commands:
-            - name: add
-              description: Add a custom registry login credential to the task
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --login-server=!: The login server of the custom registry.
-                --subscription=: Name or ID of subscription.
-                --use-identity=: The task managed identity used for the credential.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: The name of the task.
-                -p, --password=: The password to login to the custom registry.
-                -r, --registry=!: The name of the container registry.
-                -u, --username=: The username to login to the custom registry.
-            - name: update
-              description: Update the registry login credential for a task.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --login-server=!: The login server of the custom registry.
-                --subscription=: Name or ID of subscription.
-                --use-identity=: The task managed identity used for the credential.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: The name of the task.
-                -p, --password=: The password to login to the custom registry.
-                -r, --registry=!: The name of the container registry.
-                -u, --username=: The username to login to the custom registry.
-            - name: remove
-              description: Remove credential for a task.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --login-server=!: The login server of the custom registry.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: The name of the task.
-                -r, --registry=!: The name of the container registry.
-            - name: list
-              description: List all the custom registry credentials for task.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: The name of the task.
-                -r, --registry=!: The name of the container registry.
         - name: update-run
           description: Patch the run properties of an Azure Container Registry Task.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-archive=:
                 description: Indicates whether the run should be archived.
                 nargs: -1
@@ -1783,50 +1389,13 @@ commands:
             - name: list
               description: List all timer triggers for a task.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: The name of the task.
-                -r, --registry=!: The name of the container registry.
-            - name: add
-              description: Add a timer trigger to a task.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --enabled=:
-                    description: Indicates whether the timer trigger is enabled.
-                    nargs: -1
-                --schedule=!: The schedule of the timer trigger represented as a cron expression.
-                --subscription=: Name or ID of subscription.
-                --timer-name=!: The name of the timer trigger.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: The name of the task.
-                -r, --registry=!: The name of the container registry.
-              completion:
-                flag:
-                    enabled:
-                        - "true"
-                        - "false"
-            - name: remove
-              description: Remove a timer trigger from a task.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --timer-name=!: The name of the timer trigger.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=!: The name of the task.
                 -r, --registry=!: The name of the container registry.
             - name: update
               description: Update the timer trigger for a task.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --enabled=:
                     description: Indicates whether the timer trigger is enabled.
                     nargs: -1
@@ -1841,15 +1410,44 @@ commands:
                     enabled:
                         - "true"
                         - "false"
+            - name: remove
+              description: Remove a timer trigger from a task.
+              flags:
+                --subscription=: Name or ID of subscription.
+                --timer-name=!: The name of the timer trigger.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: The name of the task.
+                -r, --registry=!: The name of the container registry.
+            - name: add
+              description: Add a timer trigger to a task.
+              flags:
+                --enabled=:
+                    description: Indicates whether the timer trigger is enabled.
+                    nargs: -1
+                --schedule=!: The schedule of the timer trigger represented as a cron expression.
+                --subscription=: Name or ID of subscription.
+                --timer-name=!: The name of the timer trigger.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: The name of the task.
+                -r, --registry=!: The name of the container registry.
+              completion:
+                flag:
+                    enabled:
+                        - "true"
+                        - "false"
         - name: identity
           description: Managed Identities for Task. Please see https://aka.ms/acr/tasks/task-create-managed-identity for more information.
           commands:
+            - name: show
+              description: Display the managed identities for task.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: The name of the task.
+                -r, --registry=!: The name of the container registry.
             - name: assign
               description: Update the managed identity for a task.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --identities=:
                     description: Assigns managed identities to the task.
                     nargs: -1
@@ -1860,9 +1458,6 @@ commands:
             - name: remove
               description: Remove managed identities for a task.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --identities=:
                     description: Assigns managed identities to the task.
                     nargs: -1
@@ -1870,142 +1465,9 @@ commands:
                 -g, --resource-group=: Name of resource group.
                 -n, --name=!: The name of the task.
                 -r, --registry=!: The name of the container registry.
-            - name: show
-              description: Display the managed identities for task.
-              flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=!: The name of the task.
-                -r, --registry=!: The name of the container registry.
-        - name: update
-          description: Update a task for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --agent-pool=: The name of the agent pool.
-            --arg=: Build argument in '--arg name[=value]' format.
-            --auth-mode=: Auth mode of the source registry.
-            --base-image-trigger-enabled=:
-                description: Indicates whether the base image trigger is enabled.
-                nargs: -1
-            --base-image-trigger-type=: The type of the auto trigger for base image dependency updates.
-            --cmd=: Commands to execute.
-            --commit-trigger-enabled=:
-                description: Indicates whether the source control commit trigger is enabled.
-                nargs: -1
-            --cpu=: The CPU configuration in terms of number of cores required for the run.
-            --git-access-token=: The access token used to access the source control provider.
-            --log-template=: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}'').'
-            --no-cache=:
-                description: Indicates whether the image cache is enabled.
-                nargs: -1
-            --no-push=:
-                description: Indicates whether the image built should be pushed to the registry.
-                nargs: -1
-            --platform=: The platform where build/task is run, Eg, 'windows' and 'linux'.
-            --pull-request-trigger-enabled=:
-                description: Indicates whether the source control pull request trigger is enabled.
-                nargs: -1
-            --secret-arg=: Secret build argument in '--secret-arg name[=value]' format.
-            --set-secret=: Secret task value in '--set-secret name[=value]' format.
-            --set=: Task value in '--set name[=value]' format.
-            --status=: The current status of task.
-            --subscription=: Name or ID of subscription.
-            --target=: The name of the target build stage.
-            --timeout=: The timeout in seconds.
-            --update-trigger-endpoint=: The full URL of the endpoint to receive base image update trigger notifications.
-            --update-trigger-payload-type=: Indicates whether to include metadata about the base image trigger in the payload alongwith the update trigger token, when a notification is sent.
-            --values=: The task values/parameters file path relative to the source context.
-            -c, --context=: The full URL to the source code repository (Requires '.git' suffix for a github repo) or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag').
-            -f, --file=: Relative path of the the task/docker file to the source code root folder.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the task.
-            -r, --registry=!: The name of the container registry.
-            -t, --image=: 'The name and tag of the image using the format: ''-t repo/image:tag''.'
-          completion:
-            flag:
-                auth-mode:
-                    - None
-                    - Default
-                base-image-trigger-enabled:
-                    - "true"
-                    - "false"
-                base-image-trigger-type:
-                    - All
-                    - Runtime
-                commit-trigger-enabled:
-                    - "true"
-                    - "false"
-                no-cache:
-                    - "true"
-                    - "false"
-                no-push:
-                    - "true"
-                    - "false"
-                pull-request-trigger-enabled:
-                    - "true"
-                    - "false"
-                status:
-                    - Disabled
-                    - Enabled
-                update-trigger-payload-type:
-                    - Default
-                    - Token
-        - name: show-run
-          description: Get the properties of a specified run of an Azure Container Registry Task.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --run-id=!: The unique run identifier.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
-        - name: show
-          description: Get the properties of a named task for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --with-secure-properties=: Indicates whether the secure properties of a task should be returned.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the task.
-            -r, --registry=!: The name of the container registry.
-        - name: list-runs
-          description: List all of the executed runs for an Azure Container Registry, with the ability to filter by a specific Task.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --run-status=: The current status of run.
-            --subscription=: Name or ID of subscription.
-            --top=: Limit the number of latest runs in the results.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The name of the task.
-            -r, --registry=!: The name of the container registry.
-            -t, --image=: The name of the image.
-          completion:
-            flag:
-                run-status:
-                    - Queued
-                    - Started
-                    - Running
-                    - Succeeded
-                    - Failed
-                    - Canceled
-                    - Error
-                    - Timeout
         - name: run
           description: Manually trigger a task that might otherwise be waiting for git commits or base image update triggers.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --agent-pool=: The name of the agent pool.
             --arg=: Build argument in '--arg name[=value]' format.
             --log-template=: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}'').'
@@ -2023,12 +1485,62 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the task.
             -r, --registry=!: The name of the container registry.
+        - name: credential
+          description: Manage credentials for a task. Please see https://aka.ms/acr/tasks/cross-registry-authentication for more information.
+          commands:
+            - name: update
+              description: Update the registry login credential for a task.
+              flags:
+                --login-server=!: The login server of the custom registry.
+                --subscription=: Name or ID of subscription.
+                --use-identity=: The task managed identity used for the credential.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: The name of the task.
+                -p, --password=: The password to login to the custom registry.
+                -r, --registry=!: The name of the container registry.
+                -u, --username=: The username to login to the custom registry.
+            - name: list
+              description: List all the custom registry credentials for task.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: The name of the task.
+                -r, --registry=!: The name of the container registry.
+            - name: add
+              description: Add a custom registry login credential to the task
+              flags:
+                --login-server=!: The login server of the custom registry.
+                --subscription=: Name or ID of subscription.
+                --use-identity=: The task managed identity used for the credential.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: The name of the task.
+                -p, --password=: The password to login to the custom registry.
+                -r, --registry=!: The name of the container registry.
+                -u, --username=: The username to login to the custom registry.
+            - name: remove
+              description: Remove credential for a task.
+              flags:
+                --login-server=!: The login server of the custom registry.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=!: The name of the task.
+                -r, --registry=!: The name of the container registry.
+        - name: list
+          description: List the tasks for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
+        - name: cancel-run
+          description: Cancel a specified run of an Azure Container Registry.
+          flags:
+            --run-id=!: The unique run identifier.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
         - name: create
           description: Create a series of steps for building, testing and OS & Framework patching containers.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --agent-pool=: The name of the agent pool.
             --arg=: Build argument in '--arg name[=value]' format.
             --assign-identity=:
@@ -2040,7 +1552,6 @@ commands:
                 nargs: -1
             --base-image-trigger-name=: The name of the base image trigger.
             --base-image-trigger-type=: The type of the auto trigger for base image dependency updates.
-            --cmd=: Commands to execute.
             --commit-trigger-enabled=:
                 description: Indicates whether the source control commit trigger is enabled.
                 nargs: -1
@@ -2105,12 +1616,124 @@ commands:
                 update-trigger-payload-type:
                     - Default
                     - Token
+        - name: show
+          description: Get the properties of a named task for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            --with-secure-properties=: Indicates whether the secure properties of a task should be returned.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the task.
+            -r, --registry=!: The name of the container registry.
+        - name: list-runs
+          description: List all of the executed runs for an Azure Container Registry, with the ability to filter by a specific Task.
+          flags:
+            --run-status=: The current status of run.
+            --subscription=: Name or ID of subscription.
+            --top=: Limit the number of latest runs in the results.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The name of the task.
+            -r, --registry=!: The name of the container registry.
+            -t, --image=: The name of the image.
+          completion:
+            flag:
+                run-status:
+                    - Queued
+                    - Started
+                    - Running
+                    - Succeeded
+                    - Failed
+                    - Canceled
+                    - Error
+                    - Timeout
+        - name: delete
+          description: Delete a task from an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the task.
+            -r, --registry=!: The name of the container registry.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: update
+          description: Update a task for an Azure Container Registry.
+          flags:
+            --agent-pool=: The name of the agent pool.
+            --arg=: Build argument in '--arg name[=value]' format.
+            --auth-mode=: Auth mode of the source registry.
+            --base-image-trigger-enabled=:
+                description: Indicates whether the base image trigger is enabled.
+                nargs: -1
+            --base-image-trigger-type=: The type of the auto trigger for base image dependency updates.
+            --commit-trigger-enabled=:
+                description: Indicates whether the source control commit trigger is enabled.
+                nargs: -1
+            --cpu=: The CPU configuration in terms of number of cores required for the run.
+            --git-access-token=: The access token used to access the source control provider.
+            --log-template=: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}'').'
+            --no-cache=:
+                description: Indicates whether the image cache is enabled.
+                nargs: -1
+            --no-push=:
+                description: Indicates whether the image built should be pushed to the registry.
+                nargs: -1
+            --platform=: The platform where build/task is run, Eg, 'windows' and 'linux'.
+            --pull-request-trigger-enabled=:
+                description: Indicates whether the source control pull request trigger is enabled.
+                nargs: -1
+            --secret-arg=: Secret build argument in '--secret-arg name[=value]' format.
+            --set-secret=: Secret task value in '--set-secret name[=value]' format.
+            --set=: Task value in '--set name[=value]' format.
+            --status=: The current status of task.
+            --subscription=: Name or ID of subscription.
+            --target=: The name of the target build stage.
+            --timeout=: The timeout in seconds.
+            --update-trigger-endpoint=: The full URL of the endpoint to receive base image update trigger notifications.
+            --update-trigger-payload-type=: Indicates whether to include metadata about the base image trigger in the payload alongwith the update trigger token, when a notification is sent.
+            --values=: The task values/parameters file path relative to the source context.
+            -c, --context=: The full URL to the source code repository (Requires '.git' suffix for a github repo) or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag').
+            -f, --file=: Relative path of the the task/docker file to the source code root folder.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the task.
+            -r, --registry=!: The name of the container registry.
+            -t, --image=: 'The name and tag of the image using the format: ''-t repo/image:tag''.'
+          completion:
+            flag:
+                auth-mode:
+                    - None
+                    - Default
+                base-image-trigger-enabled:
+                    - "true"
+                    - "false"
+                base-image-trigger-type:
+                    - All
+                    - Runtime
+                commit-trigger-enabled:
+                    - "true"
+                    - "false"
+                no-cache:
+                    - "true"
+                    - "false"
+                no-push:
+                    - "true"
+                    - "false"
+                pull-request-trigger-enabled:
+                    - "true"
+                    - "false"
+                status:
+                    - Disabled
+                    - Enabled
+                update-trigger-payload-type:
+                    - Default
+                    - Token
+        - name: show-run
+          description: Get the properties of a specified run of an Azure Container Registry Task.
+          flags:
+            --run-id=!: The unique run identifier.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
         - name: logs
           description: Show logs for a particular run.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-format=: Indicates whether the logs should be displayed in raw format
             --run-id=: The unique run identifier.
             --subscription=: Name or ID of subscription.
@@ -2118,35 +1741,12 @@ commands:
             -n, --name=: The name of the task.
             -r, --registry=!: The name of the container registry.
             -t, --image=: The name of the image.
-        - name: list
-          description: List the tasks for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
     - name: taskrun
       description: Manage taskruns using Azure Container Registries.
       commands:
-        - name: delete
-          description: Delete a taskrun from an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the taskrun.
-            -r, --registry=!: The name of the container registry.
-            -y, --yes=: Do not prompt for confirmation.
         - name: show
           description: Get the properties of a named taskrun for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the taskrun.
@@ -2154,9 +1754,6 @@ commands:
         - name: logs
           description: Show run logs for a particular taskrun.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-format=: Indicates whether the logs should be displayed in raw format
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
@@ -2165,12 +1762,17 @@ commands:
         - name: list
           description: List the taskruns for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -r, --registry=!: The name of the container registry.
+        - name: delete
+          description: Delete a taskrun from an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the taskrun.
+            -r, --registry=!: The name of the container registry.
+            -y, --yes=: Do not prompt for confirmation.
     - name: token
       description: Manage tokens for an Azure Container Registry.
       commands:
@@ -2180,9 +1782,6 @@ commands:
             - name: delete
               description: Delete a token credential.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --password1=: Flag indicating if first password should be deleted
                 --password2=: Flag indicating if second password should be deleted.
                 --subscription=: Name or ID of subscription.
@@ -2192,9 +1791,6 @@ commands:
             - name: generate
               description: Generate or replace one or both passwords of a token for an Azure Container Registry.
               flags:
-                --__cmd__=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --expiration-in-days=: Number of days for which the credentials will be valid.
                 --expiration=: UTC time for which the credentials will be valid.
                 --password1=: Flag indicating if password1 should be generated.
@@ -2206,56 +1802,21 @@ commands:
         - name: show
           description: Show details and attributes of a token for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the token.
             -r, --registry=!: The name of the container registry.
-        - name: update
-          description: Update a token (replace associated scope map) for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --scope-map=: The name of the scope map associated with the token.
-            --status=: The status of the token
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the token.
-            -r, --registry=!: The name of the container registry.
-          completion:
-            flag:
-                status:
-                    - enabled
-                    - disabled
         - name: delete
           description: Delete a token for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the token.
             -r, --registry=!: The name of the container registry.
             -y, --yes=: Do not prompt for confirmation.
-        - name: list
-          description: List all tokens for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
         - name: create
           description: Create a token associated with a scope map for an Azure Container Registry.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --expiration-in-days=: Number of days for which the credentials will be valid.
             --expiration=: UTC time for which the credentials will be valid.
             --gateway=:
@@ -2281,12 +1842,29 @@ commands:
                 status:
                     - enabled
                     - disabled
+        - name: list
+          description: List all tokens for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
+        - name: update
+          description: Update a token (replace associated scope map) for an Azure Container Registry.
+          flags:
+            --scope-map=: The name of the scope map associated with the token.
+            --status=: The status of the token
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the token.
+            -r, --registry=!: The name of the container registry.
+          completion:
+            flag:
+                status:
+                    - enabled
+                    - disabled
     - name: update
       description: Update an Azure Container Registry.
       flags:
-        --__cmd__=:
-            description: ==SUPPRESS==
-            nargs: -1
         --add=:
             description: Add an object to a list of objects by specifying a path and key value pairs.
             nargs: -1
@@ -2359,12 +1937,74 @@ commands:
     - name: webhook
       description: Manage webhooks for Azure Container Registries.
       commands:
+        - name: delete
+          description: Delete a webhook from an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the webhook
+            -r, --registry=!: The name of the container registry.
+        - name: get-config
+          description: Get the service URI and custom headers for the webhook.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the webhook
+            -r, --registry=!: The name of the container registry.
+        - name: create
+          description: Create a webhook for an Azure Container Registry.
+          flags:
+            --actions=!:
+                description: Space-separated list of actions that trigger the webhook to post notifications.
+                nargs: -1
+            --headers=:
+                description: Space-separated custom headers in 'key[=value]' format that will be added to the webhook notifications.
+                nargs: -1
+            --scope=: The scope of repositories where the event can be triggered.
+            --status=: Indicates whether the webhook is enabled.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --uri=!: The service URI for the webhook to post notifications.
+            -g, --resource-group=: Name of resource group.
+            -l, --location=: Location.
+            -n, --name=!: The name of the webhook
+            -r, --registry=!: The name of the container registry.
+          completion:
+            flag:
+                actions:
+                    - push
+                    - delete
+                    - quarantine
+                    - chart_push
+                    - chart_delete
+                status:
+                    - enabled
+                    - disabled
+        - name: ping
+          description: Trigger a ping event for a webhook.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the webhook
+            -r, --registry=!: The name of the container registry.
+        - name: list-events
+          description: List recent events for a webhook.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=!: The name of the webhook
+            -r, --registry=!: The name of the container registry.
+        - name: list
+          description: List all of the webhooks for an Azure Container Registry.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -r, --registry=!: The name of the container registry.
         - name: show
           description: Get the details of a webhook.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=!: The name of the webhook
@@ -2372,9 +2012,6 @@ commands:
         - name: update
           description: Update a webhook.
           flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
             --actions=:
                 description: Space-separated list of actions that trigger the webhook to post notifications.
                 nargs: -1
@@ -2412,86 +2049,3 @@ commands:
                 status:
                     - enabled
                     - disabled
-        - name: list
-          description: List all of the webhooks for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -r, --registry=!: The name of the container registry.
-        - name: list-events
-          description: List recent events for a webhook.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the webhook
-            -r, --registry=!: The name of the container registry.
-        - name: ping
-          description: Trigger a ping event for a webhook.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the webhook
-            -r, --registry=!: The name of the container registry.
-        - name: create
-          description: Create a webhook for an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --actions=!:
-                description: Space-separated list of actions that trigger the webhook to post notifications.
-                nargs: -1
-            --headers=:
-                description: Space-separated custom headers in 'key[=value]' format that will be added to the webhook notifications.
-                nargs: -1
-            --scope=: The scope of repositories where the event can be triggered.
-            --status=: Indicates whether the webhook is enabled.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --uri=!: The service URI for the webhook to post notifications.
-            -g, --resource-group=: Name of resource group.
-            -l, --location=: Location.
-            -n, --name=!: The name of the webhook
-            -r, --registry=!: The name of the container registry.
-          completion:
-            flag:
-                actions:
-                    - push
-                    - delete
-                    - quarantine
-                    - chart_push
-                    - chart_delete
-                status:
-                    - enabled
-                    - disabled
-        - name: get-config
-          description: Get the service URI and custom headers for the webhook.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the webhook
-            -r, --registry=!: The name of the container registry.
-        - name: delete
-          description: Delete a webhook from an Azure Container Registry.
-          flags:
-            --__cmd__=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=!: The name of the webhook
-            -r, --registry=!: The name of the container registry.

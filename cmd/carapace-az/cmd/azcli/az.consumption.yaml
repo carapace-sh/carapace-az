@@ -5,46 +5,12 @@ commands:
     - name: budget
       description: Manage budgets for an Azure subscription.
       commands:
-        - name: update-with-rg
-          description: Update operation to create or update a budget.
-          flags:
-            --amount=: The total amount of cost to track with the budget
-            --category=: The category of the budget, whether the budget tracks cost or usage.
-            --e-tag=: eTag of the resource.
-            --filters=:
-                description: May be used to filter budgets by resource group, resource, or meter.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --notifications=:
-                description: Dictionary of notifications associated with the budget.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --time-grain=: The time covered by a budget.
-            --time-period=:
-                description: Has start and end date of the budget.
-                nargs: -1
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Budget Name.
-          completion:
-            flag:
-                category:
-                    - Cost
-                    - Usage
-                time-grain:
-                    - Annually
-                    - Monthly
-                    - Quarterly
         - name: create
           description: Create a budget for an Azure subscription.
           flags:
             --amount=!: Amount of a budget.
             --budget-name=!: Name of a budget.
             --category=!: Category of the budget can be cost or usage.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --meter-filter=:
                 description: Space-separated list of meters to filter on.
                 nargs: -1
@@ -68,24 +34,6 @@ commands:
                     - monthly
                     - quarterly
                     - annually
-        - name: delete-with-rg
-          description: Delete operation to delete a budget.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Budget Name.
-        - name: show-with-rg
-          description: Get the budget for a resource group under a subscription by budget name.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Budget Name.
         - name: create-with-rg
           description: Create operation to create or update a budget.
           flags:
@@ -117,6 +65,36 @@ commands:
                     - Annually
                     - Monthly
                     - Quarterly
+        - name: delete-with-rg
+          description: Delete operation to delete a budget.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Budget Name.
+        - name: show-with-rg
+          description: Get the budget for a resource group under a subscription by budget name.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Budget Name.
+        - name: delete
+          description: Delete a budget for an Azure subscription.
+          flags:
+            --budget-name=!: Name of a budget.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: show
+          description: Show budget for an Azure subscription.
+          flags:
+            --budget-name=!: Name of a budget.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: update
           description: Update operation to create or update a budget.
           flags:
@@ -177,24 +155,37 @@ commands:
             --next-token=: Token to specify where to start paginating.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-        - name: show
-          description: Show budget for an Azure subscription.
+        - name: update-with-rg
+          description: Update operation to create or update a budget.
           flags:
-            --budget-name=!: Name of a budget.
-            --cmd=:
-                description: ==SUPPRESS==
+            --amount=: The total amount of cost to track with the budget
+            --category=: The category of the budget, whether the budget tracks cost or usage.
+            --e-tag=: eTag of the resource.
+            --filters=:
+                description: May be used to filter budgets by resource group, resource, or meter.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --notifications=:
+                description: Dictionary of notifications associated with the budget.
                 nargs: -1
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: delete
-          description: Delete a budget for an Azure subscription.
-          flags:
-            --budget-name=!: Name of a budget.
-            --cmd=:
-                description: ==SUPPRESS==
+            --time-grain=: The time covered by a budget.
+            --time-period=:
+                description: Has start and end date of the budget.
                 nargs: -1
-            --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
+            -n, --name=: Budget Name.
+          completion:
+            flag:
+                category:
+                    - Cost
+                    - Usage
+                time-grain:
+                    - Annually
+                    - Monthly
+                    - Quarterly
     - name: marketplace
       description: Inspect the marketplace usage data of an Azure subscription within a billing period.
       commands:
@@ -223,19 +214,6 @@ commands:
     - name: reservation
       description: Manage reservations for Azure resources.
       commands:
-        - name: detail
-          description: List reservation details.
-          commands:
-            - name: list
-              description: List the details of a reservation by order id or reservation id.
-              flags:
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --reservation-id=: Reservation id.
-                --reservation-order-id=!: Reservation order id.
-                --subscription=: Name or ID of subscription.
-                -e, --end-date=!: End date (YYYY-MM-DD in UTC).
-                -s, --start-date=!: Start date (YYYY-MM-DD in UTC).
         - name: summary
           description: List reservation summaries.
           commands:
@@ -255,6 +233,19 @@ commands:
                     grain:
                         - daily
                         - monthly
+        - name: detail
+          description: List reservation details.
+          commands:
+            - name: list
+              description: List the details of a reservation by order id or reservation id.
+              flags:
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --reservation-id=: Reservation id.
+                --reservation-order-id=!: Reservation order id.
+                --subscription=: Name or ID of subscription.
+                -e, --end-date=!: End date (YYYY-MM-DD in UTC).
+                -s, --start-date=!: Start date (YYYY-MM-DD in UTC).
     - name: usage
       description: Inspect the usage of Azure resources.
       commands:

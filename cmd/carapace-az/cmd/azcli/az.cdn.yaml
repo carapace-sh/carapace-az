@@ -5,6 +5,38 @@ commands:
     - name: custom-domain
       description: Manage Azure CDN Custom Domains to provide custom host names for endpoints.
       commands:
+        - name: disable-https
+          description: Disable https delivery of the custom domain.
+          flags:
+            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
+            --profile-name=!: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Resource name of the custom domain.
+        - name: enable-https
+          description: Enable HTTPS for a custom domain.
+          flags:
+            --endpoint-name=!: Name of the parent endpoint.
+            --min-tls-version=: The minimum TLS version required for the custom domain.
+            --profile-name=!: Name of the parent profile.
+            --subscription=: Name or ID of subscription.
+            --user-cert-group-name=: The resource group of the KeyVault certificate
+            --user-cert-protocol-type=: The protocol type of the certificate.
+            --user-cert-secret-name=: The secret name of the KeyVault certificate
+            --user-cert-secret-version=: The secret version of the KeyVault certificate, If not specified, the "Latest" version will always been used and the deployed certificate will be automatically rotated to the latest version when a newer version of the certificate is available.
+            --user-cert-subscription-id=: The subscription id of the KeyVault certificate
+            --user-cert-vault-name=: The vault name of the KeyVault certificate
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Resource name of the custom domain.
+          completion:
+            flag:
+                min-tls-version:
+                    - none
+                    - "1.0"
+                    - "1.2"
+                user-cert-protocol-type:
+                    - sni
+                    - ip
         - name: create
           description: Create a new custom domain within an endpoint.
           flags:
@@ -57,6 +89,26 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: show
+          description: Get an existing custom domain within an endpoint.
+          flags:
+            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the custom domain within an endpoint.
+        - name: list
+          description: List all of the existing custom domains within an endpoint.
+          flags:
+            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --profile-name=!: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
         - name: update
           description: Update a new custom domain within an endpoint.
           flags:
@@ -108,61 +160,6 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: disable-https
-          description: Disable https delivery of the custom domain.
-          flags:
-            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
-            --profile-name=!: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Resource name of the custom domain.
-        - name: show
-          description: Get an existing custom domain within an endpoint.
-          flags:
-            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the custom domain within an endpoint.
-        - name: enable-https
-          description: Enable HTTPS for a custom domain.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --endpoint-name=!: Name of the parent endpoint.
-            --min-tls-version=: The minimum TLS version required for the custom domain.
-            --profile-name=!: Name of the parent profile.
-            --subscription=: Name or ID of subscription.
-            --user-cert-group-name=: The resource group of the KeyVault certificate
-            --user-cert-protocol-type=: The protocol type of the certificate.
-            --user-cert-secret-name=: The secret name of the KeyVault certificate
-            --user-cert-secret-version=: The secret version of the KeyVault certificate, If not specified, the "Latest" version will always been used and the deployed certificate will be automatically rotated to the latest version when a newer version of the certificate is available.
-            --user-cert-subscription-id=: The subscription id of the KeyVault certificate
-            --user-cert-vault-name=: The vault name of the KeyVault certificate
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Resource name of the custom domain.
-          completion:
-            flag:
-                min-tls-version:
-                    - none
-                    - "1.0"
-                    - "1.2"
-                user-cert-protocol-type:
-                    - sni
-                    - ip
-        - name: list
-          description: List all of the existing custom domains within an endpoint.
-          flags:
-            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --profile-name=!: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: wait
           description: Place the CLI in a waiting state until a condition is met.
           flags:
@@ -193,9 +190,45 @@ commands:
     - name: endpoint
       description: Manage CDN endpoints.
       commands:
+        - name: start
+          description: Starts an existing CDN endpoint that is on a stopped state.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
         - name: rule
           description: Manage delivery rules for an endpoint.
           commands:
+            - name: show
+              description: Gets an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
+              flags:
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --profile-name=: Name of the CDN profile which is unique within the resource group.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: Name of the CDN endpoint.
             - name: remove
               description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
               flags:
@@ -208,15 +241,179 @@ commands:
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
                 -n, --name=: Name of the CDN endpoint.
+            - name: action
+              description: Manage delivery rule actions for an endpoint.
+              commands:
+                - name: remove
+                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --index=!: The index of the condition/action
+                    --profile-name=: Name of the CDN profile which is unique within the resource group.
+                    --rule-name=!: Name of the rule.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the CDN endpoint.
+                - name: show
+                  description: Gets an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --profile-name=: Name of the CDN profile which is unique within the resource group.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the CDN endpoint.
+                - name: add
+                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
+                  flags:
+                    --action-name=!: 'The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-actions'
+                    --cache-behavior=: Caching behavior for the requests.
+                    --cache-duration=: The duration for which the content needs to be cached.
+                    --custom-fragment=: Fragment to add to the redirect URL.
+                    --custom-hostname=: Host to redirect.
+                    --custom-path=: The full path to redirect.
+                    --custom-querystring=: The set of query strings to be placed in the redirect URL.
+                    --destination=: The destination path to be used in the rewrite.
+                    --header-action=: Header action for the requests.
+                    --header-name=: Name of the header to modify.
+                    --header-value=: Value of the header.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --origin-group=: Name or ID of the OriginGroup that would override the default OriginGroup
+                    --preserve-unmatched-path=:
+                        description: If True, the remaining path after the source                pattern will be appended to the new destination path.
+                        nargs: -1
+                    --profile-name=: Name of the CDN profile which is unique within the resource group.
+                    --query-parameters=: Query parameters to include or exclude (comma separated).
+                    --query-string-behavior=: Query string behavior for the requests.
+                    --redirect-protocol=: Protocol to use for the redirect.
+                    --redirect-type=: The redirect type the rule will use when redirecting traffic.
+                    --rule-name=!: Name of the rule.
+                    --source-pattern=: A request URI pattern that identifies the type of requests that may be rewritten.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the CDN endpoint.
+                  completion:
+                    flag:
+                        action-name:
+                            - CacheExpiration
+                            - CacheKeyQueryString
+                            - ModifyRequestHeader
+                            - ModifyResponseHeader
+                            - OriginGroupOverride
+                            - UrlRedirect
+                            - UrlRewrite
+                        cache-behavior:
+                            - BypassCache
+                            - Override
+                            - SetIfMissing
+                        header-action:
+                            - Append
+                            - Overwrite
+                            - Delete
+                        preserve-unmatched-path:
+                            - "true"
+                            - "false"
+                        query-string-behavior:
+                            - Include
+                            - IncludeAll
+                            - Exclude
+                            - ExcludeAll
+                        redirect-protocol:
+                            - MatchRequest
+                            - Http
+                            - Https
+                        redirect-type:
+                            - Moved
+                            - Found
+                            - TemporaryRedirect
+                            - PermanentRedirect
+            - name: condition
+              description: Manage delivery rule conditions for an endpoint.
+              commands:
+                - name: show
+                  description: Gets an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --profile-name=: Name of the CDN profile which is unique within the resource group.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the CDN endpoint.
+                - name: remove
+                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --index=!: The index of the condition/action
+                    --profile-name=: Name of the CDN profile which is unique within the resource group.
+                    --rule-name=!: Name of the rule.
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the CDN endpoint.
+                - name: add
+                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
+                  flags:
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --match-values=:
+                        description: Match values of the match condition.
+                        nargs: -1
+                    --match-variable=!: 'Name of the match condition: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-match-conditions'
+                    --negate-condition=:
+                        description: If true, negates the condition
+                        nargs: -1
+                    --operator=!: Operator of the match condition.
+                    --profile-name=: Name of the CDN profile which is unique within the resource group.
+                    --rule-name=!: Name of the rule.
+                    --selector=: Selector of the match condition.
+                    --subscription=: Name or ID of subscription.
+                    --transform=:
+                        description: Transform to apply before matching.
+                        nargs: -1
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: Name of the CDN endpoint.
+                  completion:
+                    flag:
+                        match-variable:
+                            - ClientPort
+                            - Cookies
+                            - HostName
+                            - HttpVersion
+                            - IsDevice
+                            - PostArgs
+                            - QueryString
+                            - RemoteAddress
+                            - RequestBody
+                            - RequestHeader
+                            - RequestMethod
+                            - RequestScheme
+                            - RequestUri
+                            - ServerPort
+                            - SocketAddr
+                            - SslProtocol
+                            - UrlFileExtension
+                            - UrlFileName
+                            - UrlPath
+                        negate-condition:
+                            - "true"
+                            - "false"
+                        transform:
+                            - Lowercase
+                            - Uppercase
             - name: add
               description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
               flags:
                 --action-name=!: 'The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-actions'
                 --cache-behavior=: Caching behavior for the requests.
                 --cache-duration=: The duration for which the content needs to be cached.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --custom-fragment=: Fragment to add to the redirect URL.
                 --custom-hostname=: Host to redirect.
                 --custom-path=: The full path to redirect.
@@ -316,198 +513,177 @@ commands:
                     transform:
                         - Lowercase
                         - Uppercase
-            - name: action
-              description: Manage delivery rule actions for an endpoint.
-              commands:
-                - name: show
-                  description: Gets an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --profile-name=: Name of the CDN profile which is unique within the resource group.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the CDN endpoint.
-                - name: remove
-                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --index=!: The index of the condition/action
-                    --profile-name=: Name of the CDN profile which is unique within the resource group.
-                    --rule-name=!: Name of the rule.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the CDN endpoint.
-                - name: add
-                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
-                  flags:
-                    --action-name=!: 'The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-actions'
-                    --cache-behavior=: Caching behavior for the requests.
-                    --cache-duration=: The duration for which the content needs to be cached.
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --custom-fragment=: Fragment to add to the redirect URL.
-                    --custom-hostname=: Host to redirect.
-                    --custom-path=: The full path to redirect.
-                    --custom-querystring=: The set of query strings to be placed in the redirect URL.
-                    --destination=: The destination path to be used in the rewrite.
-                    --header-action=: Header action for the requests.
-                    --header-name=: Name of the header to modify.
-                    --header-value=: Value of the header.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --origin-group=: Name or ID of the OriginGroup that would override the default OriginGroup
-                    --preserve-unmatched-path=:
-                        description: If True, the remaining path after the source                pattern will be appended to the new destination path.
-                        nargs: -1
-                    --profile-name=: Name of the CDN profile which is unique within the resource group.
-                    --query-parameters=: Query parameters to include or exclude (comma separated).
-                    --query-string-behavior=: Query string behavior for the requests.
-                    --redirect-protocol=: Protocol to use for the redirect.
-                    --redirect-type=: The redirect type the rule will use when redirecting traffic.
-                    --rule-name=!: Name of the rule.
-                    --source-pattern=: A request URI pattern that identifies the type of requests that may be rewritten.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the CDN endpoint.
-                  completion:
-                    flag:
-                        action-name:
-                            - CacheExpiration
-                            - CacheKeyQueryString
-                            - ModifyRequestHeader
-                            - ModifyResponseHeader
-                            - OriginGroupOverride
-                            - UrlRedirect
-                            - UrlRewrite
-                        cache-behavior:
-                            - BypassCache
-                            - Override
-                            - SetIfMissing
-                        header-action:
-                            - Append
-                            - Overwrite
-                            - Delete
-                        preserve-unmatched-path:
-                            - "true"
-                            - "false"
-                        query-string-behavior:
-                            - Include
-                            - IncludeAll
-                            - Exclude
-                            - ExcludeAll
-                        redirect-protocol:
-                            - MatchRequest
-                            - Http
-                            - Https
-                        redirect-type:
-                            - Moved
-                            - Found
-                            - TemporaryRedirect
-                            - PermanentRedirect
-            - name: condition
-              description: Manage delivery rule conditions for an endpoint.
-              commands:
-                - name: show
-                  description: Gets an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --profile-name=: Name of the CDN profile which is unique within the resource group.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the CDN endpoint.
-                - name: add
-                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --match-values=:
-                        description: Match values of the match condition.
-                        nargs: -1
-                    --match-variable=!: 'Name of the match condition: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-match-conditions'
-                    --negate-condition=:
-                        description: If true, negates the condition
-                        nargs: -1
-                    --operator=!: Operator of the match condition.
-                    --profile-name=: Name of the CDN profile which is unique within the resource group.
-                    --rule-name=!: Name of the rule.
-                    --selector=: Selector of the match condition.
-                    --subscription=: Name or ID of subscription.
-                    --transform=:
-                        description: Transform to apply before matching.
-                        nargs: -1
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the CDN endpoint.
-                  completion:
-                    flag:
-                        match-variable:
-                            - ClientPort
-                            - Cookies
-                            - HostName
-                            - HttpVersion
-                            - IsDevice
-                            - PostArgs
-                            - QueryString
-                            - RemoteAddress
-                            - RequestBody
-                            - RequestHeader
-                            - RequestMethod
-                            - RequestScheme
-                            - RequestUri
-                            - ServerPort
-                            - SocketAddr
-                            - SslProtocol
-                            - UrlFileExtension
-                            - UrlFileName
-                            - UrlPath
-                        negate-condition:
-                            - "true"
-                            - "false"
-                        transform:
-                            - Lowercase
-                            - Uppercase
-                - name: remove
-                  description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
-                  flags:
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --index=!: The index of the condition/action
-                    --profile-name=: Name of the CDN profile which is unique within the resource group.
-                    --rule-name=!: Name of the rule.
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: Name of the CDN endpoint.
-            - name: show
-              description: Gets an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --profile-name=: Name of the CDN profile which is unique within the resource group.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: Name of the CDN endpoint.
-        - name: delete
-          description: Delete an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
+        - name: list
+          description: List existing CDN endpoints.
           flags:
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --profile-name=!: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: name-exists
+          description: Check the availability of a resource name.
+          flags:
+            --name=!: The resource name to validate.
+            --subscription=: Name or ID of subscription.
+            --type=: The type of the resource whose name is to be validated.
+          completion:
+            flag:
+                type:
+                    - Microsoft.Cdn/Profiles/AfdEndpoints
+                    - Microsoft.Cdn/Profiles/Endpoints
+        - name: show
+          description: Get an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
+        - name: create
+          description: Create a new CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
+          flags:
+            --content-types-to-compress=:
+                description: List of content types on which compression applies.
+                nargs: -1
+            --default-origin-group=: The origin group to use for origins not explicitly included in an origin group.
+            --delivery-policy=:
+                description: A policy that specifies the delivery rules to be used for an endpoint.
+                nargs: -1
+            --enable-compression=:
+                description: If compression is enabled, content will be served as compressed if user requests for a compressed version.
+                nargs: -1
+            --geo-filters=:
+                description: List of rules defining the user's geo access within a CDN endpoint.
+                nargs: -1
+            --no-http=:
+                description: Disable HTTP traffic.Indicates whether HTTP traffic is not allowed on the endpoint.
+                nargs: -1
+            --no-https=:
+                description: Indicates whether HTTPS traffic is not allowed on the endpoint.
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --optimization-type=: Specifies what scenario the customer wants this CDN endpoint to optimize for, e.g. Download, Media services.
+            --origin-groups=:
+                description: The origin groups comprising of origins that are used for load balancing the traffic based on availability.
+                nargs: -1
+            --origin-host-header=: The host header value sent to the origin with each request.
+            --origin-path=: A directory path on the origin that CDN can use to retrieve content from, e.g. contoso.cloudapp.net/originpath.
+            --origin=!:
+                description: 'Endpoint origin specified by the following space-delimited 7 tuple: www.example.com http_port https_port private_link_resource_id private_link_location private_link_approval_message origin_name.'
+                nargs: -1
+            --probe-path=: Path to a file hosted on the origin which helps accelerate delivery of the dynamic content and calculate the most optimal routes for the CDN.
+            --profile-name=!: Name of the CDN profile which is unique within the resource group.
+            --query-string-caching-behavior=: Defines how CDN caches requests that include query strings.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: Resource tags.
+                nargs: -1
+            --url-signing-keys=:
+                description: List of keys used to validate the signed URL hashes.
+                nargs: -1
+            --web-application-firewall-policy-link=:
+                description: Defines the Web Application Firewall policy for the endpoint (if applicable)  Support shorthand-syntax, json-file and yaml-file.
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+            -l, --location=: Resource location.
+            -n, --name=!: Name of the endpoint under the profile which is unique globally.
+          completion:
+            flag:
+                enable-compression:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                no-http:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                no-https:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                optimization-type:
+                    - DynamicSiteAcceleration
+                    - GeneralMediaStreaming
+                    - GeneralWebDelivery
+                    - LargeFileDownload
+                    - VideoOnDemandMediaStreaming
+                query-string-caching-behavior:
+                    - BypassCaching
+                    - IgnoreQueryString
+                    - NotSet
+                    - UseQueryString
+        - name: load
+          description: Pre-loads a content to CDN.
+          flags:
+            --content-paths=!:
+                description: The path to the content to be loaded.
+                nargs: -1
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: purge
+          description: Removes a content from CDN.
+          flags:
+            --content-paths=!:
+                description: The path to the content to be purged.
+                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -634,243 +810,6 @@ commands:
                     - IgnoreQueryString
                     - NotSet
                     - UseQueryString
-        - name: load
-          description: Pre-loads a content to CDN.
-          flags:
-            --content-paths=!:
-                description: The path to the content to be loaded.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: show
-          description: Get an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
-        - name: validate-custom-domain
-          description: Validates the custom domain mapping to ensure it maps to the correct CDN endpoint in DNS.
-          flags:
-            --host-name=!: The host name of the custom domain.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
-        - name: list
-          description: List existing CDN endpoints.
-          flags:
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --profile-name=!: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-        - name: purge
-          description: Removes a content from CDN.
-          flags:
-            --content-paths=!:
-                description: The path to the content to be purged.
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-        - name: wait
-          description: Place the CLI in a waiting state until a condition is met.
-          flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --interval=: polling interval in seconds
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
-        - name: create
-          description: Create a new CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
-          flags:
-            --content-types-to-compress=:
-                description: List of content types on which compression applies.
-                nargs: -1
-            --default-origin-group=: The origin group to use for origins not explicitly included in an origin group.
-            --delivery-policy=:
-                description: A policy that specifies the delivery rules to be used for an endpoint.
-                nargs: -1
-            --enable-compression=:
-                description: If compression is enabled, content will be served as compressed if user requests for a compressed version.
-                nargs: -1
-            --geo-filters=:
-                description: List of rules defining the user's geo access within a CDN endpoint.
-                nargs: -1
-            --no-http=:
-                description: Disable HTTP traffic.Indicates whether HTTP traffic is not allowed on the endpoint.
-                nargs: -1
-            --no-https=:
-                description: Indicates whether HTTPS traffic is not allowed on the endpoint.
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --optimization-type=: Specifies what scenario the customer wants this CDN endpoint to optimize for, e.g. Download, Media services.
-            --origin-groups=:
-                description: The origin groups comprising of origins that are used for load balancing the traffic based on availability.
-                nargs: -1
-            --origin-host-header=: The host header value sent to the origin with each request.
-            --origin-path=: A directory path on the origin that CDN can use to retrieve content from, e.g. contoso.cloudapp.net/originpath.
-            --origin=!:
-                description: 'Endpoint origin specified by the following space-delimited 7 tuple: www.example.com http_port https_port private_link_resource_id private_link_location private_link_approval_message origin_name.'
-                nargs: -1
-            --probe-path=: Path to a file hosted on the origin which helps accelerate delivery of the dynamic content and calculate the most optimal routes for the CDN.
-            --profile-name=!: Name of the CDN profile which is unique within the resource group.
-            --query-string-caching-behavior=: Defines how CDN caches requests that include query strings.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: Resource tags.
-                nargs: -1
-            --url-signing-keys=:
-                description: List of keys used to validate the signed URL hashes.
-                nargs: -1
-            --web-application-firewall-policy-link=:
-                description: Defines the Web Application Firewall policy for the endpoint (if applicable)  Support shorthand-syntax, json-file and yaml-file.
-                nargs: -1
-            -g, --resource-group=!: Name of resource group.
-            -l, --location=: Resource location.
-            -n, --name=!: Name of the endpoint under the profile which is unique globally.
-          completion:
-            flag:
-                enable-compression:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                no-http:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                no-https:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                optimization-type:
-                    - DynamicSiteAcceleration
-                    - GeneralMediaStreaming
-                    - GeneralWebDelivery
-                    - LargeFileDownload
-                    - VideoOnDemandMediaStreaming
-                query-string-caching-behavior:
-                    - BypassCaching
-                    - IgnoreQueryString
-                    - NotSet
-                    - UseQueryString
-        - name: start
-          description: Starts an existing CDN endpoint that is on a stopped state.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the endpoint under the profile which is unique globally.
-          completion:
-            flag:
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
         - name: stop
           description: Stops an existing running CDN endpoint.
           flags:
@@ -897,17 +836,60 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: name-exists
-          description: Check the availability of a resource name.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
           flags:
-            --name=!: The resource name to validate.
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
-            --type=: The type of the resource whose name is to be validated.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
+        - name: delete
+          description: Delete an existing CDN endpoint with the specified endpoint name under the specified subscription, resource group and profile.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
           completion:
             flag:
-                type:
-                    - Microsoft.Cdn/Profiles/AfdEndpoints
-                    - Microsoft.Cdn/Profiles/Endpoints
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: validate-custom-domain
+          description: Validates the custom domain mapping to ensure it maps to the correct CDN endpoint in DNS.
+          flags:
+            --host-name=!: The host name of the custom domain.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the endpoint under the profile which is unique globally.
     - name: name-exists
       description: Check the availability of a resource name.
       flags:
@@ -922,41 +904,57 @@ commands:
     - name: origin
       description: List or show existing origins related to CDN endpoints.
       commands:
-        - name: wait
-          description: Place the CLI in a waiting state until a condition is met.
+        - name: create
+          description: Create a new origin within the specified endpoint.
           flags:
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
-            --exists=: wait until the resource exists
-            --ids=:
-                description: One or more resource IDs (space-delimited).
+            --disabled=:
+                description: Don't use the origin for load balancing.
                 nargs: -1
-            --interval=: polling interval in seconds
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin which is unique within the endpoint.
-        - name: delete
-          description: Delete an existing origin within an endpoint.
-          flags:
-            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
+            --enabled=:
+                description: Origin is enabled for load balancing or not
                 nargs: -1
+            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
+            --host-name=: The address of the origin.
+            --http-port=: The value of the HTTP port.
+            --https-port=: The value of the HTTPS port.
             --no-wait=:
                 description: Do not wait for the long-running operation to finish.
                 nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --origin-host-header=: The host header value sent to the origin with each request.
+            --priority=: Priority of origin in given origin group for load balancing.
+            --private-link-alias=: The Alias of the Private Link resource.
+            --profile-name=!: Name of the CDN profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin which is unique within the endpoint.
-            -y, --yes=: Do not prompt for confirmation.
+            --weight=: Weight of the origin in given origin group for load balancing.
+            -g, --resource-group=!: Name of resource group.
+            -l, --private-link-location=: The location of the Private Link resource.
+            -m, --private-link-approval-message=: A custom message to be included in the approval request to connect to the Private Link.
+            -n, --name=!: Name of the origin that is unique within the endpoint.
+            -p, --private-link-resource-id=: The Resource Id of the Private Link resource.
           completion:
             flag:
+                disabled:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+                enabled:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
                 no-wait:
                     - "true"
                     - t
@@ -1065,68 +1063,24 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: create
-          description: Create a new origin within the specified endpoint.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition is met.
           flags:
-            --disabled=:
-                description: Don't use the origin for load balancing.
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --enabled=:
-                description: Origin is enabled for load balancing or not
-                nargs: -1
-            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
-            --host-name=: The address of the origin.
-            --http-port=: The value of the HTTP port.
-            --https-port=: The value of the HTTPS port.
-            --no-wait=:
-                description: Do not wait for the long-running operation to finish.
-                nargs: -1
-            --origin-host-header=: The host header value sent to the origin with each request.
-            --priority=: Priority of origin in given origin group for load balancing.
-            --private-link-alias=: The Alias of the Private Link resource.
-            --profile-name=!: Name of the CDN profile which is unique within the resource group.
+            --interval=: polling interval in seconds
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
-            --weight=: Weight of the origin in given origin group for load balancing.
-            -g, --resource-group=!: Name of resource group.
-            -l, --private-link-location=: The location of the Private Link resource.
-            -m, --private-link-approval-message=: A custom message to be included in the approval request to connect to the Private Link.
-            -n, --name=!: Name of the origin that is unique within the endpoint.
-            -p, --private-link-resource-id=: The Resource Id of the Private Link resource.
-          completion:
-            flag:
-                disabled:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                enabled:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
-                no-wait:
-                    - "true"
-                    - t
-                    - "yes"
-                    - "y"
-                    - "1"
-                    - "false"
-                    - f
-                    - "no"
-                    - "n"
-                    - "0"
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin which is unique within the endpoint.
         - name: show
           description: Get an existing origin within an endpoint.
           flags:
@@ -1138,11 +1092,8 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the origin which is unique within the endpoint.
-    - name: origin-group
-      description: Manage origin groups of an endpoint.
-      commands:
         - name: delete
-          description: Delete an existing origin group within an endpoint.
+          description: Delete an existing origin within an endpoint.
           flags:
             --endpoint-name=: Name of the endpoint under the profile which is unique globally.
             --ids=:
@@ -1154,7 +1105,7 @@ commands:
             --profile-name=: Name of the CDN profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the origin group which is unique within the endpoint.
+            -n, --name=: Name of the origin which is unique within the endpoint.
             -y, --yes=: Do not prompt for confirmation.
           completion:
             flag:
@@ -1169,6 +1120,9 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+    - name: origin-group
+      description: Manage origin groups of an endpoint.
+      commands:
         - name: create
           description: Create a new origin group within the specified endpoint.
           flags:
@@ -1217,6 +1171,43 @@ commands:
                     - "no"
                     - "n"
                     - "0"
+        - name: delete
+          description: Delete an existing origin group within an endpoint.
+          flags:
+            --endpoint-name=: Name of the endpoint under the profile which is unique globally.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=:
+                description: Do not wait for the long-running operation to finish.
+                nargs: -1
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the origin group which is unique within the endpoint.
+            -y, --yes=: Do not prompt for confirmation.
+          completion:
+            flag:
+                no-wait:
+                    - "true"
+                    - t
+                    - "yes"
+                    - "y"
+                    - "1"
+                    - "false"
+                    - f
+                    - "no"
+                    - "n"
+                    - "0"
+        - name: list
+          description: List all of the existing origin groups within an endpoint.
+          flags:
+            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
+            --max-items=: Total number of items to return in the command's output.
+            --next-token=: Token to specify where to start paginating.
+            --profile-name=!: Name of the CDN profile which is unique within the resource group.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
         - name: wait
           description: Place the CLI in a waiting state until a condition is met.
           flags:
@@ -1246,15 +1237,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the origin group which is unique within the endpoint.
-        - name: list
-          description: List all of the existing origin groups within an endpoint.
-          flags:
-            --endpoint-name=!: Name of the endpoint under the profile which is unique globally.
-            --max-items=: Total number of items to return in the command's output.
-            --next-token=: Token to specify where to start paginating.
-            --profile-name=!: Name of the CDN profile which is unique within the resource group.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: update
           description: Update a new origin group within the specified endpoint.
           flags:
@@ -1325,6 +1307,15 @@ commands:
                     - "0"
     - name: profile
       commands:
+        - name: show
+          description: Get an Azure Front Door Standard or Azure Front Door Premium or CDN profile with the specified profile name under the specified subscription and resource group.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
         - name: delete
           description: Delete an existing  Azure Front Door Standard or Azure Front Door Premium or CDN profile with the specified parameters.
           flags:
@@ -1462,15 +1453,6 @@ commands:
             --next-token=: Token to specify where to start paginating.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
-        - name: show
-          description: Get an Azure Front Door Standard or Azure Front Door Premium or CDN profile with the specified profile name under the specified subscription and resource group.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Azure Front Door Standard or Azure Front Door Premium or CDN profile which is unique within the resource group.
     - name: profile-migration
       description: Classic cdn profile migration operations
       commands:
@@ -1551,8 +1533,8 @@ commands:
                     - Standard_ChinaCdn
                     - Standard_Microsoft
                     - Standard_Verizon
-        - name: commit
-          description: Commit the migrated Azure Frontdoor(Standard/Premium) profile.
+        - name: abort
+          description: Abort the migration to Azure Frontdoor Premium/Standard.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1560,7 +1542,7 @@ commands:
             --no-wait=:
                 description: Do not wait for the long-running operation to finish.
                 nargs: -1
-            --profile-name=: Name of the CDN profile which is unique within the resource group.
+            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
           completion:
@@ -1576,8 +1558,8 @@ commands:
                     - "no"
                     - "n"
                     - "0"
-        - name: abort
-          description: Abort the migration to Azure Frontdoor Premium/Standard.
+        - name: commit
+          description: Commit the migrated Azure Frontdoor(Standard/Premium) profile.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -1585,7 +1567,7 @@ commands:
             --no-wait=:
                 description: Do not wait for the long-running operation to finish.
                 nargs: -1
-            --profile-name=: Name of the Azure Front Door Standard or Azure Front Door Premium which is unique within the resource group.
+            --profile-name=: Name of the CDN profile which is unique within the resource group.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
           completion:

@@ -48,15 +48,43 @@ commands:
     - name: project
       description: Manage projects for an instance of the Azure Database Migration Service (classic).
       commands:
-        - name: list
-          description: Get projects in a service.
-          flags:
-            --service-name=!: The name of the Service.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: task
           description: Manage tasks for an Azure Database Migration Service (classic) instance's project.
           commands:
+            - name: cutover
+              description: For an online migration task, complete the migration by performing a cutover.
+              flags:
+                --object-name=!: The name of the database on the source you wish to cutover.
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Task.
+            - name: show
+              description: Get task information.
+              flags:
+                --expand=: Expand the response.
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Task.
+            - name: check-name
+              description: Check if a given task name is available within a given instance of DMS as well as the name's validity.
+              flags:
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Task.
+            - name: cancel
+              description: Cancel a task.
+              flags:
+                --project-name=!: The name of the Project.
+                --service-name=!: The name of the Service.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The name of the Task.
             - name: delete
               description: Delete task.
               flags:
@@ -67,20 +95,17 @@ commands:
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The name of the Task.
                 -y, --yes=: Do not prompt for confirmation.
-            - name: cancel
-              description: Cancel a task.
+            - name: list
+              description: Get tasks in a service.
               flags:
                 --project-name=!: The name of the Project.
                 --service-name=!: The name of the Service.
                 --subscription=: Name or ID of subscription.
+                --task-type=: Filter tasks by task type.
                 -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Task.
             - name: create
               description: Create and start a migration task.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --database-options-json=!: Database and table information.
                 --enable-data-integrity-validation=: For SQL only.
                 --enable-query-analysis-validation=: For SQL only.
@@ -93,46 +118,15 @@ commands:
                 --task-type=: The type of data movement the task will support.
                 -g, --resource-group=!: Name of resource group.
                 -n, --name=!: The name of the Task.
-            - name: list
-              description: Get tasks in a service.
-              flags:
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                --task-type=: Filter tasks by task type.
-                -g, --resource-group=!: Name of resource group.
-            - name: check-name
-              description: Check if a given task name is available within a given instance of DMS as well as the name's validity.
-              flags:
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Task.
-            - name: show
-              description: Get task information.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --expand=: Expand the response.
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Task.
-            - name: cutover
-              description: For an online migration task, complete the migration by performing a cutover.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --object-name=!: The name of the database on the source you wish to cutover.
-                --project-name=!: The name of the Project.
-                --service-name=!: The name of the Service.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The name of the Task.
+        - name: delete
+          description: Delete project.
+          flags:
+            --delete-running-tasks=: Delete the resource even if it contains running tasks.
+            --service-name=!: The name of the Service.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The name of the Project.
+            -y, --yes=: Do not prompt for confirmation.
         - name: check-name
           description: Check if a given project name is available within a given instance of DMS as well as the name's validity.
           flags:
@@ -156,28 +150,19 @@ commands:
         - name: show
           description: Get project information.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --service-name=!: The name of the Service.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The name of the Project.
-        - name: delete
-          description: Delete project.
+        - name: list
+          description: Get projects in a service.
           flags:
-            --delete-running-tasks=: Delete the resource even if it contains running tasks.
             --service-name=!: The name of the Service.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The name of the Project.
-            -y, --yes=: Do not prompt for confirmation.
     - name: show
       description: Get DMS Service Instance.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -g, --resource-group=!: Name of resource group.
         -n, --name=!: The name of the Service.
@@ -198,9 +183,6 @@ commands:
     - name: wait
       description: Place the CLI in a waiting state until a condition of the DMS instance is met.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --created=: wait until created with 'provisioningState' at 'Succeeded'
         --custom=: Wait until the condition satisfies a custom JMESPath query.
         --deleted=: wait until deleted

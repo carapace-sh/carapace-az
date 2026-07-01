@@ -50,15 +50,30 @@ def get_param_help(helps, cmd_name, options):
     return ''
 
 
+def is_internal_argument(options, help_val):
+    """Check if an argument is an internal/suppressed argument that should be skipped."""
+    if help_val == '==SUPPRESS==' or 'SUPPRESS' in (help_val or ''):
+        return True
+    for opt in options:
+        opt_str = str(opt) if not isinstance(opt, str) else opt
+        if opt_str.startswith('--___') or opt_str in ('--cmd',):
+            return True
+    return False
+
+
 def serialize_argument(name, arg, helps, cmd_name):
     settings = arg.type.settings
     options = settings.get('options_list', [])
     if isinstance(options, str):
         options = [options]
+    options = [str(o) if not isinstance(o, str) else o for o in options]
 
     help_val = settings.get('help', '')
     if not isinstance(help_val, str):
         help_val = str(help_val) if help_val else ''
+
+    if is_internal_argument(options, help_val):
+        return None
 
     if not help_val:
         help_val = get_param_help(helps, cmd_name, options)
@@ -112,7 +127,9 @@ def serialize_command(name, cmd, helps):
 
     arguments = []
     for arg_name, arg in cmd.arguments.items():
-        arguments.append(serialize_argument(arg_name, arg, helps, name))
+        serialized = serialize_argument(arg_name, arg, helps, name)
+        if serialized is not None:
+            arguments.append(serialized)
 
     return {
         'description': description or '',

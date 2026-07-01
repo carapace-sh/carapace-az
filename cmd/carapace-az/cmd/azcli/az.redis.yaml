@@ -5,9 +5,21 @@ commands:
     - name: access-policy
       description: Manage Access Policies for Redis Cache
       commands:
-        - name: list
-          description: Gets the list of access policies associated with this redis cache.
+        - name: show
+          description: Gets the detailed information about an access policy of a redis cache.
           flags:
+            --access-policy-name=!: The name of the access policy that is being assigned
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Redis cache.
+        - name: create
+          description: Add an Access Policy to the Redis Cache
+          flags:
+            --access-policy-name=!: The name of the access policy that is being assigned
+            --permissions=!: Permissions for the access policy.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
@@ -21,24 +33,9 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Redis cache.
-        - name: show
-          description: Gets the detailed information about an access policy of a redis cache.
+        - name: list
+          description: Gets the list of access policies associated with this redis cache.
           flags:
-            --access-policy-name=!: The name of the access policy that is being assigned
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Redis cache.
-        - name: create
-          description: Add an Access Policy to the Redis Cache
-          flags:
-            --access-policy-name=!: The name of the access policy that is being assigned
-            --permissions=!: Permissions for the access policy.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
@@ -56,6 +53,16 @@ commands:
     - name: access-policy-assignment
       description: Manage Access Policy Assignments (Redis Users) for Redis Cache
       commands:
+        - name: show
+          description: Gets the list of assignments for an access policy of a redis cache.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --policy-assignment-name=!: The name of the access policy assignment
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Redis cache.
         - name: list
           description: Gets the list of access policy assignments associated with this redis cache.
           flags:
@@ -71,19 +78,6 @@ commands:
                 nargs: -1
             --object-id-alias=!: User friendly name for object id.
             --object-id=!: Object Id to assign access policy to
-            --policy-assignment-name=!: The name of the access policy assignment
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Redis cache.
-        - name: show
-          description: Gets the list of assignments for an access policy of a redis cache.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
             --policy-assignment-name=!: The name of the access policy assignment
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
@@ -111,9 +105,6 @@ commands:
     - name: create
       description: Create new Redis Cache instance.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --disable-access-keys=:
             description: Authentication to Redis through access keys is disabled when set as true
             nargs: -1
@@ -192,9 +183,6 @@ commands:
     - name: export
       description: Export data stored in a Redis cache.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --container=!: SAS url for container where data needs to be exported to
         --file-format=: Format of the blob (Currently rdb is the only supported format, with other formats expected in the future)
         --ids=:
@@ -214,8 +202,8 @@ commands:
     - name: firewall-rules
       description: Manage Redis firewall rules.
       commands:
-        - name: delete
-          description: Deletes a single firewall rule in a specified redis cache.
+        - name: show
+          description: Gets a single firewall rule in a specified redis cache.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -230,24 +218,9 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
-        - name: update
-          description: Update a redis cache firewall rule.
+        - name: delete
+          description: Deletes a single firewall rule in a specified redis cache.
           flags:
-            --end-ip=!: Highest IP address included in the range.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --rule-name=!: The name of the firewall rule.
-            --start-ip=!: Lowest IP address included in the range.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Redis cache.
-        - name: show
-          description: Gets a single firewall rule in a specified redis cache.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -264,6 +237,18 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
+        - name: update
+          description: Update a redis cache firewall rule.
+          flags:
+            --end-ip=!: Highest IP address included in the range.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --rule-name=!: The name of the firewall rule.
+            --start-ip=!: Lowest IP address included in the range.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Redis cache.
     - name: flush
       description: Deletes all of the keys in a cache.
       flags:
@@ -307,6 +292,15 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: Name of the Redis cache.
+        - name: show
+          description: Show the identity assigned for Azure cache for Redis.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: Name of the Redis cache.
         - name: remove
           description: Remove the identity already assigned for Azure cache for Redis.
           flags:
@@ -316,18 +310,6 @@ commands:
             --mi-system-assigned=: Flag to specify system assigned identity
             --mi-user-assigned=:
                 description: One or more space separated resource IDs of user assigned identities
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: Name of the Redis cache.
-        - name: show
-          description: Show the identity assigned for Azure cache for Redis.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
                 nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
@@ -395,19 +377,16 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
+        - name: show
+          description: Gets the patching schedule of a redis cache.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the Redis cache.
         - name: update
           description: Update the patching schedule for Redis cache.
           flags:
             --schedule-entries=!: List of Patch schedule entries.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the Redis cache.
-        - name: show
-          description: Gets the patching schedule of a redis cache.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
@@ -436,18 +415,28 @@ commands:
     - name: server-link
       description: Manage Redis server links.
       commands:
-        - name: show
-          description: Gets the detailed information about a linked server of a redis cache (requires Premium SKU).
+        - name: create
+          description: Adds a server link to the Redis cache (requires Premium SKU).
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --replication-role=!: Role of the redis cache to be linked
+            --server-to-link=!: Resource ID or name of the redis cache to be linked
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: Name of the Redis cache.
+          completion:
+            flag:
+                replication-role:
+                    - Primary
+                    - Secondary
+        - name: delete
+          description: Deletes the linked server from a redis cache (requires Premium SKU).
+          flags:
             --linked-server-name=!: Name of the linked redis cache
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
-        - name: delete
-          description: Deletes the linked server from a redis cache (requires Premium SKU).
+        - name: show
+          description: Gets the detailed information about a linked server of a redis cache (requires Premium SKU).
           flags:
             --linked-server-name=!: Name of the linked redis cache
             --subscription=: Name or ID of subscription.
@@ -459,28 +448,9 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: Name of the Redis cache.
-        - name: create
-          description: Adds a server link to the Redis cache (requires Premium SKU).
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --replication-role=!: Role of the redis cache to be linked
-            --server-to-link=!: Resource ID or name of the redis cache to be linked
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: Name of the Redis cache.
-          completion:
-            flag:
-                replication-role:
-                    - Primary
-                    - Secondary
     - name: show
       description: Gets a Redis cache (resource description).
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --ids=:
             description: One or more resource IDs (space-delimited).
             nargs: -1
@@ -492,9 +462,6 @@ commands:
       flags:
         --add=:
             description: Add an object to a list of objects by specifying a path and key value pairs.
-            nargs: -1
-        --cmd=:
-            description: ==SUPPRESS==
             nargs: -1
         --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
         --ids=:

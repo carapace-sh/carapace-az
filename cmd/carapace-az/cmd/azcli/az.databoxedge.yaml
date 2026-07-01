@@ -5,18 +5,9 @@ commands:
     - name: alert
       description: Manage alert with databoxedge
       commands:
-        - name: list
-          description: Get all the alerts for a Data Box Edge/Data Box Gateway device.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -d, --device-name=!: The device name.
-            -g, --resource-group=!: Name of resource group.
         - name: show
           description: Get an alert by name.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
@@ -24,6 +15,12 @@ commands:
             -d, --device-name=: The device name.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The alert name.
+        - name: list
+          description: Get all the alerts for a Data Box Edge/Data Box Gateway device.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -d, --device-name=!: The device name.
+            -g, --resource-group=!: Name of resource group.
     - name: bandwidth-schedule
       description: Manage bandwidth schedule with databoxedge
       commands:
@@ -32,9 +29,6 @@ commands:
           flags:
             --add=:
                 description: Add an object to a list of objects by specifying a path and key value pairs.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
                 nargs: -1
             --days=!:
                 description: The days of the week when this schedule is applicable.
@@ -83,6 +77,16 @@ commands:
             -g, --resource-group=: Name of resource group.
             -n, --name=: The bandwidth schedule name.
             -y, --yes=: Do not prompt for confirmation.
+        - name: show
+          description: Get the properties of the specified bandwidth schedule.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -d, --device-name=: The device name.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The bandwidth schedule name.
         - name: list
           description: Get all the bandwidth schedules for a Data Box Edge/Data Box Gateway device.
           flags:
@@ -92,9 +96,6 @@ commands:
         - name: wait
           description: Place the CLI in a waiting state until a condition of the databoxedge bandwidth-schedule is met.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
             --deleted=: wait until deleted
@@ -109,22 +110,193 @@ commands:
             -d, --device-name=: The device name.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The bandwidth schedule name.
-        - name: show
-          description: Get the properties of the specified bandwidth schedule.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -d, --device-name=: The device name.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The bandwidth schedule name.
     - name: device
       description: Manage device with databoxedge.
       commands:
+        - name: share
+          description: Manage device share
+          commands:
+            - name: update
+              description: Update share on the device.
+              flags:
+                --access-protocol=: Access protocol to be used by the share.
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --azure-container-info=:
+                    description: Azure container mapping for the share.
+                    nargs: -1
+                --client-access-rights=:
+                    description: List of IP addresses and corresponding access rights on the share(required for NFS protocol).
+                    nargs: -1
+                --data-policy=: Data policy of the share.
+                --description=: Description for the share.
+                --device-name=: The device name.
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --monitoring-status=: Current monitoring status of the share.
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --refresh-details=:
+                    description: Details of the refresh job on this share.
+                    nargs: -1
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --share-status=: Current status of the share.
+                --subscription=: Name or ID of subscription.
+                --user-access-rights=:
+                    description: Mapping of users and corresponding access rights on the share (required for SMB protocol).
+                    nargs: -1
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The share name.
+              completion:
+                flag:
+                    access-protocol:
+                        - NFS
+                        - SMB
+                    data-policy:
+                        - Cloud
+                        - Local
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    monitoring-status:
+                        - Disabled
+                        - Enabled
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    share-status:
+                        - NeedsAttention
+                        - OK
+                        - Offline
+                        - Unknown
+                        - Updating
+            - name: delete
+              description: Delete the share on the Data Box Edge/Data Box Gateway device.
+              flags:
+                --device-name=: The device name.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The share name.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+            - name: list
+              description: List all the shares in a Data Box Edge/Data Box Gateway device.
+              flags:
+                --device-name=!: The device name.
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: create
+              description: Create share on the device.
+              flags:
+                --access-protocol=!: Access protocol to be used by the share.
+                --azure-container-info=:
+                    description: Azure container mapping for the share.
+                    nargs: -1
+                --client-access-rights=:
+                    description: List of IP addresses and corresponding access rights on the share(required for NFS protocol).
+                    nargs: -1
+                --data-policy=: Data policy of the share.
+                --description=: Description for the share.
+                --device-name=!: The device name.
+                --monitoring-status=!: Current monitoring status of the share.
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --refresh-details=:
+                    description: Details of the refresh job on this share.
+                    nargs: -1
+                --share-status=!: Current status of the share.
+                --subscription=: Name or ID of subscription.
+                --user-access-rights=:
+                    description: Mapping of users and corresponding access rights on the share (required for SMB protocol).
+                    nargs: -1
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The share name.
+              completion:
+                flag:
+                    access-protocol:
+                        - NFS
+                        - SMB
+                    data-policy:
+                        - Cloud
+                        - Local
+                    monitoring-status:
+                        - Disabled
+                        - Enabled
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    share-status:
+                        - NeedsAttention
+                        - OK
+                        - Offline
+                        - Unknown
+                        - Updating
+            - name: show
+              description: Show share.
+              flags:
+                --device-name=: The device name.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The share name.
         - name: storage-account
           description: Manage device storage account
           commands:
@@ -140,34 +312,6 @@ commands:
                     --storage-account-name=!: The storage Account name.
                     --subscription=: Name or ID of subscription.
                     -g, --resource-group=!: Name of resource group.
-                - name: delete
-                  description: Delete the container on the Data Box Edge/Data Box Gateway device.
-                  flags:
-                    --device-name=: The device name.
-                    --ids=:
-                        description: One or more resource IDs (space-delimited).
-                        nargs: -1
-                    --no-wait=:
-                        description: Do not wait for the long-running operation to finish.
-                        nargs: -1
-                    --storage-account-name=: The Storage Account Name
-                    --subscription=: Name or ID of subscription.
-                    -g, --resource-group=: Name of resource group.
-                    -n, --name=: The container name.
-                    -y, --yes=: Do not prompt for confirmation.
-                  completion:
-                    flag:
-                        no-wait:
-                            - "true"
-                            - t
-                            - "yes"
-                            - "y"
-                            - "1"
-                            - "false"
-                            - f
-                            - "no"
-                            - "n"
-                            - "0"
                 - name: show
                   description: Show container.
                   flags:
@@ -197,6 +341,34 @@ commands:
                             - AzureFile
                             - BlockBlob
                             - PageBlob
+                        no-wait:
+                            - "true"
+                            - t
+                            - "yes"
+                            - "y"
+                            - "1"
+                            - "false"
+                            - f
+                            - "no"
+                            - "n"
+                            - "0"
+                - name: delete
+                  description: Delete the container on the Data Box Edge/Data Box Gateway device.
+                  flags:
+                    --device-name=: The device name.
+                    --ids=:
+                        description: One or more resource IDs (space-delimited).
+                        nargs: -1
+                    --no-wait=:
+                        description: Do not wait for the long-running operation to finish.
+                        nargs: -1
+                    --storage-account-name=: The Storage Account Name
+                    --subscription=: Name or ID of subscription.
+                    -g, --resource-group=: Name of resource group.
+                    -n, --name=: The container name.
+                    -y, --yes=: Do not prompt for confirmation.
+                  completion:
+                    flag:
                         no-wait:
                             - "true"
                             - t
@@ -263,16 +435,6 @@ commands:
                             - "no"
                             - "n"
                             - "0"
-            - name: show
-              description: Show storage account.
-              flags:
-                --device-name=: The device name.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The storage account name.
             - name: update
               description: Update storage account on the device.
               flags:
@@ -335,6 +497,51 @@ commands:
                         - Offline
                         - Unknown
                         - Updating
+            - name: show
+              description: Show storage account.
+              flags:
+                --device-name=: The device name.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The storage account name.
+            - name: list
+              description: List all the storage accounts in a Data Box Edge/Data Box Gateway device.
+              flags:
+                --device-name=!: The device name.
+                --max-items=: Total number of items to return in the command's output.
+                --next-token=: Token to specify where to start paginating.
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+            - name: delete
+              description: Delete storage account on the Data Box Edge/Data Box Gateway device.
+              flags:
+                --device-name=: The device name.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The StorageAccount name.
+                -y, --yes=: Do not prompt for confirmation.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
             - name: create
               description: Create storage account on the device.
               flags:
@@ -371,8 +578,68 @@ commands:
                         - Offline
                         - Unknown
                         - Updating
+        - name: list
+          description: Get all the Data Box Edge/Data Box Gateway devices in a resource group or in a subscription.
+          flags:
+            --expand=: Specify $expand=details to populate additional fields related to the resource or Specify `$skipToken=<token>` to populate the next page in the list.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: scan-for-update
+          description: Scan for updates on a Data Box Edge/Data Box Gateway device.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The device name.
+        - name: install-update
+          description: Install the updates on the Data Box Edge/Data Box Gateway device.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The device name.
+        - name: user
+          description: Manage device user
+          commands:
+            - name: create
+              description: Create user on a Data Box Edge/Data Box Gateway device.
+              flags:
+                --device-name=!: The device name.
+                --encrypted-password=:
+                    description: The password details.
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --user-type=!: Type of the user.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The user name.
+              completion:
+                flag:
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    user-type:
+                        - ARM
+                        - LocalManagement
+                        - Share
             - name: delete
-              description: Delete storage account on the Data Box Edge/Data Box Gateway device.
+              description: Delete the user on a databox edge/gateway device.
               flags:
                 --device-name=: The device name.
                 --ids=:
@@ -383,7 +650,7 @@ commands:
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=: Name of resource group.
-                -n, --name=: The StorageAccount name.
+                -n, --name=: The user name.
                 -y, --yes=: Do not prompt for confirmation.
               completion:
                 flag:
@@ -399,25 +666,94 @@ commands:
                         - "n"
                         - "0"
             - name: list
-              description: List all the storage accounts in a Data Box Edge/Data Box Gateway device.
+              description: List all the users registered on a Data Box Edge/Data Box Gateway device.
               flags:
                 --device-name=!: The device name.
+                --filter=: Specify `$filter='Type eq <type>'` to filter on user type property
                 --max-items=: Total number of items to return in the command's output.
                 --next-token=: Token to specify where to start paginating.
                 --subscription=: Name or ID of subscription.
                 -g, --resource-group=!: Name of resource group.
-        - name: get-extended-information
-          description: Gets additional information for the specified Azure Stack Edge/Data Box Gateway device.
-          flags:
-            --device-name=: The device name.
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
+            - name: show
+              description: Show user.
+              flags:
+                --device-name=: The device name.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The user name.
+            - name: update
+              description: Update user on a Data Box Edge/Data Box Gateway device.
+              flags:
+                --add=:
+                    description: Add an object to a list of objects by specifying a path and key value pairs.
+                    nargs: -1
+                --device-name=: The device name.
+                --encrypted-password=:
+                    description: The password details.
+                    nargs: -1
+                --force-string=:
+                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+                    nargs: -1
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --no-wait=:
+                    description: Do not wait for the long-running operation to finish.
+                    nargs: -1
+                --remove=:
+                    description: Remove a property or an element from a list.
+                    nargs: -1
+                --set=:
+                    description: Update an object by specifying a property path and value to set.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --user-type=: Type of the user.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The user name.
+              completion:
+                flag:
+                    force-string:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    no-wait:
+                        - "true"
+                        - t
+                        - "yes"
+                        - "y"
+                        - "1"
+                        - "false"
+                        - f
+                        - "no"
+                        - "n"
+                        - "0"
+                    user-type:
+                        - ARM
+                        - LocalManagement
+                        - Share
         - name: storage-account-credential
           description: Manage device storage account credential
           commands:
+            - name: show
+              description: Get the properties of the specified storage account credential.
+              flags:
+                --device-name=: The device name.
+                --ids=:
+                    description: One or more resource IDs (space-delimited).
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=: Name of resource group.
+                -n, --name=: The storage account credential name.
             - name: update
               description: Update the storage account credential.
               flags:
@@ -510,16 +846,6 @@ commands:
                         - "no"
                         - "n"
                         - "0"
-            - name: show
-              description: Get the properties of the specified storage account credential.
-              flags:
-                --device-name=: The device name.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The storage account credential name.
             - name: list
               description: List all the storage account credentials in a Data Box Edge/Data Box Gateway device.
               flags:
@@ -579,333 +905,6 @@ commands:
                 nargs: -1
             -g, --resource-group=: Name of resource group.
             -n, --name=: The device name.
-        - name: share
-          description: Manage device share
-          commands:
-            - name: show
-              description: Show share.
-              flags:
-                --device-name=: The device name.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The share name.
-            - name: update
-              description: Update share on the device.
-              flags:
-                --access-protocol=: Access protocol to be used by the share.
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --azure-container-info=:
-                    description: Azure container mapping for the share.
-                    nargs: -1
-                --client-access-rights=:
-                    description: List of IP addresses and corresponding access rights on the share(required for NFS protocol).
-                    nargs: -1
-                --data-policy=: Data policy of the share.
-                --description=: Description for the share.
-                --device-name=: The device name.
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --monitoring-status=: Current monitoring status of the share.
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --refresh-details=:
-                    description: Details of the refresh job on this share.
-                    nargs: -1
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --share-status=: Current status of the share.
-                --subscription=: Name or ID of subscription.
-                --user-access-rights=:
-                    description: Mapping of users and corresponding access rights on the share (required for SMB protocol).
-                    nargs: -1
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The share name.
-              completion:
-                flag:
-                    access-protocol:
-                        - NFS
-                        - SMB
-                    data-policy:
-                        - Cloud
-                        - Local
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    monitoring-status:
-                        - Disabled
-                        - Enabled
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    share-status:
-                        - NeedsAttention
-                        - OK
-                        - Offline
-                        - Unknown
-                        - Updating
-            - name: list
-              description: List all the shares in a Data Box Edge/Data Box Gateway device.
-              flags:
-                --device-name=!: The device name.
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: delete
-              description: Delete the share on the Data Box Edge/Data Box Gateway device.
-              flags:
-                --device-name=: The device name.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The share name.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: create
-              description: Create share on the device.
-              flags:
-                --access-protocol=!: Access protocol to be used by the share.
-                --azure-container-info=:
-                    description: Azure container mapping for the share.
-                    nargs: -1
-                --client-access-rights=:
-                    description: List of IP addresses and corresponding access rights on the share(required for NFS protocol).
-                    nargs: -1
-                --data-policy=: Data policy of the share.
-                --description=: Description for the share.
-                --device-name=!: The device name.
-                --monitoring-status=!: Current monitoring status of the share.
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --refresh-details=:
-                    description: Details of the refresh job on this share.
-                    nargs: -1
-                --share-status=!: Current status of the share.
-                --subscription=: Name or ID of subscription.
-                --user-access-rights=:
-                    description: Mapping of users and corresponding access rights on the share (required for SMB protocol).
-                    nargs: -1
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The share name.
-              completion:
-                flag:
-                    access-protocol:
-                        - NFS
-                        - SMB
-                    data-policy:
-                        - Cloud
-                        - Local
-                    monitoring-status:
-                        - Disabled
-                        - Enabled
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    share-status:
-                        - NeedsAttention
-                        - OK
-                        - Offline
-                        - Unknown
-                        - Updating
-        - name: user
-          description: Manage device user
-          commands:
-            - name: list
-              description: List all the users registered on a Data Box Edge/Data Box Gateway device.
-              flags:
-                --device-name=!: The device name.
-                --filter=: Specify `$filter='Type eq <type>'` to filter on user type property
-                --max-items=: Total number of items to return in the command's output.
-                --next-token=: Token to specify where to start paginating.
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-            - name: update
-              description: Update user on a Data Box Edge/Data Box Gateway device.
-              flags:
-                --add=:
-                    description: Add an object to a list of objects by specifying a path and key value pairs.
-                    nargs: -1
-                --device-name=: The device name.
-                --encrypted-password=:
-                    description: The password details.
-                    nargs: -1
-                --force-string=:
-                    description: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
-                    nargs: -1
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --remove=:
-                    description: Remove a property or an element from a list.
-                    nargs: -1
-                --set=:
-                    description: Update an object by specifying a property path and value to set.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --user-type=: Type of the user.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The user name.
-              completion:
-                flag:
-                    force-string:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    user-type:
-                        - ARM
-                        - LocalManagement
-                        - Share
-            - name: show
-              description: Show user.
-              flags:
-                --device-name=: The device name.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The user name.
-            - name: delete
-              description: Delete the user on a databox edge/gateway device.
-              flags:
-                --device-name=: The device name.
-                --ids=:
-                    description: One or more resource IDs (space-delimited).
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=: Name of resource group.
-                -n, --name=: The user name.
-                -y, --yes=: Do not prompt for confirmation.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-            - name: create
-              description: Create user on a Data Box Edge/Data Box Gateway device.
-              flags:
-                --device-name=!: The device name.
-                --encrypted-password=:
-                    description: The password details.
-                    nargs: -1
-                --no-wait=:
-                    description: Do not wait for the long-running operation to finish.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --user-type=!: Type of the user.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The user name.
-              completion:
-                flag:
-                    no-wait:
-                        - "true"
-                        - t
-                        - "yes"
-                        - "y"
-                        - "1"
-                        - "false"
-                        - f
-                        - "no"
-                        - "n"
-                        - "0"
-                    user-type:
-                        - ARM
-                        - LocalManagement
-                        - Share
-        - name: list
-          description: Get all the Data Box Edge/Data Box Gateway devices in a resource group or in a subscription.
-          flags:
-            --expand=: Specify $expand=details to populate additional fields related to the resource or Specify `$skipToken=<token>` to populate the next page in the list.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
         - name: create
           description: Create a Data Box Edge/Data Box Gateway resource.
           flags:
@@ -959,6 +958,15 @@ commands:
                     - Disconnected
                     - PartiallyDisconnected
                     - Maintenance
+        - name: get-extended-information
+          description: Gets additional information for the specified Azure Stack Edge/Data Box Gateway device.
+          flags:
+            --device-name=: The device name.
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
         - name: show-update-summary
           description: Get information about the availability of updates based on the last scan of the device.
           flags:
@@ -968,8 +976,17 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The device name.
-        - name: scan-for-update
-          description: Scan for updates on a Data Box Edge/Data Box Gateway device.
+        - name: show
+          description: Get the properties of the Data Box Edge/Data Box Gateway device.
+          flags:
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+            -n, --name=: The device name.
+        - name: delete
+          description: Delete the Data Box Edge/Data Box Gateway device.
           flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
@@ -978,22 +995,10 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The device name.
-        - name: install-update
-          description: Install the updates on the Data Box Edge/Data Box Gateway device.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The device name.
+            -y, --yes=: Do not prompt for confirmation.
         - name: wait
           description: Place the CLI in a waiting state until a condition of the databoxedge device is met.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
             --deleted=: wait until deleted
@@ -1017,29 +1022,6 @@ commands:
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Name of resource group.
             -n, --name=: The device name.
-        - name: delete
-          description: Delete the Data Box Edge/Data Box Gateway device.
-          flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The device name.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Get the properties of the Data Box Edge/Data Box Gateway device.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-            -n, --name=: The device name.
     - name: list-node
       description: Get all the nodes currently configured under this Data Box Edge device.
       flags:
@@ -1054,73 +1036,19 @@ commands:
     - name: order
       description: Manage order with databoxedge
       commands:
-        - name: delete
-          description: Delete the order related to the device.
+        - name: list
+          description: List all the orders related to a Data Box Edge/Data Box Gateway device.
           flags:
-            --ids=:
-                description: One or more resource IDs (space-delimited).
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
-            -d, --device-name=: The device name.
-            -g, --resource-group=: Name of resource group.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: create
-          description: Create an order.
-          flags:
-            --address-line1=!: The address line1.
-            --address-line2=: The address line2.
-            --address-line3=: The address line3.
-            --city=!: The city name.
-            --comments=: Comments related to this status change.
-            --company-name=!: The name of the company.
-            --contact-person=!: The contact person name.
-            --country=!: The country name.
-            --email-list=!:
-                description: The email list.
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --phone=!: The phone number.
-            --postal-code=!: The postal code.
-            --state=!: The state name.
-            --status=!: Status of the order as per the allowed status types.
-            --subscription=: Name or ID of subscription.
-            -d, --device-name=!: The order details of a device.
+            -d, --device-name=!: The device name.
             -g, --resource-group=!: Name of resource group.
-          completion:
-            flag:
-                status:
-                    - Untracked
-                    - AwaitingFulfilment
-                    - AwaitingPreparation
-                    - AwaitingShipment
-                    - Shipped
-                    - Arriving
-                    - Delivered
-                    - ReplacementRequested
-                    - LostDevice
-                    - Declined
-                    - ReturnInitiated
-                    - AwaitingReturnShipment
-                    - ShippedBack
-                    - CollectedAtMicrosoft
-        - name: wait
-          description: Place the CLI in a waiting state until a condition of the databoxedge order is met.
+        - name: show
+          description: Get a specific order by name.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
-            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
             -d, --device-name=: The device name.
             -g, --resource-group=: Name of resource group.
         - name: update
@@ -1133,9 +1061,6 @@ commands:
             --address-line2=: The address line2.
             --address-line3=: The address line3.
             --city=: The city name.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --comments=: Comments related to this status change.
             --company-name=: The name of the company.
             --contact-person=: The contact person name.
@@ -1178,24 +1103,72 @@ commands:
                     - AwaitingReturnShipment
                     - ShippedBack
                     - CollectedAtMicrosoft
-        - name: show
-          description: Get a specific order by name.
+        - name: create
+          description: Create an order.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
+            --address-line1=!: The address line1.
+            --address-line2=: The address line2.
+            --address-line3=: The address line3.
+            --city=!: The city name.
+            --comments=: Comments related to this status change.
+            --company-name=!: The name of the company.
+            --contact-person=!: The contact person name.
+            --country=!: The country name.
+            --email-list=!:
+                description: The email list.
                 nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --phone=!: The phone number.
+            --postal-code=!: The postal code.
+            --state=!: The state name.
+            --status=!: Status of the order as per the allowed status types.
+            --subscription=: Name or ID of subscription.
+            -d, --device-name=!: The order details of a device.
+            -g, --resource-group=!: Name of resource group.
+          completion:
+            flag:
+                status:
+                    - Untracked
+                    - AwaitingFulfilment
+                    - AwaitingPreparation
+                    - AwaitingShipment
+                    - Shipped
+                    - Arriving
+                    - Delivered
+                    - ReplacementRequested
+                    - LostDevice
+                    - Declined
+                    - ReturnInitiated
+                    - AwaitingReturnShipment
+                    - ShippedBack
+                    - CollectedAtMicrosoft
+        - name: delete
+          description: Delete the order related to the device.
+          flags:
             --ids=:
                 description: One or more resource IDs (space-delimited).
                 nargs: -1
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -d, --device-name=: The device name.
             -g, --resource-group=: Name of resource group.
-        - name: list
-          description: List all the orders related to a Data Box Edge/Data Box Gateway device.
+            -y, --yes=: Do not prompt for confirmation.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of the databoxedge order is met.
           flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --ids=:
+                description: One or more resource IDs (space-delimited).
+                nargs: -1
+            --interval=: polling interval in seconds
             --subscription=: Name or ID of subscription.
-            -d, --device-name=!: The device name.
-            -g, --resource-group=!: Name of resource group.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -d, --device-name=: The device name.
+            -g, --resource-group=: Name of resource group.
     - name: show-job
       description: Get the details of a specified job on a Data Box Edge/Data Box Gateway device.
       flags:

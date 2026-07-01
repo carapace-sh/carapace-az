@@ -9,9 +9,6 @@ commands:
           description: Begin a full backup of the HSM.
           flags:
             --blob-container-name=: Name of Blob Container.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --hsm-name=: Name of the HSM.
             --id=: Full URI of the HSM.
             --storage-account-name=: Name of Azure Storage Account.
@@ -29,14 +26,97 @@ commands:
     - name: certificate
       description: Manage certificates.
       commands:
-        - name: show
-          description: Gets a specific version of a certificate without returning its management policy.
+        - name: recover
+          description: Recover a deleted certificate to its latest version.
+          flags:
+            --id=: The recovery id of the certificate.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the certificate.
+        - name: delete
+          description: Delete all versions of a certificate.
           flags:
             --id=: Id of the certificate.
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Key Vault.
             -n, --name=: Name of the certificate.
-            -v, --version=: The certificate version.
+        - name: contact
+          description: Manage contacts for certificate management.
+          commands:
+            - name: list
+              description: Gets the certificate contacts for the key vault.
+              flags:
+                --subscription=: Name or ID of subscription.
+                --vault-name=!: Name of the Vault.
+            - name: delete
+              description: Remove a certificate contact from the specified vault.
+              flags:
+                --email=!: Contact e-mail address.
+                --subscription=: Name or ID of subscription.
+                --vault-name=!: Name of the Vault.
+            - name: add
+              description: Add a contact to the specified vault to receive notifications of certificate operations.
+              flags:
+                --email=!: Contact e-mail address.
+                --name=: Full contact name.
+                --phone=: Contact phone number.
+                --subscription=: Name or ID of subscription.
+                --vault-name=!: Name of the Vault.
+        - name: pending
+          description: Manage pending certificate creation operations.
+          commands:
+            - name: show
+              description: Gets the creation operation of a certificate.
+              flags:
+                --subscription=: Name or ID of subscription.
+                --vault-name=!: Name of the Vault.
+                -n, --name=!: Name of the pending certificate.
+            - name: merge
+              description: Merges a certificate or a certificate chain with a key pair existing on the server.
+              flags:
+                --disabled=:
+                    description: Create certificate in disabled state.
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                --tags=:
+                    description: 'space-separated tags: key[=value] [key[=value] ...].'
+                    nargs: -1
+                --vault-name=!: Name of the Vault.
+                -f, --file=!: File containing the certificate or certificate chain to merge.
+                -n, --name=!: Name of the pending certificate.
+              completion:
+                flag:
+                    disabled:
+                        - "true"
+                        - "false"
+            - name: delete
+              description: Deletes and stops the creation operation for a specific certificate.
+              flags:
+                --subscription=: Name or ID of subscription.
+                --vault-name=!: Name of the Vault.
+                -n, --name=!: Name of the pending certificate.
+        - name: list
+          description: List identifiers and properties of all certificates in the vault.
+          flags:
+            --id=: Full URI of the Vault.
+            --include-pending=:
+                description: Specifies whether to include certificates which are not completely provisioned.
+                nargs: -1
+            --maxresults=: Maximum number of results to return in a page.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Key Vault.
+          completion:
+            flag:
+                include-pending:
+                    - "true"
+                    - "false"
+        - name: show-deleted
+          description: Get a deleted certificate.
+          flags:
+            --id=: The recovery id of the certificate.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the certificate.
         - name: issuer
           description: Manage certificate issuer information.
           commands:
@@ -64,6 +144,37 @@ commands:
                     enabled:
                         - "true"
                         - "false"
+            - name: admin
+              description: Manage admin information for certificate issuers.
+              commands:
+                - name: list
+                  description: Gets the specified certificate issuer.
+                  flags:
+                    --issuer-name=!: Certificate issuer name.
+                    --subscription=: Name or ID of subscription.
+                    --vault-name=!: Name of the Vault.
+                - name: delete
+                  description: Remove admin details for the specified certificate issuer.
+                  flags:
+                    --email=!: Admin e-mail address.
+                    --issuer-name=!: Certificate issuer name.
+                    --subscription=: Name or ID of subscription.
+                    --vault-name=!: Name of the Vault.
+                - name: add
+                  description: Add admin details for a specified certificate issuer.
+                  flags:
+                    --email=!: Admin e-mail address.
+                    --first-name=: Admin first name.
+                    --issuer-name=!: Certificate issuer name.
+                    --last-name=: Admin last name.
+                    --phone=: Admin phone number.
+                    --subscription=: Name or ID of subscription.
+                    --vault-name=!: Name of the Vault.
+            - name: list
+              description: Lists properties of the certificate issuers for the key vault.
+              flags:
+                --subscription=: Name or ID of subscription.
+                --vault-name=!: Name of the Vault.
             - name: create
               description: Create a certificate issuer record.
               flags:
@@ -82,108 +193,46 @@ commands:
                     disabled:
                         - "true"
                         - "false"
-            - name: admin
-              description: Manage admin information for certificate issuers.
-              commands:
-                - name: add
-                  description: Add admin details for a specified certificate issuer.
-                  flags:
-                    --cmd=:
-                        description: ==SUPPRESS==
-                        nargs: -1
-                    --email=!: Admin e-mail address.
-                    --first-name=: Admin first name.
-                    --issuer-name=!: Certificate issuer name.
-                    --last-name=: Admin last name.
-                    --phone=: Admin phone number.
-                    --subscription=: Name or ID of subscription.
-                    --vault-name=!: Name of the Vault.
-                - name: delete
-                  description: Remove admin details for the specified certificate issuer.
-                  flags:
-                    --email=!: Admin e-mail address.
-                    --issuer-name=!: Certificate issuer name.
-                    --subscription=: Name or ID of subscription.
-                    --vault-name=!: Name of the Vault.
-                - name: list
-                  description: Gets the specified certificate issuer.
-                  flags:
-                    --issuer-name=!: Certificate issuer name.
-                    --subscription=: Name or ID of subscription.
-                    --vault-name=!: Name of the Vault.
             - name: delete
               description: Deletes the specified certificate issuer.
               flags:
                 --issuer-name=!: Certificate issuer name.
                 --subscription=: Name or ID of subscription.
                 --vault-name=!: Name of the Vault.
-            - name: list
-              description: Lists properties of the certificate issuers for the key vault.
-              flags:
-                --subscription=: Name or ID of subscription.
-                --vault-name=!: Name of the Vault.
+        - name: download
+          description: Download a certificate from a KeyVault.
+          flags:
+            --id=: Id of the certificate.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Key Vault.
+            -e, --encoding=: Encoding of the certificate.
+            -f, --file=!: File to receive the binary certificate contents.
+            -n, --name=: Name of the certificate.
+            -v, --version=: The certificate version.
+          completion:
+            flag:
+                encoding:
+                    - PEM
+                    - DER
+        - name: get-default-policy
+          description: Get a default certificate policy to be used with `az keyvault certificate create`
+          flags:
+            --scaffold=: create a fully formed policy structure with default values
+            --subscription=: Name or ID of subscription.
+        - name: backup
+          description: Backs up the specified certificate.
+          flags:
+            --id=: Id of the certificate.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Key Vault.
+            -f, --file=!: Local file path in which to store certificate backup.
+            -n, --name=: Name of the certificate.
         - name: restore
           description: Restores a backed up certificate to a vault.
           flags:
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Key Vault.
             -f, --file=!: Local certificate backup from which to restore certificate.
-        - name: pending
-          description: Manage pending certificate creation operations.
-          commands:
-            - name: delete
-              description: Deletes and stops the creation operation for a specific certificate.
-              flags:
-                --subscription=: Name or ID of subscription.
-                --vault-name=!: Name of the Vault.
-                -n, --name=!: Name of the pending certificate.
-            - name: merge
-              description: Merges a certificate or a certificate chain with a key pair existing on the server.
-              flags:
-                --disabled=:
-                    description: Create certificate in disabled state.
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                --tags=:
-                    description: 'space-separated tags: key[=value] [key[=value] ...].'
-                    nargs: -1
-                --vault-name=!: Name of the Vault.
-                -f, --file=!: File containing the certificate or certificate chain to merge.
-                -n, --name=!: Name of the pending certificate.
-              completion:
-                flag:
-                    disabled:
-                        - "true"
-                        - "false"
-            - name: show
-              description: Gets the creation operation of a certificate.
-              flags:
-                --subscription=: Name or ID of subscription.
-                --vault-name=!: Name of the Vault.
-                -n, --name=!: Name of the pending certificate.
-        - name: list-versions
-          description: List the identifiers and properties of a certificate's versions.
-          flags:
-            --id=: Id of the certificate.
-            --maxresults=: Maximum number of results to return in a page.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -n, --name=: Name of the certificate.
-        - name: list
-          description: List identifiers and properties of all certificates in the vault.
-          flags:
-            --id=: Full URI of the Vault.
-            --include-pending=:
-                description: Specifies whether to include certificates which are not completely provisioned.
-                nargs: -1
-            --maxresults=: Maximum number of results to return in a page.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-          completion:
-            flag:
-                include-pending:
-                    - "true"
-                    - "false"
         - name: import
           description: Import a certificate created externally.
           flags:
@@ -202,36 +251,6 @@ commands:
           completion:
             flag:
                 disabled:
-                    - "true"
-                    - "false"
-        - name: backup
-          description: Backs up the specified certificate.
-          flags:
-            --id=: Id of the certificate.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -f, --file=!: Local file path in which to store certificate backup.
-            -n, --name=: Name of the certificate.
-        - name: delete
-          description: Delete all versions of a certificate.
-          flags:
-            --id=: Id of the certificate.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -n, --name=: Name of the certificate.
-        - name: list-deleted
-          description: Lists the currently-recoverable deleted certificates.
-          flags:
-            --id=: Full URI of the Vault.
-            --include-pending=:
-                description: Specifies whether to include certificates which are not completely provisioned.
-                nargs: -1
-            --maxresults=: Maximum number of results to return in a page.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-          completion:
-            flag:
-                include-pending:
                     - "true"
                     - "false"
         - name: create
@@ -253,53 +272,13 @@ commands:
                 disabled:
                     - "true"
                     - "false"
-        - name: download
-          description: Download a certificate from a KeyVault.
-          flags:
-            --id=: Id of the certificate.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -e, --encoding=: Encoding of the certificate.
-            -f, --file=!: File to receive the binary certificate contents.
-            -n, --name=: Name of the certificate.
-            -v, --version=: The certificate version.
-          completion:
-            flag:
-                encoding:
-                    - PEM
-                    - DER
-        - name: show-deleted
-          description: Get a deleted certificate.
+        - name: purge
+          description: Permanently deletes a deleted certificate.
           flags:
             --id=: The recovery id of the certificate.
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
             -n, --name=: Name of the certificate.
-        - name: contact
-          description: Manage contacts for certificate management.
-          commands:
-            - name: delete
-              description: Remove a certificate contact from the specified vault.
-              flags:
-                --email=!: Contact e-mail address.
-                --subscription=: Name or ID of subscription.
-                --vault-name=!: Name of the Vault.
-            - name: list
-              description: Gets the certificate contacts for the key vault.
-              flags:
-                --subscription=: Name or ID of subscription.
-                --vault-name=!: Name of the Vault.
-            - name: add
-              description: Add a contact to the specified vault to receive notifications of certificate operations.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --email=!: Contact e-mail address.
-                --name=: Full contact name.
-                --phone=: Contact phone number.
-                --subscription=: Name or ID of subscription.
-                --vault-name=!: Name of the Vault.
         - name: set-attributes
           description: Updates the specified attributes associated with the given certificate.
           flags:
@@ -320,34 +299,40 @@ commands:
                 enabled:
                     - "true"
                     - "false"
-        - name: get-default-policy
-          description: Get a default certificate policy to be used with `az keyvault certificate create`
+        - name: list-deleted
+          description: Lists the currently-recoverable deleted certificates.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
+            --id=: Full URI of the Vault.
+            --include-pending=:
+                description: Specifies whether to include certificates which are not completely provisioned.
                 nargs: -1
-            --scaffold=: create a fully formed policy structure with default values
+            --maxresults=: Maximum number of results to return in a page.
             --subscription=: Name or ID of subscription.
-        - name: recover
-          description: Recover a deleted certificate to its latest version.
+            --vault-name=: Name of the Key Vault.
+          completion:
+            flag:
+                include-pending:
+                    - "true"
+                    - "false"
+        - name: list-versions
+          description: List the identifiers and properties of a certificate's versions.
           flags:
-            --id=: The recovery id of the certificate.
+            --id=: Id of the certificate.
+            --maxresults=: Maximum number of results to return in a page.
             --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
+            --vault-name=: Name of the Key Vault.
             -n, --name=: Name of the certificate.
-        - name: purge
-          description: Permanently deletes a deleted certificate.
+        - name: show
+          description: Gets a specific version of a certificate without returning its management policy.
           flags:
-            --id=: The recovery id of the certificate.
+            --id=: Id of the certificate.
             --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
+            --vault-name=: Name of the Key Vault.
             -n, --name=: Name of the certificate.
+            -v, --version=: The certificate version.
     - name: check-name
       description: Check that the given name is valid and is not already in use.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --resource-type=: Type of resource.
         --subscription=: Name or ID of subscription.
         -n, --name=!: The name of the HSM within the specified resource group
@@ -362,9 +347,6 @@ commands:
             description: '[HSM Only] Administrator role for data plane operations for Managed HSM.'
             nargs: -1
         --bypass=: Bypass traffic for space-separated uses.
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --default-action=: Default action to apply when no rule matches.
         --enable-purge-protection=:
             description: Property specifying whether protection against purge is enabled for this vault/managed HSM pool.
@@ -438,9 +420,6 @@ commands:
     - name: delete
       description: Delete a Vault or HSM.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --hsm-name=: Name of the HSM.
         --no-wait=: Do not wait for the long-running operation to finish.
         --subscription=: Name or ID of subscription.
@@ -450,9 +429,6 @@ commands:
       description: Delete security policy settings for a Key Vault.
       flags:
         --application-id=: Application ID of the client making request on behalf of a principal.
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --no-wait=: Do not wait for the long-running operation to finish.
         --object-id=: a GUID that identifies the principal that will receive permissions
         --spn=: name of a service principal that will receive permissions
@@ -471,32 +447,179 @@ commands:
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
             -n, --name=: Name of the key.
-        - name: list
-          description: List keys in the specified Vault or HSM.
+        - name: show
+          description: Get a key's attributes and, if it's an asymmetric key, its public material.
           flags:
             --hsm-name=: Name of the HSM.
-            --id=: Full URI of the Vault or HSM.
-            --include-managed=:
-                description: Include managed keys.
-                nargs: -1
+            --id=: Id of the key.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the key.
+            -v, --version=: The key version.
+        - name: encrypt
+          description: Encrypt an arbitrary sequence of bytes using an encryption key that is stored in a Vault or HSM.
+          flags:
+            --aad=: Optional data that is authenticated but not encrypted.
+            --data-type=: The type of the original data.
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --iv=: Initialization vector.
+            --subscription=: Name or ID of subscription.
+            --value=!: The value to be encrypted.
+            --vault-name=: Name of the Vault.
+            -a, --algorithm=!: Algorithm identifier
+            -n, --name=: Name of the key.
+            -v, --version=: The key version.
+          completion:
+            flag:
+                algorithm:
+                    - RSA-OAEP
+                    - RSA-OAEP-256
+                    - RSA1_5
+                    - A128GCM
+                    - A192GCM
+                    - A256GCM
+                    - A128CBC
+                    - A192CBC
+                    - A256CBC
+                    - A128CBCPAD
+                    - A192CBCPAD
+                    - A256CBCPAD
+                data-type:
+                    - base64
+                    - plaintext
+        - name: download
+          description: Download a key from a KeyVault.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -e, --encoding=: 'Encoding of the key, default: PEM'
+            -f, --file=!: File to receive the key contents.
+            -n, --name=: Name of the key.
+            -v, --version=: The key version.
+          completion:
+            flag:
+                encoding:
+                    - PEM
+                    - DER
+        - name: rotation-policy
+          description: Manage key's rotation policy.
+          commands:
+            - name: update
+              description: Update the rotation policy of a Key Vault key.
+              flags:
+                --hsm-name=: Name of the HSM.
+                --id=: Id of the key.
+                --subscription=: Name or ID of subscription.
+                --value=!: The rotation policy file definition as JSON, or a path to a file containing JSON policy definition.
+                --vault-name=: Name of the Vault.
+                -n, --name=: Name of the key.
+            - name: show
+              description: Get the rotation policy of a Key Vault key.
+              flags:
+                --hsm-name=: Name of the HSM.
+                --id=: Id of the key.
+                --subscription=: Name or ID of subscription.
+                --vault-name=: Name of the Vault.
+                -n, --name=: Name of the key.
+        - name: show-deleted
+          description: Get a deleted key.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the key.
+        - name: delete
+          description: Delete a key of any type from storage in Vault or HSM.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the key.
+        - name: rotate
+          description: Rotate the key based on the key policy by generating a new version of the key.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the key.
+        - name: backup
+          description: Request that a backup of the specified key be downloaded to the client.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -f, --file=!: Local file path in which to store key backup.
+            -n, --name=: Name of the key.
+        - name: list-versions
+          description: List the identifiers and properties of a key's versions.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
             --maxresults=: Maximum number of results to return.
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
+            -n, --name=: Name of the key.
+        - name: random
+          description: Get the requested number of random bytes from a managed HSM.
+          flags:
+            --count=!: The requested number of random bytes.
+            --hsm-name=: Name of the HSM.
+            --id=: Full URI of the HSM.
+            --subscription=: Name or ID of subscription.
+        - name: set-attributes
+          description: Change a key's properties (not its cryptographic material).
+          flags:
+            --enabled=:
+                description: Enable the key.
+                nargs: -1
+            --expires=: Expiration UTC datetime  (Y-m-d'T'H:M:S'Z').
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --immutable=:
+                description: Mark a release policy as immutable.
+                nargs: -1
+            --not-before=: Key not usable before the provided UTC datetime  (Y-m-d'T'H:M:S'Z').
+            --ops=:
+                description: Space-separated list of permitted JSON web key operations.
+                nargs: -1
+            --policy=: The policy rules under which the key can be exported.
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the key.
+            -v, --version=: The key version.
           completion:
             flag:
-                include-managed:
+                enabled:
                     - "true"
                     - "false"
-        - name: verify
-          description: Verify a signature using the key that is stored in a Vault or HSM.
+                immutable:
+                    - "true"
+                    - "false"
+                ops:
+                    - encrypt
+                    - decrypt
+                    - sign
+                    - verify
+                    - wrapKey
+                    - unwrapKey
+                    - import
+                    - export
+        - name: sign
+          description: Create a signature from a digest using a key that is stored in a Vault or HSM.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --digest=!: The value to sign
             --hsm-name=: Name of the HSM.
             --id=: Id of the key.
-            --signature=!: signature to verify
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
             -a, --algorithm=!: Algorithm identifier
@@ -515,14 +638,79 @@ commands:
                     - ES384
                     - ES512
                     - ES256K
+        - name: list-deleted
+          description: List all deleted keys, including the public part of each.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Full URI of the Vault or HSM.
+            --maxresults=: Maximum number of results to return.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+        - name: restore
+          description: Restore a backed up key to a Vault or HSM.
+          flags:
+            --backup-folder=: Name of the blob container which contains the backup
+            --blob-container-name=: Name of Blob Container.
+            --hsm-name=: Name of the HSM.
+            --id=: Full URI of the Vault or HSM.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --storage-account-name=: Name of Azure Storage Account.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -f, --file=: Local key backup from which to restore key.
+            -n, --name=: Name of the key.
+            -t, --storage-container-SAS-token=: The SAS token pointing to an Azure Blob storage container
+            -u, --storage-resource-uri=: Azure Blob storage container Uri.
+        - name: recover
+          description: Recover the deleted key to its latest version.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: The recovery id of the key.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the key.
+        - name: get-policy-template
+          description: Return policy template as JSON encoded policy definition.
+          flags:
+            --subscription=: Name or ID of subscription.
+        - name: decrypt
+          description: Decrypt a single block of encrypted data.
+          flags:
+            --aad=: Optional data that is authenticated but not encrypted.
+            --data-type=: The type of the original data.
+            --hsm-name=: Name of the HSM.
+            --id=: Id of the key.
+            --iv=: The initialization vector used during encryption.
+            --subscription=: Name or ID of subscription.
+            --tag=: The authentication tag generated during encryption.
+            --value=!: The value to be decrypted, which should be the result of "az keyvault encrypt"
+            --vault-name=: Name of the Vault.
+            -a, --algorithm=!: Algorithm identifier
+            -n, --name=: Name of the key.
+            -v, --version=: The key version.
+          completion:
+            flag:
+                algorithm:
+                    - RSA-OAEP
+                    - RSA-OAEP-256
+                    - RSA1_5
+                    - A128GCM
+                    - A192GCM
+                    - A256GCM
+                    - A128CBC
+                    - A192CBC
+                    - A256CBC
+                    - A128CBCPAD
+                    - A192CBCPAD
+                    - A256CBCPAD
+                data-type:
+                    - base64
+                    - plaintext
         - name: import
           description: Import a private key.
           flags:
             --byok-file=: BYOK file containing the key to be imported.
             --byok-string=: BYOK string containing the key to be imported.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --curve=: The curve name of the key to import (only for BYOK).
             --default-cvm-policy=: Use default policy under which the key can be exported for CVM disk encryption.
             --disabled=:
@@ -585,79 +773,14 @@ commands:
                 protection:
                     - software
                     - hsm
-        - name: download
-          description: Download a key from a KeyVault.
+        - name: verify
+          description: Verify a signature using the key that is stored in a Vault or HSM.
           flags:
+            --digest=!: The value to sign
             --hsm-name=: Name of the HSM.
             --id=: Id of the key.
+            --signature=!: signature to verify
             --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -e, --encoding=: 'Encoding of the key, default: PEM'
-            -f, --file=!: File to receive the key contents.
-            -n, --name=: Name of the key.
-            -v, --version=: The key version.
-          completion:
-            flag:
-                encoding:
-                    - PEM
-                    - DER
-        - name: show-deleted
-          description: Get a deleted key.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -n, --name=: Name of the key.
-        - name: backup
-          description: Request that a backup of the specified key be downloaded to the client.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -f, --file=!: Local file path in which to store key backup.
-            -n, --name=: Name of the key.
-        - name: rotation-policy
-          description: Manage key's rotation policy.
-          commands:
-            - name: show
-              description: Get the rotation policy of a Key Vault key.
-              flags:
-                --hsm-name=: Name of the HSM.
-                --id=: Id of the key.
-                --subscription=: Name or ID of subscription.
-                --vault-name=: Name of the Vault.
-                -n, --name=: Name of the key.
-            - name: update
-              description: Update the rotation policy of a Key Vault key.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --hsm-name=: Name of the HSM.
-                --id=: Id of the key.
-                --subscription=: Name or ID of subscription.
-                --value=!: The rotation policy file definition as JSON, or a path to a file containing JSON policy definition.
-                --vault-name=: Name of the Vault.
-                -n, --name=: Name of the key.
-        - name: get-policy-template
-          description: Return policy template as JSON encoded policy definition.
-          flags:
-            --subscription=: Name or ID of subscription.
-        - name: encrypt
-          description: Encrypt an arbitrary sequence of bytes using an encryption key that is stored in a Vault or HSM.
-          flags:
-            --aad=: Optional data that is authenticated but not encrypted.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --data-type=: The type of the original data.
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --iv=: Initialization vector.
-            --subscription=: Name or ID of subscription.
-            --value=!: The value to be encrypted.
             --vault-name=: Name of the Vault.
             -a, --algorithm=!: Algorithm identifier
             -n, --name=: Name of the key.
@@ -665,100 +788,32 @@ commands:
           completion:
             flag:
                 algorithm:
-                    - RSA-OAEP
-                    - RSA-OAEP-256
-                    - RSA1_5
-                    - A128GCM
-                    - A192GCM
-                    - A256GCM
-                    - A128CBC
-                    - A192CBC
-                    - A256CBC
-                    - A128CBCPAD
-                    - A192CBCPAD
-                    - A256CBCPAD
-                data-type:
-                    - base64
-                    - plaintext
-        - name: list-versions
-          description: List the identifiers and properties of a key's versions.
+                    - PS256
+                    - PS384
+                    - PS512
+                    - RS256
+                    - RS384
+                    - RS512
+                    - ES256
+                    - ES384
+                    - ES512
+                    - ES256K
+        - name: list
+          description: List keys in the specified Vault or HSM.
           flags:
             --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
+            --id=: Full URI of the Vault or HSM.
+            --include-managed=:
+                description: Include managed keys.
+                nargs: -1
             --maxresults=: Maximum number of results to return.
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
-            -n, --name=: Name of the key.
-        - name: decrypt
-          description: Decrypt a single block of encrypted data.
-          flags:
-            --aad=: Optional data that is authenticated but not encrypted.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --data-type=: The type of the original data.
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --iv=: The initialization vector used during encryption.
-            --subscription=: Name or ID of subscription.
-            --tag=: The authentication tag generated during encryption.
-            --value=!: The value to be decrypted, which should be the result of "az keyvault encrypt"
-            --vault-name=: Name of the Vault.
-            -a, --algorithm=!: Algorithm identifier
-            -n, --name=: Name of the key.
-            -v, --version=: The key version.
           completion:
             flag:
-                algorithm:
-                    - RSA-OAEP
-                    - RSA-OAEP-256
-                    - RSA1_5
-                    - A128GCM
-                    - A192GCM
-                    - A256GCM
-                    - A128CBC
-                    - A192CBC
-                    - A256CBC
-                    - A128CBCPAD
-                    - A192CBCPAD
-                    - A256CBCPAD
-                data-type:
-                    - base64
-                    - plaintext
-        - name: restore
-          description: Restore a backed up key to a Vault or HSM.
-          flags:
-            --backup-folder=: Name of the blob container which contains the backup
-            --blob-container-name=: Name of Blob Container.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --hsm-name=: Name of the HSM.
-            --id=: Full URI of the Vault or HSM.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --storage-account-name=: Name of Azure Storage Account.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -f, --file=: Local key backup from which to restore key.
-            -n, --name=: Name of the key.
-            -t, --storage-container-SAS-token=: The SAS token pointing to an Azure Blob storage container
-            -u, --storage-resource-uri=: Azure Blob storage container Uri.
-        - name: list-deleted
-          description: List all deleted keys, including the public part of each.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Full URI of the Vault or HSM.
-            --maxresults=: Maximum number of results to return.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-        - name: delete
-          description: Delete a key of any type from storage in Vault or HSM.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -n, --name=: Name of the key.
+                include-managed:
+                    - "true"
+                    - "false"
         - name: create
           description: Create a new key, stores it, then returns key parameters and attributes to the client.
           flags:
@@ -825,121 +880,15 @@ commands:
                 protection:
                     - software
                     - hsm
-        - name: recover
-          description: Recover the deleted key to its latest version.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: The recovery id of the key.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -n, --name=: Name of the key.
-        - name: sign
-          description: Create a signature from a digest using a key that is stored in a Vault or HSM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --digest=!: The value to sign
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -a, --algorithm=!: Algorithm identifier
-            -n, --name=: Name of the key.
-            -v, --version=: The key version.
-          completion:
-            flag:
-                algorithm:
-                    - PS256
-                    - PS384
-                    - PS512
-                    - RS256
-                    - RS384
-                    - RS512
-                    - ES256
-                    - ES384
-                    - ES512
-                    - ES256K
-        - name: set-attributes
-          description: Change a key's properties (not its cryptographic material).
-          flags:
-            --enabled=:
-                description: Enable the key.
-                nargs: -1
-            --expires=: Expiration UTC datetime  (Y-m-d'T'H:M:S'Z').
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --immutable=:
-                description: Mark a release policy as immutable.
-                nargs: -1
-            --not-before=: Key not usable before the provided UTC datetime  (Y-m-d'T'H:M:S'Z').
-            --ops=:
-                description: Space-separated list of permitted JSON web key operations.
-                nargs: -1
-            --policy=: The policy rules under which the key can be exported.
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            --vault-name=: Name of the Vault.
-            -n, --name=: Name of the key.
-            -v, --version=: The key version.
-          completion:
-            flag:
-                enabled:
-                    - "true"
-                    - "false"
-                immutable:
-                    - "true"
-                    - "false"
-                ops:
-                    - encrypt
-                    - decrypt
-                    - sign
-                    - verify
-                    - wrapKey
-                    - unwrapKey
-                    - import
-                    - export
-        - name: rotate
-          description: Rotate the key based on the key policy by generating a new version of the key.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -n, --name=: Name of the key.
-        - name: show
-          description: Get a key's attributes and, if it's an asymmetric key, its public material.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Id of the key.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -n, --name=: Name of the key.
-            -v, --version=: The key version.
-        - name: random
-          description: Get the requested number of random bytes from a managed HSM.
-          flags:
-            --count=!: The requested number of random bytes.
-            --hsm-name=: Name of the HSM.
-            --id=: Full URI of the HSM.
-            --subscription=: Name or ID of subscription.
     - name: list
       description: List Vaults and/or HSMs.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --resource-type=: When --resource-type is not present the command will list all Vaults and HSMs.
         --subscription=: Name or ID of subscription.
         -g, --resource-group=: Name of resource group.
     - name: list-deleted
       description: Get information about the deleted Vaults or HSMs in a subscription.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --resource-type=: When --resource-type is not present the command will list all deleted Vaults and HSMs.
         --subscription=: Name or ID of subscription.
     - name: network-rule
@@ -948,9 +897,6 @@ commands:
         - name: wait
           description: Place the CLI in a waiting state until a condition of the vault is met.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
             --deleted=: wait until deleted
@@ -961,21 +907,9 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
             -n, --name=!: Name of the Vault.
-        - name: list
-          description: List the network rules from the network ACLs for a Key Vault.
+        - name: remove
+          description: Remove a network rule from the network ACLs for a Key Vault.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
-            -n, --name=!: Name of the Vault.
-        - name: add
-          description: Add a network rule to the network ACLs for a Key Vault.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --ip-address=:
                 description: IPv4 address or CIDR range.
                 nargs: -1
@@ -985,12 +919,15 @@ commands:
             --vnet-name=: Name of a virtual network.
             -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
             -n, --name=!: Name of the Vault.
-        - name: remove
-          description: Remove a network rule from the network ACLs for a Key Vault.
+        - name: list
+          description: List the network rules from the network ACLs for a Key Vault.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
+            -n, --name=!: Name of the Vault.
+        - name: add
+          description: Add a network rule to the network ACLs for a Key Vault.
+          flags:
             --ip-address=:
                 description: IPv4 address or CIDR range.
                 nargs: -1
@@ -1003,67 +940,9 @@ commands:
     - name: private-endpoint-connection
       description: Manage vault/HSM private endpoint connections.
       commands:
-        - name: wait
-          description: Place the CLI in a waiting state until a condition of the private endpoint connection is met.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --hsm-name=: Name of the HSM.
-            --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            --vault-name=: Name of the Key Vault.
-            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
-            -n, --name=: The name of the private endpoint connection associated with the Key Vault/HSM.
-        - name: list
-          description: List all private endpoint connections associated with a HSM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --hsm-name=!: Name of the HSM.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
-        - name: approve
-          description: Approve a private endpoint connection request for a Key Vault.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --description=: Comments for the approve operation.
-            --hsm-name=: Name of the HSM.
-            --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
-            -n, --name=: The name of the private endpoint connection associated with the Key Vault/HSM.
-        - name: delete
-          description: Delete the specified private endpoint connection associated with a Key Vault/HSM.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --hsm-name=: Name of the HSM.
-            --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
-            -n, --name=: The name of the private endpoint connection associated with the Key Vault/HSM.
         - name: reject
           description: Reject a private endpoint connection request for a Key Vault.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --description=: Comments for the reject operation.
             --hsm-name=: Name of the HSM.
             --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
@@ -1075,11 +954,51 @@ commands:
         - name: show
           description: Show details of a private endpoint connection associated with a Key Vault/HSM.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --hsm-name=: Name of the HSM.
             --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Key Vault.
+            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
+            -n, --name=: The name of the private endpoint connection associated with the Key Vault/HSM.
+        - name: approve
+          description: Approve a private endpoint connection request for a Key Vault.
+          flags:
+            --description=: Comments for the approve operation.
+            --hsm-name=: Name of the HSM.
+            --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Key Vault.
+            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
+            -n, --name=: The name of the private endpoint connection associated with the Key Vault/HSM.
+        - name: list
+          description: List all private endpoint connections associated with a HSM.
+          flags:
+            --hsm-name=!: Name of the HSM.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of the private endpoint connection is met.
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --hsm-name=: Name of the HSM.
+            --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            --vault-name=: Name of the Key Vault.
+            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
+            -n, --name=: The name of the private endpoint connection associated with the Key Vault/HSM.
+        - name: delete
+          description: Delete the specified private endpoint connection associated with a Key Vault/HSM.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: The ID of the private endpoint connection associated with the Key Vault/HSM.
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Key Vault.
             -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
@@ -1090,9 +1009,6 @@ commands:
         - name: list
           description: List the private link resources supported for a Key Vault/HSM.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --hsm-name=: Name of the HSM.
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
@@ -1100,9 +1016,6 @@ commands:
     - name: purge
       description: Permanently delete the specified Vault or HSM.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --hsm-name=: Name of the deleted HSM.
         --no-wait=: Do not wait for the long-running operation to finish.
         --subscription=: Name or ID of subscription.
@@ -1111,9 +1024,6 @@ commands:
     - name: recover
       description: Recover a Vault or HSM.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --hsm-name=: Name of the deleted HSM.
         --no-wait=: Do not wait for the long-running operation to finish.
         --subscription=: Name or ID of subscription.
@@ -1123,22 +1033,6 @@ commands:
     - name: region
       description: Manage MHSM multi-regions.
       commands:
-        - name: wait
-          description: Place the CLI in a waiting state until a condition of the HSM is met.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --hsm-name=!: Name of the HSM.
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
         - name: remove
           description: Remove regions for the managed HSM Pool.
           flags:
@@ -1150,14 +1044,24 @@ commands:
         - name: add
           description: Add regions for the managed HSM Pool.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --hsm-name=!: Name of the HSM.
             --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
             -r, --region-name=!: The region name.
+        - name: wait
+          description: Place the CLI in a waiting state until a condition of the HSM is met.
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --hsm-name=!: Name of the HSM.
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
         - name: list
           description: The List operation gets information about the regions associated with the managed HSM Pool.
           flags:
@@ -1172,9 +1076,6 @@ commands:
           flags:
             --backup-folder=!: Name of the blob container which contains the backup
             --blob-container-name=: Name of Blob Container.
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --hsm-name=: Name of the HSM.
             --id=: Full URI of the HSM.
             --key-name=: Name of a single key in the backup.
@@ -1193,49 +1094,6 @@ commands:
     - name: role
       description: Manage user roles for access control.
       commands:
-        - name: definition
-          description: Manage role definitions.
-          commands:
-            - name: create
-              description: Create a custom role definition.
-              flags:
-                --hsm-name=!: Name of the HSM.
-                --role-definition=!: Description of a role as JSON, or a path to a file containing a JSON description.
-                --subscription=: Name or ID of subscription.
-            - name: show
-              description: Show the details of a role definition.
-              flags:
-                --hsm-name=!: Name of the HSM.
-                --role-id=: The role definition ID.
-                --subscription=: Name or ID of subscription.
-                -n, --name=: The role definition name.
-            - name: delete
-              description: Delete a role definition.
-              flags:
-                --hsm-name=!: Name of the HSM.
-                --role-id=: The role definition ID.
-                --subscription=: Name or ID of subscription.
-                -n, --name=: The role definition name.
-            - name: list
-              description: List role definitions.
-              flags:
-                --custom-role-only=:
-                    description: Only show custom role definitions.
-                    nargs: -1
-                --hsm-name=: Name of the HSM.
-                --scope=: scope at which the role assignment or definition applies to, e.g., "/" or "/keys" or "/keys/{keyname}"
-                --subscription=: Name or ID of subscription.
-              completion:
-                flag:
-                    custom-role-only:
-                        - "true"
-                        - "false"
-            - name: update
-              description: Update a role definition.
-              flags:
-                --hsm-name=!: Name of the HSM.
-                --role-definition=!: Description of a role as JSON, or a path to a file containing a JSON description.
-                --subscription=: Name or ID of subscription.
         - name: assignment
           description: Manage role assignments.
           commands:
@@ -1244,9 +1102,6 @@ commands:
               flags:
                 --assignee-object-id=: Use this parameter instead of '--assignee' to bypass graph permission issues.
                 --assignee=: represent a user, group, or service principal.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --hsm-name=: Name of the HSM.
                 --id=: Full URI of the HSM.
                 --role=: role name or id
@@ -1257,9 +1112,6 @@ commands:
               flags:
                 --assignee-object-id=: Use this parameter instead of '--assignee' to bypass graph permission issues.
                 --assignee=: represent a user, group, or service principal.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --hsm-name=: Name of the HSM.
                 --id=: Full URI of the HSM.
                 --ids=:
@@ -1274,9 +1126,6 @@ commands:
               flags:
                 --assignee-object-id=: Use this parameter instead of '--assignee' to bypass graph permission issues.
                 --assignee=: represent a user, group, or service principal.
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --hsm-name=: Name of the HSM.
                 --id=: Full URI of the HSM.
                 --role=!: role name or id
@@ -1297,39 +1146,52 @@ commands:
                         - MSI
                         - DirectoryObjectOrGroup
                         - Everyone
+        - name: definition
+          description: Manage role definitions.
+          commands:
+            - name: list
+              description: List role definitions.
+              flags:
+                --custom-role-only=:
+                    description: Only show custom role definitions.
+                    nargs: -1
+                --hsm-name=: Name of the HSM.
+                --scope=: scope at which the role assignment or definition applies to, e.g., "/" or "/keys" or "/keys/{keyname}"
+                --subscription=: Name or ID of subscription.
+              completion:
+                flag:
+                    custom-role-only:
+                        - "true"
+                        - "false"
+            - name: show
+              description: Show the details of a role definition.
+              flags:
+                --hsm-name=!: Name of the HSM.
+                --role-id=: The role definition ID.
+                --subscription=: Name or ID of subscription.
+                -n, --name=: The role definition name.
+            - name: delete
+              description: Delete a role definition.
+              flags:
+                --hsm-name=!: Name of the HSM.
+                --role-id=: The role definition ID.
+                --subscription=: Name or ID of subscription.
+                -n, --name=: The role definition name.
+            - name: create
+              description: Create a custom role definition.
+              flags:
+                --hsm-name=!: Name of the HSM.
+                --role-definition=!: Description of a role as JSON, or a path to a file containing a JSON description.
+                --subscription=: Name or ID of subscription.
+            - name: update
+              description: Update a role definition.
+              flags:
+                --hsm-name=!: Name of the HSM.
+                --role-definition=!: Description of a role as JSON, or a path to a file containing a JSON description.
+                --subscription=: Name or ID of subscription.
     - name: secret
       description: Manage secrets.
       commands:
-        - name: list-versions
-          description: List properties of all versions of a secret, excluding their values.
-          flags:
-            --id=: Id of the secret.
-            --maxresults=: Maximum number of results to return in a page.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -n, --name=: Name of the secret.
-        - name: delete
-          description: Delete all versions of a secret.
-          flags:
-            --id=: Id of the secret.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-            -n, --name=: Name of the secret.
-        - name: list
-          description: List secrets in a specified key vault.
-          flags:
-            --id=: Full URI of the Vault.
-            --include-managed=:
-                description: Include managed secrets.
-                nargs: -1
-            --maxresults=: Maximum number of results to return in a page.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
-          completion:
-            flag:
-                include-managed:
-                    - "true"
-                    - "false"
         - name: recover
           description: Recover a deleted secret to its latest version.
           flags:
@@ -1337,35 +1199,25 @@ commands:
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
             -n, --name=: Name of the secret.
-        - name: set-attributes
-          description: Update properties of a secret other than its value.
+        - name: download
+          description: Download a secret from a KeyVault.
           flags:
-            --content-type=: Type of the secret value such as a password.
-            --enabled=:
-                description: Enable the secret.
-                nargs: -1
-            --expires=: Expiration UTC datetime (Y-m-d'T'H:M:S'Z').
             --id=: Id of the secret.
-            --not-before=: Secret not usable before the provided UTC datetime (Y-m-d'T'H:M:S'Z').
             --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
             --vault-name=: Name of the Key Vault.
+            -e, --encoding=: Encoding of the secret.
+            -f, --file=!: File to receive the secret contents.
             -n, --name=: Name of the secret.
             -v, --version=: The secret version.
           completion:
             flag:
-                enabled:
-                    - "true"
-                    - "false"
-        - name: list-deleted
-          description: Lists all deleted secrets.
-          flags:
-            --id=: Full URI of the Vault.
-            --maxresults=: Maximum number of results to return in a page.
-            --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Key Vault.
+                encoding:
+                    - utf-8
+                    - utf-16le
+                    - utf-16be
+                    - ascii
+                    - base64
+                    - hex
         - name: backup
           description: Backs up the specified secret.
           flags:
@@ -1404,31 +1256,49 @@ commands:
                     - ascii
                     - base64
                     - hex
-        - name: download
-          description: Download a secret from a KeyVault.
+        - name: delete
+          description: Delete all versions of a secret.
           flags:
             --id=: Id of the secret.
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Key Vault.
-            -e, --encoding=: Encoding of the secret.
-            -f, --file=!: File to receive the secret contents.
+            -n, --name=: Name of the secret.
+        - name: set-attributes
+          description: Update properties of a secret other than its value.
+          flags:
+            --content-type=: Type of the secret value such as a password.
+            --enabled=:
+                description: Enable the secret.
+                nargs: -1
+            --expires=: Expiration UTC datetime (Y-m-d'T'H:M:S'Z').
+            --id=: Id of the secret.
+            --not-before=: Secret not usable before the provided UTC datetime (Y-m-d'T'H:M:S'Z').
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            --vault-name=: Name of the Key Vault.
             -n, --name=: Name of the secret.
             -v, --version=: The secret version.
           completion:
             flag:
-                encoding:
-                    - utf-8
-                    - utf-16le
-                    - utf-16be
-                    - ascii
-                    - base64
-                    - hex
+                enabled:
+                    - "true"
+                    - "false"
         - name: restore
           description: Restores a backed up secret to a vault.
           flags:
             --subscription=: Name or ID of subscription.
             --vault-name=!: Name of the Vault.
             -f, --file=!: File to receive the secret contents.
+        - name: list-versions
+          description: List properties of all versions of a secret, excluding their values.
+          flags:
+            --id=: Id of the secret.
+            --maxresults=: Maximum number of results to return in a page.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Key Vault.
+            -n, --name=: Name of the secret.
         - name: show-deleted
           description: Get a deleted secret.
           flags:
@@ -1436,6 +1306,28 @@ commands:
             --subscription=: Name or ID of subscription.
             --vault-name=: Name of the Vault.
             -n, --name=: Name of the secret.
+        - name: purge
+          description: Permanently deletes a deleted secret.
+          flags:
+            --id=: The recovery id of the secret.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Vault.
+            -n, --name=: Name of the secret.
+        - name: list
+          description: List secrets in a specified key vault.
+          flags:
+            --id=: Full URI of the Vault.
+            --include-managed=:
+                description: Include managed secrets.
+                nargs: -1
+            --maxresults=: Maximum number of results to return in a page.
+            --subscription=: Name or ID of subscription.
+            --vault-name=: Name of the Key Vault.
+          completion:
+            flag:
+                include-managed:
+                    - "true"
+                    - "false"
         - name: show
           description: Get a secret.
           flags:
@@ -1444,41 +1336,16 @@ commands:
             --vault-name=: Name of the Key Vault.
             -n, --name=: Name of the secret.
             -v, --version=: The secret version.
-        - name: purge
-          description: Permanently deletes a deleted secret.
+        - name: list-deleted
+          description: Lists all deleted secrets.
           flags:
-            --id=: The recovery id of the secret.
+            --id=: Full URI of the Vault.
+            --maxresults=: Maximum number of results to return in a page.
             --subscription=: Name or ID of subscription.
-            --vault-name=: Name of the Vault.
-            -n, --name=: Name of the secret.
+            --vault-name=: Name of the Key Vault.
     - name: security-domain
       description: Manage security domain operations.
       commands:
-        - name: download
-          description: Download the security domain file from the HSM.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Full URI of the HSM.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --sd-quorum=!: The minimum number of shares required to decrypt the security domain for recovery.
-            --sd-wrapping-keys=!:
-                description: Space-separated file paths to PEM files containing public keys.
-                nargs: -1
-            --security-domain-file=!: Path to a file where the JSON blob returned by this command is stored.
-            --subscription=: Name or ID of subscription.
-        - name: wait
-          description: Place the CLI in a waiting state until HSM security domain operation is finished.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Full URI of the HSM.
-            --subscription=: Name or ID of subscription.
-            --target-operation=: Target operation that needs waiting.
-          completion:
-            flag:
-                target-operation:
-                    - download
-                    - upload
-                    - restore_blob
         - name: restore-blob
           description: Enable to decrypt and encrypt security domain file as blob.
           flags:
@@ -1491,13 +1358,6 @@ commands:
             --sd-wrapping-keys=!:
                 description: Space-separated file paths to PEM files containing private keys.
                 nargs: -1
-            --subscription=: Name or ID of subscription.
-        - name: init-recovery
-          description: Retrieve the exchange key of the HSM.
-          flags:
-            --hsm-name=: Name of the HSM.
-            --id=: Full URI of the HSM.
-            --sd-exchange-key=!: Local file path to store the exported key.
             --subscription=: Name or ID of subscription.
         - name: upload
           description: Start to restore the HSM.
@@ -1515,15 +1375,44 @@ commands:
                 description: Space-separated file paths to PEM files containing private keys.
                 nargs: -1
             --subscription=: Name or ID of subscription.
+        - name: download
+          description: Download the security domain file from the HSM.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Full URI of the HSM.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --sd-quorum=!: The minimum number of shares required to decrypt the security domain for recovery.
+            --sd-wrapping-keys=!:
+                description: Space-separated file paths to PEM files containing public keys.
+                nargs: -1
+            --security-domain-file=!: Path to a file where the JSON blob returned by this command is stored.
+            --subscription=: Name or ID of subscription.
+        - name: init-recovery
+          description: Retrieve the exchange key of the HSM.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Full URI of the HSM.
+            --sd-exchange-key=!: Local file path to store the exported key.
+            --subscription=: Name or ID of subscription.
+        - name: wait
+          description: Place the CLI in a waiting state until HSM security domain operation is finished.
+          flags:
+            --hsm-name=: Name of the HSM.
+            --id=: Full URI of the HSM.
+            --subscription=: Name or ID of subscription.
+            --target-operation=: Target operation that needs waiting.
+          completion:
+            flag:
+                target-operation:
+                    - download
+                    - upload
+                    - restore_blob
     - name: set-policy
       description: Update security policy settings for a Key Vault.
       flags:
         --application-id=: Application ID of the client making request on behalf of a principal.
         --certificate-permissions=:
             description: Space-separated list of certificate permissions to assign.
-            nargs: -1
-        --cmd=:
-            description: ==SUPPRESS==
             nargs: -1
         --key-permissions=:
             description: Space-separated list of key permissions to assign.
@@ -1642,9 +1531,6 @@ commands:
     - name: show
       description: Show details of a Vault or HSM.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --hsm-name=: Name of the HSM.
         --subscription=: Name or ID of subscription.
         -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
@@ -1652,9 +1538,6 @@ commands:
     - name: show-deleted
       description: Show details of a deleted Vault or HSM.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --hsm-name=: Name of the deleted HSM.
         --subscription=: Name or ID of subscription.
         -l, --location=: Location of the deleted Vault or HSM
@@ -1666,9 +1549,6 @@ commands:
             description: Add an object to a list of objects by specifying a path and key value pairs.
             nargs: -1
         --bypass=: Bypass traffic for space-separated uses.
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --default-action=: Default action to apply when no rule matches.
         --enable-purge-protection=:
             description: Property specifying whether protection against purge is enabled for this vault/managed HSM pool.
@@ -1731,9 +1611,6 @@ commands:
             description: Add an object to a list of objects by specifying a path and key value pairs.
             nargs: -1
         --bypass=: Bypass traffic for space-separated uses.
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --default-action=: Default action to apply when no rule matches.
         --force-string=: When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
         --hsm-name=!: Name of the HSM.
@@ -1773,9 +1650,6 @@ commands:
     - name: wait
       description: Place the CLI in a waiting state until a condition of the Vault is met.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --created=: wait until created with 'provisioningState' at 'Succeeded'
         --custom=: Wait until the condition satisfies a custom JMESPath query.
         --deleted=: wait until deleted
@@ -1789,9 +1663,6 @@ commands:
     - name: wait-hsm
       description: Place the CLI in a waiting state until a condition of the HSM is met.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --created=: wait until created with 'provisioningState' at 'Succeeded'
         --custom=: Wait until the condition satisfies a custom JMESPath query.
         --deleted=: wait until deleted

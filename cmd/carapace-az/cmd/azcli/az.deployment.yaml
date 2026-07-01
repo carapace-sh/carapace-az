@@ -5,17 +5,11 @@ commands:
     - name: cancel
       description: Cancel a deployment at subscription scope.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -n, --name=!: The deployment name.
     - name: create
       description: Start a deployment at subscription scope.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --no-prompt=:
             description: The option to disable the prompt of missing parameters for ARM template.
             nargs: -1
@@ -57,38 +51,26 @@ commands:
     - name: delete
       description: Delete a deployment at subscription scope.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --no-wait=: Do not wait for the long-running operation to finish.
         --subscription=: Name or ID of subscription.
         -n, --name=!: The deployment name.
     - name: export
       description: Export the template used for a deployment.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -n, --name=!: The deployment name.
     - name: group
       description: Manage Azure Resource Manager template deployment at resource group.
       commands:
-        - name: export
-          description: Export the template used for a deployment.
+        - name: cancel
+          description: Cancel a deployment at resource group.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
         - name: wait
           description: Place the CLI in a waiting state until a deployment condition is met.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
             --deleted=: wait until deleted
@@ -99,6 +81,47 @@ commands:
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
+        - name: list
+          description: List deployments at resource group.
+          flags:
+            --filter=: Filter expression using OData notation.
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+        - name: validate
+          description: Validate whether a template is valid at resource group.
+          flags:
+            --mode=: Incremental (only add resources to resource group) or Complete (remove extra resources from resource group)
+            --no-prompt=:
+                description: The option to disable the prompt of missing parameters for ARM template.
+                nargs: -1
+            --rollback-on-error=:
+                description: The name of a deployment to roll back to on error, or use as a flag to roll back to the last successful deployment.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -f, --template-file=: a path to a template file or Bicep file in the file system
+            -g, --resource-group=!: Name of resource group.
+            -j, --handle-extended-json-format=: Support to handle extended template content including multiline and comments in deployment
+            -n, --name=: The deployment name.
+            -p, --parameters=:
+                description: the deployment parameters
+                nargs: -1
+            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
+            -s, --template-spec=: The template spec resource id.
+            -u, --template-uri=: a uri to a remote template file
+          completion:
+            flag:
+                mode:
+                    - Incremental
+                    - Complete
+                no-prompt:
+                    - "true"
+                    - "false"
+        - name: show
+          description: Show a deployment at resource group.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=!: Name of resource group.
+            -n, --name=!: The deployment name.
         - name: create
           description: Start a deployment at resource group.
           flags:
@@ -107,9 +130,6 @@ commands:
                 nargs: -1
             --aux-tenants=:
                 description: Auxiliary tenants which will be used during deployment across tenants.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
                 nargs: -1
             --mode=: Incremental (only add resources to resource group) or Complete (remove extra resources from resource group)
             --no-prompt=:
@@ -156,53 +176,9 @@ commands:
                 what-if-result-format:
                     - ResourceIdOnly
                     - FullResourcePayloads
-        - name: validate
-          description: Validate whether a template is valid at resource group.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --mode=: Incremental (only add resources to resource group) or Complete (remove extra resources from resource group)
-            --no-prompt=:
-                description: The option to disable the prompt of missing parameters for ARM template.
-                nargs: -1
-            --rollback-on-error=:
-                description: The name of a deployment to roll back to on error, or use as a flag to roll back to the last successful deployment.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -f, --template-file=: a path to a template file or Bicep file in the file system
-            -g, --resource-group=!: Name of resource group.
-            -j, --handle-extended-json-format=: Support to handle extended template content including multiline and comments in deployment
-            -n, --name=: The deployment name.
-            -p, --parameters=:
-                description: the deployment parameters
-                nargs: -1
-            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
-            -s, --template-spec=: The template spec resource id.
-            -u, --template-uri=: a uri to a remote template file
-          completion:
-            flag:
-                mode:
-                    - Incremental
-                    - Complete
-                no-prompt:
-                    - "true"
-                    - "false"
-        - name: list
-          description: List deployments at resource group.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --filter=: Filter expression using OData notation.
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
         - name: delete
           description: Delete a deployment at resource group.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
@@ -212,9 +188,6 @@ commands:
           flags:
             --aux-tenants=:
                 description: Auxiliary tenants which will be used during deployment across tenants.
-                nargs: -1
-            --cmd=:
-                description: ==SUPPRESS==
                 nargs: -1
             --mode=: Incremental (only add resources to resource group) or Complete (remove extra resources from resource group)
             --no-pretty-print=: Disable pretty-print for What-If results.
@@ -254,30 +227,15 @@ commands:
                 result-format:
                     - ResourceIdOnly
                     - FullResourcePayloads
-        - name: cancel
-          description: Cancel a deployment at resource group.
+        - name: export
+          description: Export the template used for a deployment.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=!: Name of resource group.
-            -n, --name=!: The deployment name.
-        - name: show
-          description: Show a deployment at resource group.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -g, --resource-group=!: Name of resource group.
             -n, --name=!: The deployment name.
     - name: list
       description: List deployments at subscription scope.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --filter=: Filter expression using OData notation.
         --subscription=: Name or ID of subscription.
     - name: mg
@@ -286,9 +244,6 @@ commands:
         - name: create
           description: Start a deployment at management group.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --mode=: The mode that is used to deploy resources.
             --no-prompt=:
                 description: The option to disable the prompt of missing parameters for ARM template.
@@ -332,31 +287,28 @@ commands:
                 what-if-result-format:
                     - ResourceIdOnly
                     - FullResourcePayloads
-        - name: list
-          description: List deployments at management group.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --filter=: Filter expression using OData notation.
-            --subscription=: Name or ID of subscription.
-            -m, --management-group-id=!: The management group id.
         - name: delete
           description: Delete a deployment at management group.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -m, --management-group-id=!: The management group id.
+            -n, --name=!: The deployment name.
+        - name: cancel
+          description: Cancel a deployment at management group.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -m, --management-group-id=!: The management group id.
+            -n, --name=!: The deployment name.
+        - name: show
+          description: Show a deployment at management group.
+          flags:
             --subscription=: Name or ID of subscription.
             -m, --management-group-id=!: The management group id.
             -n, --name=!: The deployment name.
         - name: validate
           description: Validate whether a template is valid at management group.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-prompt=:
                 description: The option to disable the prompt of missing parameters for ARM template.
                 nargs: -1
@@ -377,12 +329,34 @@ commands:
                 no-prompt:
                     - "true"
                     - "false"
+        - name: list
+          description: List deployments at management group.
+          flags:
+            --filter=: Filter expression using OData notation.
+            --subscription=: Name or ID of subscription.
+            -m, --management-group-id=!: The management group id.
+        - name: export
+          description: Export the template used for a deployment.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -m, --management-group-id=!: The management group id.
+            -n, --name=!: The deployment name.
+        - name: wait
+          description: Place the CLI in a waiting state until a deployment condition is met.
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -m, --management-group-id=!: The management group id.
+            -n, --name=!: The deployment name.
         - name: what-if
           description: Execute a deployment What-If operation at management group scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-pretty-print=: Disable pretty-print for What-If results.
             --no-prompt=:
                 description: The option to disable the prompt of missing parameters for ARM template.
@@ -418,83 +392,39 @@ commands:
                 result-format:
                     - ResourceIdOnly
                     - FullResourcePayloads
-        - name: wait
-          description: Place the CLI in a waiting state until a deployment condition is met.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -m, --management-group-id=!: The management group id.
-            -n, --name=!: The deployment name.
-        - name: show
-          description: Show a deployment at management group.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -m, --management-group-id=!: The management group id.
-            -n, --name=!: The deployment name.
-        - name: cancel
-          description: Cancel a deployment at management group.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -m, --management-group-id=!: The management group id.
-            -n, --name=!: The deployment name.
-        - name: export
-          description: Export the template used for a deployment.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -m, --management-group-id=!: The management group id.
-            -n, --name=!: The deployment name.
     - name: operation
       description: Manage deployment operations at subscription scope.
       commands:
         - name: sub
           description: Manage deployment operations at subscription scope.
           commands:
-            - name: list
-              description: List deployment operations at subscription scope.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -n, --name=!: The deployment name.
             - name: show
               description: Show a deployment operation at subscription scope.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --operation-ids=!:
                     description: A list of operation ids to show
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -n, --name=!: The deployment name.
+            - name: list
+              description: List deployment operations at subscription scope.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -n, --name=!: The deployment name.
+        - name: show
+          description: Show a deployment operation at subscription scope.
+          flags:
+            --operation-ids=!:
+                description: A list of operation ids to show
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The deployment name.
         - name: mg
           description: Manage deployment operations at management group.
           commands:
             - name: show
               description: Show a deployment operation at management group.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --operation-ids=!:
                     description: A list of operation ids to show
                     nargs: -1
@@ -504,110 +434,102 @@ commands:
             - name: list
               description: List deployment operations at management group.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -m, --management-group-id=!: The management group id.
                 -n, --name=!: The deployment name.
         - name: list
           description: List deployment operations at subscription scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: The deployment name.
-        - name: group
-          description: Manage deployment operations at resource group.
-          commands:
-            - name: list
-              description: List deployment operations at resource group.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The deployment name.
-            - name: show
-              description: Show a deployment operation at resource group.
-              flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
-                --operation-ids=!:
-                    description: A list of operation ids to show
-                    nargs: -1
-                --subscription=: Name or ID of subscription.
-                -g, --resource-group=!: Name of resource group.
-                -n, --name=!: The deployment name.
         - name: tenant
           description: Manage deployment operations at tenant scope.
           commands:
             - name: list
               description: List deployment operations at tenant scope.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --subscription=: Name or ID of subscription.
                 -n, --name=!: The deployment name.
             - name: show
               description: Show a deployment operation at tenant scope.
               flags:
-                --cmd=:
-                    description: ==SUPPRESS==
-                    nargs: -1
                 --operation-ids=!:
                     description: A list of operation ids to show
                     nargs: -1
                 --subscription=: Name or ID of subscription.
                 -n, --name=!: The deployment name.
-        - name: show
-          description: Show a deployment operation at subscription scope.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --operation-ids=!:
-                description: A list of operation ids to show
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: The deployment name.
+        - name: group
+          description: Manage deployment operations at resource group.
+          commands:
+            - name: show
+              description: Show a deployment operation at resource group.
+              flags:
+                --operation-ids=!:
+                    description: A list of operation ids to show
+                    nargs: -1
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The deployment name.
+            - name: list
+              description: List deployment operations at resource group.
+              flags:
+                --subscription=: Name or ID of subscription.
+                -g, --resource-group=!: Name of resource group.
+                -n, --name=!: The deployment name.
     - name: show
       description: Show a deployment at subscription scope.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --subscription=: Name or ID of subscription.
         -n, --name=!: The deployment name.
     - name: sub
       description: Manage Azure Resource Manager template deployment at subscription scope.
       commands:
-        - name: cancel
-          description: Cancel a deployment at subscription scope.
+        - name: what-if
+          description: Execute a deployment What-If operation at subscription scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
+            --no-pretty-print=: Disable pretty-print for What-If results.
+            --no-prompt=:
+                description: The option to disable the prompt of missing parameters for ARM template.
                 nargs: -1
+            --subscription=: Name or ID of subscription.
+            -f, --template-file=: a path to a template file or Bicep file in the file system
+            -l, --location=!: Location.
+            -n, --name=: The deployment name.
+            -p, --parameters=:
+                description: the deployment parameters
+                nargs: -1
+            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
+            -r, --result-format=: ""
+            -s, --template-spec=: The template spec resource id.
+            -u, --template-uri=: a uri to a remote template file
+            -x, --exclude-change-types=:
+                description: Space-separated list of resource change types to be excluded from What-If results.
+                nargs: -1
+          completion:
+            flag:
+                exclude-change-types:
+                    - Create
+                    - Delete
+                    - Ignore
+                    - Deploy
+                    - NoChange
+                    - Modify
+                    - Unsupported
+                no-prompt:
+                    - "true"
+                    - "false"
+                result-format:
+                    - ResourceIdOnly
+                    - FullResourcePayloads
+        - name: delete
+          description: Delete a deployment at subscription scope.
+          flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -n, --name=!: The deployment name.
-        - name: list
-          description: List deployments at subscription scope.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --filter=: Filter expression using OData notation.
-            --subscription=: Name or ID of subscription.
         - name: create
           description: Start a deployment at subscription scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-prompt=:
                 description: The option to disable the prompt of missing parameters for ARM template.
                 nargs: -1
@@ -644,122 +566,16 @@ commands:
                     - Modify
                     - Unsupported
                 what-if-result-format:
-                    - ResourceIdOnly
-                    - FullResourcePayloads
-        - name: wait
-          description: Place the CLI in a waiting state until a deployment condition is met.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --created=: wait until created with 'provisioningState' at 'Succeeded'
-            --custom=: Wait until the condition satisfies a custom JMESPath query.
-            --deleted=: wait until deleted
-            --exists=: wait until the resource exists
-            --interval=: polling interval in seconds
-            --subscription=: Name or ID of subscription.
-            --timeout=: maximum wait in seconds
-            --updated=: wait until updated with provisioningState at 'Succeeded'
-            -n, --name=!: The deployment name.
-        - name: export
-          description: Export the template used for a deployment.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: The deployment name.
-        - name: validate
-          description: Validate whether a template is valid at subscription scope.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-prompt=:
-                description: The option to disable the prompt of missing parameters for ARM template.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -f, --template-file=: a path to a template file or Bicep file in the file system
-            -j, --handle-extended-json-format=: Support to handle extended template content including multiline and comments in deployment
-            -l, --location=!: Location.
-            -n, --name=: The deployment name.
-            -p, --parameters=:
-                description: the deployment parameters
-                nargs: -1
-            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
-            -s, --template-spec=: The template spec resource id.
-            -u, --template-uri=: a uri to a remote template file
-          completion:
-            flag:
-                no-prompt:
-                    - "true"
-                    - "false"
-        - name: what-if
-          description: Execute a deployment What-If operation at subscription scope.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-pretty-print=: Disable pretty-print for What-If results.
-            --no-prompt=:
-                description: The option to disable the prompt of missing parameters for ARM template.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -f, --template-file=: a path to a template file or Bicep file in the file system
-            -l, --location=!: Location.
-            -n, --name=: The deployment name.
-            -p, --parameters=:
-                description: the deployment parameters
-                nargs: -1
-            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
-            -r, --result-format=: ""
-            -s, --template-spec=: The template spec resource id.
-            -u, --template-uri=: a uri to a remote template file
-            -x, --exclude-change-types=:
-                description: Space-separated list of resource change types to be excluded from What-If results.
-                nargs: -1
-          completion:
-            flag:
-                exclude-change-types:
-                    - Create
-                    - Delete
-                    - Ignore
-                    - Deploy
-                    - NoChange
-                    - Modify
-                    - Unsupported
-                no-prompt:
-                    - "true"
-                    - "false"
-                result-format:
                     - ResourceIdOnly
                     - FullResourcePayloads
         - name: show
           description: Show a deployment at subscription scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: The deployment name.
-        - name: delete
-          description: Delete a deployment at subscription scope.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: The deployment name.
-    - name: tenant
-      description: Manage Azure Resource Manager template deployment at tenant scope.
-      commands:
         - name: validate
-          description: Validate whether a template is valid at tenant scope.
+          description: Validate whether a template is valid at subscription scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-prompt=:
                 description: The option to disable the prompt of missing parameters for ARM template.
                 nargs: -1
@@ -782,9 +598,6 @@ commands:
         - name: wait
           description: Place the CLI in a waiting state until a deployment condition is met.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --created=: wait until created with 'provisioningState' at 'Succeeded'
             --custom=: Wait until the condition satisfies a custom JMESPath query.
             --deleted=: wait until deleted
@@ -794,53 +607,124 @@ commands:
             --timeout=: maximum wait in seconds
             --updated=: wait until updated with provisioningState at 'Succeeded'
             -n, --name=!: The deployment name.
-        - name: delete
-          description: Delete a deployment at tenant scope.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -n, --name=!: The deployment name.
         - name: export
           description: Export the template used for a deployment.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: The deployment name.
         - name: list
-          description: List deployments at tenant scope.
+          description: List deployments at subscription scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --filter=: Filter expression using OData notation.
             --subscription=: Name or ID of subscription.
         - name: cancel
+          description: Cancel a deployment at subscription scope.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The deployment name.
+    - name: tenant
+      description: Manage Azure Resource Manager template deployment at tenant scope.
+      commands:
+        - name: what-if
+          description: Execute a deployment What-If operation at tenant scope.
+          flags:
+            --no-pretty-print=: Disable pretty-print for What-If results.
+            --no-prompt=:
+                description: The option to disable the prompt of missing parameters for ARM template.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -f, --template-file=: a path to a template file or Bicep file in the file system
+            -l, --location=!: Location.
+            -n, --name=: The deployment name.
+            -p, --parameters=:
+                description: the deployment parameters
+                nargs: -1
+            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
+            -r, --result-format=: ""
+            -s, --template-spec=: The template spec resource id.
+            -u, --template-uri=: a uri to a remote template file
+            -x, --exclude-change-types=:
+                description: Space-separated list of resource change types to be excluded from What-If results.
+                nargs: -1
+          completion:
+            flag:
+                exclude-change-types:
+                    - Create
+                    - Delete
+                    - Ignore
+                    - Deploy
+                    - NoChange
+                    - Modify
+                    - Unsupported
+                no-prompt:
+                    - "true"
+                    - "false"
+                result-format:
+                    - ResourceIdOnly
+                    - FullResourcePayloads
+        - name: wait
+          description: Place the CLI in a waiting state until a deployment condition is met.
+          flags:
+            --created=: wait until created with 'provisioningState' at 'Succeeded'
+            --custom=: Wait until the condition satisfies a custom JMESPath query.
+            --deleted=: wait until deleted
+            --exists=: wait until the resource exists
+            --interval=: polling interval in seconds
+            --subscription=: Name or ID of subscription.
+            --timeout=: maximum wait in seconds
+            --updated=: wait until updated with provisioningState at 'Succeeded'
+            -n, --name=!: The deployment name.
+        - name: validate
+          description: Validate whether a template is valid at tenant scope.
+          flags:
+            --no-prompt=:
+                description: The option to disable the prompt of missing parameters for ARM template.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -f, --template-file=: a path to a template file or Bicep file in the file system
+            -j, --handle-extended-json-format=: Support to handle extended template content including multiline and comments in deployment
+            -l, --location=!: Location.
+            -n, --name=: The deployment name.
+            -p, --parameters=:
+                description: the deployment parameters
+                nargs: -1
+            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
+            -s, --template-spec=: The template spec resource id.
+            -u, --template-uri=: a uri to a remote template file
+          completion:
+            flag:
+                no-prompt:
+                    - "true"
+                    - "false"
+        - name: export
+          description: Export the template used for a deployment.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The deployment name.
+        - name: cancel
           description: Cancel a deployment at tenant scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
+            --subscription=: Name or ID of subscription.
+            -n, --name=!: The deployment name.
+        - name: delete
+          description: Delete a deployment at tenant scope.
+          flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -n, --name=!: The deployment name.
         - name: show
           description: Show a deployment at tenant scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --subscription=: Name or ID of subscription.
             -n, --name=!: The deployment name.
+        - name: list
+          description: List deployments at tenant scope.
+          flags:
+            --filter=: Filter expression using OData notation.
+            --subscription=: Name or ID of subscription.
         - name: create
           description: Start a deployment at tenant scope.
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
             --no-prompt=:
                 description: The option to disable the prompt of missing parameters for ARM template.
                 nargs: -1
@@ -879,52 +763,9 @@ commands:
                 what-if-result-format:
                     - ResourceIdOnly
                     - FullResourcePayloads
-        - name: what-if
-          description: Execute a deployment What-If operation at tenant scope.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --no-pretty-print=: Disable pretty-print for What-If results.
-            --no-prompt=:
-                description: The option to disable the prompt of missing parameters for ARM template.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -f, --template-file=: a path to a template file or Bicep file in the file system
-            -l, --location=!: Location.
-            -n, --name=: The deployment name.
-            -p, --parameters=:
-                description: the deployment parameters
-                nargs: -1
-            -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
-            -r, --result-format=: ""
-            -s, --template-spec=: The template spec resource id.
-            -u, --template-uri=: a uri to a remote template file
-            -x, --exclude-change-types=:
-                description: Space-separated list of resource change types to be excluded from What-If results.
-                nargs: -1
-          completion:
-            flag:
-                exclude-change-types:
-                    - Create
-                    - Delete
-                    - Ignore
-                    - Deploy
-                    - NoChange
-                    - Modify
-                    - Unsupported
-                no-prompt:
-                    - "true"
-                    - "false"
-                result-format:
-                    - ResourceIdOnly
-                    - FullResourcePayloads
     - name: validate
       description: Validate whether a template is valid at subscription scope.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --no-prompt=:
             description: The option to disable the prompt of missing parameters for ARM template.
             nargs: -1
@@ -947,9 +788,6 @@ commands:
     - name: wait
       description: Place the CLI in a waiting state until a deployment condition is met.
       flags:
-        --cmd=:
-            description: ==SUPPRESS==
-            nargs: -1
         --created=: wait until created with 'provisioningState' at 'Succeeded'
         --custom=: Wait until the condition satisfies a custom JMESPath query.
         --deleted=: wait until deleted

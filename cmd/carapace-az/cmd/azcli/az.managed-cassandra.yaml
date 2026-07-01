@@ -5,43 +5,15 @@ commands:
     - name: cluster
       description: Azure Managed Cassandra Cluster.
       commands:
-        - name: show
-          description: Get the properties of a managed Cassandra cluster.
+        - name: deallocate
+          description: Deallocate Azure Managed Cassandra Cluster
           flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Cluster Name
-            -g, --resource-group=!: Name of resource group.
-        - name: list
-          description: List Azure Managed Cassandra Clusters by resource group and subscription.
-          flags:
-            --subscription=: Name or ID of subscription.
-            -g, --resource-group=: Name of resource group.
-        - name: status
-          description: Get Azure Managed Cassandra Cluster Node Status
-          flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Cluster Name
             -g, --resource-group=!: Name of resource group.
         - name: start
           description: Start Azure Managed Cassandra Cluster
-          flags:
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Cluster Name
-            -g, --resource-group=!: Name of resource group.
-        - name: delete
-          description: Deletes a managed Cassandra cluster.
-          flags:
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Cluster Name
-            -g, --resource-group=!: Name of resource group.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: deallocate
-          description: Deallocate Azure Managed Cassandra Cluster
           flags:
             --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
@@ -73,6 +45,68 @@ commands:
                 readwrite:
                     - "true"
                     - "false"
+        - name: update
+          description: Updates an Azure Managed Cassandra Cluster
+          flags:
+            --authentication-method=: Authentication mode can be None or Cassandra.
+            --cassandra-version=: The version of Cassandra chosen.
+            --client-certificates=:
+                description: If specified, enables client certificate authentication to the Cassandra API.
+                nargs: -1
+            --external-seed-nodes=:
+                description: A list of ip addresses of the seed nodes of on-premise data centers.
+                nargs: -1
+            --hours-between-backups=: The number of hours between backup attempts.
+            --identity-type=: Type of identity used for Customer Managed Disk Key.
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --repair-enabled=:
+                description: Enables automatic repair.
+                nargs: -1
+            --subscription=: Name or ID of subscription.
+            --tags=:
+                description: 'space-separated tags: key[=value] [key[=value] ...].'
+                nargs: -1
+            -c, --cluster-name=!: Cluster Name
+            -e, --external-gossip-certificates=:
+                description: A list of certificates that the managed cassandra data center's should accept.
+                nargs: -1
+            -g, --resource-group=!: Name of resource group.
+          completion:
+            flag:
+                authentication-method:
+                    - None
+                    - Cassandra
+                identity-type:
+                    - None
+                    - SystemAssigned
+                repair-enabled:
+                    - "true"
+                    - "false"
+        - name: list
+          description: List Azure Managed Cassandra Clusters by resource group and subscription.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -g, --resource-group=: Name of resource group.
+        - name: status
+          description: Get Azure Managed Cassandra Cluster Node Status
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Cluster Name
+            -g, --resource-group=!: Name of resource group.
+        - name: show
+          description: Get the properties of a managed Cassandra cluster.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Cluster Name
+            -g, --resource-group=!: Name of resource group.
+        - name: delete
+          description: Deletes a managed Cassandra cluster.
+          flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Cluster Name
+            -g, --resource-group=!: Name of resource group.
+            -y, --yes=: Do not prompt for confirmation.
         - name: create
           description: Creates an Azure Managed Cassandra Cluster
           flags:
@@ -115,65 +149,9 @@ commands:
                 repair-enabled:
                     - "true"
                     - "false"
-        - name: update
-          description: Updates an Azure Managed Cassandra Cluster
-          flags:
-            --authentication-method=: Authentication mode can be None or Cassandra.
-            --cassandra-version=: The version of Cassandra chosen.
-            --client-certificates=:
-                description: If specified, enables client certificate authentication to the Cassandra API.
-                nargs: -1
-            --external-seed-nodes=:
-                description: A list of ip addresses of the seed nodes of on-premise data centers.
-                nargs: -1
-            --hours-between-backups=: The number of hours between backup attempts.
-            --identity-type=: Type of identity used for Customer Managed Disk Key.
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --repair-enabled=:
-                description: Enables automatic repair.
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            --tags=:
-                description: 'space-separated tags: key[=value] [key[=value] ...].'
-                nargs: -1
-            -c, --cluster-name=!: Cluster Name
-            -e, --external-gossip-certificates=:
-                description: A list of certificates that the managed cassandra data center's should accept.
-                nargs: -1
-            -g, --resource-group=!: Name of resource group.
-          completion:
-            flag:
-                authentication-method:
-                    - None
-                    - Cassandra
-                identity-type:
-                    - None
-                    - SystemAssigned
-                repair-enabled:
-                    - "true"
-                    - "false"
     - name: datacenter
       description: Azure Managed Cassandra DataCenter.
       commands:
-        - name: delete
-          description: Delete a managed Cassandra data center.
-          flags:
-            --no-wait=: Do not wait for the long-running operation to finish.
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Cluster Name
-            -d, --data-center-name=!: Datacenter Name
-            -g, --resource-group=!: Name of resource group.
-            -y, --yes=: Do not prompt for confirmation.
-        - name: show
-          description: Get the properties of a managed Cassandra data center.
-          flags:
-            --cmd=:
-                description: ==SUPPRESS==
-                nargs: -1
-            --subscription=: Name or ID of subscription.
-            -c, --cluster-name=!: Cluster Name
-            -d, --data-center-name=!: Datacenter Name
-            -g, --resource-group=!: Name of resource group.
         - name: update
           description: Updates an Azure Managed Cassandra DataCenter
           flags:
@@ -187,6 +165,19 @@ commands:
             -k, --managed-disk-customer-key-uri=: Key uri to use for encryption of managed disks.
             -n, --node-count=: The number of Cassandra virtual machines in this data center.
             -p, --backup-storage-customer-key-uri=: Indicates the Key Uri of the customer key to use for encryption of the backup storage account.
+        - name: show
+          description: Get the properties of a managed Cassandra data center.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Cluster Name
+            -d, --data-center-name=!: Datacenter Name
+            -g, --resource-group=!: Name of resource group.
+        - name: list
+          description: List all data centers in a particular managed Cassandra cluster.
+          flags:
+            --subscription=: Name or ID of subscription.
+            -c, --cluster-name=!: Cluster Name
+            -g, --resource-group=!: Name of resource group.
         - name: create
           description: Creates an Azure Managed Cassandra DataCenter
           flags:
@@ -212,9 +203,12 @@ commands:
                 availability-zone:
                     - "true"
                     - "false"
-        - name: list
-          description: List all data centers in a particular managed Cassandra cluster.
+        - name: delete
+          description: Delete a managed Cassandra data center.
           flags:
+            --no-wait=: Do not wait for the long-running operation to finish.
             --subscription=: Name or ID of subscription.
             -c, --cluster-name=!: Cluster Name
+            -d, --data-center-name=!: Datacenter Name
             -g, --resource-group=!: Name of resource group.
+            -y, --yes=: Do not prompt for confirmation.
