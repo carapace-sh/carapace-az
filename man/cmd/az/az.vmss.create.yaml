@@ -1,0 +1,447 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create an Azure Virtual Machine Scale Set.
+documentation:
+    flag:
+        accelerated-networking: enable accelerated networking. Unless specified, CLI will enable it based on machine image and size
+        admin-username: Username for the VM. Default value is current username of OS. If the default value is system reserved, then default value will be set to azureuser. Please refer to https://learn.microsoft.com/rest/api/compute/virtualmachines/createorupdate#osprofile to get a full list of reserved values.
+        app-gateway: Name to use when creating a new application gateway (default) or referencing an existing one. Can also reference an existing application gateway by ID or specify "" for none.
+        assign-identity: accept system or user assigned identities separated by spaces. Use '[system]' to refer system assigned identity, or a resource id to refer user assigned identity. Check out help for more examples
+        authentication-type: 'Type of authentication to use with the VM. Defaults to password for Windows and SSH public key for Linux. "all" enables both ssh and password authentication. '
+        backend-port: When creating a new load balancer, backend port to open with NAT rules (Defaults to 22 on Linux and 3389 on Windows). When creating an application gateway, the backend port to use for the backend HTTP settings.
+        capacity-reservation-group: The ID or name of the capacity reservation group that is used to allocate. Pass in "None" to disassociate the capacity reservation group. Please note that if you want to delete a VM/VMSS that has been associated with capacity reservation group, you need to disassociate the capacity reservation group first.
+        computer-name-prefix: Computer name prefix for all of the virtual machines in the scale set. Computer name prefixes must be 1 to 15 characters long
+        data-disk-caching: storage caching type for data disk(s), including 'None', 'ReadOnly', 'ReadWrite', etc. Use a singular value to apply on all disks, or use `<lun>=<vaule1> <lun>=<value2>` to configure individual disk
+        data-disk-iops: Specify the Read-Write IOPS (space delimited) for the managed disk. Should be used only when StorageAccountType is UltraSSD_LRS. If not specified, a default value would be assigned based on diskSizeGB.
+        data-disk-mbps: Specify the bandwidth in MB per second (space delimited) for the managed disk. Should be used only when StorageAccountType is UltraSSD_LRS. If not specified, a default value would be assigned based on diskSizeGB.
+        disable-integrity-monitoring: Disable installing guest attestation extension and enabling System Assigned Identity for Trusted Launch enabled VMs and VMSS. It will become the default behavior, so it will become useless
+        enable-agent: Indicate whether virtual machine agent should be provisioned on the virtual machine. When this property is not specified, default behavior is to set it to true. This will ensure that VM Agent is installed on the VM so that extensions can be added to the VM later
+        encryption-at-host: Enable Host Encryption for the VM or VMSS. This will enable the encryption for all the disks including Resource/Temp disk at host itself.
+        ephemeral-os-disk-placement: Only applicable when used with `--ephemeral-os-disk`. Allows you to choose the Ephemeral OS disk provisioning location.
+        eviction-policy: The eviction policy for virtual machines in a Spot priority scale set. Default eviction policy is Deallocate for a Spot priority scale set
+        generate-ssh-keys: Generate SSH public and private key files if missing. The keys will be stored in the ~/.ssh directory
+        image: |
+            The name of the operating system image as a URN alias, URN, custom image name or ID, or VHD blob URI. In addition, it also supports shared gallery image. Please use the image alias including the version of the distribution you want to use. For example: please use Debian11 instead of Debian.' This parameter is required unless using `--attach-os-disk.` Valid URN format: "Publisher:Offer:Sku:Version". For more information, see https://learn.microsoft.com/azure/virtual-machines/linux/cli-ps-findimage
+        lb-nat-rule-name: Name to use for the NAT rule v2 when creating a new load balancer. (NAT rule V2 is used to replace NAT pool)
+        lb-sku: Sku of the Load Balancer to create. The public IP is supported to be created on edge zone only when it is 'Standard'
+        license-type: Specifies that the Windows image or disk was licensed on-premises. To enable Azure Hybrid Benefit for Windows Server, use 'Windows_Server'. To enable Multi-tenant Hosting Rights for Windows 10, use 'Windows_Client'. For more information see the Azure Windows VM online docs.
+        load-balancer: Name to use when creating a new load balancer (default) or referencing an existing one. Can also reference an existing load balancer by ID or specify "" for none.
+        location: Location in which to create VM and related resources. If default location is not configured, will default to the resource group's location
+        max-batch-instance-percent: 'The maximum percent of total virtual machine instances that will be upgraded simultaneously by the rolling upgrade in one batch. Default: 20%'
+        max-price: The maximum price (in US Dollars) you are willing to pay for a Spot VM/VMSS. -1 indicates that the Spot VM/VMSS should not be evicted for price reasons
+        max-unhealthy-instance-percent: 'The maximum percentage of the total virtual machine instances in the scale set that can be simultaneously unhealthy. Default: 20%'
+        max-unhealthy-upgraded-instance-percent: 'The maximum percentage of upgraded virtual machine instances that can be found to be in an unhealthy state. Default: 20%'
+        network-api-version: Specify the Microsoft.Network API version used when creating networking resources in the Network Interface Configurations for Virtual Machine Scale Set with orchestration mode 'Flexible'. Default value is 2020-11-01.
+        orchestration-mode: Choose how virtual machines are managed by the scale set. In Uniform mode, you define a virtual machine model and Azure will generate identical instances based on that model. In Flexible mode, you manually create and add a virtual machine of any configuration to the scale set or generate identical instances based on virtual machine model defined for the scale set.
+        os-disk-caching: 'Storage caching type for the VM OS disk. Default: ReadWrite'
+        os-type: Type of OS installed on a custom VHD. Do not use when specifying an URN or URN alias.
+        patch-mode: 'Mode of in-guest patching to IaaS virtual machine. Allowed values for Windows VM: AutomaticByOS, AutomaticByPlatform, Manual. Allowed values for Linux VM: AutomaticByPlatform, ImageDefault. Manual - You control the application of patches to a virtual machine. You do this by applying patches manually inside the VM. In this mode, automatic updates are disabled; the paramater --enable-auto-update must be false. AutomaticByOS - The virtual machine will automatically be updated by the OS. The parameter --enable-auto-update must be true. AutomaticByPlatform - the virtual machine will automatically updated by the OS. ImageDefault - The virtual machine''s default patching configuration is used. The parameter --enable-agent and --enable-auto-update must be true'
+        pause-time-between-batches: 'The wait time between completing the update for all virtual machines in one batch and starting the next batch. Default: 0 seconds'
+        priority: Priority. Use 'Spot' to run short-lived workloads in a cost-effective way. 'Low' enum will be deprecated in the future. Please use 'Spot' to deploy Azure spot VM and/or VMSS. Default to Regular.
+        public-ip-address: Name of the public IP address when creating one (default) or referencing an existing one. Can also reference an existing public IP by ID or specify "" or '' for None ('""' in Azure CLI using PowerShell).
+        public-ip-per-vm: Each VM instance will have a public ip. For security, you can use '--nsg' to apply appropriate rules
+        regular-priority-count: The base number of regular priority VMs that will be created in this scale set as it scales out. Must be greater than 0.
+        regular-priority-percentage: The percentage of VM instances, after the base regular priority count has been reached, that are expected to use regular priority. Must be between 0 and 100.
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        role: 'Role name or id the system assigned identity will have. '
+        scope: 'Scope that the system assigned identity can access. '
+        security-posture-reference-exclude-extensions: List of virtual machine extensions to exclude when applying the Security Posture. Either a Json string or a file path is acceptable. Please refer to https://docs.microsoft.com/rest/api/compute/virtualmachinescalesets/get#virtualmachineextension for the data format.
+        single-placement-group: Limit the scale set to a single placement group. See https://learn.microsoft.com/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-placement-groups for details.
+        skuprofile-vmsizes: A list of VM sizes in the scale set. See https://azure.microsoft.com/pricing/details/virtual-machines/ for size info.
+        ssh-dest-key-path: Destination file path on the VM for the SSH key. If the file already exists, the specified key(s) are appended to the file. Destination path for SSH public keys is currently limited to its default value "/home/username/.ssh/authorized_keys" due to a known issue in Linux provisioning agent.
+        storage-container-name: 'Only applicable when used with `--use-unmanaged-disk`. Name of the storage container for the VM OS disk. Default: vhds'
+        storage-sku: 'The SKU of the storage account with which to persist VM. Use a singular sku that would be applied across all disks, or specify individual disks. Usage: [--storage-sku SKU | --storage-sku ID=SKU ID=SKU ID=SKU...], where each ID is "os" or a 0-indexed lun. Allowed values: Standard_LRS, Premium_LRS, StandardSSD_LRS, UltraSSD_LRS, Premium_ZRS, StandardSSD_ZRS, PremiumV2_LRS.'
+        subnet: The name of the subnet when creating a new VNet or referencing an existing one. Can also reference an existing subnet by ID. If both vnet-name and subnet are omitted, an appropriate VNet and subnet will be selected automatically, or a new one will be created.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        user-data: UserData for the virtual machines in the scale set. It can be passed in as file or string.
+        v-cpus-per-core: Specify the ratio of vCPU to physical core. Setting this property to 1 also means that hyper-threading is disabled.
+        vm-sku: Size of VMs in the scale set. Default to "Standard_DS1_v2". See https://azure.microsoft.com/pricing/details/virtual-machines/ for size info.
+flags:
+    --accelerated-networking=:
+        description: enable accelerated networking.
+        nargs: -1
+    --accept-term=: Accept the license agreement and privacy statement.
+    --additional-scheduled-events=:
+        description: The configuration parameter used while creating event grid and resource graph scheduled event setting.
+        nargs: -1
+    --admin-password=: Password for the VM if authentication type is 'Password'.
+    --admin-username=: Username for the VM.
+    --app-gateway-capacity=: The number of instances to use when creating a new application gateway.
+    --app-gateway-sku=: SKU when creating a new application gateway.
+    --app-gateway-subnet-address-prefix=: The subnet IP address prefix to use when creating a new application gateway in CIDR format.
+    --app-gateway=: Name to use when creating a new application gateway (default) or referencing an existing one.
+    --asgs=:
+        description: Space-separated list of existing application security groups to associate with the VM.
+        nargs: -1
+    --assign-identity=:
+        description: accept system or user assigned identities separated by spaces.
+        nargs: -1
+    --authentication-type=: Type of authentication to use with the VM.
+    --automatic-repairs-action=: Type of repair action that will be used for repairing unhealthy virtual machines in the scale set.
+    --automatic-repairs-grace-period=: The amount of time (in minutes, between 30 and 90) for which automatic repairs are suspended due to a state change on VM.
+    --backend-pool-name=: Name to use for the backend pool when creating a new load balancer or application gateway.
+    --backend-port=: When creating a new load balancer, backend port to open with NAT rules (Defaults to 22 on Linux and 3389 on Windows).
+    --capacity-reservation-group=: The ID or name of the capacity reservation group that is used to allocate.
+    --computer-name-prefix=: Computer name prefix for all of the virtual machines in the scale set.
+    --custom-data=: Custom init script file or text (cloud-init, cloud-config, etc..)
+    --data-disk-caching=:
+        description: storage caching type for data disk(s), including 'None', 'ReadOnly', 'ReadWrite', etc.
+        nargs: -1
+    --data-disk-delete-option=: Specify whether data disk should be deleted or detached upon VMSS Flex deletion (This feature is only for VMSS with flexible orchestration mode)
+    --data-disk-encryption-sets=:
+        description: Names or IDs (space delimited) of disk encryption sets for data disks.
+        nargs: -1
+    --data-disk-iops=:
+        description: Specify the Read-Write IOPS (space delimited) for the managed disk.
+        nargs: -1
+    --data-disk-mbps=:
+        description: Specify the bandwidth in MB per second (space delimited) for the managed disk.
+        nargs: -1
+    --data-disk-sizes-gb=:
+        description: space-separated empty managed data disk sizes in GB to create
+        nargs: -1
+    --disable-integrity-monitoring-autoupgrade=: Disable auto upgrade of guest attestation extension for Trusted Launch enabled VMs and VMSS.
+    --disable-integrity-monitoring=: Disable installing guest attestation extension and enabling System Assigned Identity for Trusted Launch enabled VMs and VMSS.
+    --disable-overprovision=: Overprovision option (see https://azure.microsoft.com/documentation/articles/virtual-machine-scale-sets-overview/ for details).
+    --disk-controller-type=: Specify the disk controller type configured for the VM or VMSS.
+    --dns-servers=:
+        description: space-separated IP addresses of DNS servers, e.g. 10.0.0.5 10.0.0.6
+        nargs: -1
+    --edge-zone=: The name of edge zone.
+    --enable-agent=:
+        description: Indicate whether virtual machine agent should be provisioned on the virtual machine.
+        nargs: -1
+    --enable-auto-os-upgrade=:
+        description: Indicate whether OS upgrades should automatically be applied to scale set instances in a rolling fashion when a newer version of the OS image becomes available.
+        nargs: -1
+    --enable-auto-update=:
+        description: Indicate whether Automatic Updates is enabled for the Windows virtual machine
+        nargs: -1
+    --enable-cross-zone-upgrade=:
+        description: Set this Boolean property will allow VMSS to ignore AZ boundaries when constructing upgrade batches, and only consider Update Domain and maxBatchInstancePercent to determine the batch size
+        nargs: -1
+    --enable-hibernation=:
+        description: The flag that enable or disable hibernation capability on the VMSS.
+        nargs: -1
+    --enable-integrity-monitoring=: Enable installing Microsoft propietary and not security supported guest attestation extension and enabling System Assigned Identity for Trusted Launch enabled VMs and VMSS.
+    --enable-osimage-notification=:
+        description: Specify whether the OS Image Scheduled event is enabled or disabled.
+        nargs: -1
+    --enable-proxy-agent=:
+        description: Specify whether proxy agent feature should be enabled on the virtual machine or virtual machine scale set.
+        nargs: -1
+    --enable-resilient-creation=:
+        description: Automatically recover customers from OS Provisioning Timeout and VM Start Timeout errors experienced during a VM Create operation by deleting and recreating the affected VM.
+        nargs: -1
+    --enable-resilient-deletion=:
+        description: Retry VM Delete requests asynchronously in the event of a failed delete operation.
+        nargs: -1
+    --enable-secure-boot=:
+        description: Enable secure boot.
+        nargs: -1
+    --enable-spot-restore=:
+        description: Enable the Spot-Try-Restore feature where evicted VMSS SPOT instances will be tried to be restored opportunistically based on capacity availability and pricing constraints
+        nargs: -1
+    --enable-user-reboot-scheduled-events=:
+        description: The configuration parameter used while publishing scheduled events additional publishing targets.
+        nargs: -1
+    --enable-user-redeploy-scheduled-events=:
+        description: The configuration parameter used while creating user initiated redeploy scheduled event setting creation.
+        nargs: -1
+    --enable-vtpm=:
+        description: Enable vTPM.
+        nargs: -1
+    --encryption-at-host=:
+        description: Enable Host Encryption for the VM or VMSS.
+        nargs: -1
+    --encryption-identity=: Resource Id of the user managed identity which can be used for Azure disk encryption
+    --ephemeral-os-disk-placement=: Only applicable when used with `--ephemeral-os-disk`.
+    --ephemeral-os-disk=:
+        description: Allows you to create an OS disk directly on the host node, providing local disk performance and faster VM/VMSS reimage time.
+        nargs: -1
+    --eviction-policy=: The eviction policy for virtual machines in a Spot priority scale set.
+    --generate-ssh-keys=: Generate SSH public and private key files if missing.
+    --health-probe=: Probe name from the existing load balancer, mainly used for rolling upgrade or automatic repairs
+    --host-group=: Name or ID of dedicated host group that the virtual machine scale set resides in
+    --image=: The name of the operating system image as a URN alias, URN, custom image name or ID, or VHD blob URI.
+    --instance-count=: Number of VMs in the scale set.
+    --lb-nat-pool-name=: Name to use for the NAT pool when creating a new load balancer.
+    --lb-nat-rule-name=: Name to use for the NAT rule v2 when creating a new load balancer.
+    --lb-sku=: Sku of the Load Balancer to create.
+    --license-type=: Specifies that the Windows image or disk was licensed on-premises.
+    --load-balancer=: Name to use when creating a new load balancer (default) or referencing an existing one.
+    --max-batch-instance-percent=: The maximum percent of total virtual machine instances that will be upgraded simultaneously by the rolling upgrade in one batch.
+    --max-price=: The maximum price (in US Dollars) you are willing to pay for a Spot VM/VMSS.
+    --max-surge=:
+        description: Specify it to create new virtual machines to upgrade the scale set, rather than updating the existing virtual machines.
+        nargs: -1
+    --max-unhealthy-instance-percent=: The maximum percentage of the total virtual machine instances in the scale set that can be simultaneously unhealthy.
+    --max-unhealthy-upgraded-instance-percent=: The maximum percentage of upgraded virtual machine instances that can be found to be in an unhealthy state.
+    --network-api-version=: Specify the Microsoft.Network API version used when creating networking resources in the Network Interface Configurations for Virtual Machine Scale Set with orchestration mode 'Flexible'.
+    --no-wait=: Do not wait for the long-running operation to finish.
+    --nsg=: Name or ID of an existing Network Security Group.
+    --orchestration-mode=: Choose how virtual machines are managed by the scale set.
+    --os-disk-caching=: Storage caching type for the VM OS disk.
+    --os-disk-delete-option=: Specify whether OS disk should be deleted or detached upon VMSS Flex deletion (This feature is only for VMSS with flexible orchestration mode).
+    --os-disk-encryption-set=: Name or ID of disk encryption set for OS disk.
+    --os-disk-name=: The name of the new VM OS disk.
+    --os-disk-secure-vm-disk-encryption-set=: Specify the customer managed disk encryption set resource ID or name for the managed disk that is used for customer managed key encrypted Confidential VM OS disk and VM guest blob.
+    --os-disk-security-encryption-type=: Specify the encryption type of the OS managed disk.
+    --os-disk-size-gb=: OS disk size in GB to create.
+    --os-type=: Type of OS installed on a custom VHD.
+    --patch-mode=: Mode of in-guest patching to IaaS virtual machine.
+    --pause-time-between-batches=: The wait time between completing the update for all virtual machines in one batch and starting the next batch.
+    --plan-name=: plan name
+    --plan-product=: plan product
+    --plan-promotion-code=: plan promotion code
+    --plan-publisher=: plan publisher
+    --platform-fault-domain-count=: Fault Domain count for each placement group in the availability zone
+    --ppg=: The name or ID of the proximity placement group the VMSS should be associated with.
+    --prioritize-unhealthy-instances=:
+        description: Set this Boolean property will lead to all unhealthy instances in a scale set getting upgraded before any healthy instances
+        nargs: -1
+    --priority=: Priority.
+    --proxy-agent-mode=: Specify the mode that proxy agent will execute on if the feature is enabled.
+    --public-ip-address-allocation=: ""
+    --public-ip-address-dns-name=: Globally unique DNS name for a newly created public IP.
+    --public-ip-address=: Name of the public IP address when creating one (default) or referencing an existing one.
+    --public-ip-per-vm=: Each VM instance will have a public ip.
+    --regular-priority-count=: The base number of regular priority VMs that will be created in this scale set as it scales out.
+    --regular-priority-percentage=: The percentage of VM instances, after the base regular priority count has been reached, that are expected to use regular priority.
+    --role=: Role name or id the system assigned identity will have.
+    --scale-in-policy=:
+        description: Specify the scale-in policy (space delimited) that decides which virtual machines are chosen for removal when a Virtual Machine Scale Set is scaled-in.
+        nargs: -1
+    --scope=: Scope that the system assigned identity can access.
+    --secrets=:
+        description: 'One or many Key Vault secrets as JSON strings or files via `@{path}` containing `[{ "sourceVault": { "id": "value" }, "vaultCertificates": [{ "certificateUrl": "value", "certificateStore": "cert store name (only on windows)"}] }]`'
+        nargs: -1
+    --security-posture-reference-exclude-extensions=:
+        description: List of virtual machine extensions to exclude when applying the Security Posture.
+        nargs: -1
+    --security-posture-reference-id=: The security posture reference id in the form of /CommunityGalleries/{communityGalleryName}/securityPostures/{securityPostureName}/versions/{major.minor.patch}|{major.*}|latest
+    --security-posture-reference-is-overridable=:
+        description: Whether the security posture can be overridden by the user.
+        nargs: -1
+    --security-type=: Specify the security type of the virtual machine.
+    --single-placement-group=:
+        description: Limit the scale set to a single placement group.
+        nargs: -1
+    --skuprofile-allocation-strategy=: Allocation strategy for vm sizes in SKU profile.
+    --skuprofile-vmsizes=:
+        description: A list of VM sizes in the scale set.
+        nargs: -1
+    --specialized=:
+        description: Indicate whether the source image is specialized.
+        nargs: -1
+    --spot-restore-timeout=: Timeout value expressed as an ISO 8601 time duration after which the platform will not try to restore the VMSS SPOT instances
+    --ssh-dest-key-path=: Destination file path on the VM for the SSH key.
+    --ssh-key-type=: Specify the type of SSH public and private key files to be generated if missing.
+    --ssh-key-values=:
+        description: Space-separated list of SSH public keys or public key file paths.
+        nargs: -1
+    --storage-container-name=: Only applicable when used with `--use-unmanaged-disk`.
+    --storage-sku=:
+        description: The SKU of the storage account with which to persist VM.
+        nargs: -1
+    --subnet-address-prefix=: The subnet IP address prefix to use when creating a new VNet in CIDR format.
+    --subnet=: The name of the subnet when creating a new VNet or referencing an existing one.
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --terminate-notification-time=: Length of time (in minutes, between 5 and 15) a notification to be sent to the VM on the instance metadata server till the VM gets deleted
+    --ultra-ssd-enabled=:
+        description: Enables or disables the capability to have 1 or more managed data disks with UltraSSD_LRS storage account
+        nargs: -1
+    --upgrade-policy-mode=: Specify the mode of an upgrade to virtual machines in the scale set.
+    --use-unmanaged-disk=: Do not use managed disk to persist VM
+    --user-data=: UserData for the virtual machines in the scale set.
+    --v-cpus-available=: Specify the number of vCPUs available
+    --v-cpus-per-core=: Specify the ratio of vCPU to physical core.
+    --validate=: Generate and validate the ARM template without creating any resources.
+    --vm-domain-name=: domain name of VM instances, once configured, the FQDN is `vm<vm-index>.<vm-domain-name>.<..rest..>`
+    --vm-sku=: Size of VMs in the scale set.
+    --vnet-address-prefix=: The IP address prefix to use when creating a new VNet in CIDR format.
+    --vnet-name=: Name of the virtual network when creating a new one or referencing an existing one.
+    --zone-balance=:
+        description: Whether to force strictly even Virtual Machine distribution cross x-zones in case there is zone outage.
+        nargs: -1
+    -g, --resource-group=!: Name of resource group.
+    -l, --location=: Location in which to create VM and related resources.
+    -n, --name=!: Name of the virtual machine scale set.
+    -z, --zones=:
+        description: Space-separated list of availability zones into which to provision the resource.
+        nargs: -1
+completion:
+    flag:
+        accelerated-networking:
+            - "true"
+            - "false"
+        additional-scheduled-events:
+            - "true"
+            - "false"
+        authentication-type:
+            - ssh
+            - password
+            - all
+        automatic-repairs-action:
+            - Replace
+            - Restart
+            - Reimage
+        data-disk-delete-option:
+            - Delete
+            - Detach
+        disk-controller-type:
+            - SCSI
+            - NVMe
+        enable-agent:
+            - "true"
+            - "false"
+        enable-auto-os-upgrade:
+            - "true"
+            - "false"
+        enable-auto-update:
+            - "true"
+            - "false"
+        enable-cross-zone-upgrade:
+            - "true"
+            - "false"
+        enable-hibernation:
+            - "true"
+            - "false"
+        enable-osimage-notification:
+            - "true"
+            - "false"
+        enable-proxy-agent:
+            - "true"
+            - "false"
+        enable-resilient-creation:
+            - "true"
+            - "false"
+        enable-resilient-deletion:
+            - "true"
+            - "false"
+        enable-secure-boot:
+            - "true"
+            - "false"
+        enable-spot-restore:
+            - "true"
+            - "false"
+        enable-user-reboot-scheduled-events:
+            - "true"
+            - "false"
+        enable-user-redeploy-scheduled-events:
+            - "true"
+            - "false"
+        enable-vtpm:
+            - "true"
+            - "false"
+        encryption-at-host:
+            - "true"
+            - "false"
+        ephemeral-os-disk:
+            - "true"
+            - "false"
+        ephemeral-os-disk-placement:
+            - CacheDisk
+            - ResourceDisk
+            - NvmeDisk
+        eviction-policy:
+            - Deallocate
+            - Delete
+        lb-sku:
+            - Basic
+            - Standard
+            - Gateway
+        license-type:
+            - Windows_Server
+            - Windows_Client
+            - RHEL_BYOS
+            - SLES_BYOS
+            - RHEL_BASE
+            - RHEL_SAPAPPS
+            - RHEL_SAPHA
+            - RHEL_EUS
+            - RHEL_BASESAPAPPS
+            - RHEL_BASESAPHA
+            - SLES_STANDARD
+            - SLES
+            - SLES_SAP
+            - SLES_HPC
+            - None
+            - RHEL_ELS_6
+            - UBUNTU_PRO
+            - UBUNTU
+        max-surge:
+            - "true"
+            - "false"
+        orchestration-mode:
+            - Uniform
+            - Flexible
+        os-disk-caching:
+            - None
+            - ReadOnly
+            - ReadWrite
+        os-disk-delete-option:
+            - Delete
+            - Detach
+        os-disk-security-encryption-type:
+            - VMGuestStateOnly
+            - DiskWithVMGuestState
+            - NonPersistedTPM
+        os-type:
+            - windows
+            - linux
+        patch-mode:
+            - AutomaticByOS
+            - AutomaticByPlatform
+            - Manual
+            - ImageDefault
+        prioritize-unhealthy-instances:
+            - "true"
+            - "false"
+        priority:
+            - Regular
+            - Low
+            - Spot
+        proxy-agent-mode:
+            - Audit
+            - Enforce
+        public-ip-address-allocation:
+            - dynamic
+            - static
+        scale-in-policy:
+            - Default
+            - OldestVM
+            - NewestVM
+        security-posture-reference-is-overridable:
+            - "true"
+            - "false"
+        security-type:
+            - TrustedLaunch
+            - ConfidentialVM
+            - Standard
+        single-placement-group:
+            - "true"
+            - "false"
+        skuprofile-allocation-strategy:
+            - LowestPrice
+            - CapacityOptimized
+        specialized:
+            - "true"
+            - "false"
+        ssh-key-type:
+            - RSA
+            - Ed25519
+        ultra-ssd-enabled:
+            - "true"
+            - "false"
+        upgrade-policy-mode:
+            - Automatic
+            - Manual
+            - Rolling
+        zone-balance:
+            - "true"
+            - "false"

@@ -1,0 +1,116 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create a container app.
+documentation:
+    flag:
+        args: A list of container startup command argument(s). Space-separated values e.g. "-c" "mycommand". Empty string to clear existing values
+        command: A list of supported commands on the container that will executed during startup. Space-separated values e.g. "/bin/queue" "mycommand". Empty string to clear existing values
+        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
+        exposed-port: Additional exposed port. Only supported by tcp transport protocol. Must be unique per environment if the app ingress is external.
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        registry-identity: A Managed Identity to authenticate with the registry server instead of username/password. Use a resource ID or 'system' for user-defined and system-defined identities, respectively. The registry must be an ACR. If possible, an 'acrpull' role assignemnt will be created for the identity automatically.
+        registry-password: The password to log in to container registry. If stored as a secret, value must start with 'secretref:' followed by the secret name.
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        scale-rule-auth: Scale rule auth parameters. Auth parameters must be in format "{triggerParameter}={secretRef} {triggerParameter}={secretRef} ...".
+        scale-rule-http-concurrency: The maximum number of concurrent requests before scale out. Only supported for http and tcp scale rules.
+        scale-rule-metadata: Scale rule metadata. Metadata must be in format "{key}={value} {key}={value} ...".
+        scale-rule-type: 'The type of the scale rule. Default: http. For more information please visit https://learn.microsoft.com/azure/container-apps/scale-app#scale-triggers'
+        secrets: A list of secret(s) for the container app. Space-separated values in 'key=value' format.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        termination-grace-period: 'Duration in seconds a replica is given to gracefully shut down before it is forcefully terminated. (Default: 30)'
+        yaml: Path to a .yaml file with the configuration of a container app. All other parameters will be ignored. For an example, see  https://learn.microsoft.com/azure/container-apps/azure-resource-manager-api-spec#examples
+flags:
+    --allow-insecure=:
+        description: Allow insecure connections for ingress traffic.
+        nargs: -1
+    --args=:
+        description: A list of container startup command argument(s).
+        nargs: -1
+    --command=:
+        description: A list of supported commands on the container that will executed during startup.
+        nargs: -1
+    --container-name=: Name of the container.
+    --cpu=: Required CPU in cores from 0.25 - 2.0, e.g. 0.5
+    --dapr-app-id=: The Dapr application identifier.
+    --dapr-app-port=: The port Dapr uses to talk to the application.
+    --dapr-app-protocol=: The protocol Dapr uses to talk to the application.
+    --dapr-enable-api-logging=: Enable API logging for the Dapr sidecar.
+    --dapr-http-max-request-size=: Increase max size of request body http and grpc servers parameter in MB to handle uploading of big files.
+    --dapr-http-read-buffer-size=: Dapr max size of http header read buffer in KB to handle when sending multi-KB headers..
+    --dapr-log-level=: Set the log level for the Dapr sidecar.
+    --enable-dapr=:
+        description: Boolean indicating if the Dapr side car is enabled.
+        nargs: -1
+    --env-vars=:
+        description: A list of environment variable(s) for the container.
+        nargs: -1
+    --environment=: Name or resource ID of the container app's environment.
+    --exposed-port=: Additional exposed port.
+    --ingress=: The ingress type.
+    --max-replicas=: The maximum number of replicas.
+    --memory=: Required memory from 0.5 - 4.0 ending with "Gi", e.g. 1.0Gi
+    --min-replicas=: The minimum number of replicas.
+    --no-wait=: Do not wait for the long-running operation to finish.
+    --registry-identity=: A Managed Identity to authenticate with the registry server instead of username/password.
+    --registry-password=: The password to log in to container registry.
+    --registry-server=: The container registry server hostname, e.g. myregistry.azurecr.io.
+    --registry-username=: The username to log in to container registry.
+    --revision-suffix=: User friendly suffix that is appended to the revision name
+    --revisions-mode=: The active revisions mode for the container app.
+    --scale-rule-auth=:
+        description: Scale rule auth parameters.
+        nargs: -1
+    --scale-rule-http-concurrency=: The maximum number of concurrent requests before scale out.
+    --scale-rule-metadata=:
+        description: Scale rule metadata.
+        nargs: -1
+    --scale-rule-name=: The name of the scale rule.
+    --scale-rule-type=: The type of the scale rule.
+    --secret-volume-mount=: Path to mount all secrets e.g. mnt/secrets
+    --subscription=: Name or ID of subscription.
+    --system-assigned=: Boolean indicating whether to assign system-assigned identity.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --target-port=: The application port used for ingress traffic.
+    --termination-grace-period=: Duration in seconds a replica is given to gracefully shut down before it is forcefully terminated.
+    --transport=: The transport protocol used for ingress traffic.
+    --user-assigned=:
+        description: Space-separated user identities to be assigned.
+        nargs: -1
+    --yaml=: Path to a .yaml file with the configuration of a container app.
+    -g, --resource-group=!: Name of resource group.
+    -i, --image=: Container image, e.g. publisher/image-name:tag.
+    -n, --name=!: The name of the Containerapp.
+    -s, --secrets=:
+        description: A list of secret(s) for the container app.
+        nargs: -1
+    -w, --workload-profile-name=: Name of the workload profile to run the app on.
+completion:
+    flag:
+        allow-insecure:
+            - "true"
+            - "false"
+        dapr-app-protocol:
+            - http
+            - grpc
+        dapr-log-level:
+            - info
+            - debug
+            - warn
+            - error
+        enable-dapr:
+            - "true"
+            - "false"
+        ingress:
+            - internal
+            - external
+        revisions-mode:
+            - single
+            - multiple
+        transport:
+            - auto
+            - http
+            - http2
+            - tcp

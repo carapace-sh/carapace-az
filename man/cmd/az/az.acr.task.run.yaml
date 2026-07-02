@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: run
+description: Manually trigger a task that might otherwise be waiting for git commits or base image update triggers.
+documentation:
+    flag:
+        arg: 'Build argument in ''--arg name[=value]'' format. Multiples are supported by passing ''--arg name[=value]'' multiple times. IMPORTANT: This parameter should not include passwords, access tokens, or sensitive information of any kind. This parameter value will be visible to the ACR team for debugging purposes.'
+        context: The full URL to the source code repository (Requires '.git' suffix for a github repo) or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag'). If '/dev/null' is specified, the value will be set to None and ignored. This is a required argument if the task is not a system task.
+        file: Relative path of the the task/docker file to the source code root folder. Task files must be suffixed with '.yaml' or piped from the standard input using '-'.
+        log-template: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}''). Only applicable to CMK enabled registry.'
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        secret-arg: Secret build argument in '--secret-arg name[=value]' format. Multiples are supported by passing '--secret-arg name[=value]' multiple times. This parameter value is not surfaced to the ACR team and is more suitable for sensitive information.
+        set: Task value in '--set name[=value]' format. Multiples supported by passing --set multiple times.
+        set-secret: Secret task value in '--set-secret name[=value]' format. Multiples supported by passing --set-secret multiple times.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+flags:
+    --agent-pool=: The name of the agent pool.
+    --arg=: Build argument in '--arg name[=value]' format.
+    --log-template=: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}'').'
+    --no-format=: Indicates whether the logs should be displayed in raw format
+    --no-logs=: Do not show logs after successfully queuing the build.
+    --no-wait=: Do not wait for the run to complete and return immediately after queuing the run.
+    --secret-arg=: Secret build argument in '--secret-arg name[=value]' format.
+    --set-secret=: Secret task value in '--set-secret name[=value]' format.
+    --set=: Task value in '--set name[=value]' format.
+    --subscription=: Name or ID of subscription.
+    --target=: The name of the target build stage.
+    --update-trigger-token=: The payload that will be passed back alongwith the base image trigger notification.
+    -c, --context=: The full URL to the source code repository (Requires '.git' suffix for a github repo) or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag').
+    -f, --file=: Relative path of the the task/docker file to the source code root folder.
+    -g, --resource-group=: Name of resource group.
+    -n, --name=!: The name of the task.
+    -r, --registry=!: The name of the container registry.

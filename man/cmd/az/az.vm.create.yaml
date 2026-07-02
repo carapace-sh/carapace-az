@@ -1,0 +1,356 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create an Azure Virtual Machine.
+documentation:
+    flag:
+        accelerated-networking: enable accelerated networking. Unless specified, CLI will enable it based on machine image and size
+        admin-username: Username for the VM. Default value is current username of OS. If the default value is system reserved, then default value will be set to azureuser. Please refer to https://learn.microsoft.com/rest/api/compute/virtualmachines/createorupdate#osprofile to get a full list of reserved values.
+        assign-identity: accept system or user assigned identities separated by spaces. Use '[system]' to refer system assigned identity, or a resource id to refer user assigned identity. Check out help for more examples
+        attach-data-disks: Attach existing data disks to the VM. Can use the name or ID of a managed disk or the URI to an unmanaged disk VHD.
+        attach-os-disk: Attach an existing OS disk to the VM. Can use the name or ID of a managed disk or the URI to an unmanaged disk VHD.
+        authentication-type: 'Type of authentication to use with the VM. Defaults to password for Windows and SSH public key for Linux. "all" enables both ssh and password authentication. '
+        availability-set: Name or ID of an existing availability set to add the VM to. None by default.
+        boot-diagnostics-storage: pre-existing storage account name or its blob uri to capture boot diagnostics. Its sku should be one of Standard_GRS, Standard_LRS and Standard_RAGRS
+        capacity-reservation-group: The ID or name of the capacity reservation group that is used to allocate. Pass in "None" to disassociate the capacity reservation group. Please note that if you want to delete a VM/VMSS that has been associated with capacity reservation group, you need to disassociate the capacity reservation group first.
+        computer-name: The host OS name of the virtual machine. Defaults to the name of the VM.
+        count: Number of virtual machines to create. Value range is [2, 250], inclusive. Don't specify this parameter if you want to create a normal single VM. The VMs are created in parallel. The output of this command is an array of VMs instead of one single VM. Each VM has its own public IP, NIC. VNET and NSG are shared. It is recommended that no existing public IP, NIC, VNET and NSG are in resource group. When --count is specified, --attach-data-disks, --attach-os-disk, --boot-diagnostics-storage, --computer-name, --host, --host-group, --nics, --os-disk-name, --private-ip-address, --public-ip-address, --public-ip-address-dns-name, --storage-account, --storage-container-name, --subnet, --use-unmanaged-disk, --vnet-name are not allowed.
+        data-disk-caching: storage caching type for data disk(s), including 'None', 'ReadOnly', 'ReadWrite', etc. Use a singular value to apply on all disks, or use `<lun>=<vaule1> <lun>=<value2>` to configure individual disk
+        data-disk-delete-option: Specify whether data disk should be deleted or detached upon VM deletion. If a single data disk is attached, the allowed values are Delete and Detach. For multiple data disks are attached, please use `<data_disk>=Delete <data_disk2>=Detach` to configure each disk
+        disable-integrity-monitoring: Disable installing guest attestation extension and enabling System Assigned Identity for Trusted Launch enabled VMs and VMSS. It will become the default behavior, so it will become useless
+        enable-agent: Indicates whether virtual machine agent should be provisioned on the virtual machine. When this property is not specified, default behavior is to set it to true. This will ensure that VM Agent is installed on the VM so that extensions can be added to the VM later
+        enable-hotpatching: Patch VMs without requiring a reboot. --enable-agent must be set and --patch-mode must be set to AutomaticByPlatform
+        encryption-at-host: Enable Host Encryption for the VM or VMSS. This will enable the encryption for all the disks including Resource/Temp disk at host itself.
+        ephemeral-os-disk-placement: Only applicable when used with `--ephemeral-os-disk`. Allows you to choose the Ephemeral OS disk provisioning location.
+        eviction-policy: The eviction policy for the Spot priority virtual machine. Default eviction policy is Deallocate for a Spot priority virtual machine
+        generate-ssh-keys: Generate SSH public and private key files if missing. The keys will be stored in the ~/.ssh directory
+        host: Resource ID of the dedicated host that the VM will reside in. --host and --host-group can't be used together.
+        host-group: Name or resource ID of the dedicated host group that the VM will reside in. --host and --host-group can't be used together.
+        image: |
+            The name of the operating system image as a URN alias, URN, custom image name or ID, custom image version ID, or VHD blob URI. In addition, it also supports shared gallery image. Please use the image alias including the version of the distribution you want to use. For example: please use Debian11 instead of Debian.' This parameter is required unless using `--attach-os-disk.` Valid URN format: "Publisher:Offer:Sku:Version". For more information, see https://learn.microsoft.com/azure/virtual-machines/linux/cli-ps-findimage
+        license-type: Specifies that the Windows image or disk was licensed on-premises. To enable Azure Hybrid Benefit for Windows Server, use 'Windows_Server'. To enable Multi-tenant Hosting Rights for Windows 10, use 'Windows_Client'. For more information see the Azure Windows VM online docs.
+        location: Location in which to create VM and related resources. If default location is not configured, will default to the resource group's location
+        max-price: The maximum price (in US Dollars) you are willing to pay for a Spot VM/VMSS. -1 indicates that the Spot VM/VMSS should not be evicted for price reasons
+        nic-delete-option: Specify what happens to the network interface when the VM is deleted. Use a singular value to apply on all resources, or use `<Name>=<Value>` to configure the delete behavior for individual resources. Possible options are Delete and Detach.
+        nics: Names or IDs of existing NICs to attach to the VM. The first NIC will be designated as primary. If omitted, a new NIC will be created. If an existing NIC is specified, do not specify subnet, VNet, public IP or NSG.
+        nsg: The name to use when creating a new Network Security Group (default) or referencing an existing one. Can also reference an existing NSG by ID or specify "" for none ('""' in Azure CLI using PowerShell or --% operator).
+        nsg-rule: NSG rule to create when creating a new NSG. Defaults to open ports for allowing RDP on Windows and allowing SSH on Linux. NONE represents no NSG rule
+        os-disk-caching: 'Storage caching type for the VM OS disk. Default: ReadWrite'
+        os-type: Type of OS installed on a custom VHD. Do not use when specifying an URN or URN alias.
+        patch-mode: 'Mode of in-guest patching to IaaS virtual machine. Allowed values for Windows VM: AutomaticByOS, AutomaticByPlatform, Manual. Allowed values for Linux VM: AutomaticByPlatform, ImageDefault. Manual - You control the application of patches to a virtual machine. You do this by applying patches manually inside the VM. In this mode, automatic updates are disabled; the paramater --enable-auto-update must be false. AutomaticByOS - The virtual machine will automatically be updated by the OS. The parameter --enable-auto-update must be true. AutomaticByPlatform - the virtual machine will automatically updated by the OS. ImageDefault - The virtual machine''s default patching configuration is used. The parameter --enable-agent and --enable-auto-update must be true'
+        platform-fault-domain: Specify the scale set logical fault domain into which the virtual machine will be created. By default, the virtual machine will be automatically assigned to a fault domain that best maintains balance across available fault domains. This is applicable only if the virtualMachineScaleSet property of this virtual machine is set. The virtual machine scale set that is referenced, must have platform fault domain count. This property cannot be updated once the virtual machine is created. Fault domain assignment can be viewed in the virtual machine instance view
+        priority: Priority. Use 'Spot' to run short-lived workloads in a cost-effective way. 'Low' enum will be deprecated in the future. Please use 'Spot' to deploy Azure spot VM and/or VMSS. Default to Regular.
+        public-ip-address: Name of the public IP address when creating one (default) or referencing an existing one. Can also reference an existing public IP by ID or specify "" or '' for None ('""' in Azure CLI using PowerShell).
+        public-ip-sku: Public IP SKU. The public IP is supported to be created on edge zone only when it is 'Standard'
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        role: 'Role name or id the system assigned identity will have. '
+        scope: 'Scope that the system assigned identity can access. '
+        size: The VM size to be created. See https://azure.microsoft.com/pricing/details/virtual-machines/ for size info.
+        source-disk-restore-point: create a data disk from a disk restore point. Can use the ID of a disk restore point.
+        source-snapshots-or-disks: Create a data disk from a snapshot or another disk. Can use the ID of a disk or snapshot.
+        ssh-dest-key-path: Destination file path on the VM for the SSH key. If the file already exists, the specified key(s) are appended to the file. Destination path for SSH public keys is currently limited to its default value "/home/username/.ssh/authorized_keys" due to a known issue in Linux provisioning agent.
+        ssh-key-name: Use it as public key in virtual machine. It should be an existing SSH key resource in Azure.
+        storage-account: Only applicable when used with `--use-unmanaged-disk`. The name to use when creating a new storage account or referencing an existing one. If omitted, an appropriate storage account in the same resource group and location will be used, or a new one will be created.
+        storage-container-name: 'Only applicable when used with `--use-unmanaged-disk`. Name of the storage container for the VM OS disk. Default: vhds'
+        storage-sku: 'The SKU of the storage account with which to persist VM. Use a singular sku that would be applied across all disks, or specify individual disks. Usage: [--storage-sku SKU | --storage-sku ID=SKU ID=SKU ID=SKU...], where each ID is "os" or a 0-indexed lun. Allowed values: Standard_LRS, Premium_LRS, StandardSSD_LRS, UltraSSD_LRS, Premium_ZRS, StandardSSD_ZRS, PremiumV2_LRS.'
+        subnet: The name of the subnet when creating a new VNet or referencing an existing one. Can also reference an existing subnet by ID. If both vnet-name and subnet are omitted, an appropriate VNet and subnet will be selected automatically, or a new one will be created.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        user-data: UserData for the VM. It can be passed in as file or string.
+        v-cpus-per-core: Specify the ratio of vCPU to physical core. Setting this property to 1 also means that hyper-threading is disabled.
+        vmss: Name or ID of an existing virtual machine scale set that the virtual machine should be assigned to. None by default.
+        workspace: Name or ID of Log Analytics Workspace. If you specify the workspace through its name, the workspace should be in the same resource group with the vm, otherwise a new workspace will be created.
+flags:
+    --accelerated-networking=:
+        description: enable accelerated networking.
+        nargs: -1
+    --accept-term=: Accept the license agreement and privacy statement.
+    --additional-scheduled-events=:
+        description: The configuration parameter used while creating event grid and resource graph scheduled event setting.
+        nargs: -1
+    --admin-password=: Password for the VM if authentication type is 'Password'.
+    --admin-username=: Username for the VM.
+    --asgs=:
+        description: Space-separated list of existing application security groups to associate with the VM.
+        nargs: -1
+    --assign-identity=:
+        description: accept system or user assigned identities separated by spaces.
+        nargs: -1
+    --attach-data-disks=:
+        description: Attach existing data disks to the VM.
+        nargs: -1
+    --attach-os-disk=: Attach an existing OS disk to the VM.
+    --authentication-type=: Type of authentication to use with the VM.
+    --availability-set=: Name or ID of an existing availability set to add the VM to.
+    --boot-diagnostics-storage=: pre-existing storage account name or its blob uri to capture boot diagnostics.
+    --capacity-reservation-group=: The ID or name of the capacity reservation group that is used to allocate.
+    --computer-name=: The host OS name of the virtual machine.
+    --count=: Number of virtual machines to create.
+    --custom-data=: Custom init script file or text (cloud-init, cloud-config, etc..)
+    --data-disk-caching=:
+        description: storage caching type for data disk(s), including 'None', 'ReadOnly', 'ReadWrite', etc.
+        nargs: -1
+    --data-disk-delete-option=:
+        description: Specify whether data disk should be deleted or detached upon VM deletion.
+        nargs: -1
+    --data-disk-encryption-sets=:
+        description: Names or IDs (space delimited) of disk encryption sets for data disks.
+        nargs: -1
+    --data-disk-sizes-gb=:
+        description: space-separated empty managed data disk sizes in GB to create
+        nargs: -1
+    --disable-integrity-monitoring-autoupgrade=: Disable auto upgrade of guest attestation extension for Trusted Launch enabled VMs and VMSS.
+    --disable-integrity-monitoring=: Disable installing guest attestation extension and enabling System Assigned Identity for Trusted Launch enabled VMs and VMSS.
+    --disk-controller-type=: Specify the disk controller type configured for the VM or VMSS.
+    --edge-zone=: The name of edge zone.
+    --enable-agent=:
+        description: Indicates whether virtual machine agent should be provisioned on the virtual machine.
+        nargs: -1
+    --enable-auto-update=:
+        description: Indicate whether Automatic Updates is enabled for the Windows virtual machine
+        nargs: -1
+    --enable-hibernation=:
+        description: The flag that enable or disable hibernation capability on the VM.
+        nargs: -1
+    --enable-hotpatching=:
+        description: Patch VMs without requiring a reboot.
+        nargs: -1
+    --enable-integrity-monitoring=: Enable installing Microsoft propietary and not security supported guest attestation extension and enabling System Assigned Identity for Trusted Launch enabled VMs and VMSS.
+    --enable-proxy-agent=:
+        description: Specify whether proxy agent feature should be enabled on the virtual machine or virtual machine scale set.
+        nargs: -1
+    --enable-secure-boot=:
+        description: Enable secure boot.
+        nargs: -1
+    --enable-user-reboot-scheduled-events=:
+        description: The configuration parameter used while publishing scheduled events additional publishing targets.
+        nargs: -1
+    --enable-user-redeploy-scheduled-events=:
+        description: The configuration parameter used while creating user initiated redeploy scheduled event setting creation.
+        nargs: -1
+    --enable-vtpm=:
+        description: Enable vTPM.
+        nargs: -1
+    --encryption-at-host=:
+        description: Enable Host Encryption for the VM or VMSS.
+        nargs: -1
+    --encryption-identity=: Resource Id of the user managed identity which can be used for Azure disk encryption
+    --ephemeral-os-disk-placement=: Only applicable when used with `--ephemeral-os-disk`.
+    --ephemeral-os-disk=:
+        description: Allows you to create an OS disk directly on the host node, providing local disk performance and faster VM/VMSS reimage time.
+        nargs: -1
+    --eviction-policy=: The eviction policy for the Spot priority virtual machine.
+    --generate-ssh-keys=: Generate SSH public and private key files if missing.
+    --host-group=: Name or resource ID of the dedicated host group that the VM will reside in.
+    --host=: Resource ID of the dedicated host that the VM will reside in.
+    --image=: The name of the operating system image as a URN alias, URN, custom image name or ID, custom image version ID, or VHD blob URI.
+    --license-type=: Specifies that the Windows image or disk was licensed on-premises.
+    --max-price=: The maximum price (in US Dollars) you are willing to pay for a Spot VM/VMSS.
+    --nic-delete-option=:
+        description: Specify what happens to the network interface when the VM is deleted.
+        nargs: -1
+    --nics=:
+        description: Names or IDs of existing NICs to attach to the VM.
+        nargs: -1
+    --no-wait=: Do not wait for the long-running operation to finish.
+    --nsg-rule=: NSG rule to create when creating a new NSG.
+    --nsg=: The name to use when creating a new Network Security Group (default) or referencing an existing one.
+    --os-disk-caching=: Storage caching type for the VM OS disk.
+    --os-disk-delete-option=: Specify the behavior of the managed disk when the VM gets deleted i.e whether the managed disk is deleted or detached.
+    --os-disk-encryption-set=: Name or ID of disk encryption set for OS disk.
+    --os-disk-name=: The name of the new VM OS disk.
+    --os-disk-secure-vm-disk-encryption-set=: Specify the customer managed disk encryption set resource ID or name for the managed disk that is used for customer managed key encrypted Confidential VM OS disk and VM guest blob.
+    --os-disk-security-encryption-type=: Specify the encryption type of the OS managed disk.
+    --os-disk-size-gb=: OS disk size in GB to create.
+    --os-type=: Type of OS installed on a custom VHD.
+    --patch-mode=: Mode of in-guest patching to IaaS virtual machine.
+    --plan-name=: plan name
+    --plan-product=: plan product
+    --plan-promotion-code=: plan promotion code
+    --plan-publisher=: plan publisher
+    --platform-fault-domain=: Specify the scale set logical fault domain into which the virtual machine will be created.
+    --ppg=: The name or ID of the proximity placement group the VM should be associated with.
+    --priority=: Priority.
+    --private-ip-address=: Static private IP address (e.g. 10.0.0.5).
+    --proxy-agent-mode=: Specify the mode that proxy agent will execute on if the feature is enabled.
+    --public-ip-address-allocation=: ""
+    --public-ip-address-dns-name=: Globally unique DNS name for a newly created public IP.
+    --public-ip-address=: Name of the public IP address when creating one (default) or referencing an existing one.
+    --public-ip-sku=: Public IP SKU.
+    --role=: Role name or id the system assigned identity will have.
+    --scope=: Scope that the system assigned identity can access.
+    --secrets=:
+        description: 'One or many Key Vault secrets as JSON strings or files via `@{path}` containing `[{ "sourceVault": { "id": "value" }, "vaultCertificates": [{ "certificateUrl": "value", "certificateStore": "cert store name (only on windows)"}] }]`'
+        nargs: -1
+    --security-type=: Specify the security type of the virtual machine.
+    --size=: The VM size to be created.
+    --source-disk-restore-point-size-gb=:
+        description: The size of the source disk restore point in GB
+        nargs: -1
+    --source-disk-restore-point=:
+        description: create a data disk from a disk restore point.
+        nargs: -1
+    --source-snapshots-or-disks-size-gb=:
+        description: The size of the source disk in GB
+        nargs: -1
+    --source-snapshots-or-disks=:
+        description: Create a data disk from a snapshot or another disk.
+        nargs: -1
+    --specialized=:
+        description: Indicate whether the source image is specialized.
+        nargs: -1
+    --ssh-dest-key-path=: Destination file path on the VM for the SSH key.
+    --ssh-key-name=: Use it as public key in virtual machine.
+    --ssh-key-type=: Specify the type of SSH public and private key files to be generated if missing.
+    --ssh-key-values=:
+        description: Space-separated list of SSH public keys or public key file paths.
+        nargs: -1
+    --storage-account=: Only applicable when used with `--use-unmanaged-disk`.
+    --storage-container-name=: Only applicable when used with `--use-unmanaged-disk`.
+    --storage-sku=:
+        description: The SKU of the storage account with which to persist VM.
+        nargs: -1
+    --subnet-address-prefix=: The subnet IP address prefix to use when creating a new VNet in CIDR format.
+    --subnet=: The name of the subnet when creating a new VNet or referencing an existing one.
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --ultra-ssd-enabled=:
+        description: Enables or disables the capability to have 1 or more managed data disks with UltraSSD_LRS storage account
+        nargs: -1
+    --use-unmanaged-disk=: Do not use managed disk to persist VM
+    --user-data=: UserData for the VM.
+    --v-cpus-available=: Specify the number of vCPUs available
+    --v-cpus-per-core=: Specify the ratio of vCPU to physical core.
+    --validate=: Generate and validate the ARM template without creating any resources.
+    --vmss=: Name or ID of an existing virtual machine scale set that the virtual machine should be assigned to.
+    --vnet-address-prefix=: The IP address prefix to use when creating a new VNet in CIDR format.
+    --vnet-name=: Name of the virtual network when creating a new one or referencing an existing one.
+    --workspace=: Name or ID of Log Analytics Workspace.
+    -g, --resource-group=!: Name of resource group.
+    -l, --location=: Location in which to create VM and related resources.
+    -n, --name=!: Name of the virtual machine.
+    -z, --zone=: Availability zone into which to provision the resource.
+completion:
+    flag:
+        accelerated-networking:
+            - "true"
+            - "false"
+        additional-scheduled-events:
+            - "true"
+            - "false"
+        authentication-type:
+            - ssh
+            - password
+            - all
+        disk-controller-type:
+            - SCSI
+            - NVMe
+        enable-agent:
+            - "true"
+            - "false"
+        enable-auto-update:
+            - "true"
+            - "false"
+        enable-hibernation:
+            - "true"
+            - "false"
+        enable-hotpatching:
+            - "true"
+            - "false"
+        enable-proxy-agent:
+            - "true"
+            - "false"
+        enable-secure-boot:
+            - "true"
+            - "false"
+        enable-user-reboot-scheduled-events:
+            - "true"
+            - "false"
+        enable-user-redeploy-scheduled-events:
+            - "true"
+            - "false"
+        enable-vtpm:
+            - "true"
+            - "false"
+        encryption-at-host:
+            - "true"
+            - "false"
+        ephemeral-os-disk:
+            - "true"
+            - "false"
+        ephemeral-os-disk-placement:
+            - CacheDisk
+            - ResourceDisk
+            - NvmeDisk
+        eviction-policy:
+            - Deallocate
+            - Delete
+        license-type:
+            - Windows_Server
+            - Windows_Client
+            - RHEL_BYOS
+            - SLES_BYOS
+            - RHEL_BASE
+            - RHEL_SAPAPPS
+            - RHEL_SAPHA
+            - RHEL_EUS
+            - RHEL_BASESAPAPPS
+            - RHEL_BASESAPHA
+            - SLES_STANDARD
+            - SLES
+            - SLES_SAP
+            - SLES_HPC
+            - None
+            - RHEL_ELS_6
+            - UBUNTU_PRO
+            - UBUNTU
+        nsg-rule:
+            - RDP
+            - SSH
+            - NONE
+        os-disk-caching:
+            - None
+            - ReadOnly
+            - ReadWrite
+        os-disk-delete-option:
+            - Delete
+            - Detach
+        os-disk-security-encryption-type:
+            - VMGuestStateOnly
+            - DiskWithVMGuestState
+            - NonPersistedTPM
+        os-type:
+            - windows
+            - linux
+        patch-mode:
+            - AutomaticByOS
+            - AutomaticByPlatform
+            - Manual
+            - ImageDefault
+        priority:
+            - Regular
+            - Low
+            - Spot
+        proxy-agent-mode:
+            - Audit
+            - Enforce
+        public-ip-address-allocation:
+            - dynamic
+            - static
+        public-ip-sku:
+            - Basic
+            - Standard
+        security-type:
+            - TrustedLaunch
+            - ConfidentialVM
+            - Standard
+        specialized:
+            - "true"
+            - "false"
+        ssh-key-type:
+            - RSA
+            - Ed25519
+        ultra-ssd-enabled:
+            - "true"
+            - "false"

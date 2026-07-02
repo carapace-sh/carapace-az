@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Creates a new share under the specified account.
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
+        enable-snapshot-virtual-directory-access: Specifies whether the snapshot virtual directory should be accessible at the root of the share mount point when NFS is enabled. If not specified, it will be accessible.
+        fail-on-exist: Specify whether to throw an exception when the share exists. False by default.
+        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
+        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
+        quota: Specifies the maximum size of the share, in gigabytes. Must be greater than 0, and less than or equal to 5TB (5120).
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: Request timeout in seconds. Applies to each call to the service.
+flags:
+    --account-key=: Storage account key.
+    --account-name=: Storage account name.
+    --connection-string=: Storage account connection string.
+    --enable-snapshot-virtual-directory-access=:
+        description: Specifies whether the snapshot virtual directory should be accessible at the root of the share mount point when NFS is enabled.
+        nargs: -1
+    --fail-on-exist=: Specify whether to throw an exception when the share exists.
+    --file-endpoint=: Storage data service endpoint.
+    --metadata=:
+        description: Metadata in space-separated key=value pairs.
+        nargs: -1
+    --protocol=: The protocol to enable for the share.
+    --quota=: Specifies the maximum size of the share, in gigabytes.
+    --sas-token=: A Shared Access Signature (SAS).
+    --subscription=: Name or ID of subscription.
+    --timeout=: Request timeout in seconds.
+    -n, --name=!: The file share name.
+completion:
+    flag:
+        enable-snapshot-virtual-directory-access:
+            - "true"
+            - "false"
+        protocol:
+            - SMB
+            - NFS

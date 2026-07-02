@@ -1,0 +1,91 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: import
+description: Import configurations into your App Configuration store from another place.
+documentation:
+    flag:
+        appservice-account: ARM ID for AppService OR the name of the AppService, assuming it is in the same subscription and resource group as the App Configuration store. Required for AppService arguments
+        auth-mode: This parameter can be used for indicating how a data operation is to be authorized. If the auth mode is "key", provide connection string or store name and your account access keys will be retrieved for authorization. If the auth mode is "login", provide the `--endpoint` or `--name` and your "az login" credentials will be used for authorization. You can configure the default auth mode using `az configure --defaults appconfig_auth_mode=<auth_mode>`. For more information, see https://learn.microsoft.com/azure/azure-app-configuration/concept-enable-rbac
+        connection-string: Combination of access key and endpoint of the App Configuration store. Can be found using 'az appconfig credential list'. Users can preset it using `az configure --defaults appconfig_connection_string=<connection_string>` or environment variable with the name AZURE_APPCONFIG_CONNECTION_STRING.
+        depth: Depth for flattening the json or yaml file to key-value pairs. Flatten to the deepest level by default if --separator is provided. Not applicable for property files or feature flags.
+        endpoint: If auth mode is "login", provide endpoint URL of the App Configuration store. The endpoint can be retrieved using "az appconfig show" command. You can configure the default endpoint using `az configure --defaults appconfig_endpoint=<endpoint>`
+        format: Imported file format. Required for file arguments. Currently, feature flags are not supported in properties format.
+        import-mode: If import mode is "ignore-match", only source key-values that do not already exist or whose value, content-type or tags are different from that of an existing key-value with the same key and label, will be written. Import mode "all" writes all key-values to the destination regardless of whether they exist or not.
+        label: Imported KVs and feature flags will be assigned with this label. If no label specified, will assign null label.
+        name: Name of the App Configuration store. You can configure the default name using `az configure --defaults app_configuration_store=<name>`.
+        path: Local configuration file path. Required for file arguments.
+        prefix: This prefix will be appended to the front of imported keys. Prefix will be ignored for feature flags.
+        preserve-labels: Flag to preserve labels from source AppConfig. This argument should NOT be specified along with --label.
+        profile: Import profile to be used for importing the key-values. Options 'depth', 'separator', 'content-type', 'label', 'skip-features' and, 'prefix' are not supported when using 'appconfig/kvset' profile.
+        separator: 'Delimiter for flattening the json or yaml file to key-value pairs. Separator will be ignored for property files and feature flags. Supported values: ''.'', '','', '';'', ''-'', ''_'', ''__'', ''/'', '':'' '
+        skip-features: Import only key values and exclude all feature flags. By default, all feature flags will be imported from file or appconfig. Not applicable for appservice.
+        source: The source of importing. Note that importing feature flags from appservice is not supported.
+        src-auth-mode: Auth mode for connecting to source App Configuration store. For details, refer to "--auth-mode" argument.
+        src-key: If no key specified, import all keys by default. Support star sign as filters, for instance abc* means keys with abc as prefix. Key filtering not applicable for feature flags. By default, all feature flags with specified label will be imported.
+        src-label: Only keys with this label in source AppConfig will be imported. If no value specified, import keys with null label by default. Support star sign as filters, for instance * means all labels, abc* means labels with abc as prefix.
+        src-snapshot: Import all keys in a given snapshot of the source App Configuration store. If no snapshot is specified, the keys currently in the store are imported based on the specified key and label filters.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+flags:
+    --appservice-account=: ARM ID for AppService OR the name of the AppService, assuming it is in the same subscription and resource group as the App Configuration store.
+    --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
+    --connection-string=: Combination of access key and endpoint of the App Configuration store.
+    --content-type=: Content type of all imported items.
+    --depth=: Depth for flattening the json or yaml file to key-value pairs.
+    --endpoint=: If auth mode is "login", provide endpoint URL of the App Configuration store.
+    --format=: Imported file format.
+    --import-mode=: If import mode is "ignore-match", only source key-values that do not already exist or whose value, content-type or tags are different from that of an existing key-value with the same key and label, will be written.
+    --label=: Imported KVs and feature flags will be assigned with this label.
+    --path=: Local configuration file path.
+    --prefix=: This prefix will be appended to the front of imported keys.
+    --preserve-labels=:
+        description: Flag to preserve labels from source AppConfig.
+        nargs: -1
+    --profile=: Import profile to be used for importing the key-values.
+    --separator=: Delimiter for flattening the json or yaml file to key-value pairs.
+    --skip-features=:
+        description: Import only key values and exclude all feature flags.
+        nargs: -1
+    --src-auth-mode=: Auth mode for connecting to source App Configuration store.
+    --src-connection-string=: Combination of access key and endpoint of the source store.
+    --src-endpoint=: If --src-auth-mode is "login", provide endpoint URL of the source App Configuration store.
+    --src-key=: If no key specified, import all keys by default.
+    --src-label=: Only keys with this label in source AppConfig will be imported.
+    --src-name=: The name of the source App Configuration store.
+    --src-snapshot=: Import all keys in a given snapshot of the source App Configuration store.
+    --strict=:
+        description: Delete all other key-values in the store with specified prefix and label
+        nargs: -1
+    --subscription=: Name or ID of subscription.
+    -n, --name=: Name of the App Configuration store.
+    -s, --source=!: The source of importing.
+    -y, --yes=: Do not prompt for preview.
+completion:
+    flag:
+        auth-mode:
+            - login
+            - key
+        format:
+            - json
+            - yaml
+            - properties
+        import-mode:
+            - all
+            - ignore-match
+        preserve-labels:
+            - "true"
+            - "false"
+        profile:
+            - appconfig/default
+            - appconfig/kvset
+        skip-features:
+            - "true"
+            - "false"
+        source:
+            - file
+            - appconfig
+            - appservice
+        src-auth-mode:
+            - login
+            - key
+        strict:
+            - "true"
+            - "false"

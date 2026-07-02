@@ -1,0 +1,67 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: copy
+description: Copy files or directories to or from Azure storage.
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_KEY'
+        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
+        cap-mbps: 'Caps the transfer rate, in megabits per second. Moment-by-moment throughput might vary slightly from the cap. If this option is set to zero, or it is omitted, the throughput isn''t capped. '
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
+        content-type: 'Specify content type of the file. '
+        destination: The path/url of copy destination. It can be a local path, an url to azure storage server. If you provide destination parameter here, you do not need to provide arguments in copy destination arguments group and copy destination arguments will be deprecated in future.
+        exclude-path: 'Exclude these paths. This option does not support wildcard characters (*). Checks relative path prefix. For example: myFolder;myFolder/subDirName/file.pdf.'
+        exclude-pattern: 'Exclude these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
+        include-path: Include only these paths. This option does not support wildcard characters (*). Checks relative path prefix. For example:myFolder;myFolder/subDirName/file.pdf
+        include-pattern: 'Include only these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
+        preserve-s2s-access-tier: Preserve access tier during service to service copy. Please refer to https://learn.microsoft.com/azure/storage/blobs/storage-blob-storage-tiers to ensure destination storage account support setting access tier. In the cases that setting access tier is not supported, please use `--preserve-s2s-access-tier false` to bypass copying access tier. (Default true)
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_SAS_TOKEN'
+        source: The path/url of copy source. It can be a local path, an url to azure storage server or AWS S3 buckets. If you provide source parameter here, you do not need to provide arguments in copy source arguments group and copy source arguments will be deprecated in future.
+        source-account-key: Account key of copy source storage account. Must be used in conjunction with source storage account name.
+        source-sas: Shared Access Signature (SAS) token of copy source. Must be used in conjunction with source storage account name.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+flags:
+    --account-key=: Storage account key.
+    --account-name=: Storage account name of copy destination
+    --auth-mode=: The mode in which to run the command.
+    --blob-type=: The type of blob at the destination.
+    --cap-mbps=: Caps the transfer rate, in megabits per second.
+    --connection-string=: Storage account connection string.
+    --content-type=: Specify content type of the file.
+    --destination-blob=: Blob name in blob container of copy destination storage account
+    --destination-container=: Container name of copy destination storage account
+    --destination-file-path=: File path in file share of copy destination storage account
+    --destination-share=: File share name of copy destination storage account
+    --exclude-path=: Exclude these paths.
+    --exclude-pattern=: Exclude these files where the name matches the pattern list.
+    --follow-symlinks=: Follow symbolic links when uploading from local file system.
+    --include-path=: Include only these paths.
+    --include-pattern=: Include only these files where the name matches the pattern list.
+    --preserve-s2s-access-tier=:
+        description: Preserve access tier during service to service copy.
+        nargs: -1
+    --put-md5=: Create an MD5 hash of each file, and save the hash as the Content-MD5 property of the destination blob/file.Only available when uploading.
+    --sas-token=: A Shared Access Signature (SAS).
+    --source-account-key=: Account key of copy source storage account.
+    --source-account-name=: Account name of copy source storage account.
+    --source-blob=: Blob name in blob container of copy source storage account
+    --source-connection-string=: Connection string of source storage account.
+    --source-container=: Container name of copy source storage account
+    --source-file-path=: File path in file share of copy source storage account
+    --source-sas=: Shared Access Signature (SAS) token of copy source.
+    --source-share=: File share name of copy source storage account
+    --subscription=: Name or ID of subscription.
+    -d, --destination=: The path/url of copy destination.
+    -r, --recursive=: Look into sub-directories recursively.
+    -s, --source=: The path/url of copy source.
+completion:
+    flag:
+        auth-mode:
+            - login
+            - key
+        blob-type:
+            - BlockBlob
+            - PageBlob
+            - AppendBlob
+        preserve-s2s-access-tier:
+            - "true"
+            - "false"

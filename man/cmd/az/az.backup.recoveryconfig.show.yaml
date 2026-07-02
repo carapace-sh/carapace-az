@@ -1,0 +1,61 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: show
+description: Construct the recovery configuration of an Azure workload backed up item.
+documentation:
+    flag:
+        backup-management-type: 'Specify the backup management type. Define how Azure Backup manages the backup of entities within the ARM resource. For eg: AzureWorkloads refers to workloads installed within Azure VMs, AzureStorage refers to entities within Storage account. Required only if friendly name is used as Container name.'
+        container-name: Name of the backup container. Accepts 'Name' or 'FriendlyName' from the output of az backup container list command. If 'FriendlyName' is passed then BackupManagementType is required.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-resource-group: Specify the resource group of target item for Cross Region Restore. Default value will be same as --resource-group if not specified.
+        target-subscription-id: Specify the subscription of the target item for Cross Subscription Restore. Defaulted to source subscription if not specified.
+        target-vault-name: Specify the vault name of target item for Cross Region Restore. Default value will be same as --vault-name if not specified.
+        workload-type: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup. 'MSSQL' and 'SQLDataBase' can be used interchangeably for SQL in Azure VM, as can 'SAPHANA' and 'SAPHanaDatabase' for SAP HANA in Azure VM.
+flags:
+    --backup-management-type=: Specify the backup management type.
+    --filepath=: The path to which the DB should be restored as files.
+    --from-full-rp-name=: Name of the starting Recovery point.
+    --ids=:
+        description: One or more resource IDs (space-delimited).
+        nargs: -1
+    --log-point-in-time=: Specify the point-in-time (in UTC) which will be restored.
+    --restore-mode=!: Specify the restore mode.
+    --subscription=: Name or ID of subscription.
+    --target-container-name=: The target container to which the DB recovery point should be restored.
+    --target-instance-name=: Specify the target instance name for the restore operation.
+    --target-item-name=: Specify the target item name for the restore operation.
+    --target-resource-group=: Specify the resource group of target item for Cross Region Restore.
+    --target-server-name=: Specify the parent server name of the target item.
+    --target-server-type=: Specify the type of the server which should be discovered.
+    --target-subscription-id=: Specify the subscription of the target item for Cross Subscription Restore.
+    --target-vault-name=: Specify the vault name of target item for Cross Region Restore.
+    --workload-type=: Specify the type of applications within the Resource which should be discovered and protected by Azure Backup.
+    -c, --container-name=: Name of the backup container.
+    -g, --resource-group=: Name of resource group.
+    -i, --item-name=: Name of the backed up item.
+    -r, --rp-name=: Name of the recovery point.
+    -v, --vault-name=: Name of the Recovery services vault.
+completion:
+    flag:
+        backup-management-type:
+            - AzureIaasVM
+            - AzureStorage
+            - AzureWorkload
+        restore-mode:
+            - AlternateWorkloadRestore
+            - OriginalWorkloadRestore
+            - RestoreAsFiles
+        target-server-type:
+            - SQLAG
+            - SQLInstance
+            - SQLDatabase
+            - HANAInstance
+            - SAPHanaDatabase
+            - SAPHanaSystem
+        workload-type:
+            - MSSQL
+            - SAPHANA
+            - SAPASE
+            - SAPHanaDatabase
+            - SQLDataBase

@@ -1,0 +1,91 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create a new import workflow for flexible server.
+documentation:
+    flag:
+        address-prefixes: The IP address prefix to use when creating a new virtual network in CIDR format. Default value is 10.0.0.0/16.
+        admin-password: 'The password of the administrator. Minimum 8 characters and maximum 128 characters. Password must contain characters from three of the following categories: English uppercase letters, English lowercase letters, numbers, and non-alphanumeric characters.'
+        admin-user: 'Administrator username for the server. Once set, it cannot be changed. '
+        auto-scale-iops: Enable or disable the auto scale iops. Default value is Enabled.
+        backup-identity: The name or resource ID of the geo backup user identity for data encryption. The identity needs to be in the same region as the backup region.
+        backup-key: The resource ID of the geo backup keyvault key for data encryption. The key needs to be in the same region as the backup region.
+        backup-retention: The number of days a backup is retained. Range of 1 to 35 days. Default is 7 days.
+        data-source: 'Data source for importing to Flexible Server. Based on the data source type provide the data source as mentioned below. e.g., mysql_single: The name or resource ID of the Azure MySQL single server. azure_blob: The name or resource ID of the Azure blob container. The storage uri of the azure blob container. Example: https://{blob_name}.blob.core.windows.net/{container_name}. The storage uri should not contain the sas token. If required, sas token can be provided in "data-source-sas-token" parameter.'
+        data-source-backup-dir: 'Relative path of the directory in which source backup is stored. By default, the backup files will be read from the root of storage. This parameter is valid for storage based data source. Example: azure_blob. '
+        data-source-sas-token: 'Sas token for accessing the data source. This parameter is valid for storage based data source. Example: azure_blob. '
+        data-source-type: 'Data source type. e.g., mysql_single: Azure Database for MySQL Servers. azure_blob: Source backup provided in Azure blob container.'
+        iops: Number of IOPS to be allocated for this server. You will get certain amount of free IOPS based on compute and storage provisioned. The default value for IOPS is free IOPS. To learn more about IOPS based on compute and storage, refer to IOPS in Azure Database for MySQL Flexible Server
+        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
+        mode: 'Mode of import. Enum values: [Offline, Online]. Default is Offline. '
+        name: Name of the server. The name can contain only lowercase letters, numbers, and the hyphen (-) character. Minimum 3 characters and maximum 63 characters.
+        private-dns-zone: This parameter only applies if you are creating cross region replica server with private access. For in-region read replica with private access, source server settings are carried over and this parameter is ignored. The name or id of new or existing private dns zone. You can use the private dns zone from same resource group, different resource group, or different subscription. If you want to use a zone from different resource group or subscription, please provide resource Id. CLI creates a new private dns zone within the same resource group as virtual network if not provided by users.
+        public-access: 'Determines the public access. Enter single or range of IP addresses to be included in the allowed list of IPs. IP address ranges must be dash-separated and not contain any spaces. Specifying 0.0.0.0 allows public access from any resources deployed within Azure to access your server. Setting it to "None" sets the server in public access mode but does not create a firewall rule. '
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        sku-name: 'The name of the compute SKU. Follows the convention Standard_{VM name}. Examples: Standard_B1ms'
+        storage-auto-grow: Enable or disable autogrow of the storage. Default value is Enabled.
+        storage-size: The storage capacity of the server. Minimum is 32 GiB and max is 16 TiB.
+        subnet: Name or resource ID of a new or existing subnet. This parameter only applies if you are creating cross region replica server with private access. For in-region read replica with private access, source server settings are carried over and this parameter is ignored. If you want to use a subnet from different resource group or subscription, please provide resource ID instead of name. Please note that the subnet will be delegated to flexibleServers. After delegation, this subnet cannot be used for any other type of Azure resources.
+        subnet-prefixes: The subnet IP address prefix to use when creating a new subnet in CIDR format. Default value is 10.0.0.0/24.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        tier: 'Compute tier of the server. Accepted values: Burstable, GeneralPurpose, MemoryOptimized '
+        vnet: Name or ID of a new or existing virtual network. This parameter only applies if you are creating cross region replica server with private access. For in-region read replica with private access, source server settings are carried over and this parameter is ignored. If you want to use a vnet from different resource group or subscription, please provide a resource ID. The name must be between 2 to 64 characters. The name must begin with a letter or number, end with a letter, number or underscore, and may contain only letters, numbers, underscores, periods, or hyphens.
+flags:
+    --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
+    --auto-scale-iops=: Enable or disable the auto scale iops.
+    --backup-identity=: The name or resource ID of the geo backup user identity for data encryption.
+    --backup-key=: The resource ID of the geo backup keyvault key for data encryption.
+    --backup-retention=: The number of days a backup is retained.
+    --data-source-backup-dir=: Relative path of the directory in which source backup is stored.
+    --data-source-sas-token=: Sas token for accessing the data source.
+    --data-source-type=!: Data source type.
+    --data-source=!: Data source for importing to Flexible Server.
+    --geo-redundant-backup=: Whether or not geo redundant backup is enabled.
+    --high-availability=: Enable (ZoneRedundant or SameZone) or disable high availability feature.
+    --identity=: The name or resource ID of the user assigned identity for data encryption.
+    --iops=: Number of IOPS to be allocated for this server.
+    --key=: The resource ID of the primary keyvault key for data encryption.
+    --mode=: Mode of import.
+    --private-dns-zone=: This parameter only applies if you are creating cross region replica server with private access.
+    --public-access=: Determines the public access.
+    --sku-name=: The name of the compute SKU.
+    --standby-zone=: The availability zone information of the standby server when high availability is enabled.
+    --storage-auto-grow=: Enable or disable autogrow of the storage.
+    --storage-size=: The storage capacity of the server.
+    --subnet-prefixes=: The subnet IP address prefix to use when creating a new subnet in CIDR format.
+    --subnet=: Name or resource ID of a new or existing subnet.
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --tier=: Compute tier of the server.
+    --version=: Server major version.
+    --vnet=: Name or ID of a new or existing virtual network.
+    -g, --resource-group=!: Name of resource group.
+    -l, --location=: Location.
+    -n, --name=!: Name of the server.
+    -p, --admin-password=: The password of the administrator.
+    -u, --admin-user=: Administrator username for the server.
+    -y, --yes=: Do not prompt for confirmation.
+    -z, --zone=: Availability zone into which to provision the resource.
+completion:
+    flag:
+        auto-scale-iops:
+            - Enabled
+            - Disabled
+        data-source-type:
+            - mysql_single
+            - azure_blob
+        geo-redundant-backup:
+            - Enabled
+            - Disabled
+        high-availability:
+            - ZoneRedundant
+            - SameZone
+            - Disabled
+        mode:
+            - Offline
+            - Online
+        storage-auto-grow:
+            - Enabled
+            - Disabled

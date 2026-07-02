@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: list-handle
+description: List file handles of a file share.
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
+        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
+        disallow-trailing-dot: If true, the trailing dot will be trimmed from the target URI. Default to False
+        enable-file-backup-request-intent: Required parameter to use with OAuth (Azure AD) Authentication for Files. This will bypass any file/directory level permission checks and allow access, based on the allowed data actions, even if there are ACLs in place for those files/directories.
+        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
+        marker: An opaque continuation token. This value can be retrieved from the next_marker field of a previous generator object if max_results was specified and that generator has finished enumerating results. If specified, this generator will begin returning results from the point where the previous generator stopped.
+        max-results: Specifies the maximum number of handles taken on files and/or directories to return. If the request does not specify max_results or specifies a value greater than 5,000, the server will return up to 5,000 items. Setting max_results to a value less than or equal to zero results in error response code 400 (Bad Request).
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: Request timeout in seconds. Applies to each call to the service.
+flags:
+    --account-key=: Storage account key.
+    --account-name=: Storage account name.
+    --auth-mode=: The mode in which to run the command.
+    --connection-string=: Storage account connection string.
+    --disallow-trailing-dot=:
+        description: If true, the trailing dot will be trimmed from the target URI.
+        nargs: -1
+    --enable-file-backup-request-intent=: Required parameter to use with OAuth (Azure AD) Authentication for Files.
+    --file-endpoint=: Storage data service endpoint.
+    --marker=: An opaque continuation token.
+    --max-results=: Specifies the maximum number of handles taken on files and/or directories to return.
+    --recursive=:
+        description: Boolean that specifies if operation should apply to the directory specified in the URI, its files, with its subdirectories and their files.
+        nargs: -1
+    --sas-token=: A Shared Access Signature (SAS).
+    --snapshot=: A string that represents the snapshot version, if applicable.
+    --subscription=: Name or ID of subscription.
+    --timeout=: Request timeout in seconds.
+    -n, --name=!: The file share name.
+    -p, --path=: The path to the file/directory within the file share.
+completion:
+    flag:
+        auth-mode:
+            - login
+            - key
+        disallow-trailing-dot:
+            - "true"
+            - "false"
+        recursive:
+            - "true"
+            - "false"

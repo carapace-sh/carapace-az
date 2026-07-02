@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create-for-rbac
+description: Create a service principal and configure its access to Azure resources.
+documentation:
+    flag:
+        cert: Certificate to use for credentials. When used with `--keyvault,`, indicates the name of the cert to use or create. Otherwise, supply a PEM or DER formatted public certificate string. Use `@{path}` to load from a file. Do not include the private key.
+        create-cert: Create a self-signed certificate to use for the credential. Only the current OS user has read/write permission to this certificate. Use with `--keyvault` to create the certificate in Key Vault. Otherwise, a certificate will be created locally.
+        display-name: Display name of the service principal. If not present, default to azure-cli-%Y-%m-%d-%H-%M-%S where the suffix is the time of creation.
+        scopes: Space-separated list of scopes the service principal's role assignment applies to. e.g., subscriptions/0b1f6471-1bf0-4dda-aec3-111122223333/resourceGroups/myGroup, /subscriptions/0b1f6471-1bf0-4dda-aec3-111122223333/resourceGroups/myGroup/providers/Microsoft.Compute/virtualMachines/myVM
+        sdk-auth: 'Output service principal credential along with cloud endpoints in JSON format. '
+        years: 'Number of years for which the credentials will be valid. Default: 1 year'
+flags:
+    --cert=: Certificate to use for credentials.
+    --create-cert=: Create a self-signed certificate to use for the credential.
+    --keyvault=: Name or ID of a KeyVault to use for creating or retrieving certificates.
+    --role=: Role of the service principal.
+    --scopes=:
+        description: Space-separated list of scopes the service principal's role assignment applies to.
+        nargs: -1
+    --sdk-auth=:
+        description: Output service principal credential along with cloud endpoints in JSON format.
+        nargs: -1
+    --skip-assignment=:
+        description: No-op.
+        nargs: -1
+    --years=: Number of years for which the credentials will be valid.
+    -n, --display-name=: Display name of the service principal.
+completion:
+    flag:
+        sdk-auth:
+            - "true"
+            - "false"
+        skip-assignment:
+            - "true"
+            - "false"

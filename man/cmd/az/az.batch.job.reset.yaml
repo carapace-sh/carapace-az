@@ -1,0 +1,44 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: reset
+description: Updates the properties of the specified Job.
+documentation:
+    flag:
+        account-endpoint: 'Batch service endpoint. Alternatively, set by environment variable: AZURE_BATCH_ENDPOINT'
+        account-key: 'Batch account key. Alternatively, set by environment variable: AZURE_BATCH_ACCESS_KEY'
+        account-name: 'Batch account name. Alternatively, set by environment variable: AZURE_BATCH_ACCOUNT'
+        allow-task-preemption: Whether Tasks in this job can be preempted by other high priority jobs. If the value is set to True, other high priority jobs submitted to the system will take precedence and will be able requeue tasks from this job. You can update a job's allowTaskPreemption after it has been created using the update job API. True if flag present.
+        if-match: An ETag value associated with the version of the resource known to the client. The operation will be performed only if the resource's current ETag on the service exactly matches the value specified by the client.
+        if-modified-since: A timestamp indicating the last modified time of the resource known to the client. The operation will be performed only if the resource on the service has been modified since the specified time.
+        if-none-match: An ETag value associated with the version of the resource known to the client. The operation will be performed only if the resource's current ETag on the service does not match the value specified by the client.
+        if-unmodified-since: A timestamp indicating the last modified time of the resource known to the client. The operation will be performed only if the resource on the service has been modified since the specified time.
+        job-id: The ID of the Job whose properties you want to update. Required.
+        job-max-task-retry-count: The maximum number of times each Task may be retried. The Batch service retries a Task if its exit code is nonzero. Note that this value specifically controls the number of retries. The Batch service will try each Task once, and may then retry up to this limit. For example, if the maximum retry count is 3, Batch tries a Task up to 4 times (one initial try and 3 retries). If the maximum retry count is 0, the Batch service does not retry Tasks. If the maximum retry count is -1, the Batch service retries Tasks without limit. The default value is 0 (no retries).
+        job-max-wall-clock-time: The maximum elapsed time that the Job may run, measured from the time the Job is created. If the Job does not complete within the time limit, the Batch service terminates it and any Tasks that are still running. In this case, the termination reason will be MaxWallClockTimeExpiry. If this property is not specified, there is no time limit on how long the Job may run. Expected format is an ISO-8601 duration.
+        json-file: A file containing the job specification in JSON (formatted to match the respective REST API body). If this parameter is specified, all 'Job Arguments' are ignored.
+        max-parallel-tasks: The maximum number of tasks that can be executed in parallel for the job. The value of maxParallelTasks must be -1 or greater than 0 if specified. If not specified, the default value is -1, which means there's no limit to the number of tasks that can be run at once. You can update a job's maxParallelTasks after it has been created using the update job API.
+        metadata: A list of name-value pairs associated with the Job as metadata. The Batch service does not assign any meaning to metadata; it is solely for the use of user code. Space-separated values in 'key=value' format.
+        on-all-tasks-complete: 'The action the Batch service should take when all Tasks in the Job are in the completed state. The default is noaction. Known values are: "noaction" and "terminatejob".'
+        pool-id: The ID of an existing Pool. All the Tasks of the Job will run on the specified Pool. You must ensure that the Pool referenced by this property exists. If the Pool does not exist at the time the Batch service tries to schedule a Job, no Tasks for the Job will run until you create a Pool with that id. Note that the Batch service will not reject the Job request; it will simply not run Tasks until the Pool exists. You must specify either the Pool ID or the auto Pool specification, but not both.
+        priority: The priority of the Job. Priority values can range from -1000 to 1000, with -1000 being the lowest priority and 1000 being the highest priority. The default value is 0.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+flags:
+    --account-endpoint=: Batch service endpoint.
+    --account-key=: Batch account key.
+    --account-name=: Batch account name.
+    --allow-task-preemption=: Whether Tasks in this job can be preempted by other high priority jobs.
+    --if-match=: An ETag value associated with the version of the resource known to the client.
+    --if-modified-since=: A timestamp indicating the last modified time of the resource known to the client.
+    --if-none-match=: An ETag value associated with the version of the resource known to the client.
+    --if-unmodified-since=: A timestamp indicating the last modified time of the resource known to the client.
+    --job-id=!: The ID of the Job whose properties you want to update.
+    --job-max-task-retry-count=: The maximum number of times each Task may be retried.
+    --job-max-wall-clock-time=: The maximum elapsed time that the Job may run, measured from the time the Job is created.
+    --json-file=: A file containing the job specification in JSON (formatted to match the respective REST API body).
+    --max-parallel-tasks=: The maximum number of tasks that can be executed in parallel for the job.
+    --metadata=:
+        description: A list of name-value pairs associated with the Job as metadata.
+        nargs: -1
+    --on-all-tasks-complete=: The action the Batch service should take when all Tasks in the Job are in the completed state.
+    --pool-id=: The ID of an existing Pool.
+    --priority=: The priority of the Job.
+    --subscription=: Name or ID of subscription.

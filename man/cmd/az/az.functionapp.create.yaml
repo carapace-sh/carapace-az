@@ -1,0 +1,130 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create a function app.
+documentation:
+    flag:
+        app-insights: Name of the existing App Insights project to be added to the function app. Must be in the same resource group.
+        assign-identity: accept system or user assigned identities separated by spaces. Use '[system]' to refer system assigned identity, or a resource id to refer user assigned identity. Check out help for more examples
+        consumption-plan-location: Geographic location where function app will be hosted. Use `az functionapp list-consumption-locations` to view available locations.
+        cpu: The CPU in cores of the container app. e.g 0.75
+        deployment-storage-auth-value: The deployment storage account authentication value. For the user-assigned managed identity authentication type, this should be the user assigned identity resource id. For the storage account connection string authentication type, this should be the name of the app setting that will contain the storage account connection string. For the system assigned managed-identity authentication type, this parameter is not applicable and should be left empty.
+        disable-app-insights: Disable creating application insights resource during functionapp create. No logs will be available.
+        flexconsumption-location: Geographic location where function app will be hosted. Use `az functionapp list-flexconsumption-locations` to view available locations.
+        functions-version: 'The functions app version. NOTE: This will be required starting the next release cycle'
+        instance-memory: The instance memory size in MB. See https://aka.ms/flex-instance-sizes for more information on the supported values.
+        memory: 'The memory size of the container app. e.g. 1.0Gi, '
+        plan: name or resource id of the functionapp app service plan. Use 'appservice plan create' to get one. If using an App Service plan from a different resource group, the full resource id must be used and not the plan name.
+        registry-password: The container registry server password. Required for private registries.
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        runtime: The functions runtime stack. Use "az functionapp list-runtimes" to check supported runtimes and versions
+        runtime-version: The version of the functions runtime stack. The functions runtime stack. Use "az functionapp list-runtimes" to check supported runtimes and versions
+        storage-account: Provide a string value of a Storage Account in the provided Resource Group. Or Resource ID of a Storage Account in a different Resource Group
+        subnet: Name or resource ID of the pre-existing subnet to have the webapp join. The --vnet is argument also needed if specifying subnet by name.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        vnet: Name or resource ID of the regional virtual network. If there are multiple vnets of the same name across different resource groups, use vnet resource id to specify which vnet to use. If vnet name is used, by default, the vnet in the same resource group as the webapp will be used. Must be used with --subnet argument.
+        zone-redundant: Enable zone redundancy for high availability. Applies to Flex Consumption SKU only.
+flags:
+    --always-ready-instances=:
+        description: space-separated configuration for the number of pre-allocated instances in the format `<name>=<value>`
+        nargs: -1
+    --app-insights-key=: Instrumentation key of App Insights to be added.
+    --app-insights=: Name of the existing App Insights project to be added to the function app.
+    --assign-identity=:
+        description: accept system or user assigned identities separated by spaces.
+        nargs: -1
+    --configure-networking-later=:
+        description: Use this option if you want to configure networking later for an app using network-restricted storage.
+        nargs: -1
+    --cpu=: The CPU in cores of the container app.
+    --dapr-app-id=: The Dapr application identifier.
+    --dapr-app-port=: The port Dapr uses to communicate to the application.
+    --dapr-enable-api-logging=:
+        description: Enable/Disable API logging for the Dapr sidecar.
+        nargs: -1
+    --dapr-http-max-request-size=: Max size of request body http and grpc servers in MB to handle uploading of large files.
+    --dapr-http-read-buffer-size=: Max size of http header read buffer in KB to handle when sending multi-KB headers.
+    --dapr-log-level=: The log level for the Dapr sidecar
+    --deployment-storage-auth-type=: The deployment storage account authentication type.
+    --deployment-storage-auth-value=: The deployment storage account authentication value.
+    --deployment-storage-container-name=: The deployment storage account container name.
+    --deployment-storage-name=: The deployment storage account name.
+    --disable-app-insights=:
+        description: Disable creating application insights resource during functionapp create.
+        nargs: -1
+    --enable-dapr=:
+        description: Enable/Disable Dapr for a function app on an Azure Container App environment
+        nargs: -1
+    --environment=: Name of the container app environment.
+    --functions-version=: The functions app version.
+    --https-only=:
+        description: Redirect all traffic made to an app using HTTP to HTTPS.
+        nargs: -1
+    --instance-memory=: The instance memory size in MB.
+    --max-replicas=: The maximum number of replicas when create function app on container app
+    --maximum-instance-count=: The maximum number of instances.
+    --memory=: The memory size of the container app.
+    --min-replicas=: The minimum number of replicas when create function app on container app
+    --os-type=: Set the OS type for the app to be created.
+    --registry-server=: The container registry server hostname, e.g. myregistry.azurecr.io.
+    --role=: Role name or id the system assigned identity will have
+    --runtime-version=: The version of the functions runtime stack.
+    --runtime=: The functions runtime stack.
+    --scope=: Scope that the system assigned identity can access
+    --subnet=: Name or resource ID of the pre-existing subnet to have the webapp join.
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --vnet=: Name or resource ID of the regional virtual network.
+    --workload-profile-name=: The workload profile name to run the container app on.
+    --workspace=: Name of an existing log analytics workspace to be used for the application insights component
+    --zone-redundant=:
+        description: Enable zone redundancy for high availability.
+        nargs: -1
+    -b, --deployment-source-branch=: the branch to deploy
+    -c, --consumption-plan-location=: Geographic location where function app will be hosted.
+    -d, --registry-username=: The container registry server username.
+    -f, --flexconsumption-location=: Geographic location where function app will be hosted.
+    -g, --resource-group=!: Name of resource group.
+    -i, --image=: Container image, e.g. publisher/image-name:tag
+    -l, --deployment-local-git=: enable local git
+    -n, --name=!: name of the new function app
+    -p, --plan=: name or resource id of the functionapp app service plan.
+    -s, --storage-account=!: Provide a string value of a Storage Account in the provided Resource Group.
+    -u, --deployment-source-url=: Git repository URL to link with manual integration
+    -w, --registry-password=: The container registry server password.
+completion:
+    flag:
+        configure-networking-later:
+            - "true"
+            - "false"
+        dapr-enable-api-logging:
+            - "true"
+            - "false"
+        dapr-log-level:
+            - debug
+            - error
+            - info
+            - warn
+        deployment-storage-auth-type:
+            - SystemAssignedIdentity
+            - UserAssignedIdentity
+            - StorageAccountConnectionString
+        disable-app-insights:
+            - "true"
+            - "false"
+        enable-dapr:
+            - "true"
+            - "false"
+        functions-version:
+            - "4"
+        https-only:
+            - "true"
+            - "false"
+        os-type:
+            - Windows
+            - Linux
+        zone-redundant:
+            - "true"
+            - "false"

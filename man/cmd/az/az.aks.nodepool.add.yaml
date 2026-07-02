@@ -1,0 +1,123 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: add
+description: Add a node pool to the managed Kubernetes cluster.
+documentation:
+    flag:
+        allowed-host-ports: Expose host ports on the node pool. When specified, format should be a space-separated list of ranges with protocol, eg. `80/TCP 443/TCP 4000-5000/TCP`.
+        asg-ids: The IDs of the application security groups to which the node pool's network interface should belong. When specified, format should be a space-separated list of IDs.
+        enable-secure-boot: Enable Secure Boot on agent node pool. Must use VMSS agent pool type.
+        enable-vtpm: Enable vTPM on agent node pool. Must use VMSS agent pool type.
+        eviction-policy: The eviction policy of the Spot node pool. It can only be set when --priority is Spot.
+        if-match: The value provided will be compared to the ETag of the agentpool, if it matches the operation will proceed. If it does not match, the request will be rejected to prevent accidental overwrites. This must not be specified when creating a new agentpool.
+        if-none-match: Set to '*' to allow a new agentpool to be created, but to prevent updating an existing agentpool. Other values will be ignored.
+        kubelet-config: Path to JSON file containing Kubelet configurations for agent nodes. https://aka.ms/aks/custom-node-config
+        labels: The node labels for the node pool. See https://aka.ms/node-labels for syntax of labels.
+        linux-os-config: Path to JSON file containing OS configurations for Linux agent nodes. https://aka.ms/aks/custom-node-config
+        max-count: Maximum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified. Please specify the value in the range of [0, 1000] for user nodepool, and [1,1000] for system nodepool.
+        max-surge: Extra nodes used to speed upgrade. When specified, it represents the number or percent used, eg. 5 or 33%
+        message-of-the-day: Path to a file containing the desired message of the day. Only valid for linux nodes. Will be written to /etc/motd.
+        min-count: Minimum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified. Please specify the value in the range of [0, 1000] for user nodepool, and [1,1000] for system nodepool.
+        mode: The mode for a node pool which defines a node pool's primary function. If set as "System", AKS prefers system pods scheduling to node pools with mode `System`. Learn more at https://aka.ms/aks/nodepool/mode.
+        node-osdisk-size: Size in GiB of the OS disk for each node in the agent pool. Minimum 30 GiB.
+        node-osdisk-type: OS disk type to be used for machines in a given agent pool. Defaults to 'Ephemeral' when possible in conjunction with VM size and OS disk size. May not be changed for this pool after creation. ('Ephemeral' or 'Managed')
+        os-sku: The OS SKU of the agent node pool. Ubuntu or CBLMariner for Linux. Windows2019 or Windows2022 for Windows.
+        os-type: The OS Type. Linux or Windows.
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        spot-max-price: It can only be set when --priority is Spot. Specify the maximum price you are willing to pay in US Dollars. Possible values are any decimal value greater than zero or -1 which indicates default price to be up-to on-demand. It can only include up to 5 decimal places.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+flags:
+    --aks-custom-headers=: Comma-separated key-value pairs to specify custom headers.
+    --allowed-host-ports=:
+        description: Expose host ports on the node pool.
+        nargs: -1
+    --asg-ids=:
+        description: The IDs of the application security groups to which the node pool's network interface should belong.
+        nargs: -1
+    --cluster-name=!: The cluster name.
+    --crg-id=: The crg id used to associate the new nodepool with the existed Capacity Reservation Group resource.
+    --disable-windows-outbound-nat=: Disable Windows OutboundNAT on Windows agent node pool.
+    --drain-timeout=: When nodes are drain how many minutes to wait for all pods to be evicted
+    --enable-encryption-at-host=: Enable EncryptionAtHost, default value is false.
+    --enable-fips-image=: Use FIPS-enabled OS on agent nodes.
+    --enable-node-public-ip=: Enable VMSS node public IP.
+    --enable-secure-boot=: Enable Secure Boot on agent node pool.
+    --enable-ultra-ssd=: Enable UltraSSD, default value is false.
+    --enable-vtpm=: Enable vTPM on agent node pool.
+    --eviction-policy=: The eviction policy of the Spot node pool.
+    --gpu-instance-profile=: GPU instance profile to partition multi-gpu Nvidia GPUs.
+    --host-group-id=: The fully qualified dedicated host group id used to provision agent node pool.
+    --if-match=: The value provided will be compared to the ETag of the agentpool, if it matches the operation will proceed.
+    --if-none-match=: Set to '*' to allow a new agentpool to be created, but to prevent updating an existing agentpool.
+    --kubelet-config=: Path to JSON file containing Kubelet configurations for agent nodes.
+    --labels=:
+        description: The node labels for the node pool.
+        nargs: -1
+    --linux-os-config=: Path to JSON file containing OS configurations for Linux agent nodes.
+    --max-count=: Maximum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified.
+    --max-surge=: Extra nodes used to speed upgrade.
+    --message-of-the-day=: Path to a file containing the desired message of the day.
+    --min-count=: Minimum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified.
+    --mode=: The mode for a node pool which defines a node pool's primary function.
+    --no-wait=: Do not wait for the long-running operation to finish.
+    --node-osdisk-size=: Size in GiB of the OS disk for each node in the agent pool.
+    --node-osdisk-type=: OS disk type to be used for machines in a given agent pool.
+    --node-public-ip-prefix-id=: Public IP prefix ID used to assign public IPs to VMSS nodes.
+    --node-public-ip-tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --node-soak-duration=: The amount of time (in minutes) to wait after draining a node and before reimaging it and moving on to next node.
+    --node-taints=: The node taints for the node pool.
+    --os-sku=: The OS SKU of the agent node pool.
+    --os-type=: The OS Type.
+    --pod-subnet-id=: The Resource Id of a subnet in an existing VNet into which to assign pods in the cluster (requires azure network-plugin).
+    --ppg=: The ID of a PPG.
+    --priority=: The priority of the node pool.
+    --scale-down-mode=: Describe how VMs are added to or removed from nodepools.
+    --snapshot-id=: The source snapshot id used to create this nodepool.
+    --spot-max-price=: It can only be set when --priority is Spot.
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --vnet-subnet-id=: The Resource Id of a subnet in an existing VNet into which to deploy the cluster.
+    -c, --node-count=: ""
+    -e, --enable-cluster-autoscaler=: ""
+    -g, --resource-group=!: Name of resource group.
+    -k, --kubernetes-version=: ""
+    -m, --max-pods=: ""
+    -n, --nodepool-name=!: The node pool name.
+    -s, --node-vm-size=: ""
+    -z, --zones=:
+        description: Space-separated list of availability zones where agent nodes will be placed.
+        nargs: -1
+completion:
+    flag:
+        eviction-policy:
+            - Delete
+            - Deallocate
+        gpu-instance-profile:
+            - MIG1g
+            - MIG2g
+            - MIG3g
+            - MIG4g
+            - MIG7g
+        mode:
+            - System
+            - User
+        node-osdisk-type:
+            - Managed
+            - Ephemeral
+        os-sku:
+            - AzureLinux
+            - Ubuntu
+            - CBLMariner
+            - Mariner
+            - Windows2019
+            - Windows2022
+        priority:
+            - Regular
+            - Spot
+        scale-down-mode:
+            - Delete
+            - Deallocate

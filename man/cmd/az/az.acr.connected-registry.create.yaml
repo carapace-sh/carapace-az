@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create a connected registry for an Azure Container Registry.
+documentation:
+    flag:
+        audit-logs-enabled: Indicate whether audit log synchronization is enabled. It is enabled by default.
+        client-tokens: Specify the client access to the repositories in the connected registry. It can be in the format [TOKEN_NAME01] [TOKEN_NAME02]...
+        log-level: Set the log level for logging on the instance. Accepted log levels are Debug, Information, Warning, Error, and None.
+        name: Name for the connected registry. Name must be between 5 to 40 character long, start with a letter and contain only alphanumeric characters (including ‘_’ or ‘-’). Name must be unique under the Cloud ACR hierarchy.
+        notifications: List of artifact pattern for which notifications need to be generated. Use the format "--notifications [PATTERN1 PATTERN2 ...]".
+        registry: The login server of the Cloud ACR registry. Must be the FQDN to support also Azure Stack.
+        repository: Specify the repositories that need to be sync to the connected registry. It can be in the format [REPO01] [REPO02]...
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        sync-message-ttl: Determine how long the sync messages will be kept in the cloud. Uses ISO 8601 duration format.
+        sync-schedule: Optional parameter to define the sync schedule. Uses cron expression to determine the schedule. If not specified, the instance is considered always online and attempts to sync every minute.
+        sync-token: Specifies the sync token used to synchronize the connected registry with its parent. It most have only repo permissions and at least the actions required for its mode. It can include access for multiple repositories.
+        sync-window: Required parameter if --sync-schedule is present. Used to determine the schedule duration. Uses ISO 8601 duration format.
+flags:
+    --audit-logs-enabled=:
+        description: Indicate whether audit log synchronization is enabled.
+        nargs: -1
+    --client-tokens=:
+        description: Specify the client access to the repositories in the connected registry.
+        nargs: -1
+    --log-level=: Set the log level for logging on the instance.
+    --notifications=:
+        description: List of artifact pattern for which notifications need to be generated.
+        nargs: -1
+    --repository=:
+        description: Specify the repositories that need to be sync to the connected registry.
+        nargs: -1
+    --subscription=: Name or ID of subscription.
+    --sync-message-ttl=: Determine how long the sync messages will be kept in the cloud.
+    --sync-token=: Specifies the sync token used to synchronize the connected registry with its parent.
+    -g, --resource-group=: Name of resource group.
+    -m, --mode=: Determine the access it will have when synchronized.
+    -n, --name=!: Name for the connected registry.
+    -p, --parent=: The name of the parent connected registry.
+    -r, --registry=!: The login server of the Cloud ACR registry.
+    -s, --sync-schedule=: Optional parameter to define the sync schedule.
+    -w, --sync-window=: Required parameter if --sync-schedule is present.
+    -y, --yes=: Do not prompt for confirmation.
+completion:
+    flag:
+        audit-logs-enabled:
+            - "true"
+            - "false"
+        mode:
+            - ReadOnly
+            - ReadWrite

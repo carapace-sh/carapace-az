@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: start-batch
+description: Copy a group of blob or files to a blob container.
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
+        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
+        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
+        destination-blob-type: Defines the type of blob at the destination. Value of "Detect" determines the type based on source blob type.
+        dryrun: List the files or blobs to be uploaded. No actual data transfer will occur.
+        pattern: The pattern used for globbing files or blobs in the source. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3/library/fnmatch.html.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
+        source-account-name: The source storage account from which the files or blobs are copied to the destination. If omitted, the destination account is used.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tier: The tier value to set the blob to. For page blob, the tier correlates to the size of the blob and number of allowed IOPS. Possible values are P10, P15, P20, P30, P4, P40, P50, P6, P60, P70, P80 and this is only applicable to page blobs on premium storage accounts; For block blob, possible values are Archive, Cold, Cool, and Hot. This is only applicable to block blobs on standard storage accounts.
+flags:
+    --account-key=: Storage account key.
+    --account-name=: Storage account name.
+    --auth-mode=: The mode in which to run the command.
+    --blob-endpoint=: Storage data service endpoint.
+    --connection-string=: Storage account connection string.
+    --destination-blob-type=: Defines the type of blob at the destination.
+    --destination-path=: The destination path that will be prepended to the blob name.
+    --dryrun=: List the files or blobs to be uploaded.
+    --pattern=: The pattern used for globbing files or blobs in the source.
+    --sas-token=: A Shared Access Signature (SAS).
+    --source-account-key=: The account key for the source storage account.
+    --source-account-name=: The source storage account from which the files or blobs are copied to the destination.
+    --source-container=: The source container from which blobs are copied.
+    --source-sas=: The shared access signature for the source storage account.
+    --source-share=: The source share from which files are copied.
+    --source-uri=: A URI specifying a file share or blob container from which the files or blobs are copied.
+    --subscription=: Name or ID of subscription.
+    --tier=: The tier value to set the blob to.
+    -c, --destination-container=: The container name.
+    -r, --rehydrate-priority=: Indicate the priority with which to rehydrate an archived blob.
+completion:
+    flag:
+        auth-mode:
+            - login
+            - key
+        destination-blob-type:
+            - Detect
+            - BlockBlob
+            - PageBlob
+            - AppendBlob

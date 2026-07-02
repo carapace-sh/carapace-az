@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: sync
+description: Sync blobs recursively to a storage blob container.
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_KEY'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
+        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
+        delete-destination: 'Defines whether to delete extra files from the destination that are not present at the source. Could be set to true, false, or prompt. If set to prompt, the user will be asked a question before scheduling files and blobs for deletion. '
+        exclude-path: 'Exclude these paths. This option does not support wildcard characters (*). Checks relative path prefix. For example: myFolder;myFolder/subDirName/file.pdf.'
+        exclude-pattern: 'Exclude these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
+        include-pattern: 'Include only these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_SAS_TOKEN'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+flags:
+    --account-key=: Storage account key.
+    --account-name=: Storage account name.
+    --auth-mode=: The mode in which to run the command.
+    --connection-string=: Storage account connection string.
+    --delete-destination=: Defines whether to delete extra files from the destination that are not present at the source.
+    --exclude-path=: Exclude these paths.
+    --exclude-pattern=: Exclude these files where the name matches the pattern list.
+    --include-pattern=: Include only these files where the name matches the pattern list.
+    --sas-token=: A Shared Access Signature (SAS).
+    --subscription=: Name or ID of subscription.
+    -c, --container=!: The sync destination container.
+    -d, --destination=: The destination path that will be prepended to the blob name.
+    -s, --source=!: The source file path to sync from.
+completion:
+    flag:
+        auth-mode:
+            - login
+            - key
+        delete-destination:
+            - "true"
+            - "false"
+            - prompt

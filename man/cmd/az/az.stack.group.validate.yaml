@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: validate
+description: Validate a deployment stack at resource group scope
+documentation:
+    flag:
+        deny-settings-excluded-actions: List of role-based management operations that are excluded from the denySettings. Up to 200 actions are permitted.
+        deny-settings-excluded-principals: List of AAD principal IDs excluded from the lock. Up to 5 principals are permitted.
+        parameters: Parameters may be supplied from a file using the `@{path}` syntax, a JSON string, or as `<KEY=VALUE>` pairs. Parameters are evaluated in order, so when a value is assigned twice, the latter value will be used. It is recommended that you supply your parameters file first, and then override selectively using KEY=VALUE syntax.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+flags:
+    --action-on-unmanage=!: Defines what happens to resources that are no longer managed after the stack is updated or deleted.
+    --bypass-stack-out-of-sync-error=:
+        description: Flag to bypass service errors that indicate the stack resource list is not correctly synchronized.
+        nargs: -1
+    --deny-settings-apply-to-child-scopes=: DenySettings will be applied to child scopes.
+    --deny-settings-excluded-actions=: List of role-based management operations that are excluded from the denySettings.
+    --deny-settings-excluded-principals=: List of AAD principal IDs excluded from the lock.
+    --deny-settings-mode=!: Define which operations are denied on resources managed by the stack.
+    --description=: The description of deployment stack.
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    -f, --template-file=: a path to a template file or Bicep file in the file system
+    -g, --resource-group=!: The resource group where the deployment stack will be created.
+    -n, --name=!: The name of the deployment stack.
+    -p, --parameters=:
+        description: Parameters may be supplied from a file using the `@{path}` syntax, a JSON string, or as `<KEY=VALUE>` pairs.
+        nargs: -1
+    -q, --query-string=: The query string (a SAS token) to be used with the template-uri in the case of linked templates.
+    -s, --template-spec=: The template spec resource id.
+    -u, --template-uri=: a uri to a remote template file
+completion:
+    flag:
+        action-on-unmanage:
+            - deleteAll
+            - deleteResources
+            - detachAll
+        bypass-stack-out-of-sync-error:
+            - "true"
+            - "false"
+        deny-settings-mode:
+            - denyDelete
+            - denyWriteAndDelete
+            - none

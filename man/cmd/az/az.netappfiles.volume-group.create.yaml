@@ -1,0 +1,145 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create a volume group along with specified volumes
+documentation:
+    flag:
+        add-snapshot-capacity: 'Additional memory to store snapshots, must be specified as % of RAM (range 0-200). This is used to auto compute storage size.  Default: 50.'
+        backup-nfsv3: Indicates if NFS Protocol version 3 is preferred for data backup and log backup volumes. Default is False.
+        data-backup-size: Capacity (in GiB) for data backup volumes. If not provided size will automatically be calculated.
+        data-backup-throughput: Throughput in MiB/s for data backup volumes. If not provided size will automatically be calculated.
+        data-size: Capacity (in GiB) for data volumes. If not provided size will automatically be calculated.
+        data-throughput: Throughput in MiB/s for data volumes. If not provided size will automatically be calculated.
+        encryption-key-source: Source of key used to encrypt data in volume. Applicable if NetApp account has encryption.keySource = 'Microsoft.KeyVault'.
+        gp-rules: Application specific placement rules for the volume group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        kv-private-endpoint-id: The resource ID of private endpoint for KeyVault. It must reside in the same VNET as the volume. Only applicable if encryptionKeySource = 'Microsoft.KeyVault'.
+        log-backup-size: Capacity (in GiB) for log backup volumes. If not provided size will automatically be calculated.
+        log-backup-throughput: Throughput in MiB/s for log backup volumes. If not provided size will automatically be calculated.
+        log-size: Capacity (in GiB) for log volumes. If not provided size will automatically be calculated.
+        log-throughput: Throughput in MiB/s for log volumes. If not provided size will automatically be calculated.
+        prefix: All volume names will be prefixed with the given text. The default values for prefix text depends on system role. For PRIMARY it will be `""` and HA it will be `"HA-"`.
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        shared-size: Capacity (in GiB) for shared volumes. If not provided size will automatically be calculated.
+        shared-throughput: Throughput in MiB/s for shared volumes. If not provided size will automatically be calculated.
+        smb-access: Enables access based enumeration share property for SMB Shares. Only applicable for SMB/DualProtocol volume.
+        smb-browsable: Enables non-browsable property for SMB Shares. Only applicable for SMB/DualProtocol volume
+        start-host-id: Starting SAP HANA Host ID. Host ID 1 indicates Master Host. Shared, Data Backup and Log Backup volumes are only provisioned for Master Host i.e. `HostID == 1`.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-role: ' Type of role for the storage account. Primary indicates first of a SAP HANA Replication (HSR) setup or No HSR. High Availability (HA) specifies local scenario. Default is PRIMARY.  Allowed values: DR, HA, PRIMARY.'
+        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        volumes: List of volumes from group  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        zones: Availability Zone  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+flags:
+    --add-snapshot-capacity=: Additional memory to store snapshots, must be specified as % of RAM (range 0-200).
+    --application-type=: Application Type
+    --backup-nfsv3=:
+        description: Indicates if NFS Protocol version 3 is preferred for data backup and log backup volumes.
+        nargs: -1
+    --data-backup-repl-skd=: Replication Schedule for data backup volume.
+    --data-backup-size=: Capacity (in GiB) for data backup volumes.
+    --data-backup-src-id=: ResourceId of the data backup source volume.
+    --data-backup-throughput=: Throughput in MiB/s for data backup volumes.
+    --data-repl-skd=: Replication Schedule for data volume.
+    --data-size=: Capacity (in GiB) for data volumes.
+    --data-src-id=: ResourceId of the data source volume.
+    --data-throughput=: Throughput in MiB/s for data volumes.
+    --encryption-key-source=: Source of key used to encrypt data in volume.
+    --gp-rules=:
+        description: Application specific placement rules for the volume group.
+        nargs: -1
+    --group-description=: Group Description
+    --kv-private-endpoint-id=: The resource ID of private endpoint for KeyVault.
+    --log-backup-repl-skd=: Replication Schedule for Log backup volume.
+    --log-backup-size=: Capacity (in GiB) for log backup volumes.
+    --log-backup-src-id=: ResourceId of the log backup source volume.
+    --log-backup-throughput=: Throughput in MiB/s for log backup volumes.
+    --log-size=: Capacity (in GiB) for log volumes.
+    --log-throughput=: Throughput in MiB/s for log volumes.
+    --memory=: System (SAP HANA) memory in GiB (max 12000 GiB), used to auto compute storage size and throughput.
+    --no-wait=:
+        description: Do not wait for the long-running operation to finish.
+        nargs: -1
+    --number-of-hosts=: Total Number of system (SAP HANA) host in this deployment (currently max 3 nodes can be configured)
+    --prefix=: All volume names will be prefixed with the given text.
+    --proximity-placement-group=!: The resource id of the Proximity Placement Group for volume placement.
+    --sap-sid=: Application specific identifier
+    --shared-repl-skd=: Replication Schedule for shared volume.
+    --shared-size=: Capacity (in GiB) for shared volumes.
+    --shared-src-id=: ResourceId of the shared source volume.
+    --shared-throughput=: Throughput in MiB/s for shared volumes.
+    --smb-access=: Enables access based enumeration share property for SMB Shares.
+    --smb-browsable=: Enables non-browsable property for SMB Shares.
+    --start-host-id=: Starting SAP HANA Host ID.
+    --subnet=: The delegated Subnet name.
+    --subscription=: Name or ID of subscription.
+    --system-role=: Type of role for the storage account.
+    --tags=:
+        description: Resource tags.
+        nargs: -1
+    --vnet=: The ARM Id or name of the vnet for the volumes.
+    --volumes=:
+        description: List of volumes from group  Support shorthand-syntax, json-file and yaml-file.
+        nargs: -1
+    --zones=:
+        description: Availability Zone  Support shorthand-syntax, json-file and yaml-file.
+        nargs: -1
+    -a, --account-name=!: The name of the NetApp account
+    -g, --resource-group=!: Name of resource group.
+    -l, --location=: Resource location
+    -n, --name=!: The name of the volumeGroup
+    -p, --pool-name=: Name of the ANF capacity pool
+completion:
+    flag:
+        application-type:
+            - ORACLE
+            - SAP-HANA
+        backup-nfsv3:
+            - "true"
+            - t
+            - "yes"
+            - "y"
+            - "1"
+            - "false"
+            - f
+            - "no"
+            - "n"
+            - "0"
+        data-backup-repl-skd:
+            - _10minutely
+            - daily
+            - hourly
+        data-repl-skd:
+            - _10minutely
+            - daily
+            - hourly
+        encryption-key-source:
+            - Microsoft.KeyVault
+            - Microsoft.NetApp
+        log-backup-repl-skd:
+            - _10minutely
+            - daily
+            - hourly
+        no-wait:
+            - "true"
+            - t
+            - "yes"
+            - "y"
+            - "1"
+            - "false"
+            - f
+            - "no"
+            - "n"
+            - "0"
+        shared-repl-skd:
+            - _10minutely
+            - daily
+            - hourly
+        smb-access:
+            - Disabled
+            - Enabled
+        smb-browsable:
+            - Disabled
+            - Enabled
+        system-role:
+            - DR
+            - HA
+            - PRIMARY

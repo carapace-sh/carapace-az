@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: update
+description: Update a managed service.
+documentation:
+    flag:
+        default-move-cost: Specify the default cost for a move. Higher costs make it less likely that the Cluster Resource Manager will move the replica when trying to balance the cluster.
+        instance-count: Specify the instance count for the stateless service. If -1 is used, it means it will run on all the nodes.
+        min-instance-count: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstanceCount computation -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service.
+        min-instance-percentage: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstancePercentage computation, -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. Allowed values are from 0 to 100.
+        placement-constraints: 'Specify the placement constraints as a string. Placement constraints are boolean expressions on node properties and allow for restricting a service to particular nodes based on the service requirements. For example, to place a service on nodes where NodeType is blue specify the following: "NodeColor == blue)".'
+        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+flags:
+    --application=!: Specify the name of the service.
+    --default-move-cost=: Specify the default cost for a move.
+    --instance-count=: Specify the instance count for the stateless service.
+    --min-instance-count=: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node.
+    --min-instance-percentage=: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node.
+    --min-replica-set-size=: Specify the min replica set size for the stateful service.
+    --name=!: Specify the name of the service.
+    --placement-constraints=: Specify the placement constraints as a string.
+    --quorum-loss-wait-duration=: Specify the maximum duration for which a partition is allowed to be in a state of quorum loss, represented in ISO 8601 format "hh:mm:ss".
+    --replica-restart-wait-duration=: Specify the duration between when a replica goes down and when a new replica is created, represented in ISO 8601 format "hh:mm:ss".
+    --service-placement-time-limit=: Specify the duration for which replicas can stay InBuild before reporting that build is stuck, represented in ISO 8601 format "hh:mm:ss".
+    --stand-by-replica-keep-duration=: Specify the definition on how long StandBy replicas should be maintained before being removed, represented in ISO 8601 format "hh:mm:ss".
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    --target-replica-set-size=: Specify the target replica set size for the stateful service.
+    -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
+    -g, --resource-group=!: Specify the resource group name.
+completion:
+    flag:
+        default-move-cost:
+            - Zero
+            - Low
+            - Medium
+            - High

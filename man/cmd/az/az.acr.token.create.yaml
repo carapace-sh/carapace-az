@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: create
+description: Create a token associated with a scope map for an Azure Container Registry.
+documentation:
+    flag:
+        expiration: UTC time for which the credentials will be valid. In the format of %Y-%m-%dT%H:%M:%SZ, e.g. 2025-12-31T12:59:59Z
+        expiration-in-days: Number of days for which the credentials will be valid. If not specified, the expiration will default to the max value "9999-12-31T23:59:59.999999+00:00"
+        gateway: gateway permissions. Use the format "--gateway GATEWAY [ACTION1 ACTION2 ...]" per flag. Valid actions are ['config/read', 'config/write', 'message/read', 'message/write']
+        no-passwords: Do not generate passwords during token creation. You can generate the passwords after the token is created by using `az acr token credentials generate` command.
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
+        repository: repository permissions. Use the format "--repository REPO [ACTION1 ACTION2 ...]" per flag. Valid actions are ['content/delete', 'content/read', 'content/write', 'metadata/read', 'metadata/write']
+        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
+        scope-map: The name of the scope map with pre-configured repository permissions. Use "--repository" and/or "--gateway" if you would like CLI to configure one for you
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+flags:
+    --expiration-in-days=: Number of days for which the credentials will be valid.
+    --expiration=: UTC time for which the credentials will be valid.
+    --gateway=:
+        description: gateway permissions.
+        nargs: -1
+    --no-passwords=:
+        description: Do not generate passwords during token creation.
+        nargs: -1
+    --repository=:
+        description: repository permissions.
+        nargs: -1
+    --scope-map=: The name of the scope map with pre-configured repository permissions.
+    --status=: The status of the token
+    --subscription=: Name or ID of subscription.
+    -g, --resource-group=: Name of resource group.
+    -n, --name=!: The name of the token.
+    -r, --registry=!: The name of the container registry.
+completion:
+    flag:
+        no-passwords:
+            - "true"
+            - "false"
+        status:
+            - enabled
+            - disabled
