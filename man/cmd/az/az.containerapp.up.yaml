@@ -1,24 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: up
 description: Create or update a container app as well as any associated resources (ACR, resource group, container apps environment, GitHub Actions, etc.)
-documentation:
-    flag:
-        branch: The branch of the Github repo. Assumed to be the Github repo's default branch if not specified.
-        context-path: Path in the repo from which to run the docker build. Defaults to "./". Dockerfile is assumed to be named "Dockerfile" and in this directory.
-        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        logs-workspace-id: Workspace ID of the Log Analytics workspace to send diagnostics logs to. You can use "az monitor log-analytics workspace create" to create one. Extra billing may apply.
-        logs-workspace-key: Log Analytics workspace key to configure your Log Analytics workspace. You can use "az monitor log-analytics workspace get-shared-keys" to retrieve the key.
-        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        registry-password: The password to log in to container registry. If stored as a secret, value must start with 'secretref:' followed by the secret name.
-        repo: 'Create an app via Github Actions. In the format: `https://github.com/<owner>/<repository-name>` or `<owner>/<repository-name>`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        service-principal-client-id: The service principal client ID. Used by Github Actions to authenticate with Azure.
-        service-principal-client-secret: The service principal client secret. Used by Github Actions to authenticate with Azure.
-        service-principal-tenant-id: The service principal tenant ID. Used by Github Actions to authenticate with Azure.
-        source: 'Local directory path containing the application source and Dockerfile for building the container image. Preview: If no Dockerfile is present, a container image is generated using buildpacks. If Docker is not running or buildpacks cannot be used, Oryx will be used to generate the image. See the supported Oryx runtimes here: https://github.com/microsoft/Oryx/blob/main/doc/supportedRuntimeVersions.md.'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        token: 'A Personal Access Token with write access to the specified repository. For more information: https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line. If not provided or not found in the cache (and using --repo), a browser page will be opened to authenticate with Github.'
 flags:
     --browse=: Open the app in a web browser after creation and deployment, if possible.
     --context-path=: Path in the repo from which to run the docker build.
@@ -51,3 +33,54 @@ completion:
         ingress:
             - internal
             - external
+documentation:
+    command: Create or update a container app as well as any associated resources (ACR, resource group, container apps environment, GitHub Actions, etc.).
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        artifact: 'Local path to the application artifact for building the container image. See the supported artifacts here: https://aka.ms/SourceToCloudSupportedArtifacts .'
+        branch: The branch of the Github repo. Assumed to be the Github repo's default branch if not specified.
+        browse: Open the app in a web browser after creation and deployment, if possible.
+        build-env-vars: A list of environment variable(s) for the build. Space-separated values in 'key=value' format.
+        change-reference: The related change reference ID for this resource operation.
+        connected-cluster-id: Resource ID of connected cluster. List using 'az connectedk8s list'.
+        context-path: Path in the repo from which to run the docker build. Defaults to "./". Dockerfile is assumed to be named "Dockerfile" and in this directory.
+        custom-location: Resource ID of custom location. List using 'az customlocation list'.
+        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
+        environment: Name or resource ID of the container app's managed environment or connected environment.
+        image: Container image, e.g. publisher/image-name:tag.
+        ingress: The ingress type.
+        kind: Set to 'functionapp' to enable built-in support and autoscaling for Azure Functions on Container Apps.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        logs-workspace-id: Workspace ID of the Log Analytics workspace to send diagnostics logs to. You can use "az monitor log-analytics workspace create" to create one. Extra billing may apply.
+        logs-workspace-key: Log Analytics workspace key to configure your Log Analytics workspace. You can use "az monitor log-analytics workspace get-shared-keys" to retrieve the key.
+        model-name: The name of the Azure AI Foundry model.
+        model-registry: The name of the Azure AI Foundry model registry.
+        model-version: The version of the Azure AI Foundry model.
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        registry-identity: A Managed Identity to authenticate with the registry server instead of username/password. Use a resource ID or 'system' for user-defined and system-defined identities, respectively. The registry must be an ACR. If possible, an 'acrpull' role assignment will be created for the identity automatically.
+        registry-password: The password to log in to container registry. If stored as a secret, value must start with 'secretref:' followed by the secret name.
+        registry-server: The container registry server hostname, e.g. myregistry.azurecr.io.
+        registry-username: The username to log in to container registry.
+        repo: 'Create an app via Github Actions. In the format: ``` https://github.com/<owner>/<repository-name> ``` or ``` <owner>/<repository-name> ``` .'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` . --service-principal-client-id --sp-cid The service principal client ID. Used by Github Actions to authenticate with Azure.
+        revisions-mode: The active revisions mode for the container app.
+        service-principal-client-id: The service principal client ID. Used by Github Actions to authenticate with Azure.
+        service-principal-client-secret: The service principal client secret. Used by Github Actions to authenticate with Azure.
+        service-principal-tenant-id: The service principal tenant ID. Used by Github Actions to authenticate with Azure.
+        source: 'Local directory path containing the application source and Dockerfile for building the container image. Preview: If no Dockerfile is present, a container image is generated using buildpacks. If Docker is not running or buildpacks cannot be used, Oryx will be used to generate the image. See the supported Oryx runtimes here: https://github.com/microsoft/Oryx/blob/main/doc/supportedRuntimeVersions.md .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-assigned: Boolean indicating whether to assign system-assigned identity.
+        target-label: The label to apply to new revisions. Required for revisions-mode 'labels'.
+        target-port: The application port used for ingress traffic.
+        token: 'A Personal Access Token with write access to the specified repository. For more information: https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line . If not provided or not found in the cache (and using --repo), a browser page will be opened to authenticate with Github.'
+        user-assigned: Space-separated user identities to be assigned.
+        workload-profile-name: The friendly name for the workload profile.
+examples:
+    Create a container app and deploy a model from Azure AI Foundry: az containerapp up -n my-containerapp -l westus3 --model-registry azureml --model-name Phi-4 --model-version 7
+    Create a container app from a dockerfile in a GitHub repo (setting up github actions): az containerapp up -n my-containerapp --repo https://github.com/myAccount/myRepo
+    Create a container app from a dockerfile in a local directory (or autogenerate a container if no dockerfile is found): az containerapp up -n my-containerapp --source .
+    Create a container app from an image in a registry: az containerapp up -n my-containerapp --image myregistry.azurecr.io/myImage:myTag
+    Create a container app from an image in a registry on a Connected cluster: az containerapp up -n my-containerapp --image myregistry.azurecr.io/myImage:myTag --connected-cluster-id MyConnectedClusterResourceId
+    Create a container app from an image in a registry on a connected environment: az containerapp up -n my-containerapp --image myregistry.azurecr.io/myImage:myTag --environment MyConnectedEnvironmentId
+    Create a container app from an image in a registry with ingress enabled and a specified environment: az containerapp up -n my-containerapp --image myregistry.azurecr.io/myImage:myTag --ingress external --target-port 80 --environment MyEnv
+    Create an Azure Functions on Container Apps (kind=functionapp): az containerapp up -n my-containerapp --image my-app:v1.0 --kind functionapp

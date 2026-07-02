@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Selectively update the set of tags on a specific resource.
-documentation:
-    flag:
-        resource-id: The resource identifier for the tagged entity. A resource, a resource group or a subscription may be tagged.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --operation=!: 'The update operation: options include Merge, Replace and Delete.'
     --resource-id=!: The resource identifier for the tagged entity.
@@ -19,3 +14,15 @@ completion:
             - Merge
             - Replace
             - Delete
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        operation: The update operation. Options are Merge, Replace and Delete.
+        resource-id: The resource identifier for the entity being tagged. A resource, a resource group or a subscription may be tagged.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Selectively update the set of tags on a resource group with "replace" Operation.: az tag update --resource-id /subscriptions/{sub-id}/resourcegroups/{rg} --operation replace --tags key1=value1 key3=value3
+    Selectively update the set of tags on a resource with "delete" Operation.: az tag update --resource-id /subscriptions/{sub-id}/resourcegroups/{rg}/providers/Microsoft.Compute/virtualMachines/{vmName} --operation delete --tags key1=value1
+    Selectively update the set of tags on a subscription with "merge" Operation.: az tag update --resource-id /subscriptions/{sub-id} --operation merge --tags key1=value1 key3=value3

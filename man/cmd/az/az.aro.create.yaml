@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a cluster.
-documentation:
-    flag:
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        master-subnet: Name or ID of master vnet subnet.  If name is supplied, `--vnet` must be supplied.
-        outbound-type: Outbound type of cluster. Must be "Loadbalancer" or "UserDefinedRouting".
-        pod-cidr: CIDR of pod network. Must be a minimum of /18 or larger.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        service-cidr: CIDR of service network. Must be a minimum of /18 or larger.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        vnet: Name or ID of vnet.  If name is supplied, `--vnet-resource-group` must be supplied.
-        worker-subnet: Name or ID of worker vnet subnet.  If name is supplied, `--vnet` must be supplied.
 flags:
     --apiserver-visibility=: API server visibility.
     --client-id=: Client ID of cluster service principal.
@@ -75,3 +63,39 @@ completion:
         worker-encryption-at-host:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        apiserver-visibility: 'API server visibility. [Default: Public].'
+        change-reference: The related change reference ID for this resource operation.
+        client-id: Client ID of cluster service principal.
+        client-secret: Client secret of cluster service principal.
+        cluster-resource-group: Resource group of cluster.
+        disk-encryption-set: ResourceID of the DiskEncryptionSet to be used for master and worker VMs.
+        domain: Domain of cluster. --enable-managed-identity --enable-mi Enable managed identity for this cluster.
+        enable-preconfigured-nsg: 'Use Preconfigured NSGs. Allowed values: false, true. [Default: false].'
+        ingress-visibility: 'Ingress visibility. [Default: Public].'
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` . --master-enc-host --master-encryption-at-host Encryption at host flag for master VMs. [Default: false].'
+        master-subnet: Name or ID of master vnet subnet.  If name is supplied, `--vnet` must be supplied.
+        master-vm-size: 'Size of master VMs. [Default: Standard_D8s_v5].'
+        name: Name of cluster.
+        no-wait: Do not wait for the long-running operation to finish.
+        outbound-type: 'Outbound type of cluster. Must be "Loadbalancer" or "UserDefinedRouting".                    [Default: Loadbalancer].'
+        pod-cidr: 'CIDR of pod network. Must be a minimum of /18 or larger. [Default: 10.128.0.0/14].'
+        pull-secret: Pull secret of cluster.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-cidr: 'CIDR of service network. Must be a minimum of /18 or larger. [Default: 172.30.0.0/16].'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        version: OpenShift version to use for cluster creation.
+        vnet: Name or ID of vnet.  If name is supplied, `--vnet-resource-group` must be supplied.
+        vnet-resource-group: Name of vnet resource group.
+        worker-count: 'Count of worker VMs. [Default: 3]. --worker-enc-host --worker-encryption-at-host Encryption at host flag for worker VMs. [Default: false].'
+        worker-subnet: Name or ID of worker vnet subnet.  If name is supplied, `--vnet` must be supplied.
+        worker-vm-disk-size-gb: 'Disk size in GB of worker VMs. [Default: 128].'
+        worker-vm-size: 'Size of worker VMs. [Default: Standard_D4s_v5].'
+examples:
+    Create a cluster with 5 compute nodes and Red Hat pull secret.: az aro create --resource-group MyResourceGroup --name MyCluster --vnet MyVnet --master-subnet MyMasterSubnet --worker-subnet MyWorkerSubnet --worker-count 5 --pull-secret pullsecret.txt
+    Create a cluster with a supported OpenShift version.: az aro create --resource-group MyResourceGroup --name MyCluster --vnet MyVnet --master-subnet MyMasterSubnet --worker-subnet MyWorkerSubnet --version X.Y.Z
+    Create a cluster.: az aro create --resource-group MyResourceGroup --name MyCluster --vnet MyVnet --master-subnet MyMasterSubnet --worker-subnet MyWorkerSubnet
+    Create a private cluster.: az aro create --resource-group MyResourceGroup --name MyCluster --vnet MyVnet --master-subnet MyMasterSubnet --worker-subnet MyWorkerSubnet --apiserver-visibility Private --ingress-visibility Private

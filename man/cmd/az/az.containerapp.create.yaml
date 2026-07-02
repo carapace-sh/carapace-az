@@ -1,25 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a container app.
-documentation:
-    flag:
-        args: A list of container startup command argument(s). Space-separated values e.g. "-c" "mycommand". Empty string to clear existing values
-        command: A list of supported commands on the container that will executed during startup. Space-separated values e.g. "/bin/queue" "mycommand". Empty string to clear existing values
-        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
-        exposed-port: Additional exposed port. Only supported by tcp transport protocol. Must be unique per environment if the app ingress is external.
-        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        registry-identity: A Managed Identity to authenticate with the registry server instead of username/password. Use a resource ID or 'system' for user-defined and system-defined identities, respectively. The registry must be an ACR. If possible, an 'acrpull' role assignemnt will be created for the identity automatically.
-        registry-password: The password to log in to container registry. If stored as a secret, value must start with 'secretref:' followed by the secret name.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        scale-rule-auth: Scale rule auth parameters. Auth parameters must be in format "{triggerParameter}={secretRef} {triggerParameter}={secretRef} ...".
-        scale-rule-http-concurrency: The maximum number of concurrent requests before scale out. Only supported for http and tcp scale rules.
-        scale-rule-metadata: Scale rule metadata. Metadata must be in format "{key}={value} {key}={value} ...".
-        scale-rule-type: 'The type of the scale rule. Default: http. For more information please visit https://learn.microsoft.com/azure/container-apps/scale-app#scale-triggers'
-        secrets: A list of secret(s) for the container app. Space-separated values in 'key=value' format.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        termination-grace-period: 'Duration in seconds a replica is given to gracefully shut down before it is forcefully terminated. (Default: 30)'
-        yaml: Path to a .yaml file with the configuration of a container app. All other parameters will be ignored. For an example, see  https://learn.microsoft.com/azure/container-apps/azure-resource-manager-api-spec#examples
 flags:
     --allow-insecure=:
         description: Allow insecure connections for ingress traffic.
@@ -114,3 +95,141 @@ completion:
             - http
             - http2
             - tcp
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        allow-insecure: Allow insecure connections for ingress traffic.
+        args: A list of container startup command argument(s). Space-separated values e.g. "-c" "mycommand". Empty string to clear existing values.
+        artifact: 'Local path to the application artifact for building the container image. See the supported artifacts here: https://aka.ms/SourceToCloudSupportedArtifacts .'
+        bind: Space separated list of services, bindings or Java components to be connected to this app. e.g. SVC_NAME1[:BIND_NAME1] SVC_NAME2[:BIND_NAME2]...
+        branch: Branch in the provided GitHub repository. Assumed to be the GitHub repository's default branch if not specified.
+        build-env-vars: A list of environment variable(s) for the build. Space-separated values in 'key=value' format.
+        change-reference: The related change reference ID for this resource operation.
+        command: A list of supported commands on the container that will executed during startup. Space-separated values e.g. "/bin/queue" "mycommand". Empty string to clear existing values.
+        container-name: Name of the container.
+        context-path: Path in the repository to run docker build. Defaults to "./". Dockerfile is assumed to be named "Dockerfile" and in this directory.
+        cpu: Required CPU in cores from 0.25 - 2.0, e.g. 0.5.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        dapr-app-id: The Dapr application identifier.
+        dapr-app-port: The port Dapr uses to talk to the application.
+        dapr-app-protocol: The protocol Dapr uses to talk to the application.
+        dapr-log-level: Set the log level for the Dapr sidecar.
+        enable-dapr: Boolean indicating if the Dapr side car is enabled.
+        enable-java-agent: Boolean indicating whether to enable Java agent for the app. Only applicable for Java runtime.
+        enable-java-metrics: Boolean indicating whether to enable Java metrics for the app. Only applicable for Java runtime.
+        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
+        environment: Name or resource ID of the container app's environment.
+        environment-type: Type of environment.
+        exposed-port: Additional exposed port. Only supported by tcp transport protocol. Must be unique per environment if the app ingress is external.
+        image: Container image, e.g. publisher/image-name:tag.
+        ingress: The ingress type.
+        kind: Set to 'functionapp' to enable built-in support and autoscaling for Azure Functions on Container Apps.
+        max-inactive-revisions: Max inactive revisions a Container App can have.
+        max-replicas: The maximum number of replicas.
+        memory: Required memory from 0.5 - 4.0 ending with "Gi", e.g. 1.0Gi.
+        min-replicas: The minimum number of replicas.
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        no-wait: Do not wait for the long-running operation to finish.
+        registry-identity: The managed identity with which to authenticate to the Azure Container Registry (instead of username/password). Use 'system' for a system-defined identity, Use 'system-environment' for an environment level system-defined identity or a resource id for a user-defined environment/containerapp level identity. The managed identity should have been assigned acrpull permissions on the ACR before deployment (use 'az role assignment create --role acrpull ...').
+        registry-password: The password to log in to container registry. If stored as a secret, value must start with 'secretref:' followed by the secret name.
+        registry-server: The container registry server hostname, e.g. myregistry.azurecr.io.
+        registry-username: The username to log in to container registry.
+        repo: 'Create an app via GitHub Actions in the format: ``` https://github.com/owner/repository-name ``` or owner/repository-name.'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        revision-suffix: User friendly suffix that is appended to the revision name.
+        revisions-mode: The active revisions mode for the container app.
+        runtime: The runtime of the container app.
+        scale-rule-auth: Scale rule auth parameters. Auth parameters must be in format "{triggerParameter}={secretRef} {triggerParameter}={secretRef} ...".
+        scale-rule-http-concurrency: The maximum number of concurrent requests before scale out. Only supported for http and tcp scale rules.
+        scale-rule-metadata: Scale rule metadata. Metadata must be in format "{key}={value} {key}={value} ...".
+        scale-rule-type: 'The type of the scale rule. Default: http. For more information please visit https://learn.microsoft.com/azure/container-apps/scale-app#scale-triggers'
+        secret-volume-mount: Path to mount all secrets e.g. mnt/secrets.
+        secrets: A list of secret(s) for the container app. Space-separated values in 'key=value' format.
+        source: 'Local directory path containing the application source and Dockerfile for building the container image. Preview: If no Dockerfile is present, a container image is generated using buildpacks. If Docker is not running or buildpacks cannot be used, Oryx will be used to generate the image. See the supported Oryx runtimes here: https://aka.ms/SourceToCloudSupportedVersions .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-assigned: Boolean indicating whether to assign system-assigned identity.
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        target-label: The label to apply to new revisions. Required for revisions-mode 'labels'.
+        target-port: The application port used for ingress traffic.
+        termination-grace-period: 'Duration in seconds a replica is given to gracefully shut down before it is forcefully terminated. (Default: 30)'
+        token: 'A Personal Access Token with write access to the specified repository. For more information: https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line . If not provided or not found in the cache (and using --repo), a browser page will be opened to authenticate with Github.'
+        transport: The transport protocol used for ingress traffic.
+        user-assigned: Space-separated user identities to be assigned.
+        workload-profile-name: Name of the workload profile to run the app on.
+        yaml: Path to a .yaml file with the configuration of a container app. All other parameters will be ignored. For an example, see https://learn.microsoft.com/azure/container-apps/azure-resource-manager-api-spec#examples .
+examples:
+    Create a Container App from the provided application source: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+        --environment MyContainerappEnv --registry-server MyRegistryServer \
+        --registry-user MyRegistryUser --registry-pass MyRegistryPass \
+        --source .
+    Create a container app and retrieve its fully qualified domain name.: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image myregistry.azurecr.io/my-app:v1.0 --environment MyContainerappEnv \
+            --ingress external --target-port 80 \
+            --registry-server myregistry.azurecr.io --registry-username myregistry --registry-password $REGISTRY_PASSWORD \
+            --query properties.configuration.ingress.fqdn
+    Create a container app from a new GitHub Actions workflow in the provided GitHub repository: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+        --environment MyContainerappEnv --registry-server MyRegistryServer \
+        --registry-user MyRegistryUser --registry-pass MyRegistryPass \
+        --repo https://github.com/myAccount/myRepo
+    Create a container app hosted on a Connected Environment.: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-app:v1.0 --environment MyContainerappConnectedEnv \
+            --environment-type connected
+    Create a container app using a YAML configuration. Example YAML configuration - https://aka.ms/azure-container-apps-yaml: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --environment MyContainerappEnv \
+            --yaml "path/to/yaml/file.yml"
+    Create a container app with a custom scale rule: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-queue-processor --environment MyContainerappEnv \
+            --min-replicas 4 --max-replicas 8 \
+            --scale-rule-name queue-based-autoscaling \
+            --scale-rule-type azure-queue \
+            --scale-rule-metadata "accountName=mystorageaccountname" \
+                                  "cloud=AzurePublicCloud" \
+                                  "queueLength=5" "queueName=foo" \
+            --scale-rule-auth "connection=my-connection-string-secret-name"
+    Create a container app with a custom scale rule using identity to authenticate: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-queue-processor --environment MyContainerappEnv \
+            --user-assigned myUserIdentityResourceId --min-replicas 4 --max-replicas 8 \
+            --scale-rule-name queue-based-autoscaling \
+            --scale-rule-type azure-queue \
+            --scale-rule-metadata "accountName=mystorageaccountname" \
+                                  "cloud=AzurePublicCloud" \
+                                  "queueLength=5" "queueName=foo" \
+            --scale-rule-identity myUserIdentityResourceId
+    Create a container app with an http scale rule: |-
+        az containerapp create -n myapp -g mygroup --environment myenv --image nginx \
+            --scale-rule-name my-http-rule \
+            --scale-rule-http-concurrency 50
+    Create a container app with java agent enabled: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-app:v1.0 --environment MyContainerappEnv \
+            --enable-java-agent
+    Create a container app with java metrics enabled: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-app:v1.0 --environment MyContainerappEnv \
+            --enable-java-metrics
+    Create a container app with resource requirements and replica count limits.: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image nginx --environment MyContainerappEnv \
+            --cpu 0.5 --memory 1.0Gi \
+            --min-replicas 4 --max-replicas 8
+    Create a container app with secrets and environment variables.: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-app:v1.0 --environment MyContainerappEnv \
+            --secrets mysecret=secretvalue1 anothersecret="secret value 2" \
+            --env-vars GREETING="Hello, world" SECRETENV=secretref:anothersecret
+    Create a container app with secrets and mounts them in a volume.: |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-app:v1.0 --environment MyContainerappEnv \
+            --secrets mysecret=secretvalue1 anothersecret="secret value 2" \
+            --secret-volume-mount "mnt/secrets"
+    Create an Azure Functions on Container Apps (kind=functionapp): |-
+        az containerapp create -n my-containerapp -g MyResourceGroup \
+            --image my-app:v1.0 --environment MyContainerappEnv \
+            --kind functionapp

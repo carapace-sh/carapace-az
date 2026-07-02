@@ -1,12 +1,18 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: show-usage
 description: Get the storage usage for an Azure Container Registry.
-documentation:
-    flag:
-        name: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=: Name of resource group.
     -n, --name=!: The name of the container registry.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        name: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Get the current amount of storage used by the registry and the maximum storage capacity allowed.: az acr show-usage -n myregistry --query "value[?name=='MaximumStorageCapacity'] | [0]"
+    Get the current amount of storage used by the registry based on the included storage of its SKU (in bytes).: az acr show-usage -n myregistry --query "value[?name=='Size'] | [0]"
+    Get the storage usage for an Azure Container Registry.: az acr show-usage -n myregistry

@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set-policy
 description: Update security policy settings for a Key Vault.
-documentation:
-    flag:
-        application-id: Application ID of the client making request on behalf of a principal. Exposed for compound identity using on-behalf-of authentication flow.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --application-id=: Application ID of the client making request on behalf of a principal.
     --certificate-permissions=:
@@ -94,3 +90,23 @@ completion:
             - listsas
             - getsas
             - deletesas
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        application-id: Application ID of the client making request on behalf of a principal. Exposed for compound identity using on-behalf-of authentication flow.
+        certificate-permissions: Space-separated list of certificate permissions to assign.
+        change-reference: The related change reference ID for this resource operation.
+        key-permissions: Space-separated list of key permissions to assign.
+        name: Name of the Vault.
+        no-wait: Do not wait for the long-running operation to finish.
+        object-id: A GUID that identifies the principal that will receive permissions.
+        resource-group: Name of resource group.
+        secret-permissions: Space-separated list of secret permissions to assign.
+        spn: Name of a service principal that will receive permissions.
+        storage-permissions: Space-separated list of storage permissions to assign.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        upn: Name of a user principal that will receive permissions.
+examples:
+    Assign key permissions `get`, `list` to a SPN (Service Principal Name).: az keyvault set-policy -n MyVault --key-permissions get list --spn {SPN}
+    Assign key permissions `get`, `list` to a UPN (User Principal Name).: az keyvault set-policy -n MyVault --key-permissions get list --upn {UPN}
+    Assign key permissions `get`, `list`, `import` and secret permissions `backup`, `restore` to an object id.: az keyvault set-policy -n MyVault --key-permissions get list import --secret-permissions backup restore --object-id {GUID}

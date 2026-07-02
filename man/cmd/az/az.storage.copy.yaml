@@ -1,24 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: copy
 description: Copy files or directories to or from Azure storage.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_KEY'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        cap-mbps: 'Caps the transfer rate, in megabits per second. Moment-by-moment throughput might vary slightly from the cap. If this option is set to zero, or it is omitted, the throughput isn''t capped. '
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        content-type: 'Specify content type of the file. '
-        destination: The path/url of copy destination. It can be a local path, an url to azure storage server. If you provide destination parameter here, you do not need to provide arguments in copy destination arguments group and copy destination arguments will be deprecated in future.
-        exclude-path: 'Exclude these paths. This option does not support wildcard characters (*). Checks relative path prefix. For example: myFolder;myFolder/subDirName/file.pdf.'
-        exclude-pattern: 'Exclude these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
-        include-path: Include only these paths. This option does not support wildcard characters (*). Checks relative path prefix. For example:myFolder;myFolder/subDirName/file.pdf
-        include-pattern: 'Include only these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
-        preserve-s2s-access-tier: Preserve access tier during service to service copy. Please refer to https://learn.microsoft.com/azure/storage/blobs/storage-blob-storage-tiers to ensure destination storage account support setting access tier. In the cases that setting access tier is not supported, please use `--preserve-s2s-access-tier false` to bypass copying access tier. (Default true)
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        source: The path/url of copy source. It can be a local path, an url to azure storage server or AWS S3 buckets. If you provide source parameter here, you do not need to provide arguments in copy source arguments group and copy source arguments will be deprecated in future.
-        source-account-key: Account key of copy source storage account. Must be used in conjunction with source storage account name.
-        source-sas: Shared Access Signature (SAS) token of copy source. Must be used in conjunction with source storage account name.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name of copy destination
@@ -65,3 +47,83 @@ completion:
         preserve-s2s-access-tier:
             - "true"
             - "false"
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: Storage account name of copy destination.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.'
+        blob-type: The type of blob at the destination.
+        cap-mbps: 'Caps the transfer rate, in megabits per second. Moment-by-moment throughput might vary slightly from the cap. If this option is set to zero, or it is omitted, the throughput isn''t capped. '
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        content-type: 'Specify content type of the file. '
+        destination: The path/url of copy destination. It can be a local path, an url to azure storage server. If you provide destination parameter here, you do not need to provide arguments in copy destination arguments group and copy destination arguments will be deprecated in future.
+        destination-account-name: Option '--destination-account-name' has been deprecated and will be removed in a future release. Use '--account-name' instead. Storage account name of copy destination.
+        destination-blob: Blob name in blob container of copy destination storage account.
+        destination-container: Container name of copy destination storage account.
+        destination-file-path: File path in file share of copy destination storage account.
+        destination-local-path: Option '--destination-local-path' has been deprecated and will be removed in a future release. Use '--destination' instead. The path/url of copy destination. It can be a local path, an url to azure storage server. If you provide destination parameter here, you do not need to provide arguments in copy destination arguments group and copy destination arguments will be deprecated in future.
+        destination-share: File share name of copy destination storage account.
+        exclude-path: 'Exclude these paths. This option does not support wildcard characters (*). Checks relative path prefix. For example: myFolder;myFolder/subDirName/file.pdf.'
+        exclude-pattern: 'Exclude these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
+        follow-symlinks: Follow symbolic links when uploading from local file system.
+        include-path: Include only these paths. This option does not support wildcard characters (*). Checks relative path prefix. For example:myFolder;myFolder/subDirName/file.pdf.
+        include-pattern: 'Include only these files where the name matches the pattern list. For example: *.jpg;*.pdf;exactName. This option supports wildcard characters (*)'
+        preserve-s2s-access-tier: Preserve access tier during service to service copy. Please refer to https://learn.microsoft.com/azure/storage/blobs/storage-blob-storage-tiers to ensure destination storage account support setting access tier. In the cases that setting access tier is not supported, please use ``` --preserve-s2s-access-tier false ``` to bypass copying access tier. (Default true).
+        put-md5: Create an MD5 hash of each file, and save the hash as the Content-MD5 property of the destination blob/file.Only available when uploading.
+        recursive: Look into sub-directories recursively.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        service-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        source: The path/url of copy source. It can be a local path, an url to azure storage server or AWS S3 buckets. If you provide source parameter here, you do not need to provide arguments in copy source arguments group and copy source arguments will be deprecated in future.
+        source-account-key: Account key of copy source storage account. Must be used in conjunction with source storage account name.
+        source-account-name: Account name of copy source storage account.
+        source-blob: Blob name in blob container of copy source storage account.
+        source-container: Container name of copy source storage account.
+        source-file-path: File path in file share of copy source storage account.
+        source-local-path: Option '--source-local-path' has been deprecated and will be removed in a future release. Use '--source' instead. The path/url of copy source. It can be a local path, an url to azure storage server or AWS S3 buckets. If you provide source parameter here, you do not need to provide arguments in copy source arguments group and copy source arguments will be deprecated in future.
+        source-sas: Shared Access Signature (SAS) token of copy source. Must be used in conjunction with source storage account name.
+        source-share: File share name of copy source storage account.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    ? Copy a single blob to another blob, and you can also specify the storage account and container information of source and destination as above.
+    : az storage copy -s https://[srcaccount].blob.core.windows.net/[container]/[path/to/blob] -d https://[destaccount].blob.core.windows.net/[container]/[path/to/blob]
+    ? Copy a single object from S3 with access key to blob, and you can also specify your storage account and container information as above.
+    : az storage copy -s https://s3.amazonaws.com/[bucket]/[object] -d https://[destaccount].blob.core.windows.net/[container]/[path/to/blob]
+    ? Copy all buckets in S3 service with access key to blob account, and you can also specify your storage account information as above.
+    : az storage copy -s https://s3.amazonaws.com/ -d https://[destaccount].blob.core.windows.net --recursive
+    ? Copy all buckets in a S3 region with access key to blob account, and you can also specify your storage account information as above.
+    : az storage copy -s https://s3-[region].amazonaws.com/ -d https://[destaccount].blob.core.windows.net --recursive
+    ? Copy an entire account data from blob account to another blob account, and you can also specify the storage account and container information of source and destination as above.
+    : az storage copy -s https://[srcaccount].blob.core.windows.net -d https://[destaccount].blob.core.windows.net --recursive
+    ? Copy an entire directory from S3 with access key to blob virtual directory, and you can also specify your storage account and container information as above.
+    : az storage copy -s https://s3.amazonaws.com/[bucket]/[folder] -d https://[destaccount].blob.core.windows.net/[container]/[path/to/directory] --recursive
+    ? Download a set of files from Azure File Share using wildcards, and you can also specify your storage account and share information as above.
+    : az storage copy -s https://[account].file.core.windows.net/[share]/ --include-pattern foo* -d /path/to/dir --recursive
+    ? Download a single file from Azure Blob using url, and you can also specify your storage account and container information as above.
+    : az storage copy -s https://[account].blob.core.windows.net/[container]/[path/to/blob] -d /path/to/file.txt
+    ? Download a single file from Azure File Share using url, and you can also specify your storage account and share information as above.
+    : az storage copy -s https://[account].file.core.windows.net/[share]/[path/to/file] -d /path/to/file.txt
+    ? Download a subset of containers within a storage account by using a wildcard symbol (*) in the container name, and you can also specify your storage account and container information as above.
+    : az storage copy -s https://[account].blob.core.windows.net/[container*name] -d /path/to/dir --recursive
+    Download a subset of files from Azure Blob. (Only jpg files and file names don't start with test will be included.): az storage copy -s https://[account].blob.core.windows.net/[container] --include-pattern "*.jpg" --exclude-pattern test* -d /path/to/dir --recursive
+    Download an entire directory from Azure Blob, and you can also specify your storage account and container information as above.: az storage copy -s https://[account].blob.core.windows.net/[container]/[path/to/directory] -d /path/to/dir --recursive
+    ? Download an entire directory from Azure File Share, and you can also specify your storage account and share information as above.
+    : az storage copy -s https://[account].file.core.windows.net/[share]/[path/to/directory] -d /path/to/dir --recursive
+    Upload a set of files to Azure Blob using wildcards with account name and container name.: az storage copy -s /path/*foo/*bar/*.pdf --destination-account-name mystorageaccount --destination-container mycontainer
+    Upload a set of files to Azure Blob using wildcards with url.: az storage copy -s /path/*foo/*bar/*.pdf -d https://[account].blob.core.windows.net/[container]/[path/to/directory]
+    Upload a set of files to Azure File Share using wildcards with account name and share name.: az storage copy -s /path/*foo/*bar/*.pdf --destination-account-name mystorageaccount --destination-share myshare
+    Upload a single file to Azure Blob using account name and container name.: az storage copy -s /path/to/file.txt --destination-account-name mystorageaccount --destination-container mycontainer
+    Upload a single file to Azure Blob using url with azcopy options pass-through.: az storage copy -s /path/to/file.txt -d https://[account].blob.core.windows.net/[container]/[path/to/blob] -- --block-size-mb=0.25 --check-length
+    Upload a single file to Azure Blob using url.: az storage copy -s /path/to/file.txt -d https://[account].blob.core.windows.net/[container]/[path/to/blob]
+    Upload a single file to Azure Blob with MD5 hash of the file content and save it as the blob's Content-MD5 property.: az storage copy -s /path/to/file.txt -d https://[account].blob.core.windows.net/[container]/[path/to/blob] --put-md5
+    Upload a single file to Azure File Share using account name and share name.: az storage copy -s /path/to/file.txt --destination-account-name mystorageaccount --destination-share myshare
+    Upload a single file to Azure File Share using url.: az storage copy -s /path/to/file.txt -d https://[account].file.core.windows.net/[share]/[path/to/file]
+    Upload an entire directory to Azure Blob using account name and container name.: az storage copy -s /path/to/dir --destination-account-name mystorageaccount --destination-container mycontainer --recursive
+    Upload an entire directory to Azure Blob using url.: az storage copy -s /path/to/dir -d https://[account].blob.core.windows.net/[container]/[path/to/directory] --recursive
+    Upload an entire directory to Azure File Share using account name and container name.: az storage copy -s /path/to/dir --destination-account-name mystorageaccount --destination-share myshare --recursive
+    Upload an entire directory to Azure File Share using url.: az storage copy -s /path/to/dir -d https://[account].file.core.windows.net/[share]/[path/to/directory] --recursive
+    Upload files and directories to Azure Blob using wildcards with account name and container name.: az storage copy -s /path/*foo/*bar* --destination-account-name mystorageaccount --destination-container mycontainer --recursive
+    Upload files and directories to Azure Blob using wildcards with url.: az storage copy -s /path/*foo/*bar* -d https://[account].blob.core.windows.net/[container]/[path/to/directory] --recursive
+    Upload files and directories to Azure File Share using wildcards with account name and share name.: az storage copy -s /path/*foo/*bar* --destination-account-name mystorageaccount --destination-share myshare --recursive
+    Upload files and directories to Azure File Share using wildcards with url.: az storage copy -s /path/*foo/*bar* -d https://[account].file.core.windows.net/[share]/[path/to/directory] --recursive

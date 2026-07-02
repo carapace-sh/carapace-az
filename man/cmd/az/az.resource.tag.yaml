@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: tag
 description: Updates the tags on an existing resource.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). If provided, no other "Resource Id" arguments should be specified.
-        is-incremental: The option to add tags incrementally without deleting the original tags. If the key of new tag and original tag are duplicated, the original value will be overwritten.
-        latest-include-preview: 'Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not. For example, if the supported api-version of resource provider is 2020-01-01-preview and 2019-01-01: when passing in this parameter it will take the latest version 2020-01-01-preview, otherwise it will take the latest stable version 2019-01-01 without passing in this parameter'
-        name: 'The resource name. (Ex: myC)'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        resource-type: 'The resource type (Ex: ''resC''). Can also accept namespace/type format (Ex: ''Microsoft.Provider/resC'')'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --api-version=: The api version of the resource (omit for the latest stable version)
     --ids=:
@@ -27,3 +17,25 @@ flags:
     -i, --is-incremental=: The option to add tags incrementally without deleting the original tags.
     -n, --name=: The resource name.
     -v, --latest-include-preview=: Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not.
+documentation:
+    command: Tag a resource.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        api-version: The api version of the resource (omit for the latest stable version).
+        change-reference: The related change reference ID for this resource operation.
+        ids: One or more resource IDs (space-delimited). If provided, no other "Resource Id" arguments should be specified.
+        is-incremental: The option to add tags incrementally without deleting the original tags. If the key of new tag and original tag are duplicated, the original value will be overwritten.
+        latest-include-preview: 'Indicate that the latest api-version will be used regardless of whether it is preview version (like 2020-01-01-preview) or not. For example, if the supported api-version of resource provider is 2020-01-01-preview and 2019-01-01: when passing in this parameter it will take the latest version 2020-01-01-preview, otherwise it will take the latest stable version 2019-01-01 without passing in this parameter.'
+        name: 'The resource name. (Ex: myC).'
+        namespace: 'Provider namespace (Ex: ''Microsoft.Provider'').'
+        parent: 'The parent path (Ex: ''resA/myA/resB/myB'').'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        resource-type: 'The resource type (Ex: ''resC''). Can also accept namespace/type format (Ex: ''Microsoft.Provider/resC'').'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Tag a web app with the key 'vmlist' and value 'vm1', using a resource identifier.: az resource tag --tags vmlist=vm1 --ids /subscriptions/{SubID}/resourceGroups/{ResourceGroup}/providers/Microsoft.Web/sites/{WebApp}
+    ? Tag the virtual machine 'MyVm' with the key 'vmlist' and value 'vm1' by using the latest api-version whether this version is a preview version.
+    : az resource tag --tags vmlist=vm1 -g MyResourceGroup -n MyVm --resource-type "Microsoft.Compute/virtualMachines" --latest-include-preview
+    Tag the virtual machine 'MyVm' with the key 'vmlist' and value 'vm1' incrementally. It doesn't empty the existing tags.: az resource tag --tags vmlist=vm1 -g MyResourceGroup -n MyVm --resource-type "Microsoft.Compute/virtualMachines" -i
+    Tag the virtual machine 'MyVm' with the key 'vmlist' and value 'vm1'.: az resource tag --tags vmlist=vm1 -g MyResourceGroup -n MyVm --resource-type "Microsoft.Compute/virtualMachines"

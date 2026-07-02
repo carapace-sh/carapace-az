@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create the restore point.
-documentation:
-    flag:
-        consistency-mode: Consistency mode of the restore point. Can be specified in the input while creating a restore point. For now, only CrashConsistent is accepted as a valid input. Please refer to https://aka.ms/RestorePoints for more details.
-        exclude-disks: List of disk resource ids that the customer wishes to exclude from the restore point. If no disks are specified, all disks will be included.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --collection-name=!: The name of the restore point collection.
     --consistency-mode=: Consistency mode of the restore point.
@@ -44,3 +38,28 @@ completion:
             - EncryptionAtRestWithPlatformKey
             - EncryptionAtRestWithCustomerKey
             - EncryptionAtRestWithPlatformAndCustomerKeys
+documentation:
+    command: Create the restore point. Updating properties of an existing restore point is not allowed.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        collection-name: The name of the restore point collection. --name --restore-point-name -n The name of the restore point.
+        consistency-mode: Consistency mode of the restore point. Can be specified in the input while creating a restore point. For now, only CrashConsistent is accepted as a valid input. Please refer to https://aka.ms/RestorePoints for more details.
+        data-disk-restore-point-encryption-set: Customer managed data disk encryption set resource id.
+        data-disk-restore-point-encryption-type: The type of key used to encrypt the data of the data disk restore point.
+        exclude-disks: 'List of disk resource ids that the customer wishes to exclude from the restore point. If no disks are specified, all disks will be included. Usage: --exclude-disks XX XX id: The ARM resource id in the form of /subscriptions/{SubscriptionId}/resourceGroups/{ResourceGroupName}/... Multiple actions can be specified by using more than one --exclude-disks argument. --ia-duration --instant-access-duration --instant-access-duration-minutes This property determines the time in minutes the snapshot is retained as instant access for restoring Premium SSD v2 or Ultra disk with fast restore performance in this restore point.'
+        no-wait: Do not wait for the long-running operation to finish.
+        os-restore-point-encryption-set: Customer managed OS disk encryption set resource id.
+        os-restore-point-encryption-type: The type of key used to encrypt the data of the OS disk restore point.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        source-data-disk-resource: Resource Id of the source data disk.
+        source-os-resource: Resource Id of the source OS disk.
+        source-restore-point: Resource Id of the source restore point from which a copy needs to be created.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a restore point: az restore-point create --exclude-disks "/subscriptions/{subscription-id}/resourceGroups/myResour               ceGroup/providers/Microsoft.Compute/disks/disk123" --resource-group "myResourceGroup"                --collection-name "rpcName" --name "rpName"
+    Create a restore point with --consistency-mode CrashConsistent: |-
+        az vm create -n vm -g rg --image Ubuntu2204 --tag EnableCrashConsistentRestorePoint=True
+        az restore-point collection create --source-id "/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVM"                -g rg --collection-name "myRpc"
+        az restore-point create --exclude-disks "/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/disks/disk123"                --resource-group "myResourceGroup" --collection-name "rpcName" --name "rpName"
+    Create a restore point with instant-access-duration-minutes: az restore-point create --exclude-disks "/subscriptions/{subscription-id}/resourceGroups/myResourceGroup/providers/Microsoft.Compute/disks/disk123"                --resource-group "myResourceGroup" --collection-name "rpcName" --name "rpName" --instant-access-duration-minutes 120

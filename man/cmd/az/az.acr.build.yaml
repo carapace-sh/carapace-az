@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: build
 description: Queues a quick build, providing streaming logs for an Azure Container Registry.
-documentation:
-    flag:
-        build-arg: 'Build argument in ''--build-arg name[=value]'' format. Multiples are supported by passing ''--build-arg name[=value]'' multiple times. IMPORTANT: This parameter should not include passwords, access tokens, or sensitive information of any kind. This parameter value will be visible to the ACR team for debugging purposes.'
-        file: The relative path of the the docker file to the source code root folder. Default to 'Dockerfile'.
-        image: 'The name and tag of the image using the format: ''-t repo/image:tag''. Multiple tags are supported by passing -t multiple times.'
-        log-template: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}''). Only applicable to CMK enabled registry.'
-        platform: The platform where build/task is run, Eg, 'windows' and 'linux'. When it's used in build commands, it also can be specified in 'os/arch/variant' format for the resulting image. Eg, linux/arm/v7. The 'arch' and 'variant' parts are optional.
-        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        secret-build-arg: Secret build argument in '--secret-build-arg name[=value]' format. Multiples are supported by passing '--secret-build-arg name[=value]' multiple times. This parameter value is not surfaced to the ACR team and is more suitable for sensitive information.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --agent-pool=: The name of the agent pool.
     --auth-mode=: Auth mode of the source registry.
@@ -35,3 +24,34 @@ completion:
         auth-mode:
             - None
             - Default
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        agent-pool: The name of the agent pool.
+        auth-mode: Auth mode of the source registry.
+        build-arg: 'Build argument in ''--build-arg name[=value]'' format. Multiples are supported by passing ''--build-arg name[=value]'' multiple times. IMPORTANT: This parameter should not include passwords, access tokens, or sensitive information of any kind. This parameter value will be visible to the ACR team for debugging purposes.'
+        change-reference: The related change reference ID for this resource operation.
+        file: The relative path of the the docker file to the source code root folder. Default to 'Dockerfile'.
+        image: 'The name and tag of the image using the format: ''-t repo/image:tag''. Multiple tags are supported by passing -t multiple times.'
+        log-template: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}''). Only applicable to CMK enabled registry.'
+        no-format: Indicates whether the logs should be displayed in raw format.
+        no-logs: Do not show logs after successfully queuing the build.
+        no-push: Indicates whether the image built should be pushed to the registry.
+        no-wait: Do not wait for the build to complete and return immediately after queuing the build.
+        platform: The platform where build/task is run, Eg, 'windows' and 'linux'. When it's used in build commands, it also can be specified in 'os/arch/variant' format for the resulting image. Eg, linux/arm/v7. The 'arch' and 'variant' parts are optional.
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        secret-build-arg: Secret build argument in '--secret-build-arg name[=value]' format. Multiples are supported by passing '--secret-build-arg name[=value]' multiple times. This parameter value is not surfaced to the ACR team and is more suitable for sensitive information.
+        source-acr-auth-id: Assign the identity used for source registry login. Use '[caller]' for caller identity.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target: The name of the target build stage.
+        timeout: The timeout in seconds. <SOURCE_LOCATION> The local source code directory path (e.g., './src'), or the URL to a git repository (e.g., 'https://github.com/Azure-Samples/acr-build-helloworld-node.git') or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag').
+examples:
+    Queue a local context as a Linux build on arm/v7 architecture, tag it, and push it to the registry.: az acr build -t sample/hello-world:{{.Run.ID}} -r myregistry . --platform linux/arm/v7
+    Queue a local context as a Linux build without pushing it to the registry.: az acr build -r myregistry .
+    ? Queue a local context as a Linux build, tag it, and push it to the ABAC-based Repository Permission enabled registry and use the caller's Entra identity to authenticate with the source registry.
+    : az acr build -t sample/hello-world:{{.Run.ID}} -r myregistry . --source-acr-auth-id [caller]
+    Queue a local context as a Linux build, tag it, and push it to the registry without streaming logs.: az acr build -t sample/hello-world:{{.Run.ID}} -r myregistry --no-logs .
+    Queue a local context as a Linux build, tag it, and push it to the registry.: az acr build -t sample/hello-world:{{.Run.ID}} -r myregistry .
+    Queue a remote GitHub context as a Windows build, tag it, and push it to the registry.: az acr build -r myregistry https://github.com/Azure/acr-builder.git -f Windows.Dockerfile --platform windows
+    Queue a remote OCI Artifact context build.: az acr build -r myregistry oci://myregistry.azurecr.io/myartifact:mytag

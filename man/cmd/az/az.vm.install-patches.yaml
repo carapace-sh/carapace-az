@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: install-patches
 description: Install patches on a VM.
-documentation:
-    flag:
-        exclude-kbs-requiring-reboot: Filter out KBs that don't have a reboot behavior of 'NeverReboots' when this is set. Applicable to Windows VM only
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        kb-numbers-to-exclude: Space-separated list of KBs to exclude in the patch operation. Applicable to Windows VM only
-        kb-numbers-to-include: Space-separated list of KBs to include in the patch operation. Applicable to Windows VM only
-        max-patch-publish-date: 'ISO 8601 time value for install patch that were published on or before this given max published date. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        maximum-duration: Specify the maximum amount of time that the operation will run. It must be an ISO 8601-compliant duration string such as PT4H (4 hours)
-        name: The name of the Virtual Machine. You can configure the default using `az configure --defaults vm=<name>`
-        package-name-masks-to-exclude: 'Space-separated list of packages to exclude in the patch operation. Format: packageName_packageVersion. Applicable to Linux VM only'
-        package-name-masks-to-include: 'Space-separated list of packages to include in the patch operation. Format: packageName_packageVersion. Applicable to Linux VM only'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --classifications-to-include-linux=:
         description: Space-separated list of classifications to include for Linux VM.
@@ -70,3 +57,27 @@ completion:
             - IfRequired
             - Never
             - Always
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        classifications-to-include-linux: Space-separated list of classifications to include for Linux VM.
+        classifications-to-include-win: Space-separated list of classifications to include for Windows VM.
+        exclude-kbs-requiring-reboot: Filter out KBs that don't have a reboot behavior of 'NeverReboots' when this is set. Applicable to Windows VM only.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        kb-numbers-to-exclude: Space-separated list of KBs to exclude in the patch operation. Applicable to Windows VM only.
+        kb-numbers-to-include: Space-separated list of KBs to include in the patch operation. Applicable to Windows VM only.
+        max-patch-publish-date: 'ISO 8601 time value for install patch that were published on or before this given max published date. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        maximum-duration: Specify the maximum amount of time that the operation will run. It must be an ISO 8601-compliant duration string such as PT4H (4 hours).
+        name: The name of the Virtual Machine. You can configure the default using ``` az configure --defaults vm=<name> ``` .
+        no-wait: Do not wait for the long-running operation to finish.
+        package-name-masks-to-exclude: 'Space-separated list of packages to exclude in the patch operation. Format: packageName_packageVersion. Applicable to Linux VM only.'
+        package-name-masks-to-include: 'Space-separated list of packages to include in the patch operation. Format: packageName_packageVersion. Applicable to Linux VM only.'
+        reboot-setting: Define when it is acceptable to reboot a VM during a software update operation.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    ? Install patches on a linux VM, allowing the maximum amount of time to be 4 hours, and the VM will reboot if required during the software update operation.
+    : az vm install-patches -g MyResourceGroup -n MyVm --maximum-duration PT4H --reboot-setting IfRequired --classifications-to-include-linux Critical
+    ? Install patches on a windows VM, allowing the maximum amount of time to be 4 hours, and the VM will reboot if required during the software update operation.
+    : az vm install-patches -g MyResourceGroup -n MyVm --maximum-duration PT4H --reboot-setting IfRequired --classifications-to-include-win Critical Security --exclude-kbs-requiring-reboot true

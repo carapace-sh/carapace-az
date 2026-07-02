@@ -1,13 +1,23 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: check-health
 description: Gets health information on the environment and optionally a target registry.
-documentation:
-    flag:
-        name: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --ignore-errors=: Provide all health checks, even if errors are found
     --subscription=: Name or ID of subscription.
     --vnet=: Virtual network ID so to run this command inside a VNET to verify the DNS routing to private endpoints
     -n, --name=: The name of the container registry.
     -y, --yes=: Do not prompt for confirmation.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        ignore-errors: Provide all health checks, even if errors are found.
+        name: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        repository: The name of the repository.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet: Virtual network ID so to run this command inside a VNET to verify the DNS routing to private endpoints.
+        "yes": Do not prompt for confirmation.
+examples:
+    Gets health state of the environment, without stopping on first error.: az acr check-health --ignore-errors
+    Gets health state with target registry 'myregistry', and checks allowed permissions to the specific repository 'myrepo'.: az acr check-health -n myregistry --repository myrepo
+    Gets health state with target registry 'myregistry', skipping confirmation for pulling image.: az acr check-health -n myregistry -y

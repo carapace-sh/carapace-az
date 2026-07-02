@@ -1,32 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a managed Kubernetes cluster.
-documentation:
-    flag:
-        api-server-authorized-ip-ranges: Comma-separated list of authorized apiserver IP ranges. Set to "" to allow all traffic on a previously restricted cluster. Set to 0.0.0.0/32 to restrict apiserver traffic to node pools.
-        assign-kubelet-identity: Update cluster's kubelet identity to an existing user assigned identity. Please note this operation will recreate all agent nodes in the cluster.
-        bootstrap-container-registry-resource-id: Configure container registry resource ID. Must use "Cache" as bootstrap artifact source.
-        cluster-autoscaler-profile: Comma-separated list of key=value pairs for configuring cluster autoscaler. Pass an empty string to clear the profile.
-        disable-azure-monitor-metrics: Disable Azure Monitor Metrics Profile. This will delete all DCRA's associated with the cluster, any linked DCRs with the data stream = prometheus-stream and the recording rule groups created by the addon for this AKS cluster.
-        disable-secret-rotation: Disable secret rotation. Use with azure-keyvault-secrets-provider addon.
-        enable-acns: Enable advanced network functionalities on a cluster. Enabling this will incur additional costs. For non-cilium clusters, acns security will be disabled by default until further notice.
-        enable-cost-analysis: Enable exporting Kubernetes Namespace and Deployment details to the Cost Analysis views in the Azure portal. For more information see aka.ms/aks/docs/cost-analysis.
-        enable-secret-rotation: Enable secret rotation. Use with azure-keyvault-secrets-provider addon.
-        if-match: The value provided will be compared to the ETag of the managed cluster, if it matches the operation will proceed. If it does not match, the request will be rejected to prevent accidental overwrites. This must not be specified when creating a new cluster.
-        if-none-match: Set to '*' to allow a new cluster to be created, but to prevent updating an existing cluster. Other values will be ignored.
-        ksm-metric-annotations-allow-list: Comma-separated list of additional Kubernetes label keys that will be used in the resource' labels metric. By default the metric contains only name and namespace labels. To include additional labels provide a list of resource names in their plural form and Kubernetes label keys you would like to allow for them (e.g.'=namespaces=[k8s-label-1,k8s-label-n,...],pods=[app],...)'. A single '*' can be provided per resource instead to allow any labels, but that has severe performance implications (e.g. '=pods=[*]').
-        ksm-metric-labels-allow-list: Comma-separated list of additional Kubernetes label keys that will be used in the resource' labels metric. By default the metric contains only name and namespace labels. To include additional labels provide a list of resource names in their plural form and Kubernetes label keys you would like to allow for them (e.g. '=namespaces=[k8s-label-1,k8s-label-n,...],pods=[app],...)'. A single '*' can be provided per resource instead to allow any labels, but that has severe performance implications (e.g. '=pods=[*]').
-        max-count: Maximum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified. Please specify the value in the range of [1, 1000]
-        min-count: Minimum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified. Please specify the value in the range of [1, 1000]
-        node-os-upgrade-channel: Manner in which the OS on your nodes is updated. It could be NodeImage, None, SecurityPatch or Unmanaged.
-        nodepool-labels: 'space-separated labels: key[=value] [key[=value] ...]. See https://aka.ms/node-labels for syntax of labels.'
-        pod-cidr: Update the pod CIDR for a cluster. Used when updating a cluster from Azure CNI to Azure CNI Overlay.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        rotation-poll-interval: Set interval of rotation poll. Use with azure-keyvault-secrets-provider addon.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        tier: Specify SKU tier for managed clusters. '--tier standard' enables a standard managed cluster service with a financially backed SLA. '--tier free' changes a standard managed cluster to a free one.
-        upgrade-override-until: Until when the cluster upgradeSettings overrides are effective. It needs to be in a valid date-time format that's within the next 30 days. For example, 2023-04-01T13:00:00Z. Note that if --force-upgrade is set to true and --upgrade-override-until is not set, by default it will be set to 3 days from now.
 flags:
     --aad-admin-group-object-ids=: Comma-separated list of aad group object IDs that will be set as cluster admin.
     --aad-tenant-id=: The ID of an Azure Active Directory tenant.
@@ -225,3 +199,264 @@ completion:
             - free
             - standard
             - premium
+documentation:
+    command: Update a managed Kubernetes cluster. When called with no optional arguments this attempts to move the cluster to its goal state without changing the current cluster configuration. This can be used to move out of a non succeeded state.
+    flag:
+        aad-admin-group-object-ids: Comma-separated list of aad group object IDs that will be set as cluster admin.
+        aad-tenant-id: The ID of an Azure Active Directory tenant.
+        acns-advanced-networkpolicies: Used to enable advanced network policies (None, FQDN or L7) on a cluster when enabling advanced networking features with "--enable-acns".
+        acns-datapath-acceleration-mode: Set the datapath acceleration mode for Azure Container Networking Solution (ACNS) Performance. Valid values are 'BpfVeth' and 'None'.
+        acns-transit-encryption-type: Set transit encryption type for ACNS security. Configures pod-to-pod encryption for Cilium-based clusters. Once enabled, all traffic between Cilium managed pods will be encrypted when it leaves the node boundary. Valid values are "WireGuard" and "None". When creating a cluster, this option must be used together with "--enable-acns"; when updating a cluster, it can be used on its own to modify the transit encryption type for an existing ACNS-enabled cluster.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        aks-custom-headers: Send custom headers. When specified, format should be Key1=Value1,Key2=Value2.
+        ampls-resource-id: Resource ID of Azure Monitor Private Link scope for Monitoring Addon.
+        api-server-authorized-ip-ranges: Comma-separated list of authorized apiserver IP ranges. Set to "" to allow all traffic on a previously restricted cluster. Set to 0.0.0.0/32 to restrict apiserver traffic to node pools.
+        apiserver-subnet-id: The ID of a subnet in an existing VNet into which to assign control plane apiserver pods(requires --enable-apiserver-vnet-integration).
+        assign-identity: Specify an existing user assigned identity to manage cluster resource group.
+        assign-kubelet-identity: Update cluster's kubelet identity to an existing user assigned identity. Please note this operation will recreate all agent nodes in the cluster.
+        assignee-principal-type: Use this parameter in conjunction with --attach-acr to explicitly set the principal type in the ACR role assignment. This helps avoid RBAC-related errors by ensuring the correct principal type is applied. Valid values are 'User', 'Group' or 'ServicePrincipal'.
+        attach-acr: Grant the 'acrpull' role assignment to the ACR specified by name or resource ID.
+        auto-upgrade-channel: Specify the upgrade channel for autoupgrade. It could be rapid, stable, patch, node-image or none, none means disable autoupgrade.
+        azure-container-storage-nodepools: Define the comma separated nodepool list to install azure container storage.
+        azure-keyvault-kms-key-id: Identifier of Azure Key Vault key.
+        azure-keyvault-kms-key-vault-network-access: Network Access of Azure Key Vault. Allowed values are "Public", "Private". If not set, defaults to type "Public". Requires --azure-keyvault-kms-key-id to be used.
+        azure-keyvault-kms-key-vault-resource-id: Resource ID of Azure Key Vault.
+        azure-monitor-workspace-resource-id: Resource ID of the Azure Monitor Workspace.
+        backup-configuration: Backup configuration as inline JSON string or @file.json . Supports storageAccountResourceId, blobContainerName, backupResourceGroupId, backupVaultId, backupPolicyId, tags. backupVaultId and backupPolicyId are required for Custom strategy. Only valid with --enable-backup.
+        backup-strategy: Backup strategy preset. Week (default, 7-day operational retention), Month (30-day operational retention), DisasterRecovery (7-day operational + 90-day vault retention), Custom (bring your own vault and policy via --backup-configuration). Only valid with --enable-backup.
+        bootstrap-artifact-source: Configure artifact source when bootstraping the cluster. The artifacts include the addon image. Use "Direct" to download artifacts from MCR, "Cache" to downalod artifacts from Azure Container Registry.
+        bootstrap-container-registry-resource-id: Configure container registry resource ID. Must use "Cache" as bootstrap artifact source. --ca-certs --custom-ca-trust-certificates Path to a file containing up to 10 blank line separated certificates. Only valid for linux nodes. These certificates are used by Custom CA Trust features and will be added to trust stores of nodes. --ca-profile --cluster-autoscaler-profile Space-separated list of key=value pairs for configuring cluster autoscaler. Pass an empty string to clear the profile.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-autoscaler-profile: Comma-separated list of key=value pairs for configuring cluster autoscaler. Pass an empty string to clear the profile.
+        cluster-service-load-balancer-health-probe-mode: Set the cluster service health probe mode. Set the cluster service health probe mode. Default is "Servicenodeport".
+        cluster-snapshot-id: The source cluster snapshot id is used to update existing cluster.
+        container-storage-version: Set azure container storage version, the latest version will be installed by default.
+        data-collection-settings: Path to JSON file containing data collection settings for Monitoring addon.
+        defender-config: Path to JSON file containing Microsoft Defender profile configurations.
+        detach-acr: Disable the 'acrpull' role assignment to the ACR specified by name or resource ID.
+        disable-acns: Disable all advanced networking functionalities on a cluster.
+        disable-acns-observability: Used to disable advanced networking observability features on a clusters when enabling advanced networking features with "--enable-acns".
+        disable-acns-security: Used to disable advanced networking security features on a clusters when enabling advanced networking features with "--enable-acns".
+        disable-ahub: Disable Azure Hybrid User Benefits (AHUB) feature for cluster.
+        disable-ai-toolchain-operator: Disable AI toolchain operator.
+        disable-application-load-balancer: Disable Application Load Balancer (Application Gateway for Containers) addon.
+        disable-azure-container-storage: 'Disable azure container storage or any one of the storage pool types. Can be used as a flag (defaults to True) or with a storagepool type value: azureDisk, ephemeralDisk, elasticSan, all (to disable all storage pools).'
+        disable-azure-keyvault-kms: Disable Azure KeyVault Key Management Service.
+        disable-azure-monitor-app-monitoring: Disable Azure Monitor Application Monitoring auto-instrumentation for a Kubernetes cluster.
+        disable-azure-monitor-logs: Disable Azure Monitor logs for the cluster. This is equivalent to using "az aks disable-addons -a monitoring". Disables Log Analytics monitoring for the cluster.
+        disable-azure-monitor-metrics: Disable Azure Monitor Metrics Profile. This will delete all DCRA's associated with the cluster, any linked DCRs with the data stream = prometheus-stream and the recording rule groups created by the addon for this AKS cluster.
+        disable-azure-rbac: Disable Azure RBAC to control authorization checks on cluster.
+        disable-blob-driver: Disable AzureBlob CSI Driver.
+        disable-cluster-autoscaler: Disable cluster autoscaler. For VirtualMachines pools, converts all autoscale profiles back to manual scale profiles.
+        disable-container-network-logs: Disable container network log collection functionalities on a cluster.
+        disable-continuous-control-plane-and-addon-monitor: Disable continuous control plane and addon monitor for the cluster.
+        disable-cost-analysis: Disable exporting Kubernetes Namespace and Deployment details to the Cost Analysis views in the Azure portal.
+        disable-defender: Disable defender profile.
+        disable-disk-driver: Disable AzureDisk CSI Driver.
+        disable-file-driver: Disable AzureFile CSI Driver.
+        disable-fips: Disable FIPS mode at the cluster level. Disables cluster-wide FIPS enforcement for AKS-managed components. This doesn't disable FIPS on existing node pools.
+        disable-force-upgrade: Disable forceUpgrade cluster upgrade settings override.
+        disable-gateway-api: Disable managed installation of Gateway API CRDs.
+        disable-http-proxy: Disable HTTP Proxy Configuration on the cluster.
+        disable-image-cleaner: Disable ImageCleaner Service.
+        disable-image-integrity: Disable ImageIntegrity Service.
+        disable-imds-restriction: Disable IMDS restriction in the cluster. All Pods in the cluster will be able to access IMDS.
+        disable-keda: Disable KEDA workload auto-scaler.
+        disable-local-accounts: (Preview) If set to true, getting static credential will be disabled for this cluster.
+        disable-opentelemetry-logs: Disable OpenTelemetry logs collection.
+        disable-opentelemetry-metrics: Disable OpenTelemetry metrics collection.
+        disable-optimized-addon-scaling: Disable optimized addon scaling feature for cluster.
+        disable-pod-identity: (PREVIEW) Disable Pod Identity addon for cluster.
+        disable-private-cluster: Disable private cluster for apiserver vnet integration cluster.
+        disable-public-fqdn: Disable public fqdn feature for private cluster.
+        disable-run-command: Disable Run command feature for the cluster.
+        disable-secret-rotation: Disable secret rotation. Use with azure-keyvault-secrets-provider addon.
+        disable-service-account-image-pull: Disable service account based image pull.
+        disable-snapshot-controller: Disable CSI Snapshot Controller.
+        disable-static-egress-gateway: Disable Static Egress Gateway addon to the cluster.
+        disable-upstream-kubescheduler-user-configuration: Disable user-defined scheduler configuration for kube-scheduler upstream on the cluster.
+        disable-vpa: Disable vertical pod autoscaler for cluster.
+        disable-windows-gmsa: Disable Windows gmsa on cluster.
+        disable-workload-identity: (PREVIEW) Disable Workload Identity addon for cluster.
+        enable-aad: Enable managed AAD feature for cluster.
+        enable-acns: Enable advanced network functionalities on a cluster. Enabling this will incur additional costs. For non-cilium clusters, acns security will be disabled by default until further notice.
+        enable-ahub: Enable Azure Hybrid User Benefits (AHUB) feature for cluster.
+        enable-ai-toolchain-operator: Enable AI toolchain operator to the cluster.
+        enable-apiserver-vnet-integration: Enable integration of user vnet with control plane apiserver pods.
+        enable-application-load-balancer: Enable Application Load Balancer (Application Gateway for Containers) addon.
+        enable-azure-container-storage: 'Enable azure container storage. Can be used as a flag (defaults to True) or with a storage pool type value: (azureDisk, ephemeralDisk, elasticSan).'
+        enable-azure-keyvault-kms: Enable Azure KeyVault Key Management Service.
+        enable-azure-monitor-app-monitoring: Enable Azure Monitor Application Monitoring auto-instrumentation for a Kubernetes cluster.
+        enable-azure-monitor-logs: Enable Azure Monitor logs for the cluster. This is equivalent to using "az aks enable-addons -a monitoring". Enables Log Analytics monitoring for the cluster. Uses the Log Analytics Default Workspace if it exists, else creates one. Specify "--workspace-resource-id" to use an existing workspace. If monitoring addon is enabled --no-wait argument will have no effect.
+        enable-azure-monitor-metrics: Enable a kubernetes cluster with the Azure Monitor managed service for Prometheus integration.
+        enable-azure-rbac: Enable Azure RBAC to control authorization checks on cluster.
+        enable-backup: Enable Azure Backup for this AKS cluster. Orchestrates the same flow as 'az dataprotection enable-backup trigger' (requires the 'dataprotection' extension).
+        enable-blob-driver: Enable AzureBlob CSI Driver.
+        enable-cluster-autoscaler: Enable cluster autoscaler. For VirtualMachines pools, converts all manual scale profiles to autoscale profiles using the same min/max counts.
+        enable-container-network-logs: Enable container network log collection functionalities on a cluster. Automatically enables --enable-high-log-scale-mode.
+        enable-continuous-control-plane-and-addon-monitor: Enable continuous control plane and addon monitor for the cluster.
+        enable-cost-analysis: Enable exporting Kubernetes Namespace and Deployment details to the Cost Analysis views in the Azure portal. For more information see aka.ms/aks/docs/cost-analysis.
+        enable-defender: Enable Microsoft Defender security profile.
+        enable-disk-driver: Enable AzureDisk CSI Driver.
+        enable-file-driver: Enable AzureFile CSI Driver.
+        enable-fips: Enable FIPS mode at the cluster level. Enables FIPS compliance for all AKS-managed components, such as the node operating system, addons, and managed containerized components ( https://aka.ms/aks/components/docs ). See Enable cluster-wide FIPS ( https://aka.ms/aks/fips ) for more details. Requires Kubernetes version 1.34 or later and the Microsoft.ContainerService/EnableFIPSPreview feature to be registered on the subscription. Existing node pools must already be FIPS-enabled before enabling this cluster-level setting, and future node pools must also be created with FIPS enabled. Some addons and extensions aren't supported with cluster-wide FIPS. Verify addon and extension compatibility before enabling this preview feature.
+        enable-force-upgrade: Enable forceUpgrade cluster upgrade settings override.
+        enable-gateway-api: Enable managed installation of Gateway API CRDs from the standard release channel.
+        enable-high-log-scale-mode: Enable High Log Scale Mode for Container Logs. Auto-enabled when --enable-container-network-logs is specified.
+        enable-http-proxy: Enable HTTP Proxy Configuration on the cluster.
+        enable-image-cleaner: Enable ImageCleaner Service.
+        enable-image-integrity: Enable ImageIntegrity Service.
+        enable-imds-restriction: Enable IMDS restriction in the cluster. Non-hostNetwork Pods will not be able to access IMDS.
+        enable-keda: Enable KEDA workload auto-scaler.
+        enable-local-accounts: (Preview) If set to true, will enable getting static credential for this cluster.
+        enable-managed-identity: Update current cluster to use managed identity to manage cluster resource group.
+        enable-msi-auth-for-monitoring: Send monitoring data to Log Analytics using the cluster's assigned identity (instead of the Log Analytics Workspace's shared key).
+        enable-oidc-issuer: Enable OIDC issuer.
+        enable-opentelemetry-logs: Enable OpenTelemetry logs collection. Requires Azure Monitor logs to be enabled.
+        enable-opentelemetry-metrics: Enable OpenTelemetry metrics collection. Requires Azure Monitor metrics to be enabled.
+        enable-optimized-addon-scaling: Enable optimized addon scaling feature for cluster.
+        enable-pod-identity: (PREVIEW) Enable Pod Identity addon for cluster.
+        enable-pod-identity-with-kubenet: (PREVIEW) Enable pod identity addon for cluster using Kubnet network plugin.
+        enable-private-cluster: Enable private cluster for apiserver vnet integration cluster.
+        enable-public-fqdn: Enable public fqdn feature for private cluster.
+        enable-run-command: Enable Run command feature for the cluster.
+        enable-secret-rotation: Enable secret rotation. Use with azure-keyvault-secrets-provider addon.
+        enable-service-account-image-pull: Enable service account based image pull. For more information, see https://aka.ms/aks/identity-binding/acr-image-pull/docs .
+        enable-snapshot-controller: Enable Snapshot Controller.
+        enable-static-egress-gateway: Enable Static Egress Gateway addon to the cluster.
+        enable-syslog: Enable syslog data collection for Monitoring addon.
+        enable-upstream-kubescheduler-user-configuration: Enable user-defined scheduler configuration for kube-scheduler upstream on the cluster.
+        enable-vpa: Enable vertical pod autoscaler for cluster.
+        enable-windows-gmsa: Enable Windows gmsa on cluster.
+        enable-windows-recording-rules: Enable Windows Recording Rules when enabling the Azure Monitor Metrics addon.
+        enable-workload-identity: (PREVIEW) Enable Workload Identity addon for cluster.
+        ephemeral-disk-nvme-perf-tier: Set ephemeral disk volume type for azure container storage.
+        ephemeral-disk-volume-type: Set ephemeral disk volume type for azure container storage.
+        gmsa-dns-server: Specify DNS server for Windows gmsa on cluster. You do not need to set this if you have set DNS server in the VNET used by the cluster. You must set or not set --gmsa-dns-server and --gmsa-root-domain-name at the same time when setting --enable-windows-gmsa.
+        gmsa-root-domain-name: Specify root domain name for Windows gmsa on cluster. You do not need to set this if you have set DNS server in the VNET used by the cluster. You must set or not set --gmsa-dns-server and --gmsa-root-domain-name at the same time when setting --enable-windows-gmsa.
+        grafana-resource-id: Resource ID of the Azure Managed Grafana Workspace.
+        http-proxy-config: HTTP Proxy configuration for this cluster.
+        if-match: The value provided will be compared to the ETag of the managed cluster, if it matches the operation will proceed. If it does not match, the request will be rejected to prevent accidental overwrites. This must not be specified when creating a new cluster.
+        if-none-match: Set to '*' to allow a new cluster to be created, but to prevent updating an existing cluster. Other values will be ignored.
+        image-cleaner-interval-hours: ImageCleaner scanning interval.
+        ip-families: A comma-separated list of IP versions to use for cluster networking. Each IP version should be in the format IPvN. For example, IPv4.
+        k8s-support-plan: Choose from "KubernetesOfficial" or "AKSLongTermSupport", with "AKSLongTermSupport" you get 1 extra year of CVE patchs.
+        kms-infrastructure-encryption: Enable encryption at rest of Kubernetes resource objects using service-managed keys. Enable infrastructure encryption for Kubernetes resource objects. This feature provides encryption at rest for cluster secrets and configuration using service-managed keys. For more information see https://aka.ms/aks/kubernetesResourceObjectEncryption .
+        ksm-metric-annotations-allow-list: Comma-separated list of additional Kubernetes label keys that will be used in the resource' labels metric. By default the metric contains only name and namespace labels. To include additional labels provide a list of resource names in their plural form and Kubernetes label keys you would like to allow for them (e.g.'=namespaces=[k8s-label-1,k8s-label-n,...],pods=[app],...)'. A single '*' can be provided per resource instead to allow any labels, but that has severe performance implications (e.g. '=pods=[*]').
+        ksm-metric-labels-allow-list: Comma-separated list of additional Kubernetes label keys that will be used in the resource' labels metric. By default the metric contains only name and namespace labels. To include additional labels provide a list of resource names in their plural form and Kubernetes label keys you would like to allow for them (e.g. '=namespaces=[k8s-label-1,k8s-label-n,...],pods=[app],...)'. A single '*' can be provided per resource instead to allow any labels, but that has severe performance implications (e.g. '=pods=[*]').
+        kube-proxy-config: Kube-proxy configuration for this cluster.
+        load-balancer-backend-pool-type: Load balancer backend pool type. Define the LoadBalancer backend pool type of managed inbound backend pool. The nodeIP means the VMs will be attached to the LoadBalancer by adding its private IP address to the backend pool. The nodeIPConfiguration means the VMs will be attached to the LoadBalancer by referencing the backend pool ID in the VM's NIC.
+        load-balancer-idle-timeout: Load balancer idle timeout in minutes. Desired idle timeout for load balancer outbound flows, default is 30 minutes. Please specify a value in the range of [4, 100].
+        load-balancer-managed-outbound-ip-count: Load balancer managed outbound IP count. Desired number of managed outbound IPs for load balancer outbound connection. Valid for Standard SKU load balancer cluster only. If the new value is greater than the original value, new additional outbound IPs will be created. If the value is less than the original value, existing outbound IPs will be deleted and outbound connections may fail due to configuration update.
+        load-balancer-managed-outbound-ipv6-count: Load balancer managed outbound IPv6 IP count. Desired number of managed outbound IPv6 IPs for load balancer outbound connection. Valid for dual-stack (--ip-families IPv4,IPv6) only.
+        load-balancer-outbound-ip-prefixes: Load balancer outbound IP prefix resource IDs. Comma-separated public IP prefix resource IDs for load balancer outbound connection. Valid for Standard SKU load balancer cluster only.
+        load-balancer-outbound-ips: Load balancer outbound IP resource IDs. Comma-separated public IP resource IDs for load balancer outbound connection. Valid for Standard SKU load balancer cluster only.
+        load-balancer-outbound-ports: Load balancer outbound allocated ports. Desired static number of outbound ports per VM in the load balancer backend pool. By default, set to 0 which uses the default allocation based on the number of VMs. Please specify a value in the range of [0, 64000] that is a multiple of 8.
+        load-balancer-sku: Azure Load Balancer SKU selection for your cluster. only standard is accepted. Upgrade to Standard Azure Load Balancer SKU for your AKS cluster.
+        max-count: Maximum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified. Please specify the value in the range of [1, 1000].
+        migrate-vmas-to-vms: Migrate cluster with VMAS node pool to VMS node pool.
+        min-count: Minimum nodes count used for autoscaler, when "--enable-cluster-autoscaler" specified. Please specify the value in the range of [1, 1000].
+        name: Name of the managed cluster.
+        nat-gateway-idle-timeout: NAT gateway idle timeout in minutes. Desired idle timeout for NAT gateway outbound flows, default is 4 minutes. Please specify a value in the range of [4, 120]. Valid for Standard SKU load balancer cluster with managedNATGateway or managedNATGatewayV2 outbound type only.
+        nat-gateway-managed-outbound-ip-count: NAT gateway managed outbound IP count. Desired number of managed outbound IPs for NAT gateway outbound connection. Please specify a value in the range of [1, 16]. Valid for Standard SKU load balancer cluster with managedNATGateway or managedNATGatewayV2 outbound type only. --nat-gateway-managed-outbound-ipv6-count --nat-gw-ipv6-count NAT gateway managed outbound IPv6 IP count. Valid only with --outbound-type managedNATGatewayV2. --nat-gateway-outbound-ip-prefixes --nat-gw-prefixes Comma-separated public IP prefix resource IDs for the cluster NAT gateway. V2 only. --nat-gateway-outbound-ips --nat-gw-ips Comma-separated public IP resource IDs for the cluster NAT gateway. V2 only.
+        network-dataplane: The network dataplane to use. Network dataplane used in the Kubernetes cluster. Specify "azure" to use the Azure dataplane (default) or "cilium" to enable Cilium dataplane.
+        network-plugin: The Kubernetes network plugin to use. Specify "azure" along with --network-plugin-mode=overlay to update a cluster to use Azure CNI Overlay. For more information see https://aka.ms/aks/azure-cni-overlay .
+        network-plugin-mode: The network plugin mode to use. Used to control the mode the network plugin should operate in. For example, "overlay" used with --network-plugin=azure will use an overlay network (non-VNET IPs) for pods in the cluster.
+        network-policy: 'Update Network Policy Engine. Azure provides three Network Policy Engines for enforcing network policies. The following values can be specified: "azure" for Azure Network Policy Manager, "cilium" for Azure CNI Powered by Cilium, "calico" for open-source network and network security solution founded by Tigera, "none" to uninstall Network Policy Engine (Azure Network Policy Manager or Calico). Defaults to "none" (network policy disabled).'
+        no-wait: Do not wait for the long-running operation to finish.
+        node-disruption-policy: Set the node disruption policy for the cluster.
+        node-os-upgrade-channel: Manner in which the OS on your nodes is updated. It could be NodeImage, None, SecurityPatch or Unmanaged.
+        node-provisioning-default-pools: 'The set of default Karpenter NodePools configured for node provisioning. Valid values are "Auto" and "None". The set of default Karpenter NodePools configured for node provisioning. Valid values are "Auto" and "None". Auto: A standard set of Karpenter NodePools are provisioned. None: No Karpenter NodePools are provisioned. WARNING: Changing this from Auto to None on an existing cluster will cause the default Karpenter NodePools to be deleted, which will in turn drain and delete the nodes associated with those pools. It is strongly recommended to not do this unless there are idle nodes ready to take the pods evicted by that action.'
+        node-provisioning-mode: Set the node provisioning mode of the cluster. Valid values are "Auto" and "Manual". For more information on "Auto" mode see aka.ms/aks/nap.
+        nodepool-labels: 'space-separated labels: key[=value] [key[=value] ...]. See https://aka.ms/node-labels for syntax of labels.'
+        nodepool-taints: The node taints for all node pool.
+        nrg-lockdown-restriction-level: Restriction level on the managed node resource group. The restriction level of permissions allowed on the cluster's managed node resource group, supported values are Unrestricted, and ReadOnly (recommended ReadOnly).
+        opentelemetry-logs-port: Port for OpenTelemetry logs collection (default port will be used if not specified).
+        opentelemetry-metrics-port: Port for OpenTelemetry metrics collection (default port will be used if not specified).
+        outbound-type: How outbound traffic will be configured for a cluster. This option will change the way how the outbound connections are managed in the AKS cluster. Available options are loadbalancer, managedNATGateway, managedNATGatewayV2, userAssignedNATGateway, userDefinedRouting, none and block. For clusters using a custom virtual network, supported values are loadbalancer, userAssignedNATGateway and userDefinedRouting. For clusters using an AKS-managed virtual network, supported values are loadbalancer, managedNATGateway, managedNATGatewayV2 and userDefinedRouting.
+        pod-cidr: A CIDR notation IP range from which to assign pod IPs when kubenet is used. This range must not overlap with any Subnet IP ranges. For example, 172.244.0.0/16.
+        private-dns-zone: The private dns zone mode for private cluster. Only allow changing private dns zone from byo/system mode to none for private cluster. Others are denied.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rotation-poll-interval: Set interval of rotation poll. Use with azure-keyvault-secrets-provider addon.
+        safeguards-excluded-ns: Comma-separated list of Kubernetes namespaces to exclude from deployment safeguards. Use "" to clear a previously non-empty list.
+        safeguards-level: The deployment safeguards Level. Accepted Values are [Off, Warning, Enforcement]. Requires azure policy addon to be enabled.
+        safeguards-version: The version of deployment safeguards to use. Default "v1.0.0" Use the ListSafeguardsVersions API to discover available versions.
+        service-account-image-pull-default-managed-identity-id: The default managed identity resource ID used for image pulls at the cluster level.
+        sku: Specify SKU name for managed clusters. Use '--sku base' enables a base managed cluster. Use '--sku automatic' enables an automatic managed cluster.
+        ssh-key-value: Public key path or key contents to install on node VMs for SSH access. For example, 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'.
+        storage-pool-name: Set storage pool name for azure container storage.
+        storage-pool-option: Set ephemeral disk storage pool option for azure container storage.
+        storage-pool-size: Set storage pool size for azure container storage.
+        storage-pool-sku: Set azure disk type storage pool sku for azure container storage.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: The tags of the managed cluster. The managed cluster instance and all resources managed by the cloud provider will be tagged.
+        tier: Specify SKU tier for managed clusters. '--tier standard' enables a standard managed cluster service with a financially backed SLA. '--tier free' changes a standard managed cluster to a free one.
+        update-cluster-autoscaler: Update min-count or max-count for cluster autoscaler. Not supported for VirtualMachines pools; use 'az aks nodepool auto-scale update' instead.
+        upgrade-override-until: Until when the cluster upgradeSettings overrides are effective. It needs to be in a valid date-time format that's within the next 30 days. For example, 2023-04-01T13:00:00Z. Note that if --force-upgrade is set to true and --upgrade-override-until is not set, by default it will be set to 3 days from now.
+        windows-admin-password: 'User account password to use on windows node VMs. Rules for windows-admin-password: - Minimum-length: 14 characters - Max-length: 123 characters - Complexity requirements: 3 out of 4 conditions below need to be fulfilled * Has lower characters * Has upper characters * Has a digit * Has a special character (Regex match [\W_]) - Disallowed values:  "abc@123", "P@$$w0rd", "P@ssw0rd", "P@ssword123", "Pa$$word", "pass@word1", "Password!", "Password1", "Password22", "iloveyou!" Reference: https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.management.compute.models.virtualmachinescalesetosprofile.adminpassword?view=azure-dotnet .'
+        workspace-resource-id: The resource ID of an existing Log Analytics Workspace to use for storing monitoring data. If not specified, uses the default Log Analytics Workspace if it exists, otherwise creates one.
+        "yes": Do not prompt for confirmation.
+examples:
+    Attach AKS cluster to ACR by name "acrName": az aks update -g MyResourceGroup -n MyManagedCluster --attach-acr acrName
+    Configure OpenTelemetry logs with custom port: az aks update -g MyResourceGroup -n MyManagedCluster --enable-opentelemetry-logs --opentelemetry-logs-port 4317
+    Configure OpenTelemetry metrics with custom port: az aks update -g MyResourceGroup -n MyManagedCluster --enable-opentelemetry-metrics --opentelemetry-metrics-port 8888
+    Disable Azure Hybrid User Benefits featture for a kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --disable-ahub
+    Disable Azure Monitor logs for a kubernetes cluster: az aks update -g MyResourceGroup -n MyManagedCluster --disable-azure-monitor-logs
+    Disable Azure RBAC in a managed AAD AKS cluster: az aks update -g MyResourceGroup -n MyManagedCluster --disable-azure-rbac
+    Disable FIPS mode at the cluster level.: az aks update -g MyResourceGroup -n MyManagedCluster --disable-fips
+    Disable KEDA workload autoscaler for an existing kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --disable-keda
+    Disable OpenTelemetry logs collection on an existing cluster: az aks update -g MyResourceGroup -n MyManagedCluster --disable-opentelemetry-logs
+    Disable OpenTelemetry metrics collection on an existing cluster: az aks update -g MyResourceGroup -n MyManagedCluster --disable-opentelemetry-metrics
+    Disable VPA(Vertical Pod Autoscaler) for an existing kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCLuster --disable-vpa
+    Disable Windows gmsa for a kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --disable-windows-gmsa
+    Disable authorized apiserver ip ranges feature for a kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --api-server-authorized-ip-ranges ""
+    Disable cluster-autoscaler for an existing cluster: az aks update --disable-cluster-autoscaler -g MyResourceGroup -n MyManagedCluster
+    Disable pod identity addon.: az aks update -g MyResourceGroup -n MyManagedCluster --disable-pod-identity
+    Enable Azure Backup for a kubernetes cluster (default Week strategy). Requires the 'dataprotection' extension.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-backup --yes
+    Enable Azure Backup with a custom strategy using an existing vault and policy: az aks update -g MyResourceGroup -n MyManagedCluster --enable-backup --backup-strategy Custom --backup-configuration @config.json --yes
+    Enable Azure Hybrid User Benefits featture for a kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-ahub
+    Enable Azure Monitor logs for a kubernetes cluster: az aks update -g MyResourceGroup -n MyManagedCluster --enable-azure-monitor-logs
+    Enable KEDA workload autoscaler for an existing kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-keda
+    Enable OpenTelemetry logs collection on an existing cluster: az aks update -g MyResourceGroup -n MyManagedCluster --enable-opentelemetry-logs
+    Enable OpenTelemetry metrics collection on an existing cluster: az aks update -g MyResourceGroup -n MyManagedCluster --enable-opentelemetry-metrics
+    Enable VPA(Vertical Pod Autoscaler) for an existing kubernetes cluster.: az aks update -g MyResourceGroup -n MyManagedCLuster --enable-vpa
+    Enable Windows gmsa for a kubernetes cluster with setting DNS server in the vnet used by the cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-windows-gmsa
+    Enable Windows gmsa for a kubernetes cluster without setting DNS server in the vnet used by the cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-windows-gmsa --gmsa-dns-server "10.240.0.4" --gmsa-root-domain-name "contoso.com"
+    Enable cluster-autoscaler within node count range [1,5]: az aks update --enable-cluster-autoscaler --min-count 1 --max-count 5 -g MyResourceGroup -n MyManagedCluster
+    Enable pod identity addon.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-pod-identity
+    Migrate a AKS AAD-Integrated cluster or a non-AAD cluster to a AKS-managed AAD cluster.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-aad --aad-admin-group-object-ids <id-1,id-2> --aad-tenant-id <id>
+    Reconcile the cluster back to its current state.: az aks update -g MyResourceGroup -n MyManagedCluster
+    Restrict apiserver traffic in a kubernetes cluster to agentpool nodes.: az aks update -g MyResourceGroup -n MyManagedCluster --api-server-authorized-ip-ranges 0.0.0.0/32
+    Update Windows password of a kubernetes cluster: az aks update -g MyResourceGroup -n MyManagedCLuster --windows-admin-password "Repl@cePassw0rd12345678"
+    Update a AKS-managed AAD cluster with tenant ID or admin group object IDs.: az aks update -g MyResourceGroup -n MyManagedCluster --aad-admin-group-object-ids <id-1,id-2> --aad-tenant-id <id>
+    Update a existing managed cluster to a managed cluster snapshot.: az aks update -g MyResourceGroup -n MyManagedCluster --cluster-snapshot-id "/subscriptions/00000/resourceGroups/AnotherResourceGroup/providers/Microsoft.ContainerService/managedclustersnapshots/mysnapshot1"
+    ? Update a kubernetes cluster of managedNATGateway outbound type with two outbound AKS managed IPs an idle flow timeout of 4 minutes
+    : az aks update -g MyResourceGroup -n MyManagedCluster --nat-gateway-managed-outbound-ip-count 2 --nat-gateway-idle-timeout 4
+    Update a kubernetes cluster to clear any namespaces excluded from safeguards. Assumes azure policy addon is already enabled: az aks update -g MyResourceGroup -n MyManagedCluster --safeguards-excluded-ns ""
+    Update a kubernetes cluster to disable the managed installation of Gateway API CRDs.: az aks update -g MyResourceGroup -n MyManagedCluster --disable-gateway-api
+    Update a kubernetes cluster to enable a managed installation of Gateway API CRDs from the standard release channel.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-gateway-api
+    Update a kubernetes cluster to use auto node provisioning mode with no default pools.: az aks update -g MyResourceGroup -n MyManagedCluster --node-provisioning-mode Auto --node-provisioning-default-pools None
+    Update a kubernetes cluster to use auto node provisioning.: az aks update -g MyResourceGroup -n MyManagedCluster --node-provisioning-mode Auto
+    ? Update a kubernetes cluster with a standard SKU load balancer, with two outbound AKS managed IPs an idle flow timeout of 5 minutes and 8000 allocated ports per machine
+    : az aks update -g MyResourceGroup -n MyManagedCluster --load-balancer-managed-outbound-ip-count 2 --load-balancer-idle-timeout 5 --load-balancer-outbound-ports 8000
+    Update a kubernetes cluster with authorized apiserver ip ranges.: az aks update -g MyResourceGroup -n MyManagedCluster --api-server-authorized-ip-ranges 193.168.1.0/24,194.168.1.0/24
+    Update a kubernetes cluster with custom headers: az aks update -g MyResourceGroup -n MyManagedCluster --aks-custom-headers WindowsContainerRuntime=containerd,AKSHTTPCustomFeatures=Microsoft.ContainerService/CustomNodeConfigPreview
+    Update a kubernetes cluster with new outbound type: az aks update -g MyResourceGroup -n MyManagedCluster --outbound-type managedNATGateway
+    ? Update a kubernetes cluster with safeguards set to "Warning" and some namespaces excluded. Assumes azure policy addon is already enabled
+    : az aks update -g MyResourceGroup -n MyManagedCluster --safeguards-level Warning --safeguards-excluded-ns ns1,ns2
+    Update a kubernetes cluster with safeguards set to "Warning". Assumes azure policy addon is already enabled: az aks update -g MyResourceGroup -n MyManagedCluster --safeguards-level Warning
+    ? Update a kubernetes cluster with standard SKU load balancer to use the provided public IP prefixes for the load balancer outbound connection usage.
+    : az aks update -g MyResourceGroup -n MyManagedCluster --load-balancer-outbound-ip-prefixes <ip-prefix-resource-id-1,ip-prefix-resource-id-2>
+    ? Update a kubernetes cluster with standard SKU load balancer to use the provided public IPs for the load balancer outbound connection usage.
+    : az aks update -g MyResourceGroup -n MyManagedCluster --load-balancer-outbound-ips <ip-resource-id-1,ip-resource-id-2>
+    ? Update a kubernetes cluster with standard SKU load balancer to use two AKS created IPs for the load balancer outbound connection usage.
+    : az aks update -g MyResourceGroup -n MyManagedCluster --load-balancer-managed-outbound-ip-count 2
+    ? Update a kubernetes cluster with two outbound AKS managed IPs an idle flow timeout of 5 minutes and 8000 allocated ports per machine
+    : az aks update -g MyResourceGroup -n MyManagedCluster --load-balancer-managed-outbound-ip-count 2 --load-balancer-idle-timeout 5 --load-balancer-outbound-ports 8000
+    Update a managed AAD AKS cluster to use Azure RBAC: az aks update -g MyResourceGroup -n MyManagedCluster --enable-azure-rbac
+    Update a non managed AAD AKS cluster to use Azure RBAC: az aks update -g MyResourceGroup -n MyManagedCluster --enable-aad --enable-azure-rbac
+    Update min-count or max-count for cluster autoscaler.: az aks update --update-cluster-autoscaler --min-count 1 --max-count 10 -g MyResourceGroup -n MyManagedCluster
+    Update the cluster to use system assigned managed identity in control plane.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-managed-identity
+    Update the cluster to use user assigned managed identity in control plane.: az aks update -g MyResourceGroup -n MyManagedCluster --enable-managed-identity --assign-identity <user_assigned_identity_resource_id>
+    Update the tags of a kubernetes cluster: az aks update -g MyResourceGroup -n MyManagedCLuster --tags "foo=bar" "baz=qux"
+    Upgrade load balancer sku to standard: az aks update --load-balancer-sku standard -g MyResourceGroup -n MyManagedCluster

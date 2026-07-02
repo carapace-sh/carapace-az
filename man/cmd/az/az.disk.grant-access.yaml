@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: grant-access
 description: Grant a resource access to a managed disk.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        secure-vm-guest-state-sas: Get SAS on managed disk with VM guest state. It will be used by default when the create option of disk is 'secureOSUpload'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --access=: Access level.
     --duration-in-seconds=!: Time duration in seconds until the SAS access expires.
@@ -51,3 +44,17 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        duration-in-seconds: Time duration in seconds until the SAS access expires.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: The name of the managed disk that is being created. The name can't be changed after the disk is created. Supported characters for the name are a-z, A-Z, 0-9, _ and -. The maximum name length is 80 characters.
+        no-wait: Do not wait for the long-running operation to finish.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        secure-vm-guest-state-sas: Get SAS on managed disk with VM guest state. It will be used by default when the create option of disk is 'secureOSUpload'.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Grant a resource read access to a disk to generate access SAS and security data access SAS: az disk grant-access --access-level Read --duration-in-seconds 3600 --name MyDisk --resource-group MyResourceGroup --secure-vm-guest-state-sas
+    Grant a resource read access to a managed disk.: az disk grant-access --access-level Read --duration-in-seconds 3600 --name MyManagedDisk --resource-group MyResourceGroup

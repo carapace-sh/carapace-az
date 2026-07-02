@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: up
 description: Create a webapp and deploy code from a local workspace to the app.
-documentation:
-    flag:
-        app-service-environment: name or resource ID of the (pre-existing) App Service Environment to deploy to. Requires an Isolated V2 sku
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        launch-browser: Launch the created app using the default browser. This is not supported in Azure Cloud Shell.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        name: name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using `az configure --defaults web=<name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --basic-auth=: Enable or disable basic auth.
     --dryrun=: show summary of the create and deploy operation instead of executing it
@@ -88,3 +79,40 @@ completion:
         track-status:
             - "true"
             - "false"
+documentation:
+    command: This command has been deprecated and will be removed in a future release. Use 'webapp create and webapp deploy' instead.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        app-service-environment: Name or resource ID of the (pre-existing) App Service Environment to deploy to. Requires an Isolated V2 sku.
+        basic-auth: Enable or disable basic auth.
+        change-reference: The related change reference ID for this resource operation.
+        domain-name-scope: Specify the scope of uniqueness for the default hostname during resource creation.
+        dryrun: Show summary of the create and deploy operation instead of executing it.
+        enable-kudu-warmup: If true, kudu will be warmed up before performing deployment for a linux webapp.
+        enriched-errors: If true, deployment failures will show context-enriched diagnostics with error codes, suggested fixes, and Copilot prompts.
+        html: Ignore app detection and deploy as an html app.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        launch-browser: Launch the created app using the default browser. This is not supported in Azure Cloud Shell.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        logs: Configure default logging required to enable viewing log stream immediately after launching the webapp.
+        name: Name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using ``` az configure --defaults web=<name> ``` .
+        os-type: Set the OS type for the app to be created. Defaults to Linux for Python and Node.js runtimes, and to Windows for .NET and ASP.NET runtimes. Use 'linux' explicitly for .NET Linux deployments. Use 'az webapp list-runtimes' to see available runtimes.
+        plan: Name of the app service plan associated with the webapp. If not specified, a name is auto-generated.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        runtime: 'Canonicalized web runtime in the format of Framework:Version, e.g. "PYTHON:3.14". Recommended: always specify explicitly for reliable results. Auto-detection from source files may pick the wrong version. Use ``` az webapp list-runtimes ``` for available list.'
+        sku: The pricing tiers, e.g., F1(Free), D1(Shared), B1(Basic Small), B2(Basic Medium), B3(Basic Large), S1(Standard Small), P1V2(Premium V2 Small), P2V2(Premium V2 Medium), P3V2(Premium V2 Large), P0V3(Premium V3 Extra Small), P1V3(Premium V3 Small), P2V3(Premium V3 Medium), P3V3(Premium V3 Large), P1MV3(Premium Memory Optimized V3 Small), P2MV3(Premium Memory Optimized V3 Medium), P3MV3(Premium Memory Optimized V3 Large), P4MV3(Premium Memory Optimized V3 Extra Large), P5MV3(Premium Memory Optimized V3 Extra Extra Large), P0V4(Premium V4 Extra Small), P1V4(Premium V4 Small), P2V4(Premium V4 Medium), P3V4(Premium V4 Large), P1MV4(Premium Memory Optimized V4 Small), P2MV4(Premium Memory Optimized V4 Medium), P3MV4(Premium Memory Optimized V4 Large), P4MV4(Premium Memory Optimized V4 Extra Large), P5MV4(Premium Memory Optimized V4 Extra Extra Large), I1V2 (Isolated V2 I1V2), I2V2 (Isolated V2 I2V2), I3V2 (Isolated V2 I3V2), I4V2 (Isolated V2 I4V2), I5V2 (Isolated V2 I5V2), I6V2 (Isolated V2 I6V2), I1MV2 (Isolated Memory Optimized V2 I1MV2), I2MV2 (Isolated Memory Optimized V2 I2MV2), I3MV2 (Isolated Memory Optimized V2 I3MV2), I4MV2 (Isolated Memory Optimized V2 I4MV2), I5MV2 (Isolated Memory Optimized V2 I5MV2), WS1 (Logic Apps Workflow Standard 1), WS2 (Logic Apps Workflow Standard 2), WS3 (Logic Apps Workflow Standard 3).
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        track-status: If true, web app startup status during deployment will be tracked for linux web apps.
+examples:
+    Create a web app and deploy as a static HTML app.: az webapp up --html
+    ? Create a web app and enable log streaming after the deployment operation is complete. This will enable the default configuration required to enable log streaming.
+    : az webapp up --logs
+    Create a web app in a specific region, by running the command from the folder where the code to be deployed exists.: az webapp up -l locationName
+    Create a web app with a specified domain name scope for unique hostname generation: az webapp up -n MyUniqueAppName --domain-name-scope TenantReuse
+    Create a web app with a specified name: az webapp up -n MyUniqueAppName
+    Create a web app with a specified name and a Java 11 runtime: az webapp up -n MyUniqueAppName --runtime "java:11:Java SE:11"
+    Create a web app with the default configuration, by running the command from the folder where the code to be deployed exists.: az webapp up
+    Deploy a .NET app to Linux (must specify --os-type linux).: az webapp up -n MyDotnetApp --runtime "DOTNETCORE:10.0" --os-type linux --plan MyPlan
+    Deploy a Python app to Linux with explicit runtime and plan name.: az webapp up -n MyApp --runtime "PYTHON:3.14" --plan MyPlan --sku P1v3
+    Deploy with enriched error diagnostics on failure.: az webapp up --enriched-errors true
+    View the details of the app that will be created, without actually running the operation: az webapp up --dryrun

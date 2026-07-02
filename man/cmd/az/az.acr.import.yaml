@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: import
 description: Imports an image to an Azure Container Registry from another Container Registry.
-documentation:
-    flag:
-        image: 'The name and tag of the image using the format: ''-t repo/image:tag''. Multiple tags are supported by passing -t multiple times.'
-        name: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        registry: The source Azure container registry. This can be name, login server or resource ID of the source registry.
-        repository: The repository name for a manifest-only copy of images. Multiple copies supported by passing --repository multiple times.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        source: Source image name or fully qualified source containing the registry login server. If `--registry` is used, `--source` will always be interpreted as a source image, even if it contains the login server.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --force=: Overwrite the existing tag of the image to be imported.
     --no-wait=: Do not wait for the import to complete and return immediately after queuing the import.
@@ -22,3 +13,29 @@ flags:
     -r, --registry=: The source Azure container registry.
     -t, --image=: 'The name and tag of the image using the format: ''-t repo/image:tag''.'
     -u, --username=: The username of source container registry
+documentation:
+    command: Imports an image to an Azure Container Registry from another Container Registry. Import removes the need to docker pull, docker tag, docker push. For larger images consider using
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        force: Overwrite the existing tag of the image to be imported.
+        image: 'The name and tag of the image using the format: ''-t repo/image:tag''. Multiple tags are supported by passing -t multiple times.'
+        name: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        no-wait: Do not wait for the import to complete and return immediately after queuing the import.
+        password: The password of source container registry.
+        registry: The source Azure container registry. This can be name, login server or resource ID of the source registry.
+        repository: The repository name for a manifest-only copy of images. Multiple copies supported by passing --repository multiple times.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        source: Source image name or fully qualified source containing the registry login server. If `--registry` is used, `--source` will always be interpreted as a source image, even if it contains the login server.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        username: The username of source container registry.
+examples:
+    Import an image from 'sourceregistry' to 'myregistry'. The image inherits its source repository and tag names.: az acr import -n myregistry --source sourceregistry.azurecr.io/sourcerepository:sourcetag
+    Import an image from a private repository using its username and password. This also applies to registries outside Azure.: az acr import -n myregistry --source myprivateregistry.azurecr.io/hello-world:latest -u username -p password
+    Import an image from a public repository on Docker Hub. The image uses the specified repository and tag names.: az acr import -n myregistry --source docker.io/library/hello-world:latest -t targetrepository:targettag
+    Import an image from an Azure container registry in a different subscription.: |-
+        az acr import -n myregistry --source sourcerepository:sourcetag -t targetrepository:targettag \
+            -r /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sourceResourceGroup/providers/Microsoft.ContainerRegistry/registries/sourceRegistry
+    Import an image using a regional endpoint URI as the source.: az acr import -n myregistry --source sourceregistry.eastus.geo.azurecr.io/sourcerepository:sourcetag
+    ? Import an image without waiting for successful completion. Failures during import will not be reflected. Run `az acr repository show-tags` to confirm that import succeeded.
+    : az acr import -n myregistry --source sourceregistry.azurecr.io/sourcerepository:sourcetag --no-wait

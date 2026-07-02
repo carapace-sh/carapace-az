@@ -1,9 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: register
 description: Register a cloud.
-documentation:
-    flag:
-        cloud-config: JSON encoded cloud configuration. Use @{file} to load from a file.
 flags:
     --cloud-config=: JSON encoded cloud configuration.
     --endpoint-active-directory-data-lake-resource-id=: The Active Directory resource ID for data lake services
@@ -31,3 +28,44 @@ completion:
             - 2018-03-01-hybrid
             - 2019-03-01-hybrid
             - 2020-09-01-hybrid
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cloud-config: JSON encoded cloud configuration. Use @{file} to load from a file.
+        endpoint-active-directory: The Active Directory login endpoint.
+        endpoint-active-directory-data-lake-resource-id: The Active Directory resource ID for data lake services.
+        endpoint-active-directory-graph-resource-id: The Active Directory resource ID.
+        endpoint-active-directory-resource-id: The resource ID to obtain AD tokens for.
+        endpoint-gallery: The template gallery endpoint.
+        endpoint-management: The management service endpoint.
+        endpoint-microsoft-graph-resource-id: The Microsoft Graph resource ID.
+        endpoint-resource-manager: The resource management endpoint.
+        endpoint-sql-management: The sql server management endpoint.
+        endpoint-vm-image-alias-doc: The uri of the document which caches commonly used virtual machine images.
+        name: Name of a registered cloud.
+        profile: 'Profile to use for this cloud. The azure stack profiles ``` 2017-03-09-profile ``` ``` 2018-03-01-hybrid ``` ``` 2019-03-01-hybrid ``` and ``` 2020-09-01-hybrid ``` have been deprecated and removed. To continue using Azure Stack, please install the Azure CLI ``` 2.66.* ``` (LTS) version. For more details, refer to: https://learn.microsoft.com/en-us/cli/azure/whats-new-overview#important-notice-for-azure-stack-hub-customers .'
+        skip-endpoint-discovery: If specified, the cloud endpoints' auto discovery will be skipped.
+        suffix-acr-login-server-endpoint: The Azure Container Registry login server suffix.
+        suffix-azure-datalake-analytics-catalog-and-job-endpoint: The Data Lake analytics job and catalog service dns suffix.
+        suffix-azure-datalake-store-file-system-endpoint: The Data Lake store filesystem service dns suffix.
+        suffix-keyvault-dns: The Key Vault service dns suffix.
+        suffix-sql-server-hostname: The dns suffix for sql servers.
+        suffix-storage-endpoint: The endpoint suffix for storage accounts.
+examples:
+    Register a cloud with a config file: |-
+        az cloud register -n MyCloud --cloud-config @"cloud.json"
+        ("cloud.json" supports all the endpoint and suffix options in camel case or the JSON output format from `az cloud show`. See the example content below.)
+        {
+          "endpointActiveDirectory": "https://login.microsoftonline.us",
+          "suffixAcrLoginServerEndpoint": ".azurecr.us"
+        }
+        or
+        {
+          "endpoints":{
+            "activeDirectory": "https://login.microsoftonline.us"
+          },
+          "suffixes":{
+            "acrLoginServerEndpoint": ".azurecr.us"
+          }
+        }
