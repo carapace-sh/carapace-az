@@ -12,15 +12,17 @@ type CliMeta struct {
 }
 
 type CommandData struct {
-	Description string          `json:"description"`
-	Arguments   []*ArgumentData `json:"arguments"`
-	Group       string          `json:"group"`
+	Description     string          `json:"description"`
+	LongDescription string          `json:"long_description"`
+	Arguments       []*ArgumentData `json:"arguments"`
+	Group           string          `json:"group"`
 }
 
 type ArgumentData struct {
 	Name     string   `json:"name"`
 	Options  []string `json:"options"`
 	Help     string   `json:"help"`
+	LongHelp string   `json:"long_help"`
 	Required bool     `json:"required"`
 	Choices  []any    `json:"choices"`
 	Type     string   `json:"type"`

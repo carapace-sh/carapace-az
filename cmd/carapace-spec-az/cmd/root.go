@@ -174,6 +174,7 @@ func convertCommand(fullName string, cmdData *CommandData) command.Command {
 	}
 	specCmd.Completion.Flag = make(map[string][]string)
 	specCmd.Documentation.Flag = make(map[string]string)
+	specCmd.Documentation.Command = cmdData.LongDescription
 
 	for _, arg := range cmdData.Arguments {
 		if len(arg.Options) == 0 {
@@ -189,7 +190,11 @@ func convertCommand(fullName string, cmdData *CommandData) command.Command {
 			}
 			specCmd.Completion.Flag[f.Name()] = choices
 		}
-		specCmd.Documentation.Flag[f.Name()] = arg.Help
+		if arg.LongHelp != "" {
+			specCmd.Documentation.Flag[f.Name()] = arg.LongHelp
+		} else if arg.Help != "" && firstSentence(arg.Help) != arg.Help {
+			specCmd.Documentation.Flag[f.Name()] = arg.Help
+		}
 	}
 
 	return specCmd

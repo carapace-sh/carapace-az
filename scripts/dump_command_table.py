@@ -39,7 +39,7 @@ def get_help(helps, key):
 
 
 def get_param_help(helps, cmd_name, options):
-    """Get help text for a parameter from the command's help entry."""
+    """Get short help text for a parameter from the command's help entry."""
     cmd_help = get_help(helps, cmd_name)
     params = cmd_help.get('parameters', [])
     for param in params:
@@ -47,6 +47,18 @@ def get_param_help(helps, cmd_name, options):
         for opt in options:
             if param_name and param_name in [opt, opt.lstrip('-')]:
                 return param.get('short-summary', '') or param.get('long-summary', '')
+    return ''
+
+
+def get_param_long_help(helps, cmd_name, options):
+    """Get long help text for a parameter from the command's help entry."""
+    cmd_help = get_help(helps, cmd_name)
+    params = cmd_help.get('parameters', [])
+    for param in params:
+        param_name = param.get('name', '')
+        for opt in options:
+            if param_name and param_name in [opt, opt.lstrip('-')]:
+                return param.get('long-summary', '') or ''
     return ''
 
 
@@ -78,6 +90,8 @@ def serialize_argument(name, arg, helps, cmd_name):
     if not help_val:
         help_val = get_param_help(helps, cmd_name, options)
 
+    long_help = get_param_long_help(helps, cmd_name, options)
+
     choices = settings.get('choices')
     if callable(choices):
         try:
@@ -99,6 +113,7 @@ def serialize_argument(name, arg, helps, cmd_name):
         'name': name,
         'options': options,
         'help': help_val,
+        'long_help': long_help,
         'required': settings.get('required', False),
         'choices': choices,
         'type': str(settings.get('type', '')),
@@ -125,6 +140,15 @@ def serialize_command(name, cmd, helps):
         help_data = get_help(helps, name)
         description = help_data.get('short-summary', '') or help_data.get('long-summary', '')
 
+    long_description = ''
+    help_data = get_help(helps, name)
+    if help_data:
+        long_description = help_data.get('long-summary', '') or ''
+    if not long_description:
+        az_help = getattr(cmd, 'AZ_HELP', None) or getattr(cmd, 'help', None)
+        if isinstance(az_help, dict):
+            long_description = az_help.get('long-summary', '') or ''
+
     arguments = []
     for arg_name, arg in cmd.arguments.items():
         serialized = serialize_argument(arg_name, arg, helps, name)
@@ -133,6 +157,7 @@ def serialize_command(name, cmd, helps):
 
     return {
         'description': description or '',
+        'long_description': long_description or '',
         'arguments': arguments,
         'group': name.split()[0],
     }

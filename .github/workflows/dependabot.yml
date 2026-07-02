@@ -29,6 +29,14 @@ jobs:
     - name: generate specs
       run: go run -C cmd/carapace-spec-az . --target cmd/carapace-az/cmd/azcli --no-doc az_commands.json
 
+    - name: install carapace-man
+      run: go install github.com/carapace-sh/carapace-man@latest
+
+    - name: generate man specs
+      run: |
+        go run -C cmd/carapace-spec-az . --stdout az_commands.json > /tmp/az-full-spec.yaml
+        carapace-man update /tmp/az-full-spec.yaml man/cmd/az
+
     - name: generate code
       run: go generate ./cmd/carapace-az
 

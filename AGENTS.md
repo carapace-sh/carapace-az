@@ -29,10 +29,11 @@ There are two separate binaries:
 
 ### Data flow
 
-1. **Command table extraction**: `dump_command_table.py` runs inside `mcr.microsoft.com/azure-cli` Docker container, uses knack's `command_table` API via `get_default_cli()` + `create_invoker_and_load_cmds_and_args()` to dump all commands, arguments, and groups as JSON
-2. **Spec generation**: `carapace-spec-az` converts JSON to YAML specs in `cmd/carapace-az/cmd/azcli/`
-3. **Code generation**: `go generate` scans YAML files and produces `azcli_generated.go` with the service map
-4. **Runtime**: `carapace-az` embeds YAML specs, registers cobra commands from the service map, loads specs lazily in `PreRun`, converts them to cobra commands via `spec.Command.ToCobra()`, and bridges dynamic completions to az's argcomplete completer
+1. **Command table extraction**: `dump_command_table.py` runs inside `mcr.microsoft.com/azure-cli` Docker container, uses knack's `command_table` API via `get_default_cli()` + `create_invoker_and_load_cmds_and_args()` to dump all commands, arguments, and groups (including `long-summary` help text) as JSON
+2. **Spec generation (completion)**: `carapace-spec-az --no-doc` converts JSON to YAML specs in `cmd/carapace-az/cmd/azcli/` (no documentation fields, keeping specs small)
+3. **Spec generation (man pages)**: `carapace-spec-az --stdout` emits a full spec with `documentation.command` and `documentation.flag` populated from knack's `long-summary`; `carapace-man update` splits it into per-subcommand files in `man/cmd/az/`
+4. **Code generation**: `go generate` scans YAML files and produces `azcli_generated.go` with the service map
+5. **Runtime**: `carapace-az` embeds YAML specs, registers cobra commands from the service map, loads specs lazily in `PreRun`, converts them to cobra commands via `spec.Command.ToCobra()`, and bridges dynamic completions to az's argcomplete completer
 
 ## Directory Structure
 
@@ -57,6 +58,7 @@ cmd/
 scripts/
   dump_command_table.py      # Python introspection script (run in Docker)
 pkg/actions/az/              # Go completion actions (subscription, resourcegroup)
+man/cmd/az/                  # Man page specs (documentation.command/flag from knack long-summary)
 Dockerfile                   # Scraping image: mcr.microsoft.com/azure-cli
 compose.yaml                 # Docker compose for running the scrape
 ```
@@ -83,6 +85,8 @@ docker compose run --rm az > az_commands.json
 # Full spec regeneration pipeline
 docker compose build && docker compose run --rm az > az_commands.json
 go run -C cmd/carapace-spec-az . --target cmd/carapace-az/cmd/azcli --no-doc az_commands.json
+go run -C cmd/carapace-spec-az . --stdout az_commands.json > /tmp/az-full-spec.yaml
+carapace-man update /tmp/az-full-spec.yaml man/cmd/az
 go generate ./cmd/carapace-az
 ```
 
@@ -177,6 +181,8 @@ Dependabot tracks the `docker` ecosystem and opens PRs when new az CLI versions 
 - **Nested command hierarchy**: az CLI has deeply nested groups (e.g., `az network vnet subnet create`). Specs use nested `commands` in YAML to represent this — one file per top-level group.
 - **Extensions not scraped**: The Docker scrape only captures core command modules. az CLI extensions (e.g., `az devops`, `az kusto`, `az ml`) are not included. Install extensions in the Dockerfile before scraping to include them.
 - **Docker/compose**: The `Dockerfile` and `compose.yaml` are for generating the command table JSON, not for running the completer.
+- **Man page docs are separate from completion specs**: `man/cmd/az/` contains documentation (from knack `long-summary`) and is generated with `carapace-spec-az --stdout` + `carapace-man update`. Completion specs in `cmd/carapace-az/cmd/azcli/` are generated with `--no-doc` to keep them small.
+- **Partial doc coverage**: knack `long-summary` is not present for all commands. Many man page specs will only have the short description without `documentation.command` content.
 - **Go version**: `go.mod` specifies `go 1.25.0`.
 
 ## Maintenance Workflow (Dependabot Updates)
@@ -184,9 +190,10 @@ Dependabot tracks the `docker` ecosystem and opens PRs when new az CLI versions 
 When a new az CLI Docker image version is published, dependabot opens a PR. The dependabot workflow automatically:
 
 1. Builds the Docker image and runs `dump_command_table.py` to produce `az_commands.json`
-2. Runs `carapace-spec-az` to convert JSON to YAML specs
-3. Runs `go generate` to update `azcli_generated.go`
-4. Commits and pushes changes, then auto-merges the PR
+2. Runs `carapace-spec-az --no-doc` to convert JSON to completion YAML specs (no documentation)
+3. Installs `carapace-man` and runs `carapace-spec-az --stdout` + `carapace-man update` to generate man page specs in `man/cmd/az/`
+4. Runs `go generate` to update `azcli_generated.go`
+5. Commits and pushes changes, then auto-merges the PR
 
 ### Manual Update
 
@@ -197,6 +204,8 @@ To manually update specs for a specific az CLI version:
 # Then run the full pipeline:
 docker compose build && docker compose run --rm az > az_commands.json
 go run -C cmd/carapace-spec-az . --target cmd/carapace-az/cmd/azcli --no-doc az_commands.json
+go run -C cmd/carapace-spec-az . --stdout az_commands.json > /tmp/az-full-spec.yaml
+carapace-man update /tmp/az-full-spec.yaml man/cmd/az
 go generate ./cmd/carapace-az
 go build ./cmd/carapace-az  # verify build
 ```
