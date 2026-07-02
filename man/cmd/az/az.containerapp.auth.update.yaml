@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update the authentication settings for the containerapp.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --config-file-path=: The path of the config file containing auth settings if they come from a file.
     --enabled=:
@@ -55,3 +49,50 @@ completion:
             - AllowAnonymous
             - Return401
             - Return403
+documentation:
+    flag:
+        acquire-policy-token: |-
+            Acquiring an Azure Policy token automatically for this resource operation.
+
+            Accepted values: AllowAnonymous, RedirectToLoginPage, Return401, Return403
+        blob-container-uri: The URI of the blob storage containing the tokens. Should not be used along with sas_url_secret and sas_url_secret_name.
+        change-reference: The related change reference ID for this resource operation.
+        config-file-path: The path of the config file containing auth settings if they come from a file. --custom-host-header --proxy-custom-host-header The name of the header containing the host of the request. --custom-proto-header --proxy-custom-proto-header The name of the header containing the scheme of the request.
+        enabled: |-
+            True if the Authentication / Authorization feature is enabled for the current app; otherwise, false.
+
+            Accepted values: false, true
+        excluded-paths: The list of paths that should be excluded from authentication rules.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        proxy-convention: |-
+            The convention used to determine the url of the request made.
+
+            Accepted values: Custom, NoProxy, Standard
+        redirect-provider: The default authentication provider to use when multiple providers are configured.
+        require-https: |-
+            False if the authentication/authorization responses not having the HTTPS scheme are permissible; otherwise, true.
+
+            Accepted values: false, true
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        runtime-version: The RuntimeVersion of the Authentication / Authorization feature in use for the current app.
+        sas-url-secret: The blob storage SAS URL to be used for token store.
+        sas-url-secret-name: The secret name that contains blob storage SAS URL to be used for token store.
+        set: Value of a specific field within the configuration settings for the Azure App Service Authentication / Authorization feature.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        token-store: |-
+            Boolean indicating if token store is enabled for the app.
+
+            Accepted values: false, true
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Configure the app to allow unauthenticated requests to hit the app.: az containerapp auth update -g myResourceGroup --name my-containerapp --unauthenticated-client-action AllowAnonymous
+    Configure the app to listen to the forward headers X-FORWARDED-HOST and X-FORWARDED-PROTO.: az containerapp auth update -g myResourceGroup --name my-containerapp --proxy-convention Standard
+    Configure the app to redirect unauthenticated requests to the Facebook provider.: az containerapp auth update -g myResourceGroup --name my-containerapp --redirect-provider Facebook
+    Configure the app with file based authentication by setting the config file path.: az containerapp auth update -g myResourceGroup --name my-containerapp --config-file-path D:\home\site\wwwroot\auth.json
+    Configure the blob storage token store using default system assigned managed identity to authenticate.: az containerapp auth update -g myResourceGroup --name my-containerapp --token-store true --blob-container-uri https://storageAccount1.blob.core.windows.net/container1
+    Configure the blob storage token store using user assigned managed identity to authenticate.: az containerapp auth update -g myResourceGroup --name my-containerapp --token-store true --blob-container-uri https://storageAccount1.blob.core.windows.net/container1 --blob-container-identity managedIdentityResourceId
+    Update the client ID of the AAD provider already configured.: az containerapp auth update -g myResourceGroup --name my-containerapp --set identityProviders.azureActiveDirectory.registration.clientId=my-client-id

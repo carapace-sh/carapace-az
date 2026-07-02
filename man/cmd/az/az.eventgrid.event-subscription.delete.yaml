@@ -1,10 +1,33 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: delete
 description: Delete an event subscription.
-documentation:
-    flag:
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --source-resource-id=: Fully qualified identifier of the source Azure resource.
     --subscription=: Name or ID of subscription.
     -n, --name=!: Name of the event subscription.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        name: Name of the event subscription.
+        source-resource-id: 'Fully qualified identifier of the Azure resource whose event subscription needs to be deleted. Usage:                      --source-resource-id Azure-Resource-ID For Azure subscription:     --source-resource-id /subscriptions/{SubID} For resource group:         --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1 For EventGrid topic:        --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/topics/t1 For storage account:        --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.Storage/storageaccounts/sa1 For EventGrid domain:       --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/domains/d1 For EventGrid domain topic: --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/domains/d1/topics/t1.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Delete an event subscription for a resource group.: |-
+        az eventgrid event-subscription delete --name es3 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}
+    Delete an event subscription for a storage account.: |-
+        az eventgrid event-subscription delete --name es3 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/microsoft.storage/storageaccounts/kalsegblob
+    Delete an event subscription for an Azure subscription.: |-
+        az eventgrid event-subscription delete --name es2 \
+            --source-resource-id /subscriptions/{SubID}
+    Delete an event subscription for an Event Grid domain topic.: |-
+        az eventgrid event-subscription delete --name es1 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/domains/domain1/topics/topic1
+    Delete an event subscription for an Event Grid domain.: |-
+        az eventgrid event-subscription delete --name es1 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/domains/domain1
+    Delete an event subscription for an Event Grid topic.: |-
+        az eventgrid event-subscription delete --name es1 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/topics/topic1

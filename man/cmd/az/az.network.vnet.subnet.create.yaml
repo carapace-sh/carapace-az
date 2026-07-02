@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a subnet and associate an existing NSG and route table.
-documentation:
-    flag:
-        address-prefixes: Space-separated list of address prefixes in CIDR format.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        default-outbound-access: Set this property to false to disable default outbound connectivity for all VMs in the subnet. This property can only be set at the time of subnet creation and cannot be updated for an existing subnet.
-        delegations: Space-separated list of services to whom the subnet should be delegated, e.g., Microsoft.Sql/servers.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        disable-private-endpoint-network-policies: Disable private endpoint network policies on the subnet. Please note that it will be replaced by `--private-endpoint-network-policies` soon.
-        disable-private-link-service-network-policies: Disable private link service network policies on the subnet. Please note that it will be replaced by `--private-link-service-network-policies` soon.
-        endpoints: An array of service endpoints.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        service-endpoint-policy: Space-separated list of names or IDs of service endpoint policies to apply.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        service-endpoints: 'Space-separated list of services allowed private access to this subnet. Values from: az network vnet list-endpoint-services.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
-        sharing-scope: Set this property to Tenant to allow sharing subnet with other subscriptions in your AAD tenant. This property can only be set if defaultOutboundAccess is set to false, both properties can only be set if subnet is empty.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --address-prefixes=:
         description: Space-separated list of address prefixes in CIDR format.
@@ -109,3 +96,51 @@ completion:
         sharing-scope:
             - DelegatedServices
             - Tenant
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        address-prefixes: Space-separated list of address prefixes in CIDR format. If provided, --ipam-allocations should not be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        default-outbound-access: Set this property to false to disable default outbound connectivity for all VMs in the subnet. This property can only be set at the time of subnet creation and cannot be updated for an existing subnet.
+        delegations: Space-separated list of services to whom the subnet should be delegated, e.g., Microsoft.Sql/servers.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        disable-private-endpoint-network-policies: Disable private endpoint network policies on the subnet. Please note that it will be replaced by `--private-endpoint-network-policies` soon.
+        disable-private-link-service-network-policies: Disable private link service network policies on the subnet. Please note that it will be replaced by `--private-link-service-network-policies` soon.
+        endpoints: An array of service endpoints.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more. --ipam-allocations --ipam-pool-prefix-allocations A list of IPAM Pools for allocating IP address prefixes. If provided, --address-prefixes would be ignored by CLI and should not be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        name: The subnet name.
+        nat-gateway: Name or ID of a NAT gateway to attach. --network-security-group --nsg Name or ID of a network security group (NSG).
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+
+            Default value: Disabled
+
+            Accepted values: Disabled, Enabled, NetworkSecurityGroupEnabled, RouteTableEnabled
+
+            Default value: Enabled
+
+            Accepted values: Disabled, Enabled
+        private-endpoint-network-policies: |-
+            ``` soon.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        private-link-service-network-policies: |-
+            ``` soon.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        route-table: Name or ID of a route table to associate with the subnet.
+        service-endpoint-policy: Space-separated list of names or IDs of service endpoint policies to apply.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        service-endpoints: 'Space-separated list of services allowed private access to this subnet. Values from: az network vnet list-endpoint-services.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        sharing-scope: |-
+            Set this property to Tenant to allow sharing subnet with other subscriptions in your AAD tenant. This property can only be set if defaultOutboundAccess is set to false, both properties can only be set if subnet is empty.
+
+            Accepted values: DelegatedServices, Tenant
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet-name: The virtual network (VNet) name.
+examples:
+    Create new subnet attached to a NAT gateway.: az network vnet subnet create -n MySubnet --vnet-name MyVnet -g MyResourceGroup --nat-gateway MyNatGateway --address-prefixes "10.0.0.0/21"
+    Create new subnet attached to an NSG with a custom route table.: az network vnet subnet create -g MyResourceGroup --vnet-name MyVnet -n MySubnet --address-prefixes 10.0.0.0/24 --network-security-group MyNsg --route-table MyRouteTable

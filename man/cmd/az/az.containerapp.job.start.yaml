@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: start
 description: Start a Container Apps Job execution.
-documentation:
-    flag:
-        args: A list of container startup command argument(s). Space-separated values e.g. "-c" "mycommand". Empty string to clear existing values
-        command: A list of supported commands on the container that will executed during startup. Space-separated values e.g. "/bin/queue" "mycommand". Empty string to clear existing values
-        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: The name of the Container Apps Job. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        registry-identity: A Managed Identity to authenticate with the registry server instead of username/password. Use a resource ID or 'system' for user-defined and system-defined identities, respectively. The registry must be an ACR. If possible, an 'acrpull' role assignemnt will be created for the identity automatically.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        yaml: Path to a .yaml file with the configuration of a container app. All other parameters will be ignored. For an example, see  https://learn.microsoft.com/azure/container-apps/azure-resource-manager-api-spec#examples
 flags:
     --args=:
         description: A list of container startup command argument(s).
@@ -35,3 +24,27 @@ flags:
     --yaml=: Path to a .yaml file with the configuration of a container app.
     -g, --resource-group=: Name of resource group.
     -n, --name=: The name of the Container Apps Job.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        args: A list of container startup command argument(s). Space-separated values e.g. "-c" "mycommand". Empty string to clear existing values.
+        change-reference: The related change reference ID for this resource operation.
+        command: A list of supported commands on the container that will executed during startup. Space-separated values e.g. "/bin/queue" "mycommand". Empty string to clear existing values.
+        container-name: Name of the container.
+        cpu: Required CPU in cores from 0.25 - 2.0, e.g. 0.5.
+        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        image: Container image, e.g. publisher/image-name:tag.
+        memory: Required memory from 0.5 - 4.0 ending with "Gi", e.g. 1.0Gi.
+        name: The name of the Container Apps Job. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        registry-identity: A Managed Identity to authenticate with the registry server instead of username/password. Use a resource ID or 'system' for user-defined and system-defined identities, respectively. The registry must be an ACR. If possible, an 'acrpull' role assignemnt will be created for the identity automatically.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        yaml: Path to a .yaml file with the configuration of a container app. All other parameters will be ignored. For an example, see https://learn.microsoft.com/azure/container-apps/azure-resource-manager-api-spec#examples .
+examples:
+    Start a job execution.: az containerapp job start -n my-containerapp-job -g MyResourceGroup
+    Start a job with different image and configurations.: az containerapp job start -n my-containerapp-job -g MyResourceGroup --image MyImageName --cpu 0.5 --memory 1.0Gi

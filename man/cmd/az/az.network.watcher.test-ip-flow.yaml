@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: test-ip-flow
 description: Test IP flow to/from a VM given the currently configured network security group rules.
-documentation:
-    flag:
-        local: Private IPv4 address for the VMs NIC and the port of the packet in X.X.X.X:PORT format. `*` can be used for port when direction is outbound.
-        nic: Name or ID of the NIC resource to test. If the VM has multiple NICs and IP forwarding is enabled on any of them, this parameter is required.
-        remote: IPv4 address and port for the remote side of the packet X.X.X.X:PORT format. `*` can be used for port when the direction is inbound.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vm: Name or ID of the VM to target. If the name of the VM is provided, the `--resource-group` is required.
 flags:
     --direction=!: Direction of the packet relative to the VM.
     --local=!: Private IPv4 address for the VMs NIC and the port of the packet in X.X.X.X:PORT format.
@@ -39,3 +32,27 @@ completion:
         protocol:
             - TCP
             - UDP
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        direction: |-
+            Direction of the packet relative to the VM.
+
+            Accepted values: Inbound, Outbound
+        local: Private IPv4 address for the VMs NIC and the port of the packet in X.X.X.X:PORT format. ``` * ``` can be used for port when direction is outbound.
+        nic: Name or ID of the NIC resource to test. If the VM has multiple NICs and IP forwarding is enabled on any of them, this parameter is required.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        protocol: |-
+            Protocol to test.
+
+            Accepted values: TCP, UDP
+        remote: IPv4 address and port for the remote side of the packet X.X.X.X:PORT format. ``` * ``` can be used for port when the direction is inbound.
+        resource-group: Name of the resource group the target VM is in.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vm: Name or ID of the VM to target. If the name of the VM is provided, the `--resource-group` is required.
+examples:
+    Run test-ip-flow verify to test logical connectivity from a VM to the specified destination IPv4 address and port.: az network watcher test-ip-flow -g MyResourceGroup --direction Outbound --protocol TCP --local 10.0.0.4:* --remote 10.1.0.4:80 --vm MyVm

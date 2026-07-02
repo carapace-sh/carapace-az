@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a domain.
-documentation:
-    flag:
-        identity: The managed identity type for the resource. Will be deprecated and replaced by --mi-system-assigned-identity in future
-        input-mapping-default-values: When input-schema is specified as customeventschema, this parameter can be used to specify input mappings based on default values. You can use this parameter when your custom schema does not include a field that corresponds to one of the three fields supported by this parameter. Specify space separated mappings in 'key=value' format. Allowed key names are 'subject', 'eventtype', 'dataversion'. The corresponding value names should specify the default values to be used for the mapping and they will be used only when the published event doesn't have a valid mapping for a particular field.
-        input-mapping-fields: When input-schema is specified as customeventschema, this parameter is used to specify input mappings based on field names. Specify space separated mappings in 'key=value' format. Allowed key names are 'id', 'topic', 'eventtime', 'subject', 'eventtype', 'dataversion'. The corresponding value names should specify the names of the fields in the custom input schema. If a mapping for either 'id' or 'eventtime' is not provided, Event Grid will auto-generate a default value for these two fields.
-        input-schema: Schema in which incoming events will be published to this topic/domain. If you specify customeventschema as the value for this parameter, you must also provide values for at least one of --input_mapping_default_values / --input_mapping_fields.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        mi-user-assigned: Add user assigned identities when identityType is user or mixed. This attribute is valid for all destination types except StorageQueue. Multiple attributes can be specified by using more than one `--mi-user-assigned` argument
-        public-network-access: This determines if traffic is allowed over public network. By default it is enabled. You can further restrict to specific IPs by configuring.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --identity=: The managed identity type for the resource.
     --inbound-ip-rules=:
@@ -53,3 +41,42 @@ completion:
         sku:
             - basic
             - premium
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        identity: |-
+            Argument 'identity' has been deprecated and will be removed in a future release. The managed identity type for the resource. Will be deprecated and replaced by --mi-system-assigned-identity in future.
+
+            Accepted values: noidentity, systemassigned
+        inbound-ip-rules: List of inbound IP rules. List of inbound IP rules specifying IP Address in CIDR notation e.g., 10.0.0.0/8 along with corresponding Action to perform based on the match or no match of the IpMask. Possible values include - Allow.
+        input-mapping-default-values: When input-schema is specified as customeventschema, this parameter can be used to specify input mappings based on default values. You can use this parameter when your custom schema does not include a field that corresponds to one of the three fields supported by this parameter. Specify space separated mappings in 'key=value' format. Allowed key names are 'subject', 'eventtype', 'dataversion'. The corresponding value names should specify the default values to be used for the mapping and they will be used only when the published event doesn't have a valid mapping for a particular field.
+        input-mapping-fields: When input-schema is specified as customeventschema, this parameter is used to specify input mappings based on field names. Specify space separated mappings in 'key=value' format. Allowed key names are 'id', 'topic', 'eventtime', 'subject', 'eventtype', 'dataversion'. The corresponding value names should specify the names of the fields in the custom input schema. If a mapping for either 'id' or 'eventtime' is not provided, Event Grid will auto-generate a default value for these two fields.
+        input-schema: |-
+            Schema in which incoming events will be published to this topic/domain. If you specify customeventschema as the value for this parameter, you must also provide values for at least one of --input_mapping_default_values / --input_mapping_fields.
+
+            Default value: eventgridschema
+
+            Accepted values: cloudeventschemav1_0, customeventschema, eventgridschema
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        mi-system-assigned: Presence of this param indicates that SystemAssigned managed identity will be used.
+        mi-user-assigned: Add user assigned identities when identityType is user or mixed. This attribute is valid for all destination types except StorageQueue. Multiple attributes can be specified by using more than one `--mi-user-assigned` argument
+        name: Name of the domain.
+        public-network-access: |-
+            This determines if traffic is allowed over public network. By default it is enabled. You can further restrict to specific IPs by configuring.
+
+            Accepted values: disabled, enabled
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku: |-
+            The Sku name of the resource.
+
+            Default value: Basic
+
+            Accepted values: basic, premium
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Create a new domain that accepts events published in CloudEvents V1.0 schema and maps a property mytopicfield to the topic name.: az eventgrid domain create -g rg1 --name domain1 -l westus2 --input-schema cloudeventschemav1_0 --input-mapping-fields topic=mytopicfield
+    Create a new domain which allows specific inbound ip rules.: az eventgrid domain create -g rg1 --name domain1 -l westus2 --public-network-access enabled --inbound-ip-rules 10.0.0.0/8 Allow --inbound-ip-rules 10.2.0.0/8 Allow --sku basic
+    Create a new domain with custom input mappings.: az eventgrid domain create -g rg1 --name domain1 -l westus2 --input-schema customeventschema --input-mapping-fields topic=mytopicField eventType=myEventTypeField --input-mapping-default-values subject=DefaultSubject dataVersion=1.0
+    Create a new domain.: az eventgrid domain create -g rg1 --name domain1 -l westus2

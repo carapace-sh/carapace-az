@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Add an image builder customizer to an image builder template.
-documentation:
-    flag:
-        defer: Temporarily store the object in the local cache instead of sending to Azure. Use `az cache` commands to view/clear.
-        file-source: The URI of the file to be downloaded into the image. It can be a github link, SAS URI for Azure Storage, etc.
-        filters: Space delimited filters to select updates to apply. Omit or specify empty array to use the default (no filter)
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        script-url: URL of script to customize the image with. The URL must be publicly accessible.
-        search-criteria: Criteria to search updates. Omit or specify empty string to use the default (search all). Refer to above link for examples and detailed description of this field.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        update-limit: Maximum number of updates to apply at a time. Omit or specify 0 to use the default (1000)
 flags:
     --customizer-name=!: Name of the customizer.
     --defer=:
@@ -49,3 +38,48 @@ completion:
             - windows-restart
             - windows-update
             - file
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        customizer-name: Name of the customizer.
+        defer: Temporarily store the object in the local cache instead of sending to Azure. Use ``` az cache ``` commands to view/clear.
+        dest-path: The absolute destination path where the file specified in --file-source will be downloaded to in the image.
+        exit-codes: Space-separated list of valid exit codes, as integers.
+        file-source: The URI of the file to be downloaded into the image. It can be a github link, SAS URI for Azure Storage, etc.
+        filters: Space delimited filters to select updates to apply. Omit or specify empty array to use the default (no filter).
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        inline-script: Space-separated list of inline script lines to customize the image with.
+        name: The name of the image template.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        restart-check-command: Command to verify that restart succeeded.
+        restart-command: Command to execute the restart operation.
+        restart-timeout: |-
+            Restart timeout specified as a string consisting of a magnitude and unit, e.g. '5m' (5 minutes) or '2h' (2 hours).
+
+            Default value: 5m
+        script-url: URL of script to customize the image with. The URL must be publicly accessible.
+        search-criteria: Criteria to search updates. Omit or specify empty string to use the default (search all). Refer to above link for examples and detailed description of this field.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        type: |-
+            Type of customizer to be added to the image template.
+
+            Accepted values: file, powershell, shell, windows-restart, windows-update
+        update-limit: Maximum number of updates to apply at a time. Omit or specify 0 to use the default (1000).
+examples:
+    Add a file customizer to an image template in the cli object cache: |-
+        az image builder customizer add -n myTemplate -g myGroup \
+            --customizer-name myFile --type file \
+            --file-source "https://my-remote-file.html" --dest-path "/tmp/index.html" --defer
+    Add a windows restart customizer to an image template in the cli object cache: |-
+        az image builder customizer add -n myTemplate -g myGroup \
+        --customizer-name shellScriptUrl \
+        --restart-check-command "echo Azure-Image-Builder-Restarted-the-VM  > \
+                                c:\buildArtifacts\restart.txt" \
+            --type windows-restart --restart-timeout 10m --defer
+    Add a windows update customizer to an image template in the cli object cache.: az image builder customizer add -n myTemplate -g myGroup --customizer-name winUpdate --type windows-update --search-criteria IsInstalled=0 --filters "exclude:\$_.Title -like \'*Preview*\'" "include:\$true" --update-limit 20 --defer
+    Add an inline shell customizer to an image template in the cli object cache: |-
+        az image builder customizer add -n myTemplate -g myGroup \
+            --inline-script "sudo mkdir /buildArtifacts" \
+                            "sudo cp /tmp/index.html /buildArtifacts/index.html" \
+            --customizer-name shellScriptInline --type shell --defer

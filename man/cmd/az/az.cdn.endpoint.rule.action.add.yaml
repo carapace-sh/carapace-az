@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
-documentation:
-    flag:
-        cache-duration: The duration for which the content needs to be cached.                Allowed format is hh:mm:ss.xxxxxx
-        custom-hostname: Host to redirect.                Leave empty to use the incoming host as the destination host.
-        custom-path: The full path to redirect. Path cannot be empty and must start with /.                Leave empty to use the incoming path as destination path.
-        custom-querystring: The set of query strings to be placed in the redirect URL.                leave empty to preserve the incoming query string.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --action-name=!: 'The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-actions'
     --cache-behavior=: Caching behavior for the requests.
@@ -74,3 +65,58 @@ completion:
             - Found
             - TemporaryRedirect
             - PermanentRedirect
+documentation:
+    command: |-
+        Command group 'cdn endpoint rule action' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        action-name: |-
+            The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-actions .
+
+            Accepted values: CacheExpiration, CacheKeyQueryString, ModifyRequestHeader, ModifyResponseHeader, OriginGroupOverride, UrlRedirect, UrlRewrite
+        cache-behavior: |-
+            Caching behavior for the requests.
+
+            Accepted values: BypassCache, Override, SetIfMissing
+        cache-duration: The duration for which the content needs to be cached.                Allowed format is hh:mm:ss.xxxxxx.
+        change-reference: The related change reference ID for this resource operation.
+        custom-fragment: Fragment to add to the redirect URL.
+        custom-hostname: Host to redirect.                Leave empty to use the incoming host as the destination host.
+        custom-path: The full path to redirect. Path cannot be empty and must start with /.                Leave empty to use the incoming path as destination path.
+        custom-querystring: The set of query strings to be placed in the redirect URL.                leave empty to preserve the incoming query string.
+        destination: The destination path to be used in the rewrite.
+        header-action: |-
+            Header action for the requests.
+
+            Accepted values: Append, Delete, Overwrite
+        header-name: Name of the header to modify.
+        header-value: Value of the header.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: Name of the CDN endpoint.
+        origin-group: Name or ID of the OriginGroup that would override the default OriginGroup.
+        preserve-unmatched-path: |-
+            If True, the remaining path after the source                pattern will be appended to the new destination path.
+
+            Accepted values: false, true
+        profile-name: Name of the CDN profile which is unique within the resource group.
+        query-parameters: Query parameters to include or exclude (comma separated).
+        query-string-behavior: |-
+            Query string behavior for the requests.
+
+            Accepted values: Exclude, ExcludeAll, Include, IncludeAll
+        redirect-protocol: |-
+            Protocol to use for the redirect.
+
+            Accepted values: Http, Https, MatchRequest
+        redirect-type: |-
+            The redirect type the rule will use when redirecting traffic.
+
+            Accepted values: Found, Moved, PermanentRedirect, TemporaryRedirect
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-name: Name of the rule.
+        source-pattern: A request URI pattern that identifies the type of requests that may be rewritten.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Add a cache expiration action: az cdn endpoint rule action add -g group -n endpoint --profile-name profile --rule-name name --action-name "CacheExpiration" --cache-behavior BypassCache
+    Add a redirect action.: az cdn endpoint rule action add -g group -n endpoint --profile-name profile --rule-name name --action-name "UrlRedirect" --redirect-protocol HTTPS --redirect-type Moved

@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Add a match condition to an application gateway WAF policy custom rule.
-documentation:
-    flag:
-        index: Index of match condition. If no index is provided, the default behavior is `append`.
-        match-variables: 'Space-separated list of variables to use when matching. Variable values: RemoteAddr, RequestMethod, QueryString, PostArgs, RequestUri, RequestHeaders, RequestBody, RequestCookies.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        transforms: 'Space-separated list of transforms to apply when matching. Allowed values: HtmlEntityDecode, Uppercase, Lowercase, RemoveNulls, Trim, UrlDecode, UrlEncode.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
-        values: Space-separated list of values to match.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --index=: Index of match condition.
     --match-variables=!:
@@ -54,3 +46,26 @@ completion:
             - LessThan
             - LessThanOrEqual
             - Regex
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        index: Index of match condition. If no index is provided, the default behavior is ``` append ``` .
+        match-variables: 'Space-separated list of variables to use when matching. Variable values: RemoteAddr, RequestMethod, QueryString, PostArgs, RequestUri, RequestHeaders, RequestBody, RequestCookies.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        name: Name of the WAF policy rule.
+        negate: |-
+            Match the negative of the condition.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        operator: |-
+            Operator for matching.
+
+            Accepted values: Any, BeginsWith, Contains, EndsWith, Equal, GeoMatch, GreaterThan, GreaterThanOrEqual, IPMatch, LessThan, LessThanOrEqual, Regex
+        policy-name: Name of the application gateway WAF policy.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        transforms: 'Space-separated list of transforms to apply when matching. Allowed values: HtmlEntityDecode, Uppercase, Lowercase, RemoveNulls, Trim, UrlDecode, UrlEncode.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        values: Space-separated list of values to match.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Add application gateway WAF policy custom rule match condition with contains.: az network application-gateway waf-policy custom-rule match-condition add --resource-group MyResourceGroup --policy-name MyPolicy --name MyWAFPolicyRule --match-variables RequestHeaders.value --operator contains --values foo boo --transform lowercase
+    Add application gateway WAF policy custom rule match condition with equal.: az network application-gateway waf-policy custom-rule match-condition add --resource-group MyResourceGroup --policy-name MyPolicy --name MyWAFPolicyRule --match-variables RequestHeaders.Content-Type --operator Equal --values application/csp-report

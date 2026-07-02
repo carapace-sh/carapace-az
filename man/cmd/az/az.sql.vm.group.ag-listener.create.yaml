@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates an availability group listener
-documentation:
-    flag:
-        ag-name: Name of the availability group. Please refer to https://learn.microsoft.com/sql/database-engine/availability-groups/windows/use-the-availability-group-wizard-sql-server-management-studio?view=sql-server-2017 to create and availability group
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vnet-name: Name of the virtual network. Provide only if name of the subnet has been provided.
 flags:
     --subscription=: Name or ID of subscription.
     --vnet-name=: Name of the virtual network.
@@ -23,3 +17,28 @@ flags:
         nargs: -1
     -r, --group-name=!: Name of the SQL virtual machine group.
     -u, --subnet=!: The name or resource id of the subnet to include in the private IP.
+documentation:
+    command: Creates an availability group listener.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        ag-name: Name of the availability group. Please refer to https://learn.microsoft.com/sql/database-engine/availability-groups/windows/use-the-availability-group-wizard-sql-server-management-studio?view=sql-server-2017 to create and availability group.
+        change-reference: The related change reference ID for this resource operation.
+        group-name: Name of the SQL virtual machine group.
+        ip-address: Private IP address bound to the availability group listener.
+        load-balancer: Name or resource ID of the load balancer.
+        name: Name of the availability group listener.
+        port: |-
+            Listener port.
+
+            Default value: 1433
+        probe-port: Probe port.
+        public-ip: Name or resource ID of the public IP.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sqlvms: Space-separated list of SQL virtual machine instance name or resource IDs that are enrolled into the availability group.
+        subnet: The name or resource id of the subnet to include in the private IP.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet-name: Name of the virtual network. Provide only if name of the subnet has been provided.
+examples:
+    Create an availability group listener. Note all resources are in the same resource group.: az sql vm group ag-listener create -n aglistenertest -g myresourcegroup --ag-name agname --group-name sqlvmgroup --ip-address 10.0.0.11 --load-balancer {lbname} --probe-port 59999 --subnet {subnetname} --vnet-name {vnname} --sqlvms sqlvm1 sqlvm2
+    ? Create an availability group listener. Note the SQL virtual machines are in the same resource group as the SQL virtual machine group.
+    : az sql vm group ag-listener create -n aglistenertest -g myresourcegroup --ag-name agname --group-name sqlvmgroup --ip-address 10.0.0.11 --load-balancer '/subscriptions/{yoursubscription}/resourceGroups/{yourrg}/providers/Microsoft.Network/loadBalancers/{lbname}' --probe-port 59999 --subnet '/subscriptions/{yoursubscription}/resourceGroups/{yourrg}/providers/Microsoft.Network/virtualNetworks/{vnname}/subnets/{subnetname}' --sqlvms sqlvm1 sqlvm2

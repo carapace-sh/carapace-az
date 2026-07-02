@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a network security rule to a managed cluster.
-documentation:
-    flag:
-        dest-addr-prefixes: CIDR or destination IP ranges. A single or space separated list of destination address prefixes
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        source-addr-prefixes: The CIDR or source IP ranges. A single or space separated list of source address prefixes
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --access=: Allows or denies network traffic
     --description=: Network security rule description
@@ -46,3 +40,31 @@ completion:
             - ah
             - esp
             - any
+documentation:
+    flag:
+        access: |-
+            Allows or denies network traffic.
+
+            Accepted values: allow, deny
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name.
+        description: Network security rule description.
+        dest-addr-prefixes: CIDR or destination IP ranges. A single or space separated list of destination address prefixes.
+        dest-port-ranges: A single or space separated list of destination port ranges.
+        direction: |-
+            Network security rule direction.
+
+            Accepted values: inbound, outbound
+        name: Network security rule name.
+        priority: Integer that shows priority for rule.
+        protocol: |-
+            Network protocol.
+
+            Accepted values: ah, any, esp, http, https, icmp, tcp, udp
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        source-addr-prefixes: The CIDR or source IP ranges. A single or space separated list of source address prefixes.
+        source-port-ranges: A single or space separated list of source port ranges.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Update network security rule.: az sf managed-cluster network-security-rule update -g testRG -c testCluster --name 'network security rule name' --access allow --description 'network security rule description' --direction inbound --protocol tcp --priority 1200           --source-port-ranges 1-1000 --dest-port-ranges 1-65535 --source-addr-prefixes 167.220.242.0/27 167.220.0.0/23 131.107.132.16/28 167.220.81.128/26 --dest-addr-prefixes 194.69.104.0/25 194.69.119.64/26 167.220.249.128/26 255.255.255.255/32

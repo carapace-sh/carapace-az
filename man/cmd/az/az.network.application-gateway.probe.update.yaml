@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a probe.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        from-settings: Whether to use host header from settings. Pick hostname from settings is currently not supported, now only support false.
-        match-status-codes: Space-separated list of allowed ranges of healthy status codes for the health response.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        path: Relative path of probe. Valid path starts from "/". Probe is sent to `<Protocol>://<host>:<port><path>`.
-        port: Custom port which will be used for probing the backend servers. The valid value ranges from 1 to 65535. In case not set, port from http settings will be used. This property is valid for Standard_v2 and WAF_v2 only.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -101,3 +90,43 @@ completion:
             - Https
             - Tcp
             - Tls
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .'
+        change-reference: The related change reference ID for this resource operation.
+        enable-proxy-header: |-
+            Whether to send Proxy Protocol header along with the Health Probe over TCP or TLS protocol. Default value is false.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        force-string: |+
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+
+        from-settings: Whether to use host header from settings. Pick hostname from settings is currently not supported, now only support false.
+        gateway-name: Name of the application gateway.
+        host: Name of the host to send the probe.
+        interval: Time interval in seconds between consecutive probes.
+        match-body: Body that must be contained in the health response.
+        match-status-codes: Space-separated list of allowed ranges of healthy status codes for the health response.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        min-servers: Minimum number of servers that are always marked healthy.
+        name: Name of the probe.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        path: Relative path of probe. Valid path starts from "/". Probe is sent to ``` <Protocol>://<host>:<port><path> ``` .
+        port: Custom port which will be used for probing the backend servers. The valid value ranges from 1 to 65535. In case not set, port from http settings will be used. This property is valid for Standard_v2 and WAF_v2 only.
+        protocol: |-
+            Protocol used for the probe.
+
+            Accepted values: Http, Https, Tcp, Tls
+        remove: 'Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        set: 'Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        threshold: Number of failed probes after which the back end server is marked down.
+        timeout: Probe timeout in seconds.
+examples:
+    Update an application gateway probe with a timeout of 60 seconds.: az network application-gateway probe update -g MyResourceGroup --gateway-name MyAppGateway -n MyProbe --timeout 60

@@ -1,21 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: restore
 description: Restores an existing database (i.e. create with 'recovery' create mode.)
-documentation:
-    flag:
-        auto-pause-delay: Time in minutes after which database is automatically paused. A value of -1 means that automatic pause is disabled.
-        backup-storage-redundancy: 'Backup storage redundancy used to store backups. Allowed values include: Local, Zone, Geo, GeoZone.'
-        encryption-protector-auto-rotation: Specifies the database encryption protector key auto rotation flag. Can be either true, false or null.
-        family: 'The compute generation component of the sku (for vcore skus only). Allowed values include: Gen4, Gen5.'
-        federated-client-id: The federated client id for the SQL Database. It is used for cross tenant CMK scenario.
-        geo-backup-id: The resource id of the geo-redundant backup to be restored. Use 'az sql db geo-backup list' or 'az sql db geo-backup show' for backup id.
-        read-replicas: The number of high availability replicas to provision for the database. Only settable for Hyperscale edition.
-        read-scale: If enabled, connections that have application intent set to readonly in their connection string may be routed to a readonly secondary replica. This property is only settable for Premium and Business Critical databases.
-        service-objective: 'The service objective for the new database. For example: Basic, S0, P1, GP_Gen4_1, GP_S_Gen5_8, BC_Gen5_2, HS_Gen5_32.'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        tier: 'The edition component of the sku. Allowed values include: Basic, Standard, Premium, GeneralPurpose, BusinessCritical, Hyperscale.'
-        zone-redundant: Specifies whether to enable zone redundancy. Default is true if no value is specified
 flags:
     --auto-pause-delay=: Time in minutes after which database is automatically paused.
     --availability-zone=: Availability zone
@@ -79,3 +64,60 @@ completion:
         zone-redundant:
             - "true"
             - "false"
+documentation:
+    command: Restore a geo-redundant backup to a new database.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        assign-identity: |-
+            Assign identity for database.
+
+            Accepted values: false, true
+        auto-pause-delay: Time in minutes after which database is automatically paused. A value of -1 means that automatic pause is disabled.
+        availability-zone: 'Availability zone. --backup-storage-redundancy --bsr Backup storage redundancy used to store backups. Allowed values include: Local, Zone, Geo, GeoZone.'
+        backup-storage-redundancy: 'Backup storage redundancy used to store backups. Allowed values include: Local, Zone, Geo, GeoZone.'
+        capacity: The capacity component of the sku in integer number of DTUs or vcores.
+        change-reference: The related change reference ID for this resource operation.
+        compute-model: |-
+            The compute model of the database.
+
+            Accepted values: Provisioned, Serverless
+        dest-database: Name of the database that will be created as the restore destination.
+        dest-server: Name of the server to restore database to.
+        elastic-pool: The name or resource id of the elastic pool to create the database in.
+        encryption-protector: |-
+            Specifies the Azure key vault key to be used as database encryption protector key. --encryption-protector-auto-rotation --epauto Specifies the database encryption protector key auto rotation flag. Can be either true, false or null.
+
+            Accepted values: false, true
+        encryption-protector-auto-rotation: Specifies the database encryption protector key auto rotation flag. Can be either true, false or null.
+        family: 'The compute generation component of the sku (for vcore skus only). Allowed values include: Gen4, Gen5.'
+        federated-client-id: The federated client id for the SQL Database. It is used for cross tenant CMK scenario. --ha-replicas --read-replicas The number of high availability replicas to provision for the database. Only settable for Hyperscale edition.
+        geo-backup-id: The resource id of the geo-redundant backup to be restored. Use 'az sql db geo-backup list' or 'az sql db geo-backup show' for backup id.
+        keys: The list of AKV keys for the SQL Database.
+        license-type: |-
+            The license type to apply for this database. ``` LicenseIncluded ``` if you need a license, or ``` BasePrice ``` if you have a license and are eligible for the Azure HybridBenefit.
+
+            Accepted values: BasePrice, LicenseIncluded
+        min-capacity: Minimal capacity that database will always have allocated, if not paused.
+        preferred-enclave-type: |-
+            Specifies type of enclave for this resource.
+
+            Accepted values: Default, VBS
+        read-replicas: The number of high availability replicas to provision for the database. Only settable for Hyperscale edition.
+        read-scale: |-
+            If enabled, connections that have application intent set to readonly in their connection string may be routed to a readonly secondary replica. This property is only settable for Premium and Business Critical databases.
+
+            Accepted values: Disabled, Enabled
+        resource-group: Name of the target resource group of the server to restore database to.
+        service-objective: 'The service objective for the new database. For example: Basic, S0, P1, GP_Gen4_1, GP_S_Gen5_8, BC_Gen5_2, HS_Gen5_32.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags. --umi --user-assigned-identity-id The list of user assigned identity for the SQL Database.'
+        tier: 'The edition component of the sku. Allowed values include: Basic, Standard, Premium, GeneralPurpose, BusinessCritical, Hyperscale.'
+        zone-redundant: |-
+            Specifies whether to enable zone redundancy. Default is true if no value is specified.
+
+            Accepted values: false, true
+examples:
+    Restore Geo-redundant backup.: |-
+        az sql db geo-backup restore \
+        --dest-database targetdb --dest-server myserver --resource-group mygroup \
+        --geo-backup-id "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/mygroup/providers/Microsoft.Sql/servers/myserver/databases/mydb/geoBackupPolicies/Default"

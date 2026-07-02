@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a public IP address.
-documentation:
-    flag:
-        ddos-protection-plan: Name or ID of a DDoS protection plan associated with the public IP. Can only be set if `--protection-mode` is Enabled.
-        dns-name-scope: The domain name label scope. If a domain name label and a domain name label scope are specified, an A DNS record is created for the public IP in the Microsoft Azure DNS system with a hashed value includes in FQDN.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --allocation-method=: IP address allocation method
     --ddos-protection-mode=: The DDoS protection mode of the public IP
@@ -59,3 +51,54 @@ completion:
         version:
             - IPv4
             - IPv6
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        allocation-method: |-
+            IP address allocation method.
+
+            Accepted values: Dynamic, Static
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Accepted values: Disabled, Enabled, VirtualNetworkInherited
+        ddos-protection-plan: Name or ID of a DDoS protection plan associated with the public IP. Can only be set if `--protection-mode` is Enabled.
+        dns-name: Globally unique DNS entry.
+        dns-name-scope: |-
+            The domain name label scope. If a domain name label and a domain name label scope are specified, an A DNS record is created for the public IP in the Microsoft Azure DNS system with a hashed value includes in FQDN.
+
+            Accepted values: NoReuse, ResourceGroupReuse, SubscriptionReuse, TenantReuse
+        edge-zone: The name of edge zone.
+        idle-timeout: |-
+            Idle timeout in minutes.
+
+            Default value: 4
+        ip-address: The IP address associated with the public IP address resource.
+        ip-tags: Space-separated list of IP tags in 'TYPE=VAL' format.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        name: The name of the public IP address.
+        protection-mode: '``` is Enabled.'
+        public-ip-prefix: Name or ID of a public IP prefix.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        reverse-fqdn: Reverse FQDN (fully qualified domain name).
+        sku: |-
+            Name of a public IP address SKU.
+
+            Default value: Standard
+
+            Accepted values: Basic, Standard, StandardV2
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        tier: |-
+            Tier of a public IP address SKU and Global tier is only supported for standard SKU public IP addresses.
+
+            Accepted values: Global, Regional
+        version: |-
+            IP address type.
+
+            Accepted values: IPv4, IPv6
+        zone: Space-separated list of availability zones into which to provision the resource.
+examples:
+    Create a basic public IP resource.: az network public-ip create -g MyResourceGroup -n MyIp
+    Create a public IP resource in an availability zone in the current resource group region.: az network public-ip create -g MyResourceGroup -n MyIp --zone 2
+    Create a static public IP resource for a DNS name label.: az network public-ip create -g MyResourceGroup -n MyIp --dns-name MyLabel --allocation-method Static

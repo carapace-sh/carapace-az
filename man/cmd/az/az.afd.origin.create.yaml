@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new origin within the specified origin group.
-documentation:
-    flag:
-        enabled-state: Whether to enable health probes to be made against backends defined under backendPools. Health probes can only be disabled if there is a single enabled backend in single enabled backend pool. When an origin is disabled, both routing and health probes to the origin are also disabled.
-        host-name: The address of the origin. Domain names, IPv4 addresses, and IPv6 addresses are supported.This should be unique across all origins in an endpoint.
-        http-port: The value of the HTTP port. Must be between 1 and 65535.
-        https-port: The value of the HTTPS port. Must be between 1 and 65535.
-        origin-host-header: The host header value sent to the origin with each request. If you leave this blank, the request hostname determines this value. Azure Front Door origins, such as Web Apps, Blob Storage, and Cloud Services require this host header value to match the origin hostname by default. This overrides the host header defined at Endpoint
-        priority: Priority of origin in given origin group for load balancing. Higher priorities will not be used for load balancing if any lower priority origin is healthy.Must be between 1 and 5
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        weight: Weight of the origin in given origin group for load balancing. Must be between 1 and 1000
 flags:
     --enable-private-link=:
         description: Indicates whether private link is enabled on that origin.
@@ -76,3 +65,50 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        enable-private-link: |-
+            Indicates whether private link is enabled on that origin.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        enabled-state: |-
+            Whether to enable health probes to be made against backends defined under backendPools. Health probes can only be disabled if there is a single enabled backend in single enabled backend pool. When an origin is disabled, both routing and health probes to the origin are also disabled.
+
+            Accepted values: Disabled, Enabled
+        enforce-certificate-name-check: |-
+            Whether to enable certificate name check at origin level.
+
+            Default value: True
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        host-name: The address of the origin. Domain names, IPv4 addresses, and IPv6 addresses are supported.This should be unique across all origins in an endpoint.
+        http-port: |-
+            The value of the HTTP port. Must be between 1 and 65535.
+
+            Default value: 80
+        https-port: |-
+            The value of the HTTPS port. Must be between 1 and 65535.
+
+            Default value: 443
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        origin-group-name: Name of the origin group which is unique within the profile.
+        origin-host-header: The host header value sent to the origin with each request. If you leave this blank, the request hostname determines this value. Azure Front Door origins, such as Web Apps, Blob Storage, and Cloud Services require this host header value to match the origin hostname by default. This overrides the host header defined at Endpoint.
+        priority: Priority of origin in given origin group for load balancing. Higher priorities will not be used for load balancing if any lower priority origin is healthy.Must be between 1 and 5.
+        private-link-location: The location of origin that will be connected to using the private link.
+        private-link-request-message: The message that is shown to the approver of the private link request.
+        private-link-resource: The resource ID of the origin that will be connected to using the private link.
+        private-link-sub-resource-type: The sub-resource type of the origin that will be connected to using the private link.You can use "az network private-link-resource list" to obtain the supported sub-resource types.
+        profile-name: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        weight: Weight of the origin in given origin group for load balancing. Must be between 1 and 1000.
+examples:
+    Create a private link origin: az afd origin create -g group --host-name example.contoso.com --profile-name profile --origin-group-name originGroup --origin-name origin1 --origin-host-header example.contoso.com --priority 1 --weight 500 --enabled-state Enabled --http-port 80 --https-port 443 --private-link-resource /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/group/providers/Microsoft.Storage/storageAccounts/plstest --private-link-location EastUS --private-link-request-message 'Please approve this request' --private-link-sub-resource-type table
+    Create an regular origin: 'az afd origin create -g group --host-name example.contoso.com --profile-name profile --origin-group-name originGroup --origin-name origin1 --origin-host-header example.contoso.com --priority 1 --weight 500 --enabled-state Enabled --http-port 80 --https-port 443 - name: Create a private link origin'

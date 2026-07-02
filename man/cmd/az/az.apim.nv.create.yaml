@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates a new Named Value.
-documentation:
-    flag:
-        display-name: Required. Unique name of NamedValue. It may contain only letters, digits, period, dash, and underscore characters.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        secret: Determines whether the value is a secret and should be encrypted or not. Default value is false.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        value: Required. Value of the NamedValue. Can contain policy expressions. It may not be empty or consist only of whitespace. This property will not be filled on GET operations! Use /listSecrets POST request to get the value.
 flags:
     --display-name=!: Required.
     --if-match=: ETag of the Entity.
@@ -29,3 +21,28 @@ completion:
         secret:
             - "true"
             - "false"
+documentation:
+    command: Create an API Management Named Value.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        display-name: Required. Unique name of NamedValue. It may contain only letters, digits, period, dash, and underscore characters.
+        if-match: ETag of the Entity.
+        named-value-id: Unique name for the Named Value to be created. Must be unique in the current API Management service instance.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        secret: |-
+            Determines whether the value is a secret and should be encrypted or not. Default value is false.
+
+            Default value: False
+
+            Accepted values: false, true
+        service-name: The name of the API Management service instance.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        value: Required. Value of the NamedValue. Can contain policy expressions. It may not be empty or consist only of whitespace. This property will not be filled on GET operations! Use /listSecrets POST request to get the value.
+examples:
+    Create a Named Value.: az apim nv create --service-name MyApim -g MyResourceGroup --named-value-id MyNamedValue --display-name 'My Named Value' --value 'foo'

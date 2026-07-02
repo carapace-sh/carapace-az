@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: regenerate
 description: Regenerate an access key for a Azure Cosmos DB database account.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --ids=:
         description: One or more resource IDs (space-delimited).
@@ -21,3 +16,23 @@ completion:
             - secondary
             - primaryReadonly
             - secondaryReadonly
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        key-kind: |-
+            The access key to regenerate.
+
+            Accepted values: primary, primaryReadonly, secondary, secondaryReadonly
+        name: Name of the Cosmos DB database account.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        skip-safe-rotation: |-
+            Skip the account keys last usage check that blocks key regeneration when the key was recently used.
+
+            Accepted values: false, true
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Regenerate an access key for a Azure Cosmos DB database account.: az cosmosdb keys regenerate --resource-group MyResourceGroup --name MyAccount --key-kind primary
+    Regenerate an access key, skipping the account keys last usage check.: az cosmosdb keys regenerate --resource-group MyResourceGroup --name MyAccount --key-kind primary --skip-safe-rotation true
+    Regenerate primaryReadonly access key for a Azure Cosmos DB database account.: az cosmosdb keys regenerate --key-kind primaryReadonly --name MyCosmosDBDatabaseAccount --resource-group MyResourceGroup --subscription MySubscription

@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new managed service on an Azure Service Fabric managed cluster.
-documentation:
-    flag:
-        default-move-cost: Specify the default cost for a move. Higher costs make it less likely that the Cluster Resource Manager will move the replica when trying to balance the cluster.
-        has-persisted-state: Determines whether this is a persistent service which stores states on the local disk. If it is then the value of this property is true, if not it is false.
-        instance-count: Specify the instance count for the stateless service. If -1 is used, it means it will run on all the nodes.
-        min-instance-count: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstanceCount computation -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service.
-        min-instance-percentage: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstancePercentage computation, -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. Allowed values are from 0 to 100.
-        partition-count: Specify the number of partitions. This is only used with UniformInt64 partition scheme.
-        partition-names: Specify the array for the names of the partitions. This is only used with Named partition scheme.
-        partition-scheme: Specify what partition scheme to use. Singleton partitions are typically used when the service does not require any additional routing. UniformInt64 means that each partition owns a range of int64 keys. Named is usually for services with data that can be bucketed, within a bounded set. Some common examples of data fields used as named partition keys would be regions, postal codes, customer groups, or other business boundaries.
-        placement-constraints: 'Specify the placement constraints as a string. Placement constraints are boolean expressions on node properties and allow for restricting a service to particular nodes based on the service requirements. For example, to place a service on nodes where NodeType is blue specify the following: "NodeColor == blue)".'
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --application=!: Specify the name of the service.
     --default-move-cost=: Specify the default cost for a move.
@@ -63,3 +49,44 @@ completion:
         state:
             - Stateless
             - Stateful
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name. --name --service-name Specify the name of the service.
+        default-move-cost: |-
+            Specify the default cost for a move. Higher costs make it less likely that the Cluster Resource Manager will move the replica when trying to balance the cluster.
+
+            Accepted values: High, Low, Medium, Zero
+        has-persisted-state: |-
+            Determines whether this is a persistent service which stores states on the local disk. If it is then the value of this property is true, if not it is false.
+
+            Accepted values: false, true
+        high-key: Specify the upper bound of the partition key range that should be split between the partition ‘Count’ This is only used with UniformInt64 partition scheme.
+        instance-count: Specify the instance count for the stateless service. If -1 is used, it means it will run on all the nodes. --keep-duration --stand-by-keep-duration --stand-by-replica-keep-duration Specify the definition on how long StandBy replicas should be maintained before being removed, represented in ISO 8601 format "hh:mm:ss".
+        low-key: Specify the lower bound of the partition key range that should be split between the partition ‘Count’ This is only used with UniformInt64 partition scheme. --min-inst-pct --min-instance-percentage Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstancePercentage computation, -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. Allowed values are from 0 to 100.
+        min-instance-count: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstanceCount computation -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. --min-replica --min-replica-set-size Specify the min replica set size for the stateful service.
+        min-instance-percentage: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstancePercentage computation, -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. Allowed values are from 0 to 100.
+        partition-count: Specify the number of partitions. This is only used with UniformInt64 partition scheme.
+        partition-names: Specify the array for the names of the partitions. This is only used with Named partition scheme.
+        partition-scheme: |-
+            Specify what partition scheme to use. Singleton partitions are typically used when the service does not require any additional routing. UniformInt64 means that each partition owns a range of int64 keys. Named is usually for services with data that can be bucketed, within a bounded set. Some common examples of data fields used as named partition keys would be regions, postal codes, customer groups, or other business boundaries.
+
+            Default value: singleton
+
+            Accepted values: Named, Singleton, UniformInt64Range
+        placement-constraints: 'Specify the placement constraints as a string. Placement constraints are boolean expressions on node properties and allow for restricting a service to particular nodes based on the service requirements. For example, to place a service on nodes where NodeType is blue specify the following: "NodeColor == blue)". --plcmt-time-limit --service-placement-time-limit Specify the duration for which replicas can stay InBuild before reporting that build is stuck, represented in ISO 8601 format "hh:mm:ss". --quorum-loss-wait --quorum-loss-wait-duration Specify the maximum duration for which a partition is allowed to be in a state of quorum loss, represented in ISO 8601 format "hh:mm:ss". --replica-restart-wait --replica-restart-wait-duration Specify the duration between when a replica goes down and when a new replica is created, represented in ISO 8601 format "hh:mm:ss".'
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` . --service-type --type Specify the service type name of the application, it should exist in the application manifest.
+        state: |-
+            Specify if the service is stateless or stateful.
+
+            Accepted values: Stateful, Stateless
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags. --target-replica --target-replica-set-size Specify the target replica set size for the stateful service.'
+examples:
+    Create a new stateful service "testService2" with a target of 5 nodes.: |-
+        az sf managed-service create -g testRG -c testCluster --application-name testApp --state stateful --service-name testService2 --has-persisted-state \
+          --service-type testStatefulType --min-replica-set-size 3 --target-replica-set-size 5 --partition-scheme uniformint64range --partition-count 1 --low-key 0 --high-key 25
+    Create a new stateless managed service "testService1" with instance count -1 (on all the nodes).: |-
+        az sf managed-service create -g testRG -c testCluster --application-name testApp --state stateless --service-name testService \
+          --service-type testStateless --instance-count -1 --partition-scheme singleton

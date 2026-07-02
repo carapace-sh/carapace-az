@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: delete
 description: Delete key-values.
-documentation:
-    flag:
-        auth-mode: This parameter can be used for indicating how a data operation is to be authorized. If the auth mode is "key", provide connection string or store name and your account access keys will be retrieved for authorization. If the auth mode is "login", provide the `--endpoint` or `--name` and your "az login" credentials will be used for authorization. You can configure the default auth mode using `az configure --defaults appconfig_auth_mode=<auth_mode>`. For more information, see https://learn.microsoft.com/azure/azure-app-configuration/concept-enable-rbac
-        connection-string: Combination of access key and endpoint of the App Configuration store. Can be found using 'az appconfig credential list'. Users can preset it using `az configure --defaults appconfig_connection_string=<connection_string>` or environment variable with the name AZURE_APPCONFIG_CONNECTION_STRING.
-        endpoint: If auth mode is "login", provide endpoint URL of the App Configuration store. The endpoint can be retrieved using "az appconfig show" command. You can configure the default endpoint using `az configure --defaults appconfig_endpoint=<endpoint>`
-        label: If no label specified, delete entry with null label. Support star sign as filters, for instance * means all label and abc* means labels with abc as prefix.
-        name: Name of the App Configuration store. You can configure the default name using `az configure --defaults app_configuration_store=<name>`.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
     --connection-string=: Combination of access key and endpoint of the App Configuration store.
@@ -23,3 +15,29 @@ completion:
         auth-mode:
             - login
             - key
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: This parameter can be used for indicating how a data operation is to be authorized. If the auth mode is "key", provide connection string or store name and your account access keys will be retrieved for authorization. If the auth mode is "login", provide the `--endpoint` or `--name` and your "az login" credentials will be used for authorization. You can configure the default auth mode using `az configure --defaults appconfig_auth_mode=<auth_mode>`. For more information, see https://learn.microsoft.com/azure/azure-app-configuration/concept-enable-rbac
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: Combination of access key and endpoint of the App Configuration store. Can be found using 'az appconfig credential list'. Users can preset it using ``` az configure --defaults appconfig_connection_string=<connection_string> ``` or environment variable with the name AZURE_APPCONFIG_CONNECTION_STRING.
+        endpoint: If auth mode is "login" or "anonymous", provide endpoint URL of the App Configuration store. The endpoint can be retrieved using "az appconfig show" command. You can configure the default endpoint using ``` az configure --defaults appconfig_endpoint=<endpoint> ``` .
+        key: Support star sign as filters, for instance * means all key and abc* means keys with abc as prefix.
+        label: If no label specified, delete entry with null label. Support star sign as filters, for instance * means all label and abc* means labels with abc as prefix.
+        name: |-
+            ``` and your "az login" credentials will be used for authorization. If the auth mode is "anonymous", provide the --endpoint that will be used for authorization. Anonymous mode is intended for custom endpoints only, such as the App Configuration emulator. You can configure the default auth mode using ``` az configure --defaults appconfig_auth_mode=<auth_mode> ``` . For more information, see https://learn.microsoft.com/azure/azure-app-configuration/concept-enable-rbac .
+
+            Default value: key
+
+            Accepted values: anonymous, key, login
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'If no tags are specified, delete all key-values with any tags. Support space-separated tags: key[=value] [key[=value] ...].'
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Delete a key using App Configuration store name without confirmation.: az appconfig kv delete -n MyAppConfiguration --key color --label MyLabel --yes
+    Delete a key using connection string.: az appconfig kv delete --connection-string Endpoint=https://contoso.azconfig.io;Id=xxx;Secret=xxx --key color --label MyLabel
+    Delete a key using your 'az login' credentials and App Configuration store endpoint.: az appconfig kv delete --endpoint https://myappconfiguration.azconfig.io --key color --auth-mode login --yes
+    Delete a key with key name "color" and has tags "tag1=value1" and "tag2=value2".: az appconfig kv delete -n MyAppConfiguration --key color --tags tag1=value1 tag2=value2 --yes

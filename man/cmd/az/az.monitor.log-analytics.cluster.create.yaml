@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a cluster instance.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        sku-capacity: The capacity of the SKU. It can be decreased only after 31 days.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        user-assigned: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
 flags:
     --billing-type=: The cluster's billing type.
     --identity-type=: Type of managed service identity.
@@ -65,3 +58,46 @@ completion:
             - "50000"
         sku-name:
             - CapacityReservation
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        billing-type: |-
+            The cluster's billing type.
+
+            Accepted values: Cluster, Workspaces
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Default value: SystemAssigned
+
+            Accepted values: None, SystemAssigned, SystemAssigned,UserAssigned, UserAssigned
+        key-name: The name of the key associated with the Log Analytics cluster.
+        key-rsa-size: Selected key minimum required size.
+        key-vault-uri: The Key Vault uri which holds they key associated with the Log Analytics cluster.
+        key-version: The version of the key associated with the Log Analytics cluster.
+        location: The geo-location where the resource lives  When not specified, the location of the resource group will be used.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        replication-enabled: |-
+            Specifies whether the replication is enabled or not. When true the cluster is replicate to the specified location.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        replication-location: The secondary location of the replication. If replication is being enabled, enabled must be provided.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku-capacity: |-
+            The capacity of the SKU. It can be decreased only after 31 days.
+
+            Accepted values: 100, 1000, 10000, 200, 2000, 25000, 300, 400, 500, 5000, 50000
+        sku-name: |-
+            The name of the SKU.
+
+            Default value: CapacityReservation
+
+            Accepted values: CapacityReservation
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        user-assigned: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+examples:
+    Create a cluster instance.: az monitor log-analytics cluster create -g MyResourceGroup -n MyCluster --sku-capacity 1000

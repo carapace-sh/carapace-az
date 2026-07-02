@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Add a regional virtual network integration to a webapp
-documentation:
-    flag:
-        name: name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using `az configure --defaults web=<name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        slot: The name of the slot. Default to the productions slot if not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --skip-delegation-check=:
         description: Skip check if you do not have permission or the VNet is in another subscription.
@@ -22,3 +16,24 @@ completion:
         skip-delegation-check:
             - "true"
             - "false"
+documentation:
+    command: Add a regional virtual network integration to a webapp.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        name: Name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using ``` az configure --defaults web=<name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        skip-delegation-check: |-
+            Skip check if you do not have permission or the VNet is in another subscription.
+
+            Default value: False
+
+            Accepted values: false, true
+        slot: The name of the slot. Default to the productions slot if not specified.
+        subnet: The name or resource ID of the subnet.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet: The name or resource ID of the Vnet.
+examples:
+    Add a regional virtual network integration to a webapp: az webapp vnet-integration add -g MyResourceGroup -n MyWebapp --vnet MyVnetName --subnet MySubnetName -s [slot]
+    Add a regional virtual network integration to a webapp using subnet resource id: az webapp vnet-integration add -g MyResourceGroup -n MyWebapp --vnet MyVnetName --subnet /subscriptions/[SubscriptionId]/resourceGroups/[MyResourceGroup]/providers/Microsoft.Network/virtualNetworks/[MyVnetName]/subnets/MySubnetName -s [slot]
+    Add a regional virtual network integration to a webapp using vnet resource id: az webapp vnet-integration add -g MyResourceGroup -n MyWebapp --vnet /subscriptions/[SubscriptionId]/resourceGroups/[MyResourceGroup]/providers/Microsoft.Network/virtualNetworks/[MyVnetName] --subnet MySubnetName -s [slot]

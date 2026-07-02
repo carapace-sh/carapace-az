@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: approve
 description: Approve a private endpoint connection request for servicebus namespace.
-documentation:
-    flag:
-        id: The ID of the private endpoint connection associated with the Service Bus Namespace. You can get it using `az servicebus namespace show`.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --description=: Comments for approve operation.
     --id=: The ID of the private endpoint connection associated with the Service Bus Namespace.
@@ -12,3 +8,20 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=: The resource group name of specified Service bus namespace.
     -n, --name=: The name of the private endpoint connection associated with the Service Bus Namespace.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        description: Comments for approve operation.
+        id: The ID of the private endpoint connection associated with the Service Bus Namespace. You can get it using ``` az servicebus namespace show ``` .
+        name: The name of the private endpoint connection associated with the Service Bus Namespace.
+        namespace-name: The Service Bus namesapce name.
+        resource-group: The resource group name of specified Service bus namespace.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Approve a private endpoint connection request for servicebus namespace by ID.: |-
+        id = (az servicebus namespace show -n mynamespace --query "privateEndpointConnections[0].id")
+        az servicebus namespace private-endpoint-connection approve --id $id
+    Approve a private endpoint connection request for servicebus namespace using namespace name and connection name.: |-
+        name = (az servicebus namespace show -n mynamespace --query "privateEndpointConnections[0].name")
+        az servicebus namespace private-endpoint-connection approve -g myRg --namespace-name mynamespace --name $name

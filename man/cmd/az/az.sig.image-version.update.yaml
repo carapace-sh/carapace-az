@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: update a share image version
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        gallery-image-version: Gallery image version in semantic version pattern. The allowed characters are digit and period. Digits must be within the range of a 32-bit integer, e.g. `<MajorVersion>.<MinorVersion>.<Patch>`
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        replica-count: The default number of replicas to be created per region. To set regional replication counts, use --target-regions
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-edge-zones: Space-separated list of regions, edge zones, replica counts and storage types. Use `<region>=<edge zone>[=<replica count>][=<storage account type>]` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used. If "--target-edge-zones None" is specified, the target extended locations will be cleared.
-        target-regions: Space-separated list of regions and their replica counts. Use `<region>[=<replica count>][=<storage account type>]` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -50,3 +39,81 @@ completion:
         block-deletion-before-end-of-life:
             - "true"
             - "false"
+documentation:
+    command: Update a share image version.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: |-
+            Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .
+
+            Default value: []
+        allow-replicated-location-deletion: |
+            Indicate whether or not removing this gallery image version from replicated regions is allowed.
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Default value: False
+        gallery-image-definition: Gallery image definition.
+        gallery-image-version: Gallery image version in semantic version pattern. The allowed characters are digit and period. Digits must be within the range of a 32-bit integer, e.g. ``` <MajorVersion>.<MinorVersion>.<Patch> ``` .
+        gallery-name: Gallery name.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        remove: |-
+            Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .
+
+            Default value: []
+        replica-count: The default number of replicas to be created per region. To set regional replication counts, use --target-regions.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        set: |-
+            Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .
+
+            Default value: []
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-edge-zones: Space-separated list of regions, edge zones, replica counts and storage types. Use ``` <region>=<edge zone>[=<replica count>][=<storage account type>] ``` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used. If "--target-edge-zones None" is specified, the target extended locations will be cleared.
+        target-regions: Space-separated list of regions and their replica counts. Use ``` <region>[=<replica count>][=<storage account type>] ``` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used.
+examples:
+    Allow to remove the gallery image version from replicated regions.: |-
+        az sig image-version update -g MyResourceGroup --gallery-name MyGallery \
+        --gallery-image-definition MyImage --gallery-image-version 1.0.0 \
+        --set safetyProfile.allowDeletionOfReplicatedLocations=true
+    Block the deletion for this gallery image version if its end of life has not expired.: |-
+        az sig image-version update -g MyResourceGroup --gallery-name MyGallery \
+        --gallery-image-definition MyImage --gallery-image-version 1.0.0 \
+        --block-deletion-before-end-of-life true
+    ? Change the end of life date for an image version. The image can still be used to create virtual machines after the end of life date.
+    : |-
+        az sig image-version update -g MyResourceGroup --gallery-name MyGallery \
+        --gallery-image-definition MyImage --gallery-image-version 1.0.0 \
+        --set publishingProfile.endOfLifeDate=2024-08-02T00:00:00+00:00
+    Change the replication extended locations: |-
+        az sig image-version update --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --target-edge-zones westus=microsoftlosangeles1 eastus=microsoftlosangeles2=1
+    Change the replication regions and replica count: |-
+        az sig image-version update --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --target-regions westcentralus=2 eastus2
+    ? Change whether an image should be included in consideration for latest version in the image definition. Setting this value to true excludes the image from consideration and setting this value to false includes the image for consideration.
+    : |-
+        az sig image-version update -g MyResourceGroup --gallery-name MyGallery \
+        --gallery-image-definition MyImage --gallery-image-version 1.0.0 \
+        --set publishingProfile.excludeFromLatest=true
+    Clear the replication extended locations: |-
+        az sig image-version update --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --target-edge-zones None
+    ? Replicate to an additional region. Optional, you can set the replica count for the region and exclude this image when using the latest version of the image definition.
+    : |-
+        az sig image-version update --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --add publishingProfile.targetRegions name=westcentralus \
+        regionalReplicaCount=3 excludeFromLatest=true

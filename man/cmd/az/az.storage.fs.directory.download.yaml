@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: download
 description: Download files from the directory in ADLS Gen2 file system to a local file path.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        recursive: Recursively download files. If enabled, all the files including the files in subdirectories will be downloaded.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        source-path: The download source directory path. It should be an absolute path to file system.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -27,3 +17,29 @@ completion:
         auth-mode:
             - login
             - key
+documentation:
+    command: |-
+        This command is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        destination-path: The destination local directory path to download.
+        file-system: The download source file system.
+        recursive: Recursively download files. If enabled, all the files including the files in subdirectories will be downloaded.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        service-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        source-path: The download source directory path. It should be an absolute path to file system.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Download a single file in a directory in ADLS Gen2 file system.: az storage fs directory download -f myfilesystem --account-name mystorageaccount -s "path/to/file" -d "<local-path>"
+    Download an entire subdirectory in ADLS Gen2 file system.: az storage fs directory download -f myfilesystem --account-name mystorageaccount -s "path/to/subdirectory" -d "<local-path>" --recursive
+    Download the entire directory in ADLS Gen2 file system.: az storage fs directory download -f myfilesystem --account-name mystorageaccount -s SourceDirectoryPath -d "<local-path>" --recursive
+    Download whole ADLS Gen2 file system.: az storage fs directory download -f myfilesystem --account-name mystorageaccount  -d "<local-path>" --recursive

@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: CDN endpoint is the entity within a CDN profile containing configuration information such as origin, protocol, content caching and delivery behavior.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        match-values: Match values of the match condition. e.g, space separated values "GET" "HTTP"
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --ids=:
         description: One or more resource IDs (space-delimited).
@@ -56,3 +50,33 @@ completion:
         transform:
             - Lowercase
             - Uppercase
+documentation:
+    command: |-
+        Command group 'cdn endpoint rule condition' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        match-values: Match values of the match condition. e.g, space separated values "GET" "HTTP".
+        match-variable: |-
+            Name of the match condition: https://learn.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-match-conditions .
+
+            Accepted values: ClientPort, Cookies, HostName, HttpVersion, IsDevice, PostArgs, QueryString, RemoteAddress, RequestBody, RequestHeader, RequestMethod, RequestScheme, RequestUri, ServerPort, SocketAddr, SslProtocol, UrlFileExtension, UrlFileName, UrlPath
+        name: Name of the CDN endpoint.
+        negate-condition: |-
+            If true, negates the condition.
+
+            Accepted values: false, true
+        operator: Operator of the match condition.
+        profile-name: Name of the CDN profile which is unique within the resource group.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-name: Name of the rule.
+        selector: Selector of the match condition.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        transform: |-
+            Transform to apply before matching.
+
+            Accepted values: Lowercase, Uppercase
+examples:
+    Add a remote address condition.: az cdn endpoint rule condition add -g group -n endpoint --profile-name profile --rule-name name --match-variable RemoteAddress --operator GeoMatch --match-values "TH"

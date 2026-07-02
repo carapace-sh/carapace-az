@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a capacity pool
-documentation:
-    flag:
-        encryption-type: Encryption type of the capacity pool, set encryption type for data at rest for this pool and all volumes in it. This value can only be set when creating new pool.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        size: Provisioned size of the pool. Must be an integer number of tebibytes in multiples of 4
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --cool-access=:
         description: If enabled (true) the pool can contain cool Access enabled volumes.
@@ -62,3 +55,47 @@ completion:
             - Standard
             - StandardZRS
             - Ultra
+documentation:
+    command: Create a capacity pool.
+    flag:
+        account-name: The name of the NetApp account. --name --pool-name -n -p The name of the capacity pool.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cool-access: |-
+            If enabled (true) the pool can contain cool Access enabled volumes.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        encryption-type: |-
+            Encryption type of the capacity pool, set encryption type for data at rest for this pool and all volumes in it. This value can only be set when creating new pool.
+
+            Default value: Single
+
+            Accepted values: Double, Single
+        location: The geo-location where the resource lives  When not specified, the location of the resource group will be used.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        qos-type: |-
+            The qos type of the pool.
+
+            Default value: Auto
+
+            Accepted values: Auto, Manual
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-level: |-
+            ServiceLevel.
+
+            Default value: Premium
+
+            Accepted values: Flexible, Premium, Standard, StandardZRS, Ultra
+        size: |-
+            Provisioned size of the pool. Must be an integer number of tebibytes in multiples of 4.
+
+            Default value: 4398046511104
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Create an ANF pool: az netappfiles pool create -g mygroup --account-name myaccountname --name mypoolname -l westus2 --size 8 --service-level premium

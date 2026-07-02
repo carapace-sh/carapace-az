@@ -1,26 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates a SQL virtual machine.
-documentation:
-    flag:
-        enable-auto-backup: Enable or disable autobackup on SQL virtual machine. If any backup settings provided, parameter automatically sets to true.
-        enable-auto-patching: Enable or disable autopatching on SQL virtual machine. If any autopatching settings provided, parameter automatically sets to true.
-        enable-encryption: ' Enable encryption for backup on SQL virtual machine.'
-        enable-key-vault-credential: Enable or disable key vault credential setting. If any key vault settings provided, parameter automatically sets to true.
-        full-backup-duration: Duration of the time window of a given day during which full backups can take place. 1-23 hours.
-        full-backup-frequency: Frequency of full backups. In both cases, full backups begin during the next scheduled time window.
-        full-backup-start-hour: Start time of a given day during which full backups can take place. 0-23 hours.
-        image-offer: SQL image offer. Examples include SQL2008R2-WS2008, SQL2008-WS2008.
-        least-privilege-mode: SQL IaaS Agent Least Privilege Mode. Updates from sysadmin to specific permissions used per feature.
-        location: Location. If not provided, virtual machine should be in the same region of resource group.You can configure the default location using `az configure --defaults location=<location>`.
-        log-backup-frequency: Frequency of log backups. 5-60 minutes.
-        maintenance-window-duration: Duration of patching. 30-180 minutes.
-        maintenance-window-start-hour: Hour of the day when patching is initiated. Local VM time 0-23 hours.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        retention-period: Retention period of backup. 1-30 days.
-        sql-mgmt-type: SQL Server management type. If NoAgent selected, please provide --image-sku and --offer-type.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --backup-pwd=: Password for encryption on backup.
     --backup-schedule-type=: Backup schedule type.
@@ -133,3 +113,105 @@ completion:
             - GENERAL
             - OLTP
             - DW
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        backup-pwd: Password for encryption on backup.
+        backup-schedule-type: |-
+            Backup schedule type.
+
+            Accepted values: Automated, Manual
+        backup-system-dbs: |-
+            Include system databases on backup.
+
+            Default value: False
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        connectivity-type: |-
+            SQL Server connectivity option.
+
+            Accepted values: LOCAL, PRIVATE, PUBLIC
+        credential-name: Credential name.
+        day-of-week: |-
+            Day of week to apply the patch on.
+
+            Accepted values: Everyday, Friday, Monday, Saturday, Sunday, Thursday, Tuesday, Wednesday
+        enable-auto-backup: |-
+            Enable or disable autobackup on SQL virtual machine. If any backup settings provided, parameter automatically sets to true.
+
+            Accepted values: false, true
+        enable-auto-patching: |-
+            Enable or disable autopatching on SQL virtual machine. If any autopatching settings provided, parameter automatically sets to true.
+
+            Accepted values: false, true
+        enable-encryption: |-
+            Enable encryption for backup on SQL virtual machine.
+
+            Default value: False
+
+            Accepted values: false, true
+        enable-key-vault-credential: |-
+            Enable or disable key vault credential setting. If any key vault settings provided, parameter automatically sets to true.
+
+            Accepted values: false, true
+        enable-r-services: |-
+            Enable or disable R services (SQL 2016 onwards).
+
+            Accepted values: false, true
+        full-backup-duration: Duration of the time window of a given day during which full backups can take place. 1-23 hours.
+        full-backup-frequency: |-
+            Frequency of full backups. In both cases, full backups begin during the next scheduled time window.
+
+            Accepted values: Daily, Weekly
+        full-backup-start-hour: Start time of a given day during which full backups can take place. 0-23 hours.
+        image-offer: SQL image offer. Examples include SQL2008R2-WS2008, SQL2008-WS2008.
+        image-sku: |-
+            SQL image sku.
+
+            Accepted values: Developer, Enterprise, Express, Standard, Web
+        key-vault: Azure Key Vault url.
+        least-privilege-mode: |-
+            SQL IaaS Agent Least Privilege Mode. Updates from sysadmin to specific permissions used per feature.
+
+            Accepted values: Enabled, NotSet
+        license-type: |-
+            SQL Server license type.
+
+            Accepted values: AHUB, DR, PAYG
+        location: Location. If not provided, virtual machine should be in the same region of resource group.You can configure the default location using ``` az configure --defaults location=<location> ``` .
+        log-backup-frequency: Frequency of log backups. 5-60 minutes.
+        maintenance-window-duration: Duration of patching. 30-180 minutes.
+        maintenance-window-start-hour: Hour of the day when patching is initiated. Local VM time 0-23 hours.
+        name: Name of the SQL virtual machine. The name of the new SQL virtual machine must be equal to the underlying virtual machine created from SQL marketplace image.
+        port: SQL Server port.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        retention-period: Retention period of backup. 1-30 days.
+        sa-key: Storage account key where backup will be taken to.
+        sp-name: Service principal name to access key vault.
+        sp-secret: Service principal name secret to access key vault.
+        sql-auth-update-pwd: SQL Server sysadmin login password.
+        sql-auth-update-username: SQL Server sysadmin login to create.
+        sql-mgmt-type: |-
+            Argument 'sql_management_mode' has been deprecated and will be removed in a future release. SQL Server management type. If NoAgent selected, please provide --image-sku and --offer-type.
+
+            Default value: LightWeight
+
+            Accepted values: Full, LightWeight, NoAgent
+        sql-workload-type: |-
+            SQL Server workload type.
+
+            Accepted values: DW, GENERAL, OLTP
+        storage-account: Storage account url where backup will be taken to.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Create SQL virtual machine and configure SQL connectivity settings.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --license-type PAYG --sql-mgmt-type Full --connectivity-type private --port 1433 --sql-auth-update-username {newlogin} --sql-auth-update-pwd {sqlpassword}
+    Create SQL virtual machine and configure auto backup settings.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --license-type PAYG --sql-mgmt-type Full --backup-schedule-type manual --full-backup-frequency Weekly --full-backup-start-hour 2 --full-backup-duration 2 --sa-key {storageKey} --storage-account 'https://storageacc.blob.core.windows.net/' --retention-period 30 --log-backup-frequency 60
+    Create SQL virtual machine and configure auto patching settings.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --license-type PAYG --sql-mgmt-type Full --day-of-week sunday --maintenance-window-duration 60 --maintenance-window-start-hour 2
+    Create a SQL virtual machine with AHUB billing tag.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --license-type AHUB
+    Create a SQL virtual machine with DR billing tag.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --license-type DR
+    Create a SQL virtual machine with NoAgent type, only valid for EOS SQL 2008 and SQL 2008 R2.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --license-type AHUB --sql-mgmt-type NoAgent --image-sku Enterprise --image-offer SQL2008-WS2008R2
+    Create a SQL virtual machine with least privilege mode enabled.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --least-privilege-mode Enabled --sql-mgmt-type Full
+    Create a SQL virtual machine with specific sku type and license type.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --image-sku Enterprise --license-type AHUB
+    Enable R services in SQL2016 onwards.: az sql vm create -n sqlvm -g myresourcegroup -l eastus --license-type PAYG --sql-mgmt-type Full --enable-r-services true

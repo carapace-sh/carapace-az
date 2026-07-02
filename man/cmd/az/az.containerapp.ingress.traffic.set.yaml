@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Configure traffic-splitting for a container app.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        label-weight: A list of label weight(s) for the container app. Space-separated values in 'label_name=weight' format.
-        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        revision-weight: A list of revision weight(s) for the container app. Space-separated values in 'revision_name=weight' format. For latest revision, use 'latest=weight'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --ids=:
         description: One or more resource IDs (space-delimited).
@@ -22,3 +14,19 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=: Name of resource group.
     -n, --name=: The name of the Containerapp.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        label-weight: A list of label weight(s) for the container app. Space-separated values in 'label_name=weight' format.
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        revision-weight: A list of revision weight(s) for the container app. Space-separated values in 'revision_name=weight' format. For latest revision, use 'latest=weight'.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        traffic-weight: Option '--traffic-weight' has been deprecated and will be removed in a future release. Use '--revision-weight' instead. A list of revision weight(s) for the container app. Space-separated values in 'revision_name=weight' format. For latest revision, use 'latest=weight'.
+examples:
+    Route 100% of a container app's traffic to its latest revision.: az containerapp ingress traffic set -n my-containerapp -g MyResourceGroup --revision-weight latest=100
+    Split a container app's traffic between a label and a revision.: az containerapp ingress traffic set -n my-containerapp -g MyResourceGroup --revision-weight latest=80 --label-weight myLabel=20
+    Split a container app's traffic between two labels.: az containerapp ingress traffic set -n my-containerapp -g MyResourceGroup --label-weight myLabel=80 myLabel2=20
+    Split a container app's traffic between two revisions.: az containerapp ingress traffic set -n my-containerapp -g MyResourceGroup --revision-weight latest=80 MyRevisionName=20

@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a Spark pool.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --delay=: The delay time whose unit is minute.
     --enable-auto-pause=:
@@ -60,3 +55,58 @@ completion:
             - MemoryOptimized
             - HardwareAcceleratedFPGA
             - HardwareAcceleratedGPU
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        delay: The delay time whose unit is minute.
+        enable-auto-pause: |-
+            The flag of enabling auto pause.
+
+            Accepted values: false, true
+        enable-auto-scale: |-
+            The flag of enabling auto scale.
+
+            Accepted values: false, true
+        enable-dynamic-exec: |-
+            Indicates whether Dynamic Executor Allocation is enabled or not.
+
+            Accepted values: false, true
+        max-executors: The maximum number of executors alloted.
+        max-node-count: The max node count.
+        min-executors: The minimum number of executors alloted.
+        min-node-count: The min node count.
+        name: The name of the Spark pool.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        node-count: The number of node.
+        node-size: |-
+            The level of compute power that each node in the Big Data pool has..
+
+            Accepted values: Large, Medium, None, Small, XLarge, XXLarge, XXXLarge
+        node-size-family: |-
+            The kind of nodes that the Big Data pool provides.
+
+            Default value: MemoryOptimized
+
+            Accepted values: HardwareAcceleratedFPGA, HardwareAcceleratedGPU, MemoryOptimized, None
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        spark-config-file-path: Absolute path of Spark pool properties configuration file.
+        spark-events-folder: |-
+            The Spark events folder.
+
+            Default value: /events
+        spark-log-folder: |-
+            The default Spark log folder.
+
+            Default value: /logs
+        spark-version: The supported Spark version is 2.4 now.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        workspace-name: The workspace name.
+examples:
+    Create a Spark pool.: |-
+        az synapse spark pool create --name testpool --workspace-name testsynapseworkspace --resource-group rg \
+        --spark-version 2.4 --node-count 3 --node-size Medium --spark-config-file-path 'path/configfile.txt'

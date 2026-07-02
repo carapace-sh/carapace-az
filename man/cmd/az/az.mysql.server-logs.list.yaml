@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List log files for a server.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --file-last-written=: Integer in hours to indicate file last modify time, default value is 72.
     --filename-contains=: The pattern that file name should match.
@@ -12,3 +8,15 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=!: Name of resource group.
     -s, --server-name=!: Name of the Server.
+documentation:
+    flag:
+        file-last-written: Integer in hours to indicate file last modify time, default value is 72.
+        filename-contains: The pattern that file name should match.
+        max-file-size: The file size limitation to filter files.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        server-name: Name of the Server.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    List log files for 'testsvr' less than 30Kb in size.: az mysql server-logs list -g testgroup -s testsvr --max-file-size 30
+    List log files for 'testsvr' modified in the last 10 hours.: az mysql server-logs list -g testgroup -s testsvr --file-last-written 10
+    List log files for 'testsvr' modified in the last 72 hours (default value).: az mysql server-logs list -g testgroup -s testsvr

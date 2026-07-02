@@ -1,21 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: create a new image version
-documentation:
-    flag:
-        gallery-image-version: Gallery image version in semantic version pattern. The allowed characters are digit and period. Digits must be within the range of a 32-bit integer, e.g. `<MajorVersion>.<MinorVersion>.<Patch>`
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        replica-count: The default number of replicas to be created per region. To set regional replication counts, use --target-regions
-        replication-mode: Optional parameter which specifies the mode to be used for replication. This property is not updatable.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        storage-account-type: The default storage account type to be used per region. To set regional storage account types, use --target-regions
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        target-edge-zone-encryption: 'Space-separated list of customer managed keys for encrypting the OS and data disks in the gallery artifact for each region. Format for each edge zone: `<edge zone>,<os_des>,<lun1>,<lun1_des>,<lun2>,<lun2_des>`.'
-        target-edge-zones: Space-separated list of regions, edge zones, replica counts and storage types. Use `<region>=<edge zone>[=<replica count>][=<storage account type>]` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used. If "--target-edge-zones None" is specified, the target extended locations will be cleared.
-        target-region-cvm-encryption: 'Space-separated list of customer managed key for Confidential VM encrypting the OS disk in the gallery artifact for each region. Format for each region: `<os_cvm_encryption_type>,<os_cvm_des>`. The valid values for os_cvm_encryption_type are EncryptedVMGuestStateOnlyWithPmk, EncryptedWithPmk, EncryptedWithCmk.'
-        target-region-encryption: 'Space-separated list of customer managed keys for encrypting the OS and data disks in the gallery artifact for each region. Format for each region: `<os_des>,<lun1>,<lun1_des>,<lun2>,<lun2_des>`. Use "null" as a placeholder.'
-        target-regions: Space-separated list of regions and their replica counts. Use `<region>[=<replica count>][=<storage account type>]` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used
 flags:
     --allow-replicated-location-deletion=:
         description: Indicate whether or not removing this gallery image version from replicated regions is allowed.
@@ -91,3 +76,171 @@ completion:
             - Standard_LRS
             - Standard_ZRS
             - Premium_LRS
+documentation:
+    command: Create a new image version.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        allow-replicated-location-deletion: |
+            Indicate whether or not removing this gallery image version from replicated regions is allowed.
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        data-snapshot-luns: Logical unit numbers (space-delimited) of data disk snapshots.
+        data-snapshots: Names or IDs (space-delimited) of data disk snapshots.
+        data-vhds-luns: Logical unit numbers (space-delimited) of source VHD URIs of data disks. --data-vhds-sa --data-vhds-storage-accounts Names or IDs (space-delimited) of storage accounts of source VHD URIs of data disks.
+        data-vhds-uris: Source VHD URIs (space-delimited) of data disks.
+        end-of-life-date: Breaking change The end of life date, e.g. '2020-12-31'.
+        exclude-from-latest: |-
+            The flag means that if it is set to true, people deploying VMs with version omitted will not use this version.
+
+            Accepted values: false, true
+        gallery-image-definition: Gallery image definition.
+        gallery-image-version: Gallery image version in semantic version pattern. The allowed characters are digit and period. Digits must be within the range of a 32-bit integer, e.g. ``` <MajorVersion>.<MinorVersion>.<Patch> ``` .
+        gallery-name: Gallery name.
+        image-version: Resource id of gallery image version source.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        managed-image: Image name(if in the same resource group) or resource id.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        os-snapshot: Name or ID of OS disk snapshot.
+        os-vhd-storage-account: Name or ID of storage account of source VHD URI of OS disk.
+        os-vhd-uri: Source VHD URI of OS disk.
+        replica-count: The default number of replicas to be created per region. To set regional replication counts, use --target-regions.
+        replication-mode: Optional parameter which specifies the mode to be used for replication. This property is not updatable.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        storage-account-type: |-
+            The default storage account type to be used per region. To set regional storage account types, use --target-regions.
+
+            Accepted values: Premium_LRS, Standard_LRS, Standard_ZRS
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags. --target-edge-zone-encryption --zone-encryption Space-separated list of customer managed keys for encrypting the OS and data disks in the gallery artifact for each region. Format for each edge zone: ``` <edge zone>,<os_des>,<lun1>,<lun1_des>,<lun2>,<lun2_des> ``` .'
+        target-edge-zone-encryption: 'Space-separated list of customer managed keys for encrypting the OS and data disks in the gallery artifact for each region. Format for each edge zone: `<edge zone>,<os_des>,<lun1>,<lun1_des>,<lun2>,<lun2_des>`.'
+        target-edge-zones: Space-separated list of regions, edge zones, replica counts and storage types. Use ``` <region>=<edge zone>[=<replica count>][=<storage account type>] ``` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used. If "--target-edge-zones None" is specified, the target extended locations will be cleared.
+        target-region-cvm-encryption: 'Space-separated list of customer managed key for Confidential VM encrypting the OS disk in the gallery artifact for each region. Format for each region: ``` <os_cvm_encryption_type>,<os_cvm_des> ``` . The valid values for os_cvm_encryption_type are EncryptedVMGuestStateOnlyWithPmk, EncryptedWithPmk, EncryptedWithCmk.'
+        target-region-encryption: 'Space-separated list of customer managed keys for encrypting the OS and data disks in the gallery artifact for each region. Format for each region: ``` <os_des>,<lun1>,<lun1_des>,<lun2>,<lun2_des> ``` . Use "null" as a placeholder.'
+        target-regions: Space-separated list of regions and their replica counts. Use ``` <region>[=<replica count>][=<storage account type>] ``` to optionally set the replica count and/or storage account type for each region. If a replica count is not specified, the default replica count will be used. If a storage account type is not specified, the default storage account type will be used.
+        virtual-machine: Resource id of VM source.
+examples:
+    Add a new image version and block the deletion for this image version if its end of life has not expired: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --virtual-machine /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/virtualMachines/MyVM \
+        --end-of-life-date 2024-08-02T00:00:00+00:00 \
+        --block-deletion-before-end-of-life true
+    ? Add a new image version and copy it to additional regions. The home location for the source of the image version must be included in the list of target regions. For each additional region, you can specify a different replica count and storage account type. Otherwise, the region will inherit from the global. The default replica count is 1 and the default storage account type is Standard LRS. In this example, eastus2 will have one replica stored on Standard ZRS storage, ukwest will have 3 replicas stored on Standard ZRS storage, southindia will have one replica stored on Standard LRS storage, and brazilsouth will have 2 replicas stored on Standard LRS storage.
+    : |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 --replica-count 1 \
+        --storage-account-type Standard_ZRS --managed-image image-name \
+        --target-regions eastus2 ukwest=3 southindia=standard_lrs \
+        brazilsouth=2=standard_lrs
+    Add a new image version and copy it to extended locations with encryption using a disk encryption set.: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --virtual-machine /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/virtualMachines/MyVM \
+        --target-edge-zones westus=microsoftlosangeles1 \
+        --target-edge-zone-encryption microsoftlosangeles1,WestUSDiskEncryptionSet1,0,WestUSDiskEncryptionSet2
+    Add a new image version and copy it to extended locations.: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 --replica-count 1 \
+        --storage-account-type Standard_ZRS --managed-image image-name \
+        --target-edge-zones westus=microsoftlosangeles1 eastus=microsoftlosangeles2=1 \
+        brazilsouth=2=standard_lrs
+    ? Add a new image version and don't wait on it. Later you can invoke "az sig image-version wait" command when ready to create a vm from the gallery image version
+    : |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --virtual-machine /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/virtualMachines/MyVM \
+        --no-wait
+    ? Add a new image version and set its end-of-life date. The image version can still be used to create a virtual machine after its end-of-life date.
+    : |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --virtual-machine /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/virtualMachines/MyVM \
+        --end-of-life-date 2024-08-02T00:00:00+00:00
+    Add a new image version but remove it from consideration as latest version in its image definition: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --virtual-machine /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/virtualMachines/MyVM \
+        --exclude-from-latest true
+    Add a new image version from a VHD of an OS disk and add additional VHDs as data disks: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --os-vhd-storage-account /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Storage/storageAccounts/mystorageaccount \
+        --os-vhd-uri https://mystorageaccount.blob.core.windows.net/container/path_to_vhd_file \
+        --data-vhds-sa /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Storage/storageAccounts/myotherstorageaccount \
+        --data-vhds-uris https://myotherstorageaccount.blob.core.windows.net/container/path_to_vhd_file \
+        --data-vhds-luns 0
+    Add a new image version from a VHD of an OS disk.: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --os-vhd-storage-account /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Storage/storageAccounts/mystorageaccount \
+        --os-vhd-uri https://mystorageaccount.blob.core.windows.net/container/path_to_vhd_file
+    Add a new image version from a managed disk: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --os-snapshot /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/disks/MyOSDisk
+    Add a new image version from a managed disk and add additional data disks: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --os-snapshot /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/disks/MyOSDisk \
+        --data-snapshots /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/disks/MyDataDisk \
+        --data-snapshot-luns 0
+    Add a new image version from a managed image: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --managed-image /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/images/MyManagedImage
+    Add a new image version from a snapshot of an OS disk and add additional snapshots as data disks: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --os-snapshot /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/snapshots/MyOsDiskSnapshot \
+        --data-snapshots /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/snapshots/MyDiskSnapshot \
+        --data-snapshot-luns 0
+    Add a new image version from a snapshot of an OS disk.: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --os-snapshot /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/snapshots/MyOsDiskSnapshot
+    Add a new image version from a virtual machine: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --virtual-machine /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/virtualMachines/MyVM
+    Add a new image version from another image version: |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --image-version /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/galleries/MyGallery/images/MyImageDefinition/versions/1.0.0
+    ? Add a new image version with encryption using a disk encryption set. Encryption is applied to each disk that is a part of the image version.
+    : |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --virtual-machine /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/virtualMachines/MyVM \
+        --target-regions westus=2=standard eastus \
+        --target-region-encryption WestUSDiskEncryptionSet1,0,WestUSDiskEncryptionSet2 \
+        EastUSDiskEncryptionSet1,0,EastUSDiskEncryptionSet2
+    ? You can combine snapshots, managed disks, and VHDs to create a new image version. Add a new image version using a VHD as the OS disk and a managed disk and a snapshot as data disks.
+    : |-
+        az sig image-version create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --gallery-image-version 1.0.0 \
+        --os-vhd-storage-account /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Storage/storageAccounts/mystorageaccount \
+        --os-vhd-uri https://mystorageaccount.blob.core.windows.net/container/path_to_vhd_file \
+        --data-snapshots /subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/disks/MyDataDisk subscriptions/00000000-0000-0000-0000-00000000xxxx/resourceGroups/imageGroups/providers/Microsoft.Compute/snapshots/MyDiskSnapshot \
+        --data-snapshot-luns 0 1

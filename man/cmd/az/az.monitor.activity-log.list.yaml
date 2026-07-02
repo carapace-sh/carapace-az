@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List and query activity log events.
-documentation:
-    flag:
-        end-time: 'End time of the query. Defaults to the current time. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        offset: |
-            Time offset of the query range, in ##d##h format.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        start-time: 'Start time of the query. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        status: |
-            Status to query for (ex: Failed)
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --caller=: Caller to query for, such as an e-mail address or service principal ID.
     --correlation-id=: Correlation ID to query.
@@ -57,3 +47,31 @@ completion:
             - submissionTimestamp
             - subscriptionId
             - tenantId
+documentation:
+    flag:
+        caller: Caller to query for, such as an e-mail address or service principal ID.
+        correlation-id: Correlation ID to query.
+        end-time: 'End time of the query. Defaults to the current time. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        max-events: |-
+            Maximum number of records to return.
+
+            Default value: 50
+        namespace: Resource provider namespace.
+        offset: |-
+            Time offset of the query range, in ##d##h format. Can be used with either --start-time or --end-time. If used with --start-time, then the end time will be calculated by adding the offset. If used with --end-time (default), then the start time will be calculated by subtracting the offset. If --start-time and --end-time are provided, then --offset will be ignored.
+
+            Default value: 6h
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        resource-id: ARM ID of a resource.
+        select: |-
+            Space-separated list of properties to return.
+
+            Accepted values: authorization, caller, category, claims, correlationId, description, eventDataId, eventName, eventTimestamp, httpRequest, id, level, operationId, operationName, properties, resourceGroupName, resourceId, resourceProviderName, resourceType, status, subStatus, submissionTimestamp, subscriptionId, tenantId
+        start-time: 'Start time of the query. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        status: |
+            Status to query for (ex: Failed)
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    List all events from July 1st, looking forward one week.: az monitor activity-log list --start-time 2018-07-01 --offset 7d
+    List events within the past hour based on resource group.: az monitor activity-log list -g {ResourceGroup} --offset 1h
+    List events within the past six hours based on a correlation ID.: az monitor activity-log list --correlation-id b5eac9d2-e829-4c9a-9efb-586d19417c5f

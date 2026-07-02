@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: reset
 description: Reset the properties of a Batch task.
-documentation:
-    flag:
-        account-endpoint: 'Batch service endpoint. Alternatively, set by environment variable: AZURE_BATCH_ENDPOINT'
-        account-key: 'The Batch account key. Alternatively, set by environment variable: AZURE_BATCH_ACCESS_KEY'
-        account-name: 'The Batch account name. Only needed Alternatively, set by environment variable: AZURE_BATCH_ACCOUNT'
-        json-file: The file containing pool update properties parameter specification in JSON(formatted to match REST API request body). If this parameter is specified, all 'Pool Update Properties Parameter Arguments' are ignored.
-        max-task-retry-count: The maximum number of times the Task may be retried. The Batch service retries a Task if its exit code is nonzero. Note that this value specifically controls the number of retries for the Task executable due to a nonzero exit code. The Batch service will try the Task once, and may then retry up to this limit. For example, if the maximum retry count is 3, Batch tries the Task up to 4 times (one initial try and 3 retries). If the maximum retry count is 0, the Batch service does not retry the Task after the first attempt. If the maximum retry count is -1, the Batch service retries the Task without limit, however this is not recommended for a start task or any task. The default value is 0 (no retries).
-        max-wall-clock-time: If this is not specified, there is no time limit on how long the Task may run. Expected format is an ISO-8601 duration.
-        retention-time: The default is 7 days, i.e. the Task directory will be retained for 7 days unless the Compute Node is removed or the Job is deleted. Expected format is an ISO-8601 duration.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-endpoint=: Batch service endpoint.
     --account-key=: The Batch account key.
@@ -26,3 +16,23 @@ flags:
     --retention-time=: The default is 7 days, i.e. the Task directory will be retained for 7 days unless the Compute Node is removed or the Job is deleted.
     --subscription=: Name or ID of subscription.
     --task-id=!: The ID of the Task to update.
+documentation:
+    flag:
+        account-endpoint: 'Batch service endpoint. Alternatively, set by environment variable: AZURE_BATCH_ENDPOINT.'
+        account-key: 'The Batch account key. Alternatively, set by environment variable: AZURE_BATCH_ACCESS_KEY.'
+        account-name: 'The Batch account name. Only needed Alternatively, set by environment variable: AZURE_BATCH_ACCOUNT.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        if-match: The operation will be performed only if the resource's current ETag exactly matches the specified value.
+        if-modified-since: The operation will be performed only if the resource has been modified since the specified timestamp.
+        if-none-match: The operation will not be performed only if the resource's current ETag exactly matches the specified value.
+        if-unmodified-since: The operation will not be performed only if the resource has been modified since the specified timestamp.
+        job-id: The ID of the Job containing the Task.
+        json-file: The file containing pool update properties parameter specification in JSON(formatted to match REST API request body). If this parameter is specified, all 'Pool Update Properties Parameter Arguments' are ignored.
+        max-task-retry-count: The maximum number of times the Task may be retried. The Batch service retries a Task if its exit code is nonzero. Note that this value specifically controls the number of retries for the Task executable due to a nonzero exit code. The Batch service will try the Task once, and may then retry up to this limit. For example, if the maximum retry count is 3, Batch tries the Task up to 4 times (one initial try and 3 retries). If the maximum retry count is 0, the Batch service does not retry the Task after the first attempt. If the maximum retry count is -1, the Batch service retries the Task without limit, however this is not recommended for a start task or any task. The default value is 0 (no retries).
+        max-wall-clock-time: If this is not specified, there is no time limit on how long the Task may run. Expected format is an ISO-8601 duration.
+        retention-time: The default is 7 days, i.e. the Task directory will be retained for 7 days unless the Compute Node is removed or the Job is deleted. Expected format is an ISO-8601 duration.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        task-id: The ID of the Task to update.
+examples:
+    Set max retry count to 3 and reset other properties to their defaults: az batch task reset --task-id task1 --job-id job1 --max-task-retry-count 3

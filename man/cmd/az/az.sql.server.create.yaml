@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates a server.
-documentation:
-    flag:
-        admin-user: Administrator username for the server. Oncecreated it cannot be changed.
-        enable-public-network: Set whether public network access to server is allowed or not. When false,only connections made through Private Links can reach this server.
-        external-admin-sid: The unique ID of the Azure AD administrator. Object Id for User or Group, Client Id for Applications
-        identity-type: Type of Identity to be used. Possible values are SystemAsssigned,UserAssigned, SystemAssigned,UserAssigned and None.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        name: Name of the Azure SQL Server. You can configure the default using `az configure --defaults sql-server=<name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        restrict-outbound-network-access: Set whether outbound network access to server is restricted or not. When true,the outbound connections from the server will be restricted.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --enable-ad-only-auth=: Enable Azure Active Directory Only Authentication for this server.
     --external-admin-name=: Display name of the Azure AD administrator user, group or application.
@@ -57,3 +46,58 @@ completion:
         restrict-outbound-network-access:
             - "true"
             - "false"
+documentation:
+    command: Create a server.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        admin-password: The administrator login password (required forserver creation).
+        admin-user: Administrator username for the server. Oncecreated it cannot be changed.
+        assign-identity: |-
+            Generate and assign an Azure Active Directory Identity for this server for use with key management services like Azure KeyVault.
+
+            Default value: False
+        change-reference: The related change reference ID for this resource operation.
+        enable-ad-only-auth: |-
+            Enable Azure Active Directory Only Authentication for this server.
+
+            Default value: False
+        enable-public-network: |-
+            Set whether public network access to server is allowed or not. When false,only connections made through Private Links can reach this server.
+
+            Accepted values: false, true
+        external-admin-name: Display name of the Azure AD administrator user, group or application.
+        external-admin-principal-type: User, Group or Application.
+        external-admin-sid: The unique ID of the Azure AD administrator. Object Id for User or Group, Client Id for Applications. --federated-client-id --fid The federated client id used in cross tenant CMK scenario.
+        identity-type: |-
+            Type of Identity to be used. Possible values are SystemAsssigned,UserAssigned, SystemAssigned,UserAssigned and None.
+
+            Accepted values: None, SystemAssigned, SystemAssigned,UserAssigned, UserAssigned
+        key-id: The key vault URI for encryption.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        minimal-tls-version: |-
+            The minimal TLS version enforced by the sql server for inbound connections.
+
+            Accepted values: 1.0, 1.1, 1.2, 1.3
+        name: Name of the Azure SQL Server. You can configure the default using ``` az configure --defaults sql-server=<name> ``` .
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        restrict-outbound-network-access: |-
+            Set whether outbound network access to server is restricted or not. When true,the outbound connections from the server will be restricted.
+
+            Accepted values: false, true
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags.'
+        user-assigned-identity-id: Generate and assign an User Managed Identity(UMI) for this server.
+examples:
+    Create a server with disabled public network access to server.: az sql server create -l westus -g mygroup -n myserver -u myadminuser -p myadminpassword -e false
+    Create a server with soft delete enabled with 7 days retention.: az sql server create -l westus -g mygroup -n myserver -u myadminuser -p myadminpassword --soft-delete-retention-days 7
+    Create a server with soft delete protection (using short alias).: az sql server create -l westus -g mygroup -n myserver -u myadminuser -p myadminpassword --sdrd 5
+    Create a server with tags.: az sql server create -l westus -g mygroup -n myserver -u myadminuser -p myadminpassword --tags key1=value1 key2=value2
+    Create a server without SQL Admin, with AD admin and AD Only enabled.: az sql server create --enable-ad-only-auth --external-admin-principal-type User --external-admin-name myUserName --external-admin-sid c5e964e2-6bb2-1111-1111-3b16ec0e1234 -g myResourceGroup -n myServer
+    ? Create a server without SQL Admin, with AD admin, AD Only enabled, User ManagedIdenties and Identity Type is SystemAssigned,UserAssigned.
+    : az sql server create --enable-ad-only-auth --external-admin-principal-type User --external-admin-name myUserName \ --external-admin-sid c5e964e2-6bb2-1111-1111-3b16ec0e1234 -g myResourceGroup -n myServer -i \ --user-assigned-identity-id /subscriptions/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testumi \ --identity-type SystemAssigned,UserAssigned --pid /subscriptions/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testumi
+    Create a server without SQL Admin, with AD admin, AD Only enabled, User ManagedIdenties and Identity Type is UserAssigned.: az sql server create --enable-ad-only-auth --external-admin-principal-type User --external-admin-name myUserName \ --external-admin-sid c5e964e2-6bb2-1111-1111-3b16ec0e1234 -g myResourceGroup -n myServer -i \ --user-assigned-identity-id /subscriptions/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testumi \ --identity-type UserAssigned --pid /subscriptions/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/testumi
+    Create a server.: az sql server create -l westus -g mygroup -n myserver -u myadminuser -p myadminpassword

@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create an existing custom image.
-documentation:
-    flag:
-        os-state: 'The current state of the virtual machine. For Windows virtual machines: NonSysprepped, SysprepRequested, SysprepApplied. For Linux virtual machines: NonDeprovisioned, DeprovisionRequested, DeprovisionApplied.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --author=: The author of the custom image.
     --description=: The description of the custom image.
@@ -35,3 +30,28 @@ completion:
         os-type:
             - Windows
             - Linux
+documentation:
+    command: |-
+        Command group 'lab' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        author: The author of the custom image.
+        change-reference: The related change reference ID for this resource operation.
+        description: The description of the custom image.
+        lab-name: The name of the lab.
+        name: The name of the custom image.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        os-state: 'The current state of the virtual machine. For Windows virtual machines: NonSysprepped, SysprepRequested, SysprepApplied. For Linux virtual machines: NonDeprovisioned, DeprovisionRequested, DeprovisionApplied.'
+        os-type: |-
+            Type of the OS on which the custom image is based.
+
+            Accepted values: Linux, Windows
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        source-vm-id: The resource ID of a virtual machine in the provided lab.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a custom image in the lab from a running Windows virtual machine without applying sysprep.: az lab custom-image create --lab-name {LabName} -g {ResourceGroup} --name {VMName} --os-type Windows --os-state NonSysprepped --source-vm-id "/subscriptions/{SubID}/resourcegroups/{ResourceGroup}/providers/microsoft.devtestlab/labs/{LabName}/virtualmachines/{VMName}"

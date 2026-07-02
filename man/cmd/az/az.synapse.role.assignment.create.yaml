@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Check parameters are provided correctly, then call _create_role_assignment.
-documentation:
-    flag:
-        assignee: 'Represent a user or service principal. Supported format: object id, user sign-in name, or service principal name.'
-        assignee-object-id: Use this parameter instead of '--assignee' to bypass Graph API invocation in case of insufficient privileges. This parameter only works with object ids for users, groups, service principals, and managed identities. For managed identities use the principal id. For service principals, use the object id and not the app id.
-        item: Item granted access in the workspace. Using with --item-type to combine the scope of assignment
-        item-type: Item type granted access in the workspace. Using with --item to combine the scope of assignment.
-        scope: A scope defines the resources or artifacts that the access applies to. Synapse supports hierarchical scopes. Permissions granted at a higher-level scope are inherited by objects at a lower level. In Synapse RBAC, the top-level scope is a workspace. Assigning a role with workspace scope grants permissions to all applicable objects in the workspace.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --assignee-object-id=: Use this parameter instead of '--assignee' to bypass Graph API invocation in case of insufficient privileges.
     --assignee-principal-type=: use with --assignee-object-id to avoid errors caused by propagation latency in AAD Graph
@@ -31,3 +23,46 @@ completion:
             - integrationRuntimes
             - credentials
             - linkedServices
+documentation:
+    command: Create a role assignment.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        assignee: 'Represent a user or service principal. Supported format: object id, user sign-in name, or service principal name.'
+        assignee-object-id: |-
+            Use this parameter instead of '--assignee' to bypass Graph API invocation in case of insufficient privileges. This parameter only works with object ids for users, groups, service principals, and managed identities. For managed identities use the principal id. For service principals, use the object id and not the app id. --assignee-principal-type --assignee-type Use with --assignee-object-id to avoid errors caused by propagation latency in AAD Graph.
+
+            Accepted values: Group, ServicePrincipal, User
+        assignment-id: Custom role assignment id in guid format, if not specified, assignment id will be randomly generated.
+        change-reference: The related change reference ID for this resource operation.
+        item: Item granted access in the workspace. Using with --item-type to combine the scope of assignment.
+        item-type: |-
+            Item type granted access in the workspace. Using with --item to combine the scope of assignment.
+
+            Accepted values: bigDataPools, credentials, integrationRuntimes, linkedServices
+        role: The role name/id that is assigned to the principal.
+        scope: A scope defines the resources or artifacts that the access applies to. Synapse supports hierarchical scopes. Permissions granted at a higher-level scope are inherited by objects at a lower level. In Synapse RBAC, the top-level scope is a workspace. Assigning a role with workspace scope grants permissions to all applicable objects in the workspace.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        workspace-name: The workspace name.
+examples:
+    Create a role assignment at scope that combination of item type and item name.: |-
+        az synapse role assignment create --workspace-name testsynapseworkspace \
+        --item-type "bigDataPools" --item "bigDataPoolName" --role "Synapse Administrator" \
+        --assignee username@contoso.com
+    Create a role assignment at scope.: |-
+        az synapse role assignment create --workspace-name testsynapseworkspace \
+        --scope "workspaces/{workspaceName}" --role "Synapse Administrator" --assignee username@contoso.com
+    Create a role assignment using objectId of the User, Group or Service Principal.: |-
+        az synapse role assignment create --workspace-name testsynapseworkspace \
+        --role "Synapse Administrator" --assignee 00000000-0000-0000-0000-000000000000
+    Create a role assignment using service principal name.: |-
+        az synapse role assignment create --workspace-name testsynapseworkspace \
+        --role "Synapse Administrator" --assignee sp_name
+    Create a role assignment using user principal name.: |-
+        az synapse role assignment create --workspace-name testsynapseworkspace \
+        --role "Synapse Administrator" --assignee username@contoso.com
+    ? When you are a user with permission to manage Azure RBAC role assignment on the workspace but not a Synapse Administrator, please create role assigment by -role roleid. The reason for this is , when you try to add a "Synapse Administrator" role, the cmdlet needs to get the role ID from the role name which requires workspace read permission, which the current user does not have.
+    : |-
+        az synapse role assignment create \
+        --workspace-name testsynapseworkspace \
+        --role "6e4bf58a-b8e1-4cc3-bbf9-d73143322b78" \
+        --assignee username@contoso.com

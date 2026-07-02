@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a peering in the specified virtual network.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        local-subnet-names: List of local subnet names that are subnet peered with remote virtual network.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        remote-subnet-names: List of remote subnet names from remote virtual network that are subnet peered.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        use-remote-gateways: Allows VNet to use the remote VNet's gateway. Remote VNet gateway must have --allow-gateway-transit enabled for remote peering. Only 1 peering can have this flag enabled. Cannot be set if the VNet already has a gateway.
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -153,3 +142,59 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .'
+        allow-forwarded-traffic: |-
+            Allows forwarded traffic from the local VNet to the remote VNet.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        allow-gateway-transit: |-
+            Allows gateway link to be used in the remote VNet.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        allow-vnet-access: |-
+            Allows access from the local VNet to the remote VNet.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        change-reference: The related change reference ID for this resource operation.
+        enable-only-ipv6: |-
+            Whether only Ipv6 address space is peered for subnet peering.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        local-subnet-names: List of local subnet names that are subnet peered with remote virtual network.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        name: The name of the VNet peering.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        peer-complete-vnets: |-
+            Whether complete virtual network address space is peered.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        remote-subnet-names: List of remote subnet names from remote virtual network that are subnet peered.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        remote-vnet: Name or ID of the remote VNet.
+        remove: 'Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        set: 'Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        sync-remote: |-
+            Parameter indicates the intention to sync the peering with the current address space on the remote vNet after it's updated.
+
+            Accepted values: true
+        use-remote-gateways: |-
+            Allows VNet to use the remote VNet's gateway. Remote VNet gateway must have --allow-gateway-transit enabled for remote peering. Only 1 peering can have this flag enabled. Cannot be set if the VNet already has a gateway.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        vnet-name: The virtual network (VNet) name.
+examples:
+    Change forwarded traffic configuration of a virtual network peering.: az network vnet peering update -g MyResourceGroup -n MyVnet1ToMyVnet2 --vnet-name MyVnet1 --set allowForwardedTraffic=true
+    Change gateway transit property configuration of a virtual network peering.: az network vnet peering update -g MyResourceGroup -n MyVnet1ToMyVnet2 --vnet-name MyVnet1 --set allowGatewayTransit=true
+    Change virtual network access of a virtual network peering.: az network vnet peering update -g MyResourceGroup -n MyVnet1ToMyVnet2 --vnet-name MyVnet1 --set allowVirtualNetworkAccess=true
+    Use remote gateways in virtual network peering.: az network vnet peering update -g MyResourceGroup -n MyVnet1ToMyVnet2 --vnet-name MyVnet1 --set useRemoteGateways=true

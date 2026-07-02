@@ -1,21 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: tail
 description: List the metric values for a VM.
-documentation:
-    flag:
-        end-time: 'End time of the query. Defaults to the current time. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        filter: A string used to reduce the set of metric data returned. eg. "LUN eq '*'"
-        interval: |
-            The interval over which to aggregate metrics, in ##h##m format.
-        metrics: |
-            Space-separated list of metric names to retrieve.
-        offset: |
-            Time offset of the query range, in ##d##h format.
-        orderby: 'Aggregation to use for sorting results and the direction of the sort. Only one order can be specificed. Examples: sum asc'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        start-time: 'Start time of the query. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        top: Max number of records to retrieve. Valid only if --filter used.
 flags:
     --aggregation=:
         description: The list of aggregation types (space-separated) to retrieve.
@@ -51,3 +36,49 @@ completion:
             - Minimum
             - Maximum
             - Total
+documentation:
+    command: |-
+        Command group 'vm monitor metrics' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        aggregation: |-
+            The list of aggregation types (space-separated) to retrieve.
+
+            Accepted values: Average, Count, Maximum, Minimum, None, Total
+
+            Value from: az vm monitor metrics list-definitions -n MyVM -g MyRG --query "@[*].supportedAggregationTypes"
+        change-reference: The related change reference ID for this resource operation.
+        dimension: |-
+            The list of dimensions (space-separated) the metrics are queried into.
+
+            Value from: az vm monitor metrics list-definitions -n MyVM -g MyRG --query "@[*].dimensions"
+        end-time: 'End time of the query. Defaults to the current time. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        filter: A string used to reduce the set of metric data returned. eg. "LUN eq '*'". For a full list of filters, see the filter string reference at https://learn.microsoft.com/rest/api/monitor/metrics/list .
+        interval: |-
+            The interval over which to aggregate metrics, in ##h##m format.
+
+            Default value: 1m
+        metadata: Return the metadata values instead of metric data.
+        metrics: |-
+            Space-separated list of metric names to retrieve.
+
+            Value from: az vm monitor metrics list-definitions -n MyVM -g MyRG --query "@[*].name.value"
+        name: Name or ID of a virtual machine.
+        namespace: Namespace to query metric definitions for.
+        offset: |-
+            Time offset of the query range, in ##d##h format. Can be used with either --start-time or --end-time. If used with --start-time, then the end time will be calculated by adding the offset. If used with --end-time (default), then the start time will be calculated by subtracting the offset. If --start-time and --end-time are provided, then --offset will be ignored.
+
+            Default value: 1h
+        orderby: 'Aggregation to use for sorting results and the direction of the sort. Only one order can be specificed. Examples: sum asc.'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        start-time: 'Start time of the query. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        top: |-
+            Max number of records to retrieve. Valid only if --filter used.
+
+            Default value: 10
+examples:
+    List CPU usage of VM for past one hour: az vm monitor metrics tail --name myVM -g myRG --metric "Percentage CPU"
+    List CPU usage of VM for past one hour with filter: az vm monitor metrics tail --name myVM -g myRG --metrics "Per Disk Read Bytes/sec" --filter "SlotId eq '*'"
+    List one hour CPU usage of VM started at 2019-12-18T00:00:00Z: az vm monitor metrics tail --name myVM -g myRG --metric "Percentage CPU" --start-time 2019-12-18T00:00:00Z

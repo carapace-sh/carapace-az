@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Enable Autoscale for a running cluster.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        timezone: The timezone for schedule autoscale type. Values from `az hdinsight autoscale list-timezones`
 flags:
     --cluster-name=!: The name of the cluster.
     --days=:
@@ -34,3 +29,38 @@ completion:
         type:
             - Load
             - Schedule
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: The name of the cluster.
+        days: |-
+            A space-delimited list of schedule day.
+
+            Accepted values: Friday, Monday, Saturday, Sunday, Thursday, Tuesday, Wednesday
+        max-workernode-count: The max workernode count for Load-based atuoscale.
+        min-workernode-count: The minimal workernode count for Load-based atuoscale.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        time: The 24-hour time in the form xx:xx in days.
+        timezone: The timezone for schedule autoscale type. Values from ``` az hdinsight autoscale list-timezones ``` .
+        type: |-
+            The autoscale type.
+
+            Accepted values: Load, Schedule
+        workernode-count: The schedule workernode count.
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Enable Load-based Autoscale for a running cluster.: |-
+        az hdinsight autoscale create --resource-group MyResourceGroup --cluster-name MyCluster --type Load \
+        --min-workernode-count 3 --max-workernode-count 5
+    Enable Schedule-based Autoscale for a running cluster.: |-
+        az hdinsight autoscale create --resource-group MyResourceGroup --cluster-name MyCluster --type Schedule \
+        --timezone "Pacific Standard Time" --days Monday Tuesday --time 09:00 --workernode-count 5

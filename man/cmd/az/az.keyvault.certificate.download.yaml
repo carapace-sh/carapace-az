@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: download
 description: Download a certificate from a KeyVault.
-documentation:
-    flag:
-        encoding: Encoding of the certificate. DER will create a binary DER formatted x509 certificate, and PEM will create a base64 PEM x509 certificate.
-        id: Id of the certificate. If specified all other 'Id' arguments should be omitted.
-        name: Name of the certificate. Required if --id is not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vault-name: Name of the Key Vault. Required if --id is not specified
-        version: The certificate version. If omitted, uses the latest version.
 flags:
     --id=: Id of the certificate.
     --subscription=: Name or ID of subscription.
@@ -22,3 +14,27 @@ completion:
         encoding:
             - PEM
             - DER
+documentation:
+    command: Download the public portion of a Key Vault certificate.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        encoding: |-
+            Encoding of the certificate. DER will create a binary DER formatted x509 certificate, and PEM will create a base64 PEM x509 certificate.
+
+            Default value: PEM
+
+            Accepted values: DER, PEM
+        file: File to receive the binary certificate contents.
+        id: Id of the certificate. If specified all other 'Id' arguments should be omitted.
+        name: Name of the certificate. Required if --id is not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vault-name: Name of the Key Vault. Required if --id is not specified.
+        version: The certificate version. If omitted, uses the latest version.
+examples:
+    Download a certificate as DER and check its fingerprint in openssl.: |-
+        az keyvault certificate download --vault-name vault -n cert-name -f cert.crt -e DER && \
+        openssl x509 -in cert.crt -inform DER  -noout -sha1 -fingerprint
+    Download a certificate as PEM and check its fingerprint in openssl.: |-
+        az keyvault certificate download --vault-name vault -n cert-name -f cert.pem && \
+        openssl x509 -in cert.pem -inform PEM  -noout -sha1 -fingerprint

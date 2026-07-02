@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create or update a new managed application definition.
-documentation:
-    flag:
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --deployment-mode=: The managed application deployment mode.
     --description=!: the managed application definition description
@@ -33,3 +28,36 @@ completion:
             - CanNotDelete
             - ReadOnly
             - None
+documentation:
+    command: Create a managed application definition.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        authorizations: Space-separated authorization pairs in a format of ``` <principalId>:<roleDefinitionId> ``` .
+        change-reference: The related change reference ID for this resource operation.
+        create-ui-definition: JSON formatted string or a path to a file with such content.
+        deployment-mode: |-
+            The managed application deployment mode.
+
+            Accepted values: Complete, Incremental
+        description: The managed application definition description.
+        display-name: The managed application definition display name.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        lock-level: |-
+            The type of lock restriction.
+
+            Accepted values: CanNotDelete, None, ReadOnly
+        main-template: JSON formatted string or a path to a file with such content.
+        name: The managed application definition name.
+        package-file-uri: The managed application definition package file uri.
+        resource-group: The resource group of the managed application definition.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Create a managed application defintion with inline values for createUiDefinition and mainTemplate.: |-
+        az managedapp definition create -g MyResourceGroup -n MyManagedAppDef -l eastus --display-name "MyManagedAppDef" \
+            --description "My Managed App Def description" -a "myPrincipalId:myRoleId" --lock-level None \
+            --create-ui-definition @myCreateUiDef.json --main-template @myMainTemplate.json
+    Create a managed application defintion.: |-
+        az managedapp definition create -g MyResourceGroup -n MyManagedAppDef -l eastus --display-name "MyManagedAppDef" \
+            --description "My Managed App Def description" -a "myPrincipalId:myRoleId" --lock-level None \
+            --package-file-uri "https://path/to/myPackage.zip"

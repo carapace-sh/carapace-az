@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new service on an Azure Service Fabric cluster.
-documentation:
-    flag:
-        application: 'Specify the name of the service. The application name must be a prefix of the service name, for example: appName~serviceName'
-        default-move-cost: Specify the default cost for a move. Higher costs make it less likely that the Cluster Resource Manager will move the replica when trying to balance the cluster.
-        instance-count: Specify the instance count for the stateless service. If -1 is used, it means it will run on all the nodes.
-        name: 'Specify the name of the service. The application name must be a prefix of the service name, for example: appName~serviceName'
-        partition-scheme: Specify what partition scheme to use. Singleton partitions are typically used when the service does not require any additional routing. UniformInt64 means that each partition owns a range of int64 keys. Named is usually for services with data that can be bucketed, within a bounded set. Some common examples of data fields used as named partition keys would be regions, postal codes, customer groups, or other business boundaries.
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --application=!: Specify the name of the service.
     --default-move-cost=: Specify the default cost for a move.
@@ -37,3 +28,35 @@ completion:
         state:
             - stateless
             - stateful
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        application: 'Specify the name of the service. The application name must be a prefix of the service name, for example: appName~serviceName'
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: 'Specify the name of the cluster, if not given it will be same as resource group name. --name --service-name Specify the name of the service. The application name must be a prefix of the service name, for example: appName~serviceName.'
+        default-move-cost: |-
+            Specify the default cost for a move. Higher costs make it less likely that the Cluster Resource Manager will move the replica when trying to balance the cluster.
+
+            Accepted values: High, Low, Medium, Zero
+        instance-count: Specify the instance count for the stateless service. If -1 is used, it means it will run on all the nodes. --min-replica --min-replica-set-size Specify the min replica set size for the stateful service.
+        name: 'Specify the name of the service. The application name must be a prefix of the service name, for example: appName~serviceName'
+        partition-scheme: |-
+            Specify what partition scheme to use. Singleton partitions are typically used when the service does not require any additional routing. UniformInt64 means that each partition owns a range of int64 keys. Named is usually for services with data that can be bucketed, within a bounded set. Some common examples of data fields used as named partition keys would be regions, postal codes, customer groups, or other business boundaries.
+
+            Default value: singleton
+
+            Accepted values: named, singleton, uniformInt64
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-type: Specify the service type name of the application, it should exist in the application manifest.
+        state: |-
+            Specify if the service is stateless or stateful.
+
+            Accepted values: stateful, stateless
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a new stateful service "testApp~testService2" with a target of 5 nodes.: |-
+        az sf service create -g testRG -c testCluster --application-name testApp --state stateful --service-name testApp~testService2 \
+          --service-type testStatefulType --min-replica-set-size 3 --target-replica-set-size 5
+    Create a new stateless service "testApp~testService1" with instance count -1 (on all the nodes).: |-
+        az sf service create -g testRG -c testCluster --application-name testApp --state stateless --service-name testApp~testService \
+          --service-type testStateless --instance-count -1 --partition-scheme singleton

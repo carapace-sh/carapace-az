@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: invoke
 description: Invoke a Spark statement.
-documentation:
-    flag:
-        code: The code of Spark statement. This is either the code contents or use `@<file path>` to load the content from a file
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --code=!: The code of Spark statement.
     --language=!: The language of Spark statement.
@@ -22,3 +18,23 @@ completion:
             - SparkDotNet
             - CSharp
             - SQL
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        code: The code of Spark statement. This is either the code contents or use ``` @<file path> ``` to load the content from a file.
+        language: |-
+            The language of Spark statement.
+
+            Accepted values: CSharp, PySpark, Python, SQL, Scala, Spark, SparkDotNet
+        session-id: The id of Spark session.
+        spark-pool-name: The name of the Spark pool.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        workspace-name: The name of the workspace.
+examples:
+    Invoke a Spark statement.: |-
+        az synapse spark statement invoke --session-id 1 --workspace-name testsynapseworkspace \
+        --spark-pool-name testsparkpool --code "print('hello, Azure CLI')" --language pyspark
+    Submit a Spark statement by reading code content from file.: |-
+        az synapse spark statement invoke --session-id 1 --workspace-name testsynapseworkspace \
+        --spark-pool-name testsparkpool --code @file-path --language pyspark

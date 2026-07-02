@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a managed service.
-documentation:
-    flag:
-        default-move-cost: Specify the default cost for a move. Higher costs make it less likely that the Cluster Resource Manager will move the replica when trying to balance the cluster.
-        instance-count: Specify the instance count for the stateless service. If -1 is used, it means it will run on all the nodes.
-        min-instance-count: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstanceCount computation -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service.
-        min-instance-percentage: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstancePercentage computation, -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. Allowed values are from 0 to 100.
-        placement-constraints: 'Specify the placement constraints as a string. Placement constraints are boolean expressions on node properties and allow for restricting a service to particular nodes based on the service requirements. For example, to place a service on nodes where NodeType is blue specify the following: "NodeColor == blue)".'
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --application=!: Specify the name of the service.
     --default-move-cost=: Specify the default cost for a move.
@@ -38,3 +28,26 @@ completion:
             - Low
             - Medium
             - High
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name. --name --service-name Specify the name of the service.
+        default-move-cost: |-
+            Specify the default cost for a move. Higher costs make it less likely that the Cluster Resource Manager will move the replica when trying to balance the cluster.
+
+            Accepted values: High, Low, Medium, Zero
+        instance-count: Specify the instance count for the stateless service. If -1 is used, it means it will run on all the nodes. --keep-duration --stand-by-keep-duration --stand-by-replica-keep-duration Specify the definition on how long StandBy replicas should be maintained before being removed, represented in ISO 8601 format "hh:mm:ss". --min-inst-pct --min-instance-percentage Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstancePercentage computation, -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. Allowed values are from 0 to 100.
+        min-instance-count: Specify the minimum number of instances that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstanceCount computation -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. --min-replica --min-replica-set-size Specify the min replica set size for the stateful service.
+        min-instance-percentage: Specify the minimum percentage of InstanceCount that must be up to meet the EnsureAvailability safety check during operations like upgrade or deactivate node. The actual number that is used is max( MinInstanceCount, ceil( MinInstancePercentage/100.0 * InstanceCount) ). Note, if InstanceCount is set to -1, during MinInstancePercentage computation, -1 is first converted into the number of nodes on which the instances are allowed to be placed according to the placement constraints on the service. Allowed values are from 0 to 100.
+        placement-constraints: 'Specify the placement constraints as a string. Placement constraints are boolean expressions on node properties and allow for restricting a service to particular nodes based on the service requirements. For example, to place a service on nodes where NodeType is blue specify the following: "(NodeColor == blue)". --plcmt-time-limit --service-placement-time-limit Specify the duration for which replicas can stay InBuild before reporting that build is stuck, represented in ISO 8601 format "hh:mm:ss". --quorum-loss-wait --quorum-loss-wait-duration Specify the maximum duration for which a partition is allowed to be in a state of quorum loss, represented in ISO 8601 format "hh:mm:ss". --replica-restart-wait --replica-restart-wait-duration Specify the duration between when a replica goes down and when a new replica is created, represented in ISO 8601 format "hh:mm:ss".'
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags. --target-replica --target-replica-set-size Specify the target replica set size for the stateful service.'
+examples:
+    Update managed stateful service.: |-
+        az sf managed-service update -g testRG -c testCluster --application-name testApp --service-name testService2 --service-placement-time-limit '00:11:00' \
+          --stand-by-replica-keep-duration '00:11:00' --replica-restart-wait-duration '00:11:00' --quorum-loss-wait-duration '00:11:00'
+    Update managed stateless service.: |-
+        az sf managed-service update -g testRG -c testCluster --application-name testApp --service-name testService --min-instance-count 2 \
+          --min-instance-percentage 20

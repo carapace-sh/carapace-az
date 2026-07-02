@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update an Azure Cognitive Services account.
-documentation:
-    flag:
-        api-properties: Api properties in JSON format or a=b c=d format. Some cognitive services (i.e. QnA Maker) require extra api properties to create the account.
-        custom-domain: User domain assigned to the account. Name is the CNAME source.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --api-properties=:
         description: Api properties in JSON format or a=b c=d format.
@@ -22,3 +15,27 @@ flags:
         nargs: -1
     -g, --resource-group=!: Name of resource group.
     -n, --name=!: cognitive service account name
+documentation:
+    command: Manage Azure Cognitive Services accounts.
+    flag:
+        acquire-policy-token: |-
+            Acquiring an Azure Policy token automatically for this resource operation.
+
+            Accepted values: false, true
+        api-properties: Api properties in JSON format or a=b c=d format. Some cognitive services (i.e. QnA Maker) require extra api properties to create the account.
+        change-reference: The related change reference ID for this resource operation.
+        custom-domain: User domain assigned to the account. Name is the CNAME source.
+        encryption: The encryption properties for this resource, in JSON format.
+        kind: |-
+            The target API name to transform the existing account into.
+
+            Accepted values: AIServices, OpenAI
+
+            Value from: az cognitiveservices account list-skus
+        name: Cognitive service account name.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        storage: The storage accounts for this resource, in JSON array format.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Update sku and tags.: az cognitiveservices account update --name myresource -g cognitive-services-resource-group --sku S0 --tags external-app=chatbot-HR azure-web-app-bot=HR-external azure-app-service=HR-external-app-service

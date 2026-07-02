@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update the Spark pool.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --delay=: The delay time whose unit is minute.
     --enable-auto-pause=:
@@ -69,3 +63,68 @@ completion:
         package-action:
             - Add
             - Remove
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        delay: The delay time whose unit is minute.
+        enable-auto-pause: |-
+            The flag of enabling auto pause.
+
+            Accepted values: false, true
+        enable-auto-scale: |-
+            The flag of enabling auto scale.
+
+            Accepted values: false, true
+        enable-dynamic-exec: |-
+            Indicates whether Dynamic Executor Allocation is enabled or not.
+
+            Accepted values: false, true
+        force: |-
+            The flag of force operation.
+
+            Default value: False
+
+            Accepted values: false, true
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        library-requirements: The library requirements file.
+        max-executors: The maximum number of executors alloted.
+        max-node-count: The max node count.
+        min-executors: The minimum number of executors alloted.
+        min-node-count: The min node count.
+        name: The name of the Spark pool.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        node-count: The number of node.
+        node-size: |-
+            The level of compute power that each node in the Big Data pool has..
+
+            Accepted values: Large, Medium, None, Small, XLarge, XXLarge, XXXLarge
+        package: List of workspace packages name.
+        package-action: |-
+            Package action must be specified when you add or remove a workspace package from a Apache Spark pool.
+
+            Accepted values: Add, Remove
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        spark-config-file-path: Absolute path of Spark pool properties configuration file.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        workspace-name: The workspace name.
+examples:
+    Update the Spark pool's auto scale configuration.: |-
+        az synapse spark pool update --name testpool --workspace-name testsynapseworkspace --resource-group rg \
+        --enable-auto-scale --min-node-count 3 --max-node-count 100
+    Update the Spark pool's configuration file.: |-
+        az synapse spark pool update --name testpool --workspace-name testsynapseworkspace --resource-group rg \
+        --spark-config-file-path 'path/configfile.txt'
+    Update the Spark pool's custom libraries.: |-
+        az synapse spark pool update --name testpool --workspace-name testsynapseworkspace --resource-group rg \
+        --package-action Add --package package1.jar package2.jar
+    Update the Spark pool's dynamic executor allocation configuration.: |-
+        az synapse spark pool update --name testpool --workspace-name testsynapseworkspace --resource-group rg \
+        --enable-dynamic-exec --min-executors 3 --max-executors 10
+    Update the Spark pool's tags.: |-
+        az synapse spark pool update --name testpool --workspace-name testsynapseworkspace --resource-group rg \
+        --tags key1=value1

@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a read replica for a server.
-documentation:
-    flag:
-        address-prefixes: The IP address prefix to use when creating a new virtual network in CIDR format. Default value is 10.0.0.0/16.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        private-dns-zone: This parameter only applies for a server with private access. The name or id of new or existing private dns zone. You can use the private dns zone from same resource group, different resource group, or different subscription. If you want to use a zone from different resource group or subscription, please provide resource Id. CLI creates a new private dns zone within the same resource group as virtual network if not provided by users.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        sku-name: 'The name of the compute SKU. Follows the convention Standard_{VM name}. Examples: Standard_B1ms'
-        storage-size: The storage capacity of the server. Minimum is 32 GiB and max is 16 TiB.
-        subnet: Name or resource ID of a new or existing subnet. If you want to use a subnet from different resource group or subscription, please provide resource ID instead of name. Please note that the subnet will be delegated to flexibleServers. After delegation, this subnet cannot be used for any other type of Azure resources.
-        subnet-prefixes: The subnet IP address prefix to use when creating a new subnet in CIDR format. Default value is 10.0.0.0/24.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        tier: 'Compute tier of the server. Accepted values: Burstable, GeneralPurpose, MemoryOptimized '
-        vnet: Name or ID of a new or existing virtual network. If you want to use a vnet from different resource group or subscription, please provide a resource ID. The name must be between 2 to 64 characters. The name must begin with a letter or number, end with a letter, number or underscore, and may contain only letters, numbers, underscores, periods, or hyphens.
 flags:
     --address-prefixes=: The IP address prefix to use when creating a new virtual network in CIDR format.
     --identity=: The name or resource ID of the user assigned identity for data encryption.
@@ -38,3 +24,51 @@ flags:
     -l, --location=: Location.
     -y, --yes=: Do not prompt for confirmation.
     -z, --zone=: Availability zone into which to provision the resource.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        address-prefixes: The IP address prefix to use when creating a new virtual network in CIDR format. Default value is 10.0.0.0/16.
+        change-reference: The related change reference ID for this resource operation.
+        identity: The name or resource identifier of the user assigned identity for data encryption.
+        key: The resource identifier of the primary keyvault key for data encryption.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        name: Name of the read replica.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        performance-tier: Performance tier of the server.
+        private-dns-zone: This parameter only applies for a server with private access. The name or id of new or existing private dns zone. You can use the private dns zone from same resource group, different resource group, or different subscription. If you want to use a zone from different resource group or subscription, please provide resource Id. CLI creates a new private dns zone within the same resource group as virtual network if not provided by users.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku-name: 'The name of the compute SKU. Follows the convention Standard_{VM name}. Examples: Standard_B1ms.'
+        source-server: The name or resource identifier of the source server to restore from.
+        storage-size: The storage capacity of the server. Minimum is 32 GiB and max is 16 TiB.
+        storage-type: |-
+            Storage type for the read replica. Allowed value is PremiumV2_LRS. Default is for the read replica to match storage type of the primary server.
+
+            Accepted values: PremiumV2_LRS
+        subnet: Name or resource ID of a new or existing subnet. If you want to use a subnet from different resource group or subscription, please provide resource ID instead of name. Please note that the subnet will be delegated to flexibleServers. After delegation, this subnet cannot be used for any other type of Azure resources.
+        subnet-prefixes: The subnet IP address prefix to use when creating a new subnet in CIDR format. Default value is 10.0.0.0/24.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        tier: 'Compute tier of the server. Accepted values: Burstable, GeneralPurpose, MemoryOptimized '
+        vnet: Name or identifier of an existing virtual network. If you want to use a vnet from a different resource group or subscription, please provide a resource identifier. The name must be between 2 to 64 characters. The name must begin with a letter or number, end with a letter, number or underscore, and may contain only letters, numbers, underscores, periods, or hyphens.
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+        zone: Availability zone into which to provision the resource.
+examples:
+    Create a read replica 'testreplica' for 'testserver' with custom --storage-size and --sku.: az postgres flexible-server replica create --name testreplica -g testgroup --source-server testserver --sku-name Standard_D4ds_v5 --storage-size 256
+    Create a read replica 'testreplica' for 'testserver' with private access using existing network resources.: |-
+        az postgres flexible-server replica create --name testreplica -g testGroup \
+          --source-server testserver --zone 3 --location testLocation \
+          --vnet newVnet --subnet newSubnet \
+          --private-dns-zone testdns.postgres.database.azure.com \
+          --tags "key=value"
+    ? Create a read replica 'testreplica' for 'testserver' with public or private access       in the specified location if available. Since zone is not passed, it will automatically pick up zone in the       replica location which is different from source server, if available, else will pick up zone same as source server       in the replica location if available, else will set the zone as None, i.e. No preference
+    : az postgres flexible-server replica create --name testreplica -g testgroup --source-server testserver --location testLocation
+    ? Create a read replica 'testreplica' for 'testserver' with public or private access in the specified zone and location if available.
+    : az postgres flexible-server replica create --name testreplica -g testGroup --source-server testserver --zone 3 --location testLocation
+    ? Create a read replica 'testreplica' for 'testserver', where 'testreplica' is in a different resource group 'newTestGroup'.       Here --resource-group is for the read replica's resource group, and --source-server must be passed as resource identifier.
+    : az postgres flexible-server replica create --name testreplicaserver -g newTestGroup         --source-server /subscriptions/{sourceSubscriptionId}/resourceGroups/{sourceResourceGroup}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{sourceServer} --location testLocation

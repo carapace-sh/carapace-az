@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: execute
 description: Execute script actions on the specified HDInsight cluster.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        roles: A space-delimited list of roles (nodes) where the script will be executed. Valid roles are headnode, workernode, zookeepernode, edgenode.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --cluster-name=!: The name of the cluster.
     --persist-on-success=: If the scripts needs to be persisted.
@@ -17,3 +12,25 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=!: Name of resource group.
     -n, --name=!: The name of the script action.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: The name of the cluster.
+        name: The name of the script action.
+        persist-on-success: |-
+            If the scripts needs to be persisted.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        roles: A space-delimited list of roles (nodes) where the script will be executed. Valid roles are headnode, workernode, zookeepernode, edgenode.
+        script-parameters: The parameters for the script.
+        script-uri: The URI to the script.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Execute a script action and persist on success.: |-
+        az hdinsight script-action execute -g MyResourceGroup -n MyScriptActionName \
+        --cluster-name MyCluster \
+        --script-uri https://hdiconfigactions.blob.core.windows.net/linuxgiraphconfigactionv01/giraph-installer-v01.sh \
+        --roles headnode workernode \
+        --persist-on-success

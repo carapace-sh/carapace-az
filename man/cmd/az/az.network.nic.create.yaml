@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a network interface.
-documentation:
-    flag:
-        app-gateway-address-pools: Space-separated list of names or IDs of application gateway backend address pools to associate with the NIC. If names are used, `--gateway-name` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        application-security-groups: Space-separated list of application security groups.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        dns-servers: Space-separated list of DNS server IP addresses.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        lb-address-pools: Space-separated list of names or IDs of load balancer address pools to associate with the NIC. If names are used, `--lb-name` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        lb-inbound-nat-rules: Space-separated list of names or IDs of load balancer inbound NAT rules to associate with the NIC. If names are used, `--lb-name` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet: Name or ID of an existing subnet. If name specified, please also specify `--vnet-name`; If you want to use an existing subnet in other resource group, please provide the ID instead of the name of the subnet.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'Space-separated tags: key[=value] [key[=value] ...].  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
 flags:
     --accelerated-networking=:
         description: Whether to enable accelerated networking.
@@ -106,3 +94,58 @@ completion:
         private-ip-address-version:
             - IPv4
             - IPv6
+documentation:
+    flag:
+        accelerated-networking: |-
+            Whether to enable accelerated networking.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        app-gateway-address-pools: Space-separated list of names or IDs of application gateway backend address pools to associate with the NIC. If names are used, `--gateway-name` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        application-security-groups: Space-separated list of application security groups.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        auxiliary-mode: |-
+            Auxiliary mode of Network Interface resource.
+
+            Accepted values: AcceleratedConnections, Floating, MaxConnections, None
+        auxiliary-sku: |-
+            Auxiliary sku of Network Interface resource.
+
+            Accepted values: A1, A2, A4, A8, None
+        change-reference: The related change reference ID for this resource operation.
+        dns-servers: Space-separated list of DNS server IP addresses.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        edge-zone: Name of edge zone.
+        gateway-name: '``` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        internal-dns-name: Name of internal DNS label.
+        ip-forwarding: |-
+            Whether to enable IP forwarding.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        lb-address-pools: Space-separated list of names or IDs of load balancer address pools to associate with the NIC. If names are used, `--lb-name` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        lb-inbound-nat-rules: Space-separated list of names or IDs of load balancer inbound NAT rules to associate with the NIC. If names are used, `--lb-name` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        lb-name: '``` must be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        name: Name of the network interface (NIC).
+        network-security-group: Name or ID of an existing network security group.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        private-ip-address: Static private IP address to use.
+        private-ip-address-version: |-
+            Version of private IP address to use.
+
+            Default value: IPv4
+
+            Accepted values: IPv4, IPv6
+        public-ip-address: Name or ID of an existing public IP address.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subnet: Name or ID of an existing subnet. If name specified, please also specify `--vnet-name`; If you want to use an existing subnet in other resource group, please provide the ID instead of the name of the subnet.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...].  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        vnet-name: '``` ; If you want to use an existing subnet in other resource group, please provide the ID instead of the name of the subnet.'
+examples:
+    Create a network interface for a specified subnet on a specified virtual network.: az network nic create -g MyResourceGroup --vnet-name MyVnet --subnet MySubnet -n MyNic
+    ? Create a network interface for a specified subnet on a virtual network which allows IP forwarding subject to a network security group.
+    : az network nic create -g MyResourceGroup --vnet-name MyVnet --subnet MySubnet -n MyNic --ip-forwarding --network-security-group MyNsg
+    ? Create a network interface for a specified subnet on a virtual network with network security group and application security groups.
+    : az network nic create -g MyResourceGroup --vnet-name MyVnet --subnet MySubnet -n MyNic --network-security-group MyNsg --application-security-groups Web App

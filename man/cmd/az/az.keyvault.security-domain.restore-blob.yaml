@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: restore-blob
 description: Enable to decrypt and encrypt security domain file as blob.
-documentation:
-    flag:
-        passwords: Space-separated password list for --sd-wrapping-keys. CLI will match them in order. Can be omitted if your keys are without password protection.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --passwords=:
         description: Space-separated password list for --sd-wrapping-keys.
@@ -16,3 +12,16 @@ flags:
         description: Space-separated file paths to PEM files containing private keys.
         nargs: -1
     --subscription=: Name or ID of subscription.
+documentation:
+    command: Enable to decrypt and encrypt security domain file as blob. Can be run in offline environment, before file is uploaded to HSM using security-domain upload.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        passwords: Space-separated password list for --sd-wrapping-keys. CLI will match them in order. Can be omitted if your keys are without password protection.
+        sd-exchange-key: The exchange key for security domain.
+        sd-file: This file contains security domain encrypted using SD Exchange file downloaded in security-domain init-recovery command.
+        sd-file-restore-blob: Local file path to store the security domain encrypted with the exchange key.
+        sd-wrapping-keys: Space-separated file paths to PEM files containing private keys.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Security domain restore blob.: az keyvault security-domain restore-blob --sd-file "{SD_TRANSFER_FILE}" --sd-exchange-key "{PEM_FILE_NAME}" --sd-wrapping-keys "{PEM_PRIVATE_KEY1_FILE_NAME}" "{PEM_PRIVATE_KEY2_FILE_NAME}" --sd-file-restore-blob "{SD_TRANSFER_FILE_RESTORE_BLOB}"

@@ -1,17 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: download-batch
 description: Download blobs from a blob container recursively.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        overwrite: Overwrite an existing file when specified. Default value is false.
-        pattern: The pattern used for globbing files or blobs in the source. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3/library/fnmatch.html.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -37,3 +26,44 @@ completion:
         overwrite:
             - "true"
             - "false"
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        destination: The existing destination folder for this download operation.
+        dryrun: |-
+            Show the summary of the operations to be taken instead of actually downloading the file(s).
+
+            Default value: False
+        max-connections: |-
+            The number of parallel connections with which to download.
+
+            Default value: 2
+        no-progress: |-
+            Include this flag to disable progress reporting for the command.
+
+            Default value: False
+        overwrite: |-
+            Overwrite an existing file when specified. Default value is false.
+
+            Default value: False
+
+            Accepted values: false, true
+        pattern: The pattern used for globbing files or blobs in the source. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3/library/fnmatch.html . When you use '*' in --pattern, it will match any character including the the directory separator '/'.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        source: The blob container from where the files will be downloaded. The source can be the container URL or the container name. When the source is the container URL, the storage account name will be parsed from the URL.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Download all blobs in a directory named "dir" from container named "mycontainer".: az storage blob download-batch -d . -s mycontainer --pattern "dir/*"
+    Download all blobs that end with .py: az storage blob download-batch -d . --pattern "*.py" -s mycontainer --account-name mystorageaccount --account-key 00000000
+    ? Download all blobs with the format 'cli-201x-xx-xx.txt' except cli-2018-xx-xx.txt' and 'cli-2019-xx-xx.txt' in container to current path.
+    : az storage blob download-batch -d . -s mycontainer --pattern "cli-201[!89]-??-??.txt"
+    Download all blobs with the format 'cli-2018-xx-xx.txt' or 'cli-2019-xx-xx.txt' in container to current path.: az storage blob download-batch -d . -s mycontainer --pattern "cli-201[89]-??-??.txt"

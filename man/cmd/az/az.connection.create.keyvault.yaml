@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: keyvault
 description: Create a Service Connector local connection to keyvault.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-id: The resource id of target service. Required if ['--target-resource-group', '--vault'] are not specified.
-        target-resource-group: The resource group which contains the keyvault. Required if '--target-id' is not specified.
-        vault: Name of the keyvault. Required if '--target-id' is not specified.
 flags:
     --client-type=: The client type used on the connection
     --connection=: Name of the connection.
@@ -39,3 +30,29 @@ completion:
             - nodejs
             - springBoot
             - none
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the connection.
+
+            Accepted values: dotnet, dotnet-internal, java, nodejs, none, python, springBoot
+        connection: Name of the connection.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-principal: 'The service principal auth info. Usage: --service-principal client-id=XX secret=XX client-id      : Required. Client id of the service principal. object-id      : Optional. Object id of the service principal (Enterprise Application). secret         : Required. Secret of the service principal.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-id: The resource id of target service. Required if ['--target-resource-group', '--vault'] are not specified. --target-resource-group --tg The resource group which contains the keyvault. Required if '--target-id' is not specified.
+        target-resource-group: The resource group which contains the keyvault. Required if '--target-id' is not specified.
+        user-account: 'The user account auth info. Usage: --user-account object-id=XX object-id              : Optional. Object id of current login user. It will be set automatically if not provided.'
+        vault: Name of the keyvault. Required if '--target-id' is not specified.
+examples:
+    Create a connection from local to keyvault interactively: az connection create keyvault -g resourceGroup
+    Create a connection from local to keyvault with resource id: az connection create keyvault -g resourceGroup --target-id /subscriptions/{subscription}/resourceGroups/{target_resource_group}/providers/Microsoft.KeyVault/vaults/{vault} --user-account
+    Create a connection from local to keyvault with resource name: az connection create keyvault -g resourceGroup --tg KeyvaultRG --vault MyVault --user-account

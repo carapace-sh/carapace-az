@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a managed service.
-documentation:
-    flag:
-        default-load: Specify the default amount of load, as a number, that this service creates for this metric. Used only for Stateless services.
-        primary-default-load: Specify the default amount of load, as a number, that this service creates for this metric when it is a Primary replica. Used only for Stateful services.
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        secondary-default-load: Specify the default amount of load, as a number, that this service creates for this metric when it is a Secondary replica. Used only for Stateful services.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --application=!: Specify the name of the service.
     --default-load=: Specify the default amount of load, as a number, that this service creates for this metric.
@@ -19,3 +12,22 @@ flags:
     --weight=: Specify the service load metric relative weight, compared to other metrics configured for this service, as a number.
     -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
     -g, --resource-group=!: Specify the resource group name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name.
+        default-load: Specify the default amount of load, as a number, that this service creates for this metric. Used only for Stateless services.
+        metric-name: Specify the name of the metric. --name --service-name Specify the name of the service.
+        primary-default-load: Specify the default amount of load, as a number, that this service creates for this metric when it is a Primary replica. Used only for Stateful services.
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        secondary-default-load: Specify the default amount of load, as a number, that this service creates for this metric when it is a Secondary replica. Used only for Stateful services.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        weight: Specify the service load metric relative weight, compared to other metrics configured for this service, as a number.
+examples:
+    Update a new stateful service load metric.: |-
+        az sf managed-service load-metrics update -g testRG -c testCluster --application-name testApp --service-name testService2 \
+          --metric-name Metric2 --weight Low --primary-default-load 2 --secondary-default-load 1
+    Update a new stateless managed service load metric.: |-
+        az sf managed-service load-metrics update -g testRG -c testCluster --application-name testApp --service-name testService \
+          --metric-name Metric1 --weight Medium --default-load 5

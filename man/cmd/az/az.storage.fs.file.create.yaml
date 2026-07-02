@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new file.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
-        permissions: POSIX access permissions for the file owner, the file owning group, and others. Each class may be granted read (4), write (2), or execute (1) permission. Both symbolic (rwxrw-rw-) and 4-digit octal notation (e.g. 0766) are supported. The sticky bit is also supported and in symbolic notation, its represented either by the letter t or T in the final character-place depending on whether the execution bit for the others category is set or unset respectively (e.g. rwxrw-rw- with sticky bit is represented as rwxrw-rwT. A rwxrw-rwx with sticky bit is represented as rwxrw-rwt), absence of t or T indicates sticky bit not set. In 4-digit octal notation, its represented by 1st digit (e.g. 1766 represents rwxrw-rw- with sticky bit and 0766 represents rwxrw-rw- without sticky bit). For more information, please refer to https://learn.microsoft.com/azure/storage/blobs/data-lake-storage-access-control#levels-of-permission.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        timeout: Request timeout in seconds. Applies to each call to the service.
-        umask: When creating a file or directory and the parent folder does not have a default ACL, the umask restricts the permissions of the file or directory to be created. The resulting permission is given by p & ^u, where p is the permission and u is the umask. For more information, please refer to https://learn.microsoft.com/azure/storage/blobs/data-lake-storage-access-control#umask.
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -41,3 +28,31 @@ completion:
         auth-mode:
             - login
             - key
+documentation:
+    command: Create a new file in ADLS Gen2 file system.
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        content-disposition: Conveys additional information about how to process the response payload, and can also be used to attach additional metadata.
+        content-encoding: The content encoding type.
+        content-language: The content language.
+        content-md5: The content's MD5 hash.
+        content-type: The content MIME type.
+        file-system: File system name (i.e. container name).
+        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
+        path: The file path in a file system.
+        permissions: POSIX access permissions for the file owner, the file owning group, and others. Each class may be granted read (4), write (2), or execute (1) permission. Both symbolic (rwxrw-rw-) and 4-digit octal notation (e.g. 0766) are supported. The sticky bit is also supported and in symbolic notation, its represented either by the letter t or T in the final character-place depending on whether the execution bit for the others category is set or unset respectively (e.g. rwxrw-rw- with sticky bit is represented as rwxrw-rwT. A rwxrw-rwx with sticky bit is represented as rwxrw-rwt), absence of t or T indicates sticky bit not set. In 4-digit octal notation, its represented by 1st digit (e.g. 1766 represents rwxrw-rw- with sticky bit and 0766 represents rwxrw-rw- without sticky bit). For more information, please refer to https://learn.microsoft.com/azure/storage/blobs/data-lake-storage-access-control#levels-of-permission .
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: Request timeout in seconds. Applies to each call to the service.
+        umask: When creating a file or directory and the parent folder does not have a default ACL, the umask restricts the permissions of the file or directory to be created. The resulting permission is given by p & ^u, where p is the permission and u is the umask. For more information, please refer to https://learn.microsoft.com/azure/storage/blobs/data-lake-storage-access-control#umask .
+examples:
+    Create a new file in ADLS Gen2 file system.: az storage fs file create -p dir/a.txt -f fsname --account-name myadlsaccount --account-key 0000-0000

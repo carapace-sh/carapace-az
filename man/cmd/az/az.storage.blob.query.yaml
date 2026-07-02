@@ -1,26 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: query
 description: Enable users to select/project on blob or blob snapshot data by providing simple query expressions.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        blob-url: The full endpoint URL to the Blob, including SAS token and snapshot if used. This could be either the primary endpoint, or the secondary endpoint depending on the current `location_mode`.
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        if-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag matches the value specified.
-        if-none-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag does not match the value specified. Specify the wildcard character (*) to perform the operation only if the resource does not exist, and fail the operation if it does exist.
-        in-escape-char: The string used as an escape character. Default to empty.
-        in-has-header: Whether the blob data includes headers in the first line. The default value is False, meaning that the data will be returned inclusive of the first line. If set to True, the data will be returned exclusive of the first line.
-        input-format: Serialization type of the data currently stored in the blob. The default is to treat the blob data as CSV data formatted in the default dialect.The blob data will be reformatted according to that profile when blob format is specified. If you choose `json`, please specify `Output Json Text Configuration Arguments` accordingly; If you choose `csv`, please specify `Output Delimited Text Configuration Arguments`.
-        out-escape-char: The string used as an escape character. Default to empty.
-        out-has-header: Whether the blob data includes headers in the first line. The default value is False, meaning that the data will be returned inclusive of the first line. If set to True, the data will be returned exclusive of the first line.
-        output-format: Output serialization type for the data stream. By default the data will be returned as it is represented in the blob. By providing an output format, the blob data will be reformatted according to that profile. If you choose `json`, please specify `Output Json Text Configuration Arguments` accordingly; If you choose `csv`, please specify `Output Delimited Text Configuration Arguments`.
-        query-expression: The query expression in SQL. The maximum size of the query expression is 256KiB. For more information about the expression syntax, please see https://learn.microsoft.com/azure/storage/blobs/query-acceleration-sql-reference
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        timeout: Request timeout in seconds. Applies to each call to the service.
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -66,3 +46,79 @@ completion:
         output-format:
             - csv
             - json
+documentation:
+    command: |-
+        This command is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        blob-url: The full endpoint URL to the Blob, including SAS token and snapshot if used. This could be either the primary endpoint, or the secondary endpoint depending on the current ``` location_mode ``` .
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        container-name: The container name.
+        if-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag matches the value specified.
+        if-modified-since: Commence only if modified since supplied UTC datetime (Y-m-d'T'H:M'Z').
+        if-none-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag does not match the value specified. Specify the wildcard character (*) to perform the operation only if the resource does not exist, and fail the operation if it does exist.
+        if-unmodified-since: Commence only if unmodified since supplied UTC datetime (Y-m-d'T'H:M'Z').
+        in-column-separator: |-
+            The string used to separate columns.
+
+            Default value: ,
+        in-escape-char: The string used as an escape character. Default to empty.
+        in-has-header: |-
+            Whether the blob data includes headers in the first line. The default value is False, meaning that the data will be returned inclusive of the first line. If set to True, the data will be returned exclusive of the first line.
+
+            Default value: False
+        in-line-separator: |-
+            The string used to separate records.
+
+            Default value: --in-quote-char
+
+            Default value: "
+        in-record-separator: |-
+            The string used to separate records.
+
+            Default value: --input-format
+
+            Accepted values: csv, json
+        input-format: Serialization type of the data currently stored in the blob. The default is to treat the blob data as CSV data formatted in the default dialect.The blob data will be reformatted according to that profile when blob format is specified. If you choose `json`, please specify `Output Json Text Configuration Arguments` accordingly; If you choose `csv`, please specify `Output Delimited Text Configuration Arguments`.
+        lease-id: Required if the blob has an active lease.
+        name: The blob name.
+        out-column-separator: |-
+            The string used to separate columns.
+
+            Default value: ,
+        out-escape-char: The string used as an escape character. Default to empty.
+        out-has-header: |-
+            Whether the blob data includes headers in the first line. The default value is False, meaning that the data will be returned inclusive of the first line. If set to True, the data will be returned exclusive of the first line.
+
+            Default value: False
+        out-line-separator: |-
+            The string used to separate records.
+
+            Default value: --out-quote-char
+
+            Default value: "
+        out-record-separator: |-
+            The string used to separate records.
+
+            Default value: --output-format
+
+            Accepted values: csv, json
+        output-format: Output serialization type for the data stream. By default the data will be returned as it is represented in the blob. By providing an output format, the blob data will be reformatted according to that profile. If you choose `json`, please specify `Output Json Text Configuration Arguments` accordingly; If you choose `csv`, please specify `Output Delimited Text Configuration Arguments`.
+        query-expression: The query expression in SQL. The maximum size of the query expression is 256KiB. For more information about the expression syntax, please see https://learn.microsoft.com/azure/storage/blobs/query-acceleration-sql-reference .
+        result-file: Specify the file path to save result.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags-condition: Specify a SQL where clause on blob tags to operate only on blobs with a matching value.
+        timeout: Request timeout in seconds. Applies to each call to the service.
+examples:
+    Enable users to select/project on blob by providing simple query expressions and save in target file.: az storage blob query -c mycontainer -n myblob --query-expression "SELECT _2 from BlobStorage" --result-file result.csv
+    Enable users to select/project on blob by providing simple query expressions.: az storage blob query -c mycontainer -n myblob --query-expression "SELECT _2 from BlobStorage"

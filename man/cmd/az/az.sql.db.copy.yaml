@@ -1,24 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: copy
 description: Copies a DB (i.e. create with 'Copy' create mode.)
-documentation:
-    flag:
-        auto-pause-delay: Time in minutes after which database is automatically paused. A value of -1 means that automatic pause is disabled.
-        backup-storage-redundancy: 'Backup storage redundancy used to store backups. Allowed values include: Local, Zone, Geo, GeoZone.'
-        dest-resource-group: Name of the resource group to create the copy in. If unspecified, defaults to the origin resource group.
-        dest-server: Name of the server to create the copy in. If unspecified, defaults to the origin server.
-        encryption-protector-auto-rotation: Specifies the database encryption protector key auto rotation flag. Can be either true, false or null.
-        family: 'The compute generation component of the sku (for vcore skus only). Allowed values include: Gen4, Gen5.'
-        federated-client-id: The federated client id for the SQL Database. It is used for cross tenant CMK scenario.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        read-replicas: The number of high availability replicas to provision for the database. Only settable for Hyperscale edition.
-        read-scale: If enabled, connections that have application intent set to readonly in their connection string may be routed to a readonly secondary replica. This property is only settable for Premium and Business Critical databases.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        server: Name of the Azure SQL Server. You can configure the default using `az configure --defaults sql-server=<name>`
-        service-objective: 'The service objective for the new database. For example: Basic, S0, P1, GP_Gen4_1, GP_S_Gen5_8, BC_Gen5_2, HS_Gen5_32.'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        zone-redundant: Specifies whether to enable zone redundancy. Default is true if no value is specified
 flags:
     --auto-pause-delay=: Time in minutes after which database is automatically paused.
     --availability-zone=: Availability zone
@@ -87,3 +69,65 @@ completion:
         zone-redundant:
             - "true"
             - "false"
+documentation:
+    command: Create a copy of a database.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        assign-identity: |-
+            Assign identity for database.
+
+            Accepted values: false, true
+        auto-pause-delay: Time in minutes after which database is automatically paused. A value of -1 means that automatic pause is disabled.
+        availability-zone: 'Availability zone. --backup-storage-redundancy --bsr Backup storage redundancy used to store backups. Allowed values include: Local, Zone, Geo, GeoZone.'
+        backup-storage-redundancy: 'Backup storage redundancy used to store backups. Allowed values include: Local, Zone, Geo, GeoZone.'
+        capacity: The capacity component of the sku in integer number of DTUs or vcores.
+        change-reference: The related change reference ID for this resource operation.
+        compute-model: |-
+            The compute model of the database.
+
+            Accepted values: Provisioned, Serverless
+        dest-name: Name of the database that will be created as the copy destination.
+        dest-resource-group: Name of the resource group to create the copy in. If unspecified, defaults to the origin resource group.
+        dest-server: Name of the server to create the copy in. If unspecified, defaults to the origin server.
+        elastic-pool: The name or resource id of the elastic pool to create the database in.
+        encryption-protector: |-
+            Specifies the Azure key vault key to be used as database encryption protector key. --encryption-protector-auto-rotation --epauto Specifies the database encryption protector key auto rotation flag. Can be either true, false or null.
+
+            Accepted values: false, true
+        encryption-protector-auto-rotation: Specifies the database encryption protector key auto rotation flag. Can be either true, false or null.
+        family: 'The compute generation component of the sku (for vcore skus only). Allowed values include: Gen4, Gen5.'
+        federated-client-id: The federated client id for the SQL Database. It is used for cross tenant CMK scenario. --ha-replicas --read-replicas The number of high availability replicas to provision for the database. Only settable for Hyperscale edition.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        keys: The list of AKV keys for the SQL Database.
+        license-type: |-
+            The license type to apply for this database. ``` LicenseIncluded ``` if you need a license, or ``` BasePrice ``` if you have a license and are eligible for the Azure HybridBenefit.
+
+            Accepted values: BasePrice, LicenseIncluded
+        min-capacity: Minimal capacity that database will always have allocated, if not paused.
+        name: Name of the Azure SQL Database.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        preferred-enclave-type: |-
+            Specifies type of enclave for this resource.
+
+            Accepted values: Default, VBS
+        read-replicas: The number of high availability replicas to provision for the database. Only settable for Hyperscale edition.
+        read-scale: |-
+            If enabled, connections that have application intent set to readonly in their connection string may be routed to a readonly secondary replica. This property is only settable for Premium and Business Critical databases.
+
+            Accepted values: Disabled, Enabled
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        server: Name of the Azure SQL Server. You can configure the default using ``` az configure --defaults sql-server=<name> ``` .
+        service-objective: 'The service objective for the new database. For example: Basic, S0, P1, GP_Gen4_1, GP_S_Gen5_8, BC_Gen5_2, HS_Gen5_32.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags. --umi --user-assigned-identity-id The list of user assigned identity for the SQL Database.'
+        zone-redundant: |-
+            Specifies whether to enable zone redundancy. Default is true if no value is specified.
+
+            Accepted values: false, true
+examples:
+    Create a database with GeneralPurpose edition, Gen4 hardware, and 1 vcore as a copy of an existing GeneralPurpose database.: az sql db copy -g mygroup -s myserver -n originalDb --dest-name newDb -f Gen4 -c 1
+    Create a database with local backup storage redundancy as a copy of an existing database: az sql db copy -g mygroup -s myserver -n originalDb --dest-name newDb --backup-storage-redundancy Local
+    Create a database with performance level S0 as a copy of an existing Standard database.: az sql db copy -g mygroup -s myserver -n originalDb --dest-name newDb --service-objective S0

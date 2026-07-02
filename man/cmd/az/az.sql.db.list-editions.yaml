@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list-editions
 description: Gets database capabilities and optionally applies the specified filters.
-documentation:
-    flag:
-        dtu: Number of DTUs to search for. If unspecified, all DTU sizes are shown.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        service-objective: Service objective to search for. If unspecified, all service objectives are shown.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tier: Edition to search for. If unspecified, all editions are shown.
-        vcores: Number of vcores to search for. If unspecified, all vcore sizes are shown.
 flags:
     --dtu=: Number of DTUs to search for.
     --service-objective=: Service objective to search for.
@@ -24,3 +16,26 @@ completion:
     flag:
         show-details:
             - max-size
+documentation:
+    command: Show database editions available for the currently active subscription.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        available: |-
+            If specified, show only results that are available in the specified region.
+
+            Default value: False
+        change-reference: The related change reference ID for this resource operation.
+        dtu: Number of DTUs to search for. If unspecified, all DTU sizes are shown.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        service-objective: Service objective to search for. If unspecified, all service objectives are shown.
+        show-details: |-
+            List of additional details to include in output.
+
+            Accepted values: max-size
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tier: Edition to search for. If unspecified, all editions are shown.
+        vcores: Number of vcores to search for. If unspecified, all vcore sizes are shown.
+examples:
+    Show all available database service objectives for Standard edition.: az sql db list-editions -l westus --edition Standard -o table
+    Show all database editions in a location.: az sql db list-editions -l westus -o table
+    Show available max database sizes for P1 service objective: az sql db list-editions -l westus --service-objective P1 --show-details max-size

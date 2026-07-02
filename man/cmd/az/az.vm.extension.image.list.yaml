@@ -1,9 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List the information on available extensions.
-documentation:
-    flag:
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --latest=: Show the latest version only.
     --subscription=: Name or ID of subscription.
@@ -11,3 +8,21 @@ flags:
     -l, --location=: Image location.
     -n, --name=: Image name
     -p, --publisher=: Image publisher name
+documentation:
+    flag:
+        latest: |-
+            Show the latest version only.
+
+            Default value: False
+        location: Image location.
+        name: Image name.
+        publisher: Image publisher name.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        version: Extension version.
+examples:
+    Find extensions with "Docker" in the name.: az vm extension image list --query "[].name" -o tsv | sort -u | grep Docker
+    List extension names where the publisher name starts with "Microsoft.Azure.App".: |-
+        az vm extension image list --query \
+            "[?starts_with(publisher, 'Microsoft.Azure.App')].publisher" \
+            -o tsv | sort -u | xargs -I{} az vm extension image list-names --publisher {} -l westus
+    List the unique publishers for extensions.: az vm extension image list --query "[].publisher" -o tsv | sort -u

@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update storage blob service properties.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        delete-retention-period: Number of days that soft-deleted blob will be retained. Must be in range [1,365].
-        index-document: Represents the name of the index document. This is commonly "index.html".
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --404-document=: Represents the path to the error document that should be shown when an error 404 is issued, in other words, when a browser requests a page that does not exist.
     --account-key=: Storage account key.
@@ -53,3 +39,48 @@ completion:
         static-website:
             - "true"
             - "false"
+documentation:
+    flag:
+        404-document: Represents the path to the error document that should be shown when an error 404 is issued, in other words, when a browser requests a page that does not exist.
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: |-
+            Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .
+
+            Default value: []
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        default-index-path: Absolute path of the default index page.
+        delete-retention: |-
+            Enables soft-delete.
+
+            Accepted values: false, true
+        delete-retention-period: Number of days that soft-deleted blob will be retained. Must be in range [1,365].
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Default value: False
+        index-document: Represents the name of the index document. This is commonly "index.html".
+        remove: |-
+            Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .
+
+            Default value: []
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        set: |-
+            Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .
+
+            Default value: []
+        static-website: |-
+            Enables static-website.
+
+            Accepted values: false, true
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: Request timeout in seconds. Applies to each call to the service.
+examples:
+    Update storage blob service properties. (autogenerated): az storage blob service-properties update --404-document error.html --account-name mystorageccount --account-key 00000000 --index-document index.html --static-website true

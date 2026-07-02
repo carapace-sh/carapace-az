@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Add a GitHub Actions workflow to a repository to deploy a container app.
-documentation:
-    flag:
-        branch: The branch of the Github repo. Assumed to be the Github repo's default branch if not specified.
-        context-path: Path in the repo from which to run the docker build. Defaults to "./"
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        image: Container image name that the Github Action should use. Defaults to the Container App name.
-        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        registry-password: The password of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied
-        registry-username: The username of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied
-        repo-url: 'The GitHub repository to which the workflow file will be added. In the format: `https://github.com/<owner>/<repository-name>`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        service-principal-client-id: 'The service principal client ID. '
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        token: 'A Personal Access Token with write access to the specified repository. For more information: https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line'
 flags:
     --context-path=: Path in the repo from which to run the docker build.
     --ids=:
@@ -34,3 +20,33 @@ flags:
     -g, --resource-group=: Name of resource group.
     -i, --image=: Container image name that the Github Action should use.
     -n, --name=: The name of the Containerapp.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        branch: The branch of the Github repo. Assumed to be the Github repo's default branch if not specified.
+        build-env-vars: A list of environment variable(s) for the build. Space-separated values in 'key=value' format.
+        change-reference: The related change reference ID for this resource operation.
+        context-path: Path in the repo from which to run the docker build. Defaults to "./".
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        image: Container image name that the Github Action should use. Defaults to the Container App name.
+        login-with-github: |-
+            Interactively log in with Github to retrieve the Personal Access Token.
+
+            Default value: False
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        registry-password: The password of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied.
+        registry-url: The container registry server, e.g. myregistry.azurecr.io.
+        registry-username: The username of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied.
+        repo-url: 'The GitHub repository to which the workflow file will be added. In the format: ``` https://github.com/<owner>/<repository-name> ``` .'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-principal-client-id: 'The service principal client ID. '
+        service-principal-client-secret: The service principal client secret.
+        service-principal-tenant-id: The service principal tenant ID.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        token: 'A Personal Access Token with write access to the specified repository. For more information: https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line .'
+examples:
+    Add GitHub Actions, using Azure Container Registry and log in to GitHub flow to retrieve personal access token.: az containerapp github-action add -g MyResourceGroup -n my-containerapp --repo-url https://github.com/userid/repo --branch main --registry-url myregistryurl.azurecr.io --service-principal-client-id 00000000-0000-0000-0000-00000000 --service-principal-tenant-id 00000000-0000-0000-0000-00000000 --service-principal-client-secret ClientSecret --login-with-github
+    ? Add GitHub Actions, using Azure Container Registry and personal access token, configure image build via build environment variables.
+    : az containerapp github-action add -g MyResourceGroup -n my-containerapp --repo-url https://github.com/userid/repo --branch main --registry-url myregistryurl.azurecr.io --service-principal-client-id 00000000-0000-0000-0000-00000000 --service-principal-tenant-id 00000000-0000-0000-0000-00000000 --service-principal-client-secret ClientSecret --token MyAccessToken --build-env-vars BP_JVM_VERSION=21 BP_MAVEN_VERSION=4
+    Add GitHub Actions, using Azure Container Registry and personal access token.: az containerapp github-action add -g MyResourceGroup -n my-containerapp --repo-url https://github.com/userid/repo --branch main --registry-url myregistryurl.azurecr.io --service-principal-client-id 00000000-0000-0000-0000-00000000 --service-principal-tenant-id 00000000-0000-0000-0000-00000000 --service-principal-client-secret ClientSecret --token MyAccessToken
+    Add GitHub Actions, using Docker Hub and log in to GitHub flow to retrieve personal access token.: az containerapp github-action add -g MyResourceGroup -n my-containerapp --repo-url https://github.com/userid/repo --branch main --registry-username MyUsername --registry-password MyPassword --service-principal-client-id 00000000-0000-0000-0000-00000000 --service-principal-tenant-id 00000000-0000-0000-0000-00000000 --service-principal-client-secret ClientSecret --login-with-github

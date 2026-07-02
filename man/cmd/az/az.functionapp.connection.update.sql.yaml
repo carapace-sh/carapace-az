@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: sql
 description: Update a functionapp to sql connection.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        id: The resource id of the connection. ['--resource-group', '--name', '--connection'] are required if '--id' is not specified.
-        name: Name of the function app. Required if '--id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        private-endpoint: Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
-        resource-group: The resource group which contains the function app. Required if '--id' is not specified.None
-        service-endpoint: Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --appconfig-id=: The app configuration id to store configuration
     --client-type=: The client type used on the functionapp
@@ -72,3 +62,43 @@ completion:
         service-endpoint:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appconfig-id: The app configuration id to store configuration.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the functionapp.
+
+            Accepted values: django, dotnet, dotnet-internal, go, java, nodejs, none, php, python, ruby, springBoot
+        connection: Name of the functionapp connection.
+        connstr-props: The additional connection string properties used to build connection string.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        id: The resource id of the connection. ['--resource-group', '--name', '--connection'] are required if '--id' is not specified.
+        name: Name of the function app. Required if '--id' is not specified.None.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        private-endpoint: |-
+            Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
+
+            Accepted values: false, true
+        resource-group: The resource group which contains the function app. Required if '--id' is not specified.None.
+        secret: 'The secret auth info. Usage: --secret name=XX secret=XX --secret name=XX secret-uri=XX --secret name=XX secret-name=XX name    : Required. Username or account name for secret auth. secret  : One of ``` <secret, secret-uri, secret-name> ``` is required. Password or account key for secret auth. secret-uri  : One of ``` <secret, secret-uri, secret-name> ``` is required. Keyvault secret uri which stores password. secret-name : One of ``` <secret, secret-uri, secret-name> ``` is required. Keyvault secret name which stores password. It''s for AKS only.'
+        service-endpoint: |-
+            Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
+
+            Accepted values: false, true
+        service-principal: 'The service principal auth info. Usage: --service-principal client-id=XX secret=XX client-id      : Required. Client id of the service principal. object-id      : Optional. Object id of the service principal (Enterprise Application). secret         : Required. Secret of the service principal.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-identity: 'The flag to use system assigned identity auth info. No additional parameters are needed. Usage: --system-identity.'
+        user-identity: 'The user assigned identity auth info. Usage: --user-identity client-id=XX subs-id=XX client-id      : Required. Client id of the user assigned identity. subs-id        : Required. Subscription id of the user assigned identity.'
+        vault-id: The id of key vault to store secret value.
+examples:
+    Update the client type of a connection with resource id: az functionapp connection update sql --id /subscriptions/{subscription}/resourceGroups/{source_resource_group}/providers/Microsoft.Web/sites/{site}/providers/Microsoft.ServiceLinker/linkers/{linker} --client-type dotnet
+    Update the client type of a connection with resource name: az functionapp connection update sql -g FuncAppRG -n MyFunctionApp --connection MyConnection --client-type dotnet

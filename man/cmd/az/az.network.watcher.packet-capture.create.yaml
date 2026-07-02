@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create and start a packet capture session.
-documentation:
-    flag:
-        capture-size: Number of bytes captured per packet. Excess bytes are truncated.
-        exclude: Space-separated list of VMSS instances to exclude in packet capture.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        file-path: Local path on the targeted VM at which to save the packet capture. For Linux VMs, the path must start with `/var/captures`.
-        filters: JSON encoded list of packet filters. Use `@{path}` to load from file.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        include: Space-separated list of VMSS instances to include in packet capture like 0 1 2.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        storage-path: Fully qualified URI of an existing storage container in which to store the capture file. If not specified, the container `network-watcher-logs` will be created if it does not exist and the capture file will be stored there.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target: Name or ID of the target resource. If `--target-type` is AzureVMSS, then `--target` is mandatory.
 flags:
     --capture-limit=: Maximum size in bytes of the capture output.
     --capture-size=: Number of bytes captured per packet.
@@ -52,3 +42,47 @@ completion:
         target-type:
             - AzureVM
             - AzureVMSS
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        capture-limit: |-
+            Maximum size in bytes of the capture output.
+
+            Default value: 1073741824
+        capture-size: |-
+            Number of bytes captured per packet. Excess bytes are truncated.
+
+            Default value: 0
+        change-reference: The related change reference ID for this resource operation.
+        exclude: Space-separated list of VMSS instances to exclude in packet capture.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        file-path: Local path on the targeted VM at which to save the packet capture. For Linux VMs, the path must start with ``` /var/captures ``` .
+        filters: JSON encoded list of packet filters. Use ``` @{path} ``` to load from file.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        include: Space-separated list of VMSS instances to include in packet capture like 0 1 2.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        name: Name of the packet capture session.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        resource-group: Name of the resource group the target resource is in.
+        storage-account: Name or ID of a storage account to save the packet capture to.
+        storage-path: Fully qualified URI of an existing storage container in which to store the capture file. If not specified, the container ``` network-watcher-logs ``` will be created if it does not exist and the capture file will be stored there.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target: Name or ID of the target resource. If `--target-type` is AzureVMSS, then `--target` is mandatory.
+        target-type: |-
+            Resource type of target.
+
+            Default value: AzureVM
+
+            Accepted values: AzureVM, AzureVMSS
+        time-limit: |-
+            Maximum duration of the capture session in seconds.
+
+            Default value: 18000
+        vm: Name or ID of the VM to target.
+examples:
+    ? Create a packet capture session on a VM with optional filters for protocols, local IP address and remote IP address ranges and ports.
+    : az network watcher packet-capture create -g MyResourceGroup -n MyPacketCaptureName --vm MyVm --storage-account MyStorageAccount --filters '[{"protocol":"TCP", "remoteIPAddress":"1.1.1.1-255.255.255", "localIPAddress":"10.0.0.3", "remotePort":"20"}, {"protocol":"TCP", "remoteIPAddress":"1.1.1.1-255.255.255", "localIPAddress":"10.0.0.3", "remotePort":"80"}, {"protocol":"TCP", "remoteIPAddress":"1.1.1.1-255.255.255", "localIPAddress":"10.0.0.3", "remotePort":"443"}, {"protocol":"UDP"}]'
+    Create a packet capture session on a VM.: az network watcher packet-capture create -g MyResourceGroup -n MyPacketCaptureName --vm MyVm --storage-account MyStorageAccount
+    Create a packet capture session on a VMSS with excluding particular instances.: az network watcher packet-capture create -g MyResourceGroup -n MyPacketCaptureName --vm MyVmVMSS --storage-account MyStorageAccount --target-type "AzureVMSS" --exclude "0" "1"
+    Create a packet capture session on a VMSS with including particular instances.: az network watcher packet-capture create -g MyResourceGroup -n MyPacketCaptureName --target MyVmVMSS --storage-account MyStorageAccount --target-type "AzureVMSS" --include "0" "1"
+    Create a packet capture session on a VMSS.: az network watcher packet-capture create -g MyResourceGroup -n MyPacketCaptureName --vm MyVmVMSS --storage-account MyStorageAccount --target-type "AzureVMSS"

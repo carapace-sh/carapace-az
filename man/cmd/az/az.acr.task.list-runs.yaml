@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list-runs
 description: List all of the executed runs for an Azure Container Registry, with the ability to filter by a specific Task.
-documentation:
-    flag:
-        image: The name of the image. May include a tag in the format 'name:tag' or digest in the format 'name@digest'.
-        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --run-status=: The current status of run.
     --subscription=: Name or ID of subscription.
@@ -26,3 +20,25 @@ completion:
             - Canceled
             - Error
             - Timeout
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        image: The name of the image. May include a tag in the format 'name:tag' or digest in the format 'name@digest'.
+        name: The name of the task.
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        run-status: |-
+            The current status of run.
+
+            Accepted values: Canceled, Error, Failed, Queued, Running, Started, Succeeded, Timeout
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        top: |-
+            Limit the number of latest runs in the results.
+
+            Default value: 15
+examples:
+    List all of the runs for a registry and show the results in a table.: az acr task list-runs -r myregistry -o table
+    List all of the runs that built the image 'hello-world' for a registry and show the results in a table.: az acr task list-runs -r myregistry --image hello-world -o table
+    List runs for a task and show the results in a table.: az acr task list-runs -r myregistry -n MyTask -o table
+    List the last 10 successful runs for a registry and show the results in a table.: az acr task list-runs -r myregistry --run-status Succeeded --top 10 -o table

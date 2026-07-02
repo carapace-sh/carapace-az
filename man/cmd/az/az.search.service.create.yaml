@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a search service in the given resource group.
-documentation:
-    flag:
-        disable-local-auth: When set to true, calls to the search service will not be permitted to utilize API keys for authentication. This cannot be set to true if 'dataPlaneAuthOptions' are defined.
-        hosting-mode: Applicable only for the standard3 SKU. You can set this property to enable up to 3 high density partitions that allow up to 1000 indexes, which is much higher than the maximum indexes allowed for any other SKU. For the standard3 SKU, the value is either 'default' or 'highDensity'. For all other SKUs, this value must be 'default'.
-        name: The name of the Azure Cognitive Search service to create or update. Search service names must only contain lowercase letters, digits or dashes, cannot use dash as the first two or last one characters, cannot contain consecutive dashes, and must be between 2 and 60 characters in length. Search service names must be globally unique since they are part of the service URI (`https://<name>.search.windows.net`). You cannot change the service name after the service is created.
-        partition-count: The number of partitions in the search service; if specified, it can be 1, 2, 3, 4, 6, or 12. Values greater than 1 are only valid for standard SKUs. For 'standard3' services with hostingMode set to 'highDensity', the allowed values are between 1 and 3.
-        public-access: This value can be set to 'enabled' to avoid breaking changes on existing customer resources and templates. If set to 'disabled', traffic over public interface is not allowed, and private endpoint connections would be the exclusive access method.
-        replica-count: The number of replicas in the search service. If specified, it must be a value between 1 and 12 inclusive for standard SKUs or between 1 and 3 inclusive for basic SKU.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        semantic-search: Sets options that control the availability of semantic search. This configuration is only possible for certain Azure Cognitive Search SKUs in certain locations.
-        sku: 'The SKU of the search service. Valid values include: ''free'': Shared service. ''basic'': Dedicated service with up to 3 replicas. ''standard'': Dedicated service with up to 12 partitions and 12 replicas. ''standard2'': Similar to standard, but with more capacity per search unit. ''standard3'': The largest Standard offering with up to 12 partitions and 12 replicas (or up to 3 partitions with more indexes if you also set the hostingMode property to ''highDensity''). ''storage_optimized_l1'': Supports 1TB per partition, up to 12 partitions. ''storage_optimized_l2'': Supports 2TB per partition, up to 12 partitions.'''
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --aad-auth-failure-mode=: Describes what response the data plane API of a Search service would send for requests that failed authentication.
     --auth-options=: Some Help
@@ -89,3 +76,74 @@ completion:
             - standard3
             - storage_optimized_l1
             - storage_optimized_l2
+documentation:
+    command: Creates or updates a search service in the given resource group. If the search service already exists, all properties will be updated with the given values.
+    flag:
+        aad-auth-failure-mode: |-
+            Describes what response the data plane API of a Search service would send for requests that failed authentication.
+
+            Accepted values: http401WithBearerChallenge, http403
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-options: |-
+            Some Help.
+
+            Accepted values: aadOrApiKey, apiKeyOnly
+        bypass: |-
+            Possible origins of inbound traffic that can bypass the rules defined in the 'ipRules' section.
+
+            Accepted values: AzureServices, None
+        change-reference: The related change reference ID for this resource operation.
+        compute-type: |-
+            Configure this property to support the search service using either the Default Compute or Azure Confidential Compute.
+
+            Accepted values: confidential, default
+        disable-local-auth: |-
+            When set to true, calls to the search service will not be permitted to utilize API keys for authentication. This cannot be set to true if 'dataPlaneAuthOptions' are defined.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        encryption-with-cmk: Specifies any policy regarding encryption of resources (such as indexes) using customer manager keys within a search service.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        hosting-mode: |-
+            Applicable only for the standard3 SKU. You can set this property to enable up to 3 high density partitions that allow up to 1000 indexes, which is much higher than the maximum indexes allowed for any other SKU. For the standard3 SKU, the value is either 'default' or 'highDensity'. For all other SKUs, this value must be 'default'.
+
+            Default value: default
+
+            Accepted values: default, highDensity
+        identity-type: |-
+            The identity type.
+
+            Accepted values: None, SystemAssigned, SystemAssigned, UserAssigned, UserAssigned
+        ip-rules: A list of IP defineing the inbound network(s) allowed to access to the search service endpoint.
+        knowledge-retrieval: |-
+            Specifies the billing plan for agentic retrieval on the Azure AI Search service.
+
+            Accepted values: free, standard
+        location: The geo-location where the resource lives  When not specified, the location of the resource group will be used.
+        name: The name of the Azure Cognitive Search service to create or update. Search service names must only contain lowercase letters, digits or dashes, cannot use dash as the first two or last one characters, cannot contain consecutive dashes, and must be between 2 and 60 characters in length. Search service names must be globally unique since they are part of the service URI (`https://<name>.search.windows.net`). You cannot change the service name after the service is created.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        partition-count: |-
+            The number of partitions in the search service; if specified, it can be 1, 2, 3, 4, 6, or 12. Values greater than 1 are only valid for standard SKUs. For 'standard3' services with hostingMode set to 'highDensity', the allowed values are between 1 and 3.
+
+            Default value: 1
+
+            Default value: enabled
+
+            Accepted values: disabled, enabled, securedByPerimeter
+        public-access: This value can be set to 'enabled' to avoid breaking changes on existing customer resources and templates. If set to 'disabled', traffic over public interface is not allowed, and private endpoint connections would be the exclusive access method.
+        replica-count: |-
+            The number of replicas in the search service. If specified, it must be a value between 1 and 12 inclusive for standard SKUs or between 1 and 3 inclusive for basic SKU.
+
+            Default value: 1
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        semantic-search: |-
+            Sets options that control the availability of semantic search. This configuration is only possible for certain Azure AI Search SKUs in certain locations.
+
+            Accepted values: disabled, free, standard
+        sku: |-
+            The SKU of the search service. Valid values include: 'free': Shared service. 'basic': Dedicated service with up to 3 replicas. 'standard': Dedicated service with up to 12 partitions and 12 replicas. 'standard2': Similar to standard, but with more capacity per search unit. 'standard3': The largest Standard offering with up to 12 partitions and 12 replicas (or up to 3 partitions with more indexes if you also set the hostingMode property to 'highDensity'). 'storage_optimized_l1': Supports 1TB per partition, up to 12 partitions. 'storage_optimized_l2': Supports 2TB per partition, up to 12 partitions. 'serverless': Serverless tier with auto-scaling capabilities.
+
+            Accepted values: basic, free, serverless, standard, standard2, standard3, storage_optimized_l1, storage_optimized_l2
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.

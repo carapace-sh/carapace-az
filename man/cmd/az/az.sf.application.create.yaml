@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new application on an Azure Service Fabric cluster.
-documentation:
-    flag:
-        max-nodes: Specify the maximum number of nodes on which to place an application. The value of this parameter must be a non-negative integer. The default value is 0, which indicates the application can be placed on any number of nodes in the cluster.
-        min-nodes: Specify the minimum number of nodes where Service Fabric will reserve capacity for this application, this does not mean that the application is guaranteed to have replicas on all those nodes. The value of this parameter must be a non-negative integer. Default value for this is zero, which means no capacity is reserved for the application.
-        parameters: 'Specify the application parameters as key/value pairs. These parameters must exist in the application manifest. for example: --application-parameters param1=value1 param2=value2'
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --max-nodes=: Specify the maximum number of nodes on which to place an application.
     --min-nodes=: Specify the minimum number of nodes where Service Fabric will reserve capacity for this application, this does not mean that the application is guaranteed to have replicas on all those nodes.
@@ -21,3 +14,23 @@ flags:
     --version=!: Specify the application type version.
     -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
     -g, --resource-group=!: Specify the resource group name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name.
+        max-nodes: Specify the maximum number of nodes on which to place an application. The value of this parameter must be a non-negative integer. The default value is 0, which indicates the application can be placed on any number of nodes in the cluster.
+        min-nodes: Specify the minimum number of nodes where Service Fabric will reserve capacity for this application, this does not mean that the application is guaranteed to have replicas on all those nodes. The value of this parameter must be a non-negative integer. Default value for this is zero, which means no capacity is reserved for the application.
+        package-url: Specify the url of the application package sfpkg file.
+        parameters: 'Specify the application parameters as key/value pairs. These parameters must exist in the application manifest. for example: --application-parameters param1=value1 param2=value2'
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create application "testApp" and app type version using the package url provided.: |-
+        az sf application create -g testRG -c testCluster --application-name testApp --application-type-name TestAppType \
+          --application-type-version v1 --package-url "https://sftestapp.blob.core.windows.net/sftestapp/testApp_1.0.sfpkg" \
+            --application-parameters key0=value0
+    ? Create application "testApp" with parameters. The application type "TestAppType" version "v1" should already exist in the cluster, and the application parameters should be defined in the application manifest.
+    : |-
+        az sf application create -g testRG -c testCluster --application-name testApp --application-type-name TestAppType \
+          --application-type-version v1 --application-parameters key0=value0

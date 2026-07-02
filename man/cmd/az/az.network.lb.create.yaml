@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a load balancer.
-documentation:
-    flag:
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        public-ip-address: Name or ID of the public IP address, or '' for none. Uses existing resource if available or will create a new resource with defaults if omitted.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet: Name or ID of a subnet. Uses existing resource or creates new if specified, or none if omitted. If name specified, also specify --vnet-name. If you want to use an existing subnet in other resource group or subscription, please provide the ID instead of the name of the subnet
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --backend-pool-name=: The name of the backend address pool.
     --edge-zone=: The name of edge zone.
@@ -48,3 +40,65 @@ completion:
             - Basic
             - Gateway
             - Standard
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        backend-pool-name: The name of the backend address pool.
+        change-reference: The related change reference ID for this resource operation.
+        edge-zone: The name of edge zone.
+        frontend-ip-name: |-
+            The name of the frontend IP configuration.
+
+            Default value: LoadBalancerFrontEnd
+        frontend-ip-zone: Used to create internal facing Load balancer.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        name: The load balancer name.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        private-ip-address: Static private IP address to use.
+        private-ip-address-version: |-
+            The private IP address version to use.
+
+            Default value: IPv4
+
+            Accepted values: IPv4, IPv6
+        public-ip-address: Name or ID of the public IP address, or '' for none. Uses existing resource if available or will create a new resource with defaults if omitted.
+        public-ip-address-allocation: |-
+            IP allocation method.
+
+            Accepted values: Dynamic, Static
+        public-ip-dns-name: Globally unique DNS name for a new public IP.
+        public-ip-zone: Used to created a new public ip for the load balancer, a.k.a public facing Load balancer.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku: |-
+            Load balancer SKU.
+
+            Default value: Standard
+
+            Accepted values: Basic, Gateway, Standard
+        subnet: Name or ID of a subnet. Uses existing resource or creates new if specified, or none if omitted. If name specified, also specify --vnet-name. If you want to use an existing subnet in other resource group or subscription, please provide the ID instead of the name of the subnet.
+        subnet-address-prefix: |-
+            The CIDR address prefix to use when creating a new subnet.
+
+            Default value: 10.0.0.0/24
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        validate: |-
+            Generate and validate the ARM template without creating any resources.
+
+            Default value: False
+        vnet-address-prefix: |-
+            The CIDR address prefix to use when creating a new VNet.
+
+            Default value: 10.0.0.0/16
+        vnet-name: The virtual network (VNet) name.
+examples:
+    ? Create a basic load balancer on a specific virtual network and subnet. If a virtual network with the same name is found in the same resource group, the load balancer will utilize this virtual network.  If one is not found a new one will be created.
+    : az network lb create -g MyResourceGroup -n MyLb --sku Basic --vnet-name MyVnet --subnet MySubnet
+    ? Create a basic load balancer on a subnet of a pre-existing virtual network. The subnet can be in arbitary resource group or subscription by providing the ID of the subnet.
+    : az network lb create -g MyResourceGroup -n MyLb --sku Basic --subnet {subnetID}
+    Create a basic load balancer.: az network lb create -g MyResourceGroup -n MyLb --sku Basic
+    Create a basic zone flavored internal load balancer, through provisioning a zonal public ip.: az network lb create -g MyResourceGroup -n MyLb --sku Basic --public-ip-zone 2
+    Create a standard zone flavored public-facing load balancer, through provisioning a zonal frontend ip configuration and Vnet.: az network lb create -g MyResourceGroup -n MyLb --sku Standard --frontend-ip-zone 1 --vnet-name MyVnet --subnet MySubnet

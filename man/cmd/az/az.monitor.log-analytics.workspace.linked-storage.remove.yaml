@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: remove
 description: Remove some linked storage accounts with specific data source type for log analytics workspace
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --storage-accounts=!:
         description: List of Name or ID of Azure Storage Account.
@@ -21,3 +17,19 @@ completion:
             - CustomLogs
             - Ingestion
             - Query
+documentation:
+    command: Remove some linked storage accounts with specific data source type for log analytics workspace.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        storage-accounts: List of Name or ID of Azure Storage Account.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        type: |-
+            Data source type for the linked storage account.
+
+            Accepted values: Alerts, AzureWatson, CustomLogs, Ingestion, Query
+        workspace-name: Name of the Log Analytics Workspace.
+examples:
+    Remove one linked storage accounts for a log analytics workspace using the resource id of the storage account.: az monitor log-analytics workspace linked-storage remove --type AzureWatson -g MyResourceGroup --workspace-name MyWorkspace --storage-accounts /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/clitest.rg000001/providers/Microsoft.Storage/storageAccounts/cli000001
+    Remove two linked storage accounts for a log analytics workspace using the name of the storage account.: az monitor log-analytics workspace linked-storage remove --type AzureWatson -g MyResourceGroup --workspace-name MyWorkspace --storage-accounts StorageAccount1 StorageAccount2

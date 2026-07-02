@@ -1,30 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: export
 description: Export configurations to another place from your App Configuration store.
-documentation:
-    flag:
-        appservice-account: ARM ID for AppService OR the name of the AppService, assuming it is in the same subscription and resource group as the App Configuration store. Required for AppService arguments
-        auth-mode: This parameter can be used for indicating how a data operation is to be authorized. If the auth mode is "key", provide connection string or store name and your account access keys will be retrieved for authorization. If the auth mode is "login", provide the `--endpoint` or `--name` and your "az login" credentials will be used for authorization. You can configure the default auth mode using `az configure --defaults appconfig_auth_mode=<auth_mode>`. For more information, see https://learn.microsoft.com/azure/azure-app-configuration/concept-enable-rbac
-        connection-string: Combination of access key and endpoint of the App Configuration store. Can be found using 'az appconfig credential list'. Users can preset it using `az configure --defaults appconfig_connection_string=<connection_string>` or environment variable with the name AZURE_APPCONFIG_CONNECTION_STRING.
-        dest-auth-mode: Auth mode for connecting to the destination App Configuration store. For details, refer to "--auth-mode" argument.
-        dest-label: Exported KVs will be labeled with this destination label. If neither --dest-label nor --preserve-labels is specified, will assign null label.
-        destination: The destination of exporting. Note that exporting feature flags to appservice is not supported.
-        endpoint: If auth mode is "login", provide endpoint URL of the App Configuration store. The endpoint can be retrieved using "az appconfig show" command. You can configure the default endpoint using `az configure --defaults appconfig_endpoint=<endpoint>`
-        export-as-reference: Export key-values as App Configuration references. For more information, see https://learn.microsoft.com/en-us/azure/app-service/app-service-configuration-references
-        format: File format exporting to. Required for file arguments. Currently, feature flags are not supported in properties format.
-        key: If no key specified, return all keys by default. Support star sign as filters, for instance abc* means keys with abc as prefix. Key filtering not applicable for feature flags. By default, all feature flags with specified label will be exported.
-        label: Only keys and feature flags with this label will be exported. If no label specified, export keys and feature flags with null label by default. When export destination is appconfig, or when export destination is file with `appconfig/kvset` profile, this argument supports asterisk and comma signs for label filtering, for instance, * means all labels, abc* means labels with abc as prefix, and abc,xyz means labels with abc or xyz.
-        name: Name of the App Configuration store. You can configure the default name using `az configure --defaults app_configuration_store=<name>`.
-        naming-convention: 'Naming convention to be used for "Feature Management" section of file. Example: pascal = FeatureManagement, camel = featureManagement, underscore = feature_management, hyphen = feature-management.'
-        path: Local configuration file path. Required for file arguments.
-        prefix: Prefix to be trimmed from keys. Prefix will be ignored for feature flags.
-        preserve-labels: Flag to preserve labels from source AppConfig. This argument should NOT be specified along with --dest-label.
-        profile: Export profile to be used for exporting the key-values. Options 'depth', 'separator', 'naming-convention', 'prefix', 'dest-label' and, 'resolve-keyvault' are not supported when using 'appconfig/kvset' profile
-        separator: 'Delimiter for flattening the key-value pairs to json or yaml file. Required for exporting hierarchical structure. Separator will be ignored for property files and feature flags. Supported values: ''.'', '','', '';'', ''-'', ''_'', ''__'', ''/'', '':'' '
-        skip-features: Export items excluding all feature flags. By default, all features with the specified label will be exported to file or appconfig. Not applicable for appservice.
-        skip-keyvault: Export items excluding all key vault references. By default, all key vault references with the specified label will be exported.
-        snapshot: Export all keys in a given snapshot of the App Configuration store. If no snapshot is specified, the keys currently in the store are exported based on the specified key and label filters.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --appservice-account=: ARM ID for AppService OR the name of the AppService, assuming it is in the same subscription and resource group as the App Configuration store.
     --auth-mode=: This parameter can be used for indicating how a data operation is to be authorized.
@@ -102,3 +78,107 @@ completion:
         skip-keyvault:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appservice-account: ARM ID for AppService OR the name of the AppService, assuming it is in the same subscription and resource group as the App Configuration store. Required for AppService arguments.
+        auth-mode: This parameter can be used for indicating how a data operation is to be authorized. If the auth mode is "key", provide connection string or store name and your account access keys will be retrieved for authorization. If the auth mode is "login", provide the `--endpoint` or `--name` and your "az login" credentials will be used for authorization. You can configure the default auth mode using `az configure --defaults appconfig_auth_mode=<auth_mode>`. For more information, see https://learn.microsoft.com/azure/azure-app-configuration/concept-enable-rbac
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: Combination of access key and endpoint of the App Configuration store. Can be found using 'az appconfig credential list'. Users can preset it using ``` az configure --defaults appconfig_connection_string=<connection_string> ``` or environment variable with the name AZURE_APPCONFIG_CONNECTION_STRING.
+        dest-auth-mode: |-
+            Auth mode for connecting to the destination App Configuration store. For details, refer to "--auth-mode" argument.
+
+            Default value: key
+
+            Accepted values: anonymous, key, login
+        dest-connection-string: Combination of access key and endpoint of the destination store.
+        dest-endpoint: If --dest-auth-mode is "login", provide endpoint URL of the destination App Configuration store.
+        dest-label: Exported KVs will be labeled with this destination label. If neither --dest-label nor --preserve-labels is specified, will assign null label.
+        dest-name: The name of the destination App Configuration store.
+        dest-tags: 'Exported KVs and feature flags will be assigned with these tags. If no tags are specified, exported KVs and features will retain existing tags. Support space-separated tags: key[=value] [key[=value] ...]. Use  to clear existing tags.'
+        destination: |-
+            The destination of exporting. Note that exporting feature flags to appservice is not supported.
+
+            Accepted values: appconfig, appservice, file
+        dry-run: |-
+            Preview the result of export operation without making any changes to the App Configuration store.
+
+            Default value: False
+        endpoint: If auth mode is "login" or "anonymous", provide endpoint URL of the App Configuration store. The endpoint can be retrieved using "az appconfig show" command. You can configure the default endpoint using ``` az configure --defaults appconfig_endpoint=<endpoint> ``` .
+        export-as-reference: |-
+            Export key-values as App Configuration references. For more information, see https://learn.microsoft.com/en-us/azure/app-service/app-service-configuration-references .
+
+            Default value: False
+
+            Accepted values: false, true
+        format: |-
+            File format exporting to. Required for file arguments. Currently, feature flags are not supported in properties format.
+
+            Accepted values: json, properties, yaml
+        key: If no key specified, return all keys by default. Support star sign as filters, for instance abc* means keys with abc as prefix. Key filtering not applicable for feature flags. By default, all feature flags with specified label will be exported.
+        label: Only keys and feature flags with this label will be exported. If no label specified, export keys and feature flags with null label by default. When export destination is appconfig, or when export destination is file with ``` appconfig/kvset ``` profile, this argument supports asterisk and comma signs for label filtering, for instance, * means all labels, abc* means labels with abc as prefix, and abc,xyz means labels with abc or xyz.
+        name: |-
+            ``` and your "az login" credentials will be used for authorization. If the auth mode is "anonymous", provide the --endpoint that will be used for authorization. Anonymous mode is intended for custom endpoints only, such as the App Configuration emulator. You can configure the default auth mode using ``` az configure --defaults appconfig_auth_mode=<auth_mode> ``` . For more information, see https://learn.microsoft.com/azure/azure-app-configuration/concept-enable-rbac .
+
+            Default value: key
+
+            Accepted values: anonymous, key, login
+        naming-convention: |-
+            Naming convention to be used for "Feature Management" section of file. Example: pascal = FeatureManagement, camel = featureManagement, underscore = feature_management, hyphen = feature-management.
+
+            Default value: pascal
+
+            Accepted values: camel, hyphen, pascal, underscore
+        path: Local configuration file path. Required for file arguments.
+        prefix: Prefix to be trimmed from keys. Prefix will be ignored for feature flags.
+        preserve-labels: |-
+            Flag to preserve labels from source AppConfig. This argument should NOT be specified along with --dest-label.
+
+            Default value: False
+
+            Accepted values: false, true
+        profile: |-
+            Export profile to be used for exporting the key-values. Options 'depth', 'separator', 'naming-convention', 'prefix', 'dest-label' , 'dest-tags' and, 'resolve-keyvault' are not supported when using 'appconfig/kvset' profile.
+
+            Default value: appconfig/default
+
+            Accepted values: appconfig/default, appconfig/kvset
+        resolve-keyvault: |-
+            Resolve the content of key vault reference.
+
+            Default value: False
+
+            Accepted values: false, true
+        separator: 'Delimiter for flattening the key-value pairs to json or yaml file. Required for exporting hierarchical structure. Separator will be ignored for property files and feature flags. Supported values: ''.'', '','', '';'', ''-'', ''_'', ''__'', ''/'', '':'' '
+        skip-features: |-
+            Export items excluding all feature flags. By default, all features with the specified label will be exported to file or appconfig. Not applicable for appservice.
+
+            Default value: False
+
+            Accepted values: false, true
+        skip-keyvault: |-
+            Export items excluding all key vault references. By default, all key vault references with the specified label will be exported.
+
+            Default value: False
+
+            Accepted values: false, true
+        snapshot: Export all keys in a given snapshot of the App Configuration store. If no snapshot is specified, the keys currently in the store are exported based on the specified key and label filters.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Key-values which contain the specified tags in source AppConfig will be exported. If no tags are specified, all key-values with any tags can be exported. Support space-separated tag filters: key[=value] [key[=value] ...].'
+        "yes": |-
+            Do not prompt for preview.
+
+            Default value: False
+examples:
+    Export all keys and feature flags to another App Configuration store and apply new tags.: az appconfig kv export -n MyAppConfiguration -d appconfig --dest-name AnotherAppConfiguration --dest-tags newtag1=newvalue1
+    Export all keys and feature flags with all labels to another App Configuration store and overwrite destination labels.: az appconfig kv export -n MyAppConfiguration -d appconfig --dest-name AnotherAppConfiguration --key * --label * --dest-label ExportedKeys
+    Export all keys and feature flags with all labels to another App Configuration store.: az appconfig kv export -n MyAppConfiguration -d appconfig --dest-name AnotherAppConfiguration --key * --label * --preserve-labels
+    ? Export all keys and feature flags with label test to a json file. To use the Microsoft Feature Management schema when exporting feature flags to a file, set the environment variable AZURE_APPCONFIG_FM_COMPATIBLE to False.
+    : az appconfig kv export -n MyAppConfiguration --label test -d file --path D:/abc.json --format json
+    Export all keys and feature flags with label test using appconfig/kvset profile.: az appconfig kv export -n MyAppConfiguration --label test -d file --path D:/abc.json --format json --profile appconfig/kvset
+    Export all keys and feature flags with specific tags to another App Configuration store.: az appconfig kv export -n MyAppConfiguration -d appconfig --tags tag1=value1 tag2=value2 --dest-name AnotherAppConfiguration
+    Export all keys to another App Configuration store from a snapshot of the source configuration: az appconfig kv export -n MyAppConfiguration -d appconfig --dest-name AnotherAppConfiguration --snapshot MySnapshot
+    Export all keys to another App Configuration store using your 'az login' credentials.: az appconfig kv export -d appconfig --endpoint https://myappconfiguration.azconfig.io --auth-mode login --dest-endpoint https://anotherappconfiguration.azconfig.io --dest-auth-mode login --key * --label * --preserve-labels
+    Export all keys with label test excluding feature flags to a json file.: az appconfig kv export -n MyAppConfiguration --label test -d file --path D:/abc.json --format json --skip-features
+    Export all keys with null label to an App Service application.: az appconfig kv export -n MyAppConfiguration -d appservice --appservice-account MyAppService
+    Preview the export result without making any changes to the App Configuration store.: az appconfig kv export -n MyAppConfiguration --label test -d file --path D:/abc.json --format json --dry-run

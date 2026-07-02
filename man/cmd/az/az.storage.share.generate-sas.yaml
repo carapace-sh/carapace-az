@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: generate-sas
 description: Generate a shared access signature for the share.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        expiry: Specifies the UTC datetime (Y-m-d'T'H:M'Z') at which the SAS becomes invalid. Do not use if a stored access policy is referenced with --policy-name that specifies this value.
-        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        https-only: Only permit requests made with the HTTPS protocol. If omitted, requests from both the HTTP and HTTPS protocol are permitted.
-        ip: Specifies the IP address or range of IP addresses from which to accept requests. Supports only IPv4 style addresses.
-        permissions: 'The permissions the SAS grants. Allowed values: (c)reate (d)elete (l)ist (r)ead (w)rite. Do not use if a stored access policy is referenced with --id that specifies this value. Can be combined.'
-        start: Specifies the UTC datetime (Y-m-d'T'H:M'Z') at which the SAS becomes valid. Do not use if a stored access policy is referenced with --policy-name that specifies this value. Defaults to the time of the request.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -31,3 +19,42 @@ flags:
     --start=: Specifies the UTC datetime (Y-m-d'T'H:M'Z') at which the SAS becomes valid.
     --subscription=: Name or ID of subscription.
     -n, --name=!: The file share name.
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        as-user: |-
+            Indicates that this command return the SAS signed with the user delegation key. The expiry parameter and '--auth-mode login' are required if this argument is specified.
+
+            Default value: False
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+
+            Default value: False
+        cache-control: Response header value for Cache-Control when resource is accessed using this shared access signature.
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        content-disposition: Response header value for Content-Disposition when resource is accessed using this shared access signature.
+        content-encoding: Response header value for Content-Encoding when resource is accessed using this shared access signature.
+        content-language: Response header value for Content-Language when resource is accessed using this shared access signature.
+        content-type: Response header value for Content-Type when resource is accessed using this shared access signature.
+        expiry: Specifies the UTC datetime (Y-m-d'T'H:M'Z') at which the SAS becomes invalid. Do not use if a stored access policy is referenced with --policy-name that specifies this value.
+        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        https-only: Only permit requests made with the HTTPS protocol. If omitted, requests from both the HTTP and HTTPS protocol are permitted.
+        ip: Specifies the IP address or range of IP addresses from which to accept requests. Supports only IPv4 style addresses.
+        name: The file share name.
+        permissions: 'The permissions the SAS grants. Allowed values: (c)reate (d)elete (l)ist (r)ead (w)rite. Do not use if a stored access policy is referenced with --id that specifies this value. Can be combined.'
+        policy-name: The name of a stored access policy within the share's ACL.
+        start: Specifies the UTC datetime (Y-m-d'T'H:M'Z') at which the SAS becomes valid. Do not use if a stored access policy is referenced with --policy-name that specifies this value. Defaults to the time of the request.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        user-delegation-oid: Specifies the Entra ID of the user that is authorized to use the resulting SAS URL. The resulting SAS URL must be used in conjunction with an Entra ID token that has been issued to the user specified in this value.
+        user-delegation-tid: The delegated user tenant id in Azure AD. This parameter can only be specified when using OAuth.
+examples:
+    Generate a sas token for a fileshare and use it to upload a file.: |-
+        end=`date -u -d "30 minutes" '+%Y-%m-%dT%H:%MZ'`
+        sas=`az storage share generate-sas -n MyShare --account-name MyStorageAccount --https-only --permissions dlrw --expiry $end -o tsv`
+        az storage file upload -s MyShare --account-name MyStorageAccount --source file.txt  --sas-token $sas
+    Generate a shared access signature for the share. (autogenerated): az storage share generate-sas --connection-string $connectionString --expiry 2019-02-01T12:20Z --name MyShare --permissions dlrw

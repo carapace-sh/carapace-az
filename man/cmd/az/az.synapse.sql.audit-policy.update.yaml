@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a SQL's auditing policy.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        event-hub: The name of the event hub. If none is specified when providing event_hub_authorization_rule_id, the default event hub will be selected.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --actions=:
         description: List of actions and action groups to audit.
@@ -67,3 +59,93 @@ completion:
         use-secondary-key:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        actions: List of actions and action groups to audit.
+        add: |-
+            Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .
+
+            Default value: []
+        blob-auditing-policy-name: |-
+            Default value: default
+
+            Accepted values: Disabled, Enabled
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Accepted values: Disabled, Enabled
+        enable-azure-monitor: |-
+            Whether enabling azure monitor target or not.
+
+            Accepted values: false, true
+        event-hub: The name of the event hub. If none is specified when providing event_hub_authorization_rule_id, the default event hub will be selected.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Default value: False
+
+            Accepted values: Disabled, Enabled
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        remove: |-
+            Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .
+
+            Default value: []
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        retention-days: The number of days to retain audit logs.
+        set: |-
+            Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .
+
+            Default value: []
+        state: |-
+            Auditing policy state.
+
+            Accepted values: Disabled, Enabled
+        storage-account: Name of the storage account.
+        storage-endpoint: The storage account endpoint.
+        storage-key: Access key for the storage account.
+        storage-subscription: The subscription id of storage account.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        use-secondary-key: |-
+            Indicates whether using the secondary storeage key or not.
+
+            Accepted values: false, true
+        workspace-name: The workspace name.
+examples:
+    Disable a blob storage auditing policy.: |-
+        az synapse sql audit-policy update --workspace-name testsynapseworkspace --resource-group rg \
+        --blob-storage-target-state Disabled
+    Disable a log analytics auditing policy.: |-
+        az synapse sql audit-policy update --resource-group mygroup --workspace-name myws --state Enabled
+            --log-analytics-target-state Disabled
+    Disable an auditing policy.: |-
+        az synapse sql audit-policy update --workspace-name testsynapseworkspace --resource-group rg \
+        --state Disabled
+    Disable an event hub auditing policy.: |-
+        az synapse sql audit-policy update --resource-group mygroup --workspace-name myws
+           --state Enabled --event-hub-target-state Disabled
+    Enable a log analytics auditing policy.: |-
+        az synapse sql audit-policy update --resource-group mygroup --workspace-name myws --state Enabled \
+            --log-analytics-target-state Enabled --log-analytics-workspace-resource-id myworkspaceresourceid
+    Enable an event hub auditing policy for default event hub.: |-
+        az synapse sql audit-policy update --resource-group mygroup --workspace-name myws --state Enabled \
+            --event-hub-target-state Enabled \
+            --event-hub-authorization-rule-id eventhubauthorizationruleid
+    Enable an event hub auditing policy.: |-
+        az synapse sql audit-policy update --resource-group mygroup --workspace-name myws --state Enabled \
+            --event-hub-target-state Enabled \
+            --event-hub-authorization-rule-id eventhubauthorizationruleid \
+            --event-hub eventhubname
+    Enable by storage account name.: |-
+        az synapse sql audit-policy update --workspace-name testsynapseworkspace --resource-group rg --state Enabled \
+            --blob-storage-target-state Enabled --storage-account mystorage
+    Enable by storage endpoint and key.: |-
+        az synapse sql audit-policy update --workspace-name testsynapseworkspace --resource-group rg --state Enabled \
+            --blob-storage-target-state Enabled --storage-endpoint https://mystorage.blob.core.windows.net \
+            --storage-key MYKEY==
+    Set the list of audit actions.: |-
+        az synapse sql audit-policy update --workspace-name testsynapseworkspace --resource-group rg \
+        --actions SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP 'UPDATE on database::mydb by public'

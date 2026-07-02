@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Updates an Azure Managed Cassandra DataCenter
-documentation:
-    flag:
-        base64-encoded-cassandra-yaml-fragment: This is a Base64 encoded yaml file that is a subset of cassandra.yaml.  Supported fields will be honored and others will be ignored.
-        managed-disk-customer-key-uri: Key uri to use for encryption of managed disks. Ensure the system assigned identity of the cluster has been assigned appropriate permissions(key get/wrap/unwrap permissions) on the key.
-        node-count: The number of Cassandra virtual machines in this data center. The minimum value is 3.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        sku: Virtual Machine SKU used for data centers. Default value is Standard_DS14_v2
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --no-wait=: Do not wait for the long-running operation to finish.
     --sku=: Virtual Machine SKU used for data centers.
@@ -20,3 +12,33 @@ flags:
     -k, --managed-disk-customer-key-uri=: Key uri to use for encryption of managed disks.
     -n, --node-count=: The number of Cassandra virtual machines in this data center.
     -p, --backup-storage-customer-key-uri=: Indicates the Key Uri of the customer key to use for encryption of the backup storage account.
+documentation:
+    command: Update a Datacenter in an Azure Managed Cassandra Cluster.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        backup-storage-customer-key-uri: Indicates the Key Uri of the customer key to use for encryption of the backup storage account.
+        base64-encoded-cassandra-yaml-fragment: This is a Base64 encoded yaml file that is a subset of cassandra.yaml.  Supported fields will be honored and others will be ignored.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Cluster Name.
+        data-center-name: Datacenter Name.
+        ldap-search-base-dn: Distinguished name of the object to start the recursive search of users from.
+        ldap-search-filter: Template to use for searching. Defaults to (cn=%s) where %s will be replaced by the username used to login. While using this parameter from Windows Powershell (not Windows CommandPrompt or Linux) there is a known issue with escaping special characters, so pass as """(cn=%s)""" instead.
+        ldap-server-certs: LDAP server certificate. It should have subject alternative name(SAN) DNS Name entry matching the hostname of the LDAP server.
+        ldap-server-hostname: Hostname of the LDAP server.
+        ldap-server-port: Port of the LDAP server. Defaults to 636.
+        ldap-service-user-dn: Distinguished name of the look up user account, who can look up user details on authentication.
+        ldap-svc-user-pwd: Password of the look up user.
+        managed-disk-customer-key-uri: Key uri to use for encryption of managed disks. Ensure the system assigned identity of the cluster has been assigned appropriate permissions(key get/wrap/unwrap permissions) on the key.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        node-count: The number of Cassandra virtual machines in this data center. The minimum value is 3.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku: Virtual Machine SKU used for data centers. Default value is Standard_DS14_v2.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    ? Scale the number of nodes in a datacenter. This is a scale down operation assuming that the create datacenter was done with 3 nodes, followed by a scale up to 6 nodes. Each datacenter should atleast have 3 nodes.
+    : az managed-cassandra datacenter update --resource-group MyResourceGroup --cluster-name MyCluster --data-center-name MyDataCenter --node-count 4
+    ? Scale the number of nodes in a datacenter. This is a scale up operation assuming that the create datacenter was done with 3 nodes. Each datacenter should atleast have 3 nodes.
+    : az managed-cassandra datacenter update --resource-group MyResourceGroup --cluster-name MyCluster --data-center-name MyDataCenter --node-count 6

@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update the authentication settings for the webapp.
-documentation:
-    flag:
-        aad-token-issuer-url: This url can be found in the JSON output returned from your active directory endpoint using your tenantID. The endpoint can be queried from `az cloud show` at "endpoints.activeDirectory". The tenantID can be found using `az account show`. Get the "issuer" from the JSON at `<active directory endpoint>/<tenantId>/.well-known/openid-configuration`.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using `az configure --defaults web=<name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        slot: the name of the slot. Default to the productions slot if not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --aad-allowed-token-audiences=:
         description: One or more token audiences (comma-delimited).
@@ -67,3 +59,78 @@ completion:
         token-store:
             - "true"
             - "false"
+documentation:
+    command: Update the authentication settings for the webapp in the v2 format.
+    flag:
+        aad-allowed-token-audiences: One or more token audiences (comma-delimited).
+        aad-client-id: Application ID to integrate AAD organization account Sign-in into your web app.
+        aad-client-secret: AAD application secret.
+        aad-token-issuer-url: This url can be found in the JSON output returned from your active directory endpoint using your tenantID. The endpoint can be queried from ``` az cloud show ``` at "endpoints.activeDirectory". The tenantID can be found using ``` az account show ``` . Get the "issuer" from the JSON at ``` <active directory endpoint>/<tenantId>/.well-known/openid-configuration ``` .
+        acquire-policy-token: |-
+            Acquiring an Azure Policy token automatically for this resource operation.
+
+            Accepted values: AllowAnonymous, RedirectToLoginPage, Return401, Return403, Return404
+        action: 'Accepted values: AllowAnonymous, LoginWithAzureActiveDirectory, LoginWithFacebook, LoginWithGoogle, LoginWithMicrosoftAccount, LoginWithTwitter'
+        allowed-external-redirect-urls: One or more urls (space-delimited).
+        change-reference: The related change reference ID for this resource operation.
+        config-file-path: The path of the config file containing auth settings if they come from a file. --custom-host-header --proxy-custom-host-header The name of the header containing the host of the request. --custom-proto-header --proxy-custom-proto-header The name of the header containing the scheme of the request.
+        enable-token-store: |-
+            True to durably store platform-specific security tokens that are obtained during login flows; otherwise, false.
+
+            Accepted values: false, true
+        enabled: |-
+            True if the Authentication / Authorization feature is enabled for the current app; otherwise, false.
+
+            Accepted values: false, true
+        excluded-paths: The list of paths that should be excluded from authentication rules.
+        facebook-app-id: Application ID to integrate Facebook Sign-in into your web app.
+        facebook-app-secret: Facebook Application client secret.
+        facebook-oauth-scopes: One or more facebook authentication scopes (comma-delimited).
+        google-client-id: Application ID to integrate Google Sign-in into your web app.
+        google-client-secret: Google Application client secret.
+        google-oauth-scopes: One or more Google authentication scopes (space-delimited).
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        microsoft-account-client-id: AAD V2 Application ID to integrate Microsoft account Sign-in into your web app.
+        microsoft-account-client-secret: AAD V2 Application client secret.
+        microsoft-account-oauth-scopes: One or more Microsoft authentification scopes (comma-delimited).
+        name: Name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using ``` az configure --defaults web=<name> ``` .
+        proxy-convention: |-
+            The convention used to determine the url of the request made.
+
+            Accepted values: Custom, NoProxy, Standard
+        redirect-provider: The default authentication provider to use when multiple providers are configured.
+        require-https: |-
+            False if the authentication/authorization responses not having the HTTPS scheme are permissible; otherwise, true.
+
+            Accepted values: false, true
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        runtime-version: The RuntimeVersion of the Authentication / Authorization feature in use for the current app.
+        set: Value of a specific field within the configuration settings for the Azure App Service Authentication / Authorization V2 feature.
+        slot: The name of the slot. Default to the productions slot if not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        token-refresh-extension-hours: Hours, must be formattable into a float.
+        token-store: |-
+            Use App Service Token Store.
+
+            Accepted values: false, true
+        twitter-consumer-key: Application ID to integrate Twitter Sign-in into your web app.
+        twitter-consumer-secret: Twitter Application client secret.
+examples:
+    ? Allow Facebook authentication by setting FB-associated parameters and turning on public-profile and email scopes; allow anonymous users
+    : |-
+        az webapp auth update -g myResourceGroup -n myUniqueApp --action AllowAnonymous \
+          --facebook-app-id my_fb_id --facebook-app-secret my_fb_secret \
+          --facebook-oauth-scopes public_profile email
+    Configure the app to allow unauthenticated requests to hit the app.: az webapp auth update -g myResourceGroup --name MyWebApp --unauthenticated-client-action AllowAnonymous
+    Configure the app to listen to the forward headers X-FORWARDED-HOST and X-FORWARDED-PROTO: az webapp auth update -g myResourceGroup --name MyWebApp --proxy-convention Standard
+    Configure the app to redirect unauthenticated requests to the Facebook provider: az webapp auth update -g myResourceGroup --name MyWebApp --redirect-provider Facebook
+    Configure the app with file based authentication by setting the config file path: az webapp auth update -g myResourceGroup --name MyWebApp --config-file-path D:\home\site\wwwroot\auth.json
+    ? Enable AAD by enabling authentication and setting AAD-associated parameters. Default provider is set to AAD. Must have created a AAD service principal beforehand.
+    : |-
+        az webapp auth update  -g myResourceGroup -n myUniqueApp --enabled true \
+          --action LoginWithAzureActiveDirectory \
+          --aad-allowed-token-audiences https://webapp_name.azurewebsites.net/.auth/login/aad/callback \
+          --aad-client-id ecbacb08-df8b-450d-82b3-3fced03f2b27 --aad-client-secret very_secret_password \
+          --aad-token-issuer-url https://sts.windows.net/54826b22-38d6-4fb2-bad9-b7983a3e9c5a/
+    Pin the runtime version of the app to 1.4.7: az webapp auth update -g myResourceGroup --name MyWebApp --runtime-version 1.4.7
+    Update the client ID of the AAD provider already configured: az webapp auth update -g myResourceGroup --name MyWebApp --set identityProviders.azureActiveDirectory.registration.clientId=my-client-id

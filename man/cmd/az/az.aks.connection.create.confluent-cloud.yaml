@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: confluent-cloud
 description: Create a aks connection to confluent-cloud.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        name: Name of the managed cluster. Required if '--source-id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        resource-group: The resource group which contains the managed cluster. Required if '--source-id' is not specified.None
-        source-id: The resource id of a aks. Required if ['--resource-group', '--name'] are not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --appconfig-id=: The app configuration id to store configuration
     --bootstrap-server=!: Kafka bootstrap server url
@@ -45,3 +37,41 @@ completion:
             - publicnetwork
             - configinfo
             - auth
+documentation:
+    command: |-
+        Command group 'aks connection' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appconfig-id: The app configuration id to store configuration.
+        bootstrap-server: Kafka bootstrap server url.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the aks.
+
+            Accepted values: dotnet, dotnet-internal, go, java, none, python, springBoot
+        connection: Name of the connection.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        kafka-key: Kafka API-Key (key).
+        kafka-secret: Kafka API-Key (secret).
+        kube-namespace: |-
+            The kubernetes namespace where the connection information will be saved into (as kubernetes secret).
+
+            Default value: default
+        name: Name of the managed cluster. Required if '--source-id' is not specified.None.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        resource-group: The resource group which contains the managed cluster. Required if '--source-id' is not specified.None.
+        schema-key: Schema registry API-Key (key).
+        schema-registry: Schema registry url.
+        schema-secret: Schema registry API-Key (secret).
+        source-id: The resource id of a aks. Required if ['--resource-group', '--name'] are not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a connection between aks and confluent-cloud: az aks connection create confluent-cloud -g ClusterRG -n MyCluster --bootstrap-server xxx.eastus.azure.confluent.cloud:9092 --kafka-key Name --kafka-secret Secret --schema-registry https://xxx.eastus.azure.confluent.cloud --schema-key Name --schema-secret Secret

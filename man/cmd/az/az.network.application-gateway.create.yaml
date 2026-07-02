@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create an application gateway.
-documentation:
-    flag:
-        connection-draining-timeout: 'The time in seconds after a backend server is removed during which on open connection remains active. Range: 0 (disabled) to 3600'
-        enable-private-link: Enable Private Link feature for this application gateway. If both public IP and private IP are enbaled, taking effect only in public frontend IP
-        key-vault-secret-id: Secret Id of (base-64 encoded unencrypted pfx) 'Secret' or 'Certificate' object stored in Azure KeyVault. You need enable soft delete for keyvault to use this feature.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        priority: Priority of the request routing rule. Supported SKU tiers are Standard_v2, WAF_v2.
-        private-link-ip-address: The static private IP address of a subnet for Private Link. If omitting, a dynamic one will be created
-        public-ip-address: Name or ID of a public IP address. Uses existing resource or creates new if specified, or none if omitted.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        ssl-certificate-name: The certificate name. Default will be `<application-gateway-name>SslCert`.
-        subnet: Name or ID of the subnet. Will create resource if it does not exist. If name specified, also specify --vnet-name. If you want to use an existing subnet in other resource group or subscription, please provide the ID instead of the name of the subnet
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --capacity=: The number of instances to use with the application gateway.
     --cert-file=: The path to the PFX certificate file.
@@ -103,3 +89,121 @@ completion:
             - WAF_Large
             - Standard_v2
             - WAF_v2
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        capacity: |-
+            The number of instances to use with the application gateway.
+
+            Default value: 2
+        cert-file: The path to the PFX certificate file.
+        cert-password: The certificate password.
+        change-reference: The related change reference ID for this resource operation.
+        connection-draining-timeout: |-
+            The time in seconds after a backend server is removed during which on open connection remains active. Range: 0 (disabled) to 3600.
+
+            Default value: 0
+        custom-error-pages: Space-separated list of custom error pages in ``` STATUS_CODE=URL ``` format.
+        enable-fips: |-
+            Whether FIPS is enabled on the application gateway resource.
+
+            Accepted values: false, true
+        enable-private-link: |-
+            Enable Private Link feature for this application gateway. If both public IP and private IP are enbaled, taking effect only in public frontend IP.
+
+            Default value: False
+        frontend-port: The front end port number.
+        http-settings-cookie-based-affinity: |-
+            Enable or disable HTTP settings cookie-based affinity.
+
+            Default value: disabled
+
+            Accepted values: Disabled, Enabled
+        http-settings-port: |-
+            The HTTP settings port.
+
+            Default value: 80
+        http-settings-protocol: |-
+            The HTTP settings protocol.
+
+            Default value: Http
+
+            Accepted values: Http, Https, Tcp, Tls
+        http2: |-
+            Use HTTP2 for the application gateway.
+
+            Accepted values: Disabled, Enabled
+        identity: Name or ID of the ManagedIdentity Resource.
+        key-vault-secret-id: Secret Id of (base-64 encoded unencrypted pfx) 'Secret' or 'Certificate' object stored in Azure KeyVault. You need enable soft delete for keyvault to use this feature.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        max-capacity: Upper bound on the number of application gateway instances.
+        min-capacity: Lower bound on the number of application gateway instances.
+        name: Name of the application gateway.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        priority: Priority of the request routing rule. Supported SKU tiers are Standard_v2, WAF_v2.
+        private-ip-address: Static private IP address to use.
+        private-link-ip-address: The static private IP address of a subnet for Private Link. If omitting, a dynamic one will be created.
+        private-link-primary: |-
+            Whether the IP configuration is primary or not.
+
+            Accepted values: false, true
+        private-link-subnet: |-
+            The name of the subnet within the same vnet of an application gateway.
+
+            Default value: PrivateLinkDefaultSubnet
+        private-link-subnet-prefix: |-
+            The CIDR prefix to use when creating a new subnet.
+
+            Default value: 10.0.1.0/24
+        public-ip-address: Name or ID of a public IP address. Uses existing resource or creates new if specified, or none if omitted.
+        public-ip-address-allocation: |-
+            The kind of IP allocation to use when creating a new public IP.
+
+            Default value: Dynamic
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        routing-rule-type: |-
+            The request routing rule type.
+
+            Default value: Basic
+
+            Accepted values: Basic, PathBasedRouting
+        servers: Space-separated list of IP addresses or DNS names corresponding to backend servers.
+        sku: |-
+            The name of the SKU.
+
+            Default value: Standard_Medium
+
+            Accepted values: Standard_Medium, Standard_Small, Standard_v2, WAF_Large, WAF_Medium, WAF_v2
+        ssl-certificate-name: The certificate name. Default will be ``` <application-gateway-name>SslCert ``` .
+        ssl-profile: 'The application gateway ssl profiles. Usage: --ssl-profile name=MySslProfile client-auth-configuration=True cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 policy-type=Custom min-protocol-version=TLSv1_0 name: Required. Name of the SSL profile that is unique within an Application Gateway. polic-name: Name of Ssl Policy. policy-type: Type of Ssl Policy. min-protocol-version: Minimum version of Ssl protocol to be supported on application gateway. cipher-suites: Ssl cipher suites to be enabled in the specified order to application gateway. disabled-ssl-protocols: Space-separated list of protocols to disable. trusted-client-certificates: Array of references to application gateway trusted client certificates. client-auth-configuration: Client authentication configuration of the application gateway resource. Multiple ssl profiles can be specified by using more than one ```'
+        ssl-profile-id: SSL profile resource of the application gateway.
+        subnet: |-
+            Name or ID of the subnet. Will create resource if it does not exist. If name specified, also specify --vnet-name. If you want to use an existing subnet in other resource group or subscription, please provide the ID instead of the name of the subnet.
+
+            Default value: default
+        subnet-address-prefix: |-
+            The CIDR prefix to use when creating a new subnet.
+
+            Default value: 10.0.0.0/24
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        trusted-client-cert: 'The application gateway trusted client certificate. Usage: --trusted-client-certificates name=client1 data=client.cer name: Required. Name of the trusted client certificate that is unique within an Application Gateway data: Required. Certificate public data. Multiple trusted client certificates can be specified by using more than one ```'
+        trusted-client-certificates: '``` argument.'
+        validate: |-
+            Generate and validate the ARM template without creating any resources.
+
+            Default value: False
+        vnet-address-prefix: |-
+            The CIDR prefix to use when creating a new VNet.
+
+            Default value: 10.0.0.0/16
+        vnet-name: The virtual network (VNet) name.
+        waf-policy: Name or ID of a web application firewall (WAF) policy.
+        zones: Space-separated list of availability zones into which to provision the resource.
+examples:
+    Create an application gateway with SSL profile.: az network application-gateway create -n MyAppGateway -g MyResourceGroup --public-ip-address MyPublicIP --sku Standard_v2 --priority 1001 --ssl-profile name=MyProfile min-protocol-version=TLSv1_0 cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 policy-type=Custom client-auth-configuration=True
+    Create an application gateway with VMs as backend servers.: az network application-gateway create -g MyResourceGroup -n MyAppGateway --capacity 2 --sku Standard_Medium --vnet-name MyVNet --subnet MySubnet --http-settings-cookie-based-affinity Enabled --public-ip-address MyAppGatewayPublicIp --servers 10.0.0.4 10.0.0.5
+    Create an application gateway.: az network application-gateway create --capacity 2 --frontend-port MyFrontendPort --http-settings-cookie-based-affinity Enabled --http-settings-port 80 --http-settings-protocol Http --location westus2 --name MyAppGateway --public-ip-address MyAppGatewayPublicIp --resource-group MyResourceGroup --sku Standard_Small --subnet MySubnet --vnet-name MyVNet

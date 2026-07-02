@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create or update a deployment stack at subscription scope
-documentation:
-    flag:
-        deny-settings-excluded-actions: List of role-based management operations that are excluded from the denySettings. Up to 200 actions are permitted.
-        deny-settings-excluded-principals: List of AAD principal IDs excluded from the lock. Up to 5 principals are permitted.
-        deployment-resource-group: The scope at which the initial deployment should be created. If a scope is not specified, it will default to the scope of the deployment stack.
-        parameters: Parameters may be supplied from a file using the `@{path}` syntax, a JSON string, or as `<KEY=VALUE>` pairs. Parameters are evaluated in order, so when a value is assigned twice, the latter value will be used. It is recommended that you supply your parameters file first, and then override selectively using KEY=VALUE syntax.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --action-on-unmanage=!: Defines what happens to resources that are no longer managed after the stack is updated or deleted.
     --bypass-stack-out-of-sync-error=:
@@ -48,3 +40,55 @@ completion:
             - denyDelete
             - denyWriteAndDelete
             - none
+documentation:
+    command: Create or update a deployment stack at subscription scope.
+    flag:
+        acquire-policy-token: |-
+            Acquiring an Azure Policy token automatically for this resource operation.
+
+            Default value: False
+
+            Accepted values: false, true
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Default value: False
+        deny-settings-excluded-actions: List of role-based management operations that are excluded from the denySettings. Up to 200 actions are permitted.
+        deny-settings-excluded-principals: List of AAD principal IDs excluded from the lock. Up to 5 principals are permitted.
+        deployment-resource-group: The scope at which the initial deployment should be created. If a scope is not specified, it will default to the scope of the deployment stack.
+        description: The description of deployment stack.
+        location: The location to store deployment stack.
+        name: The name of the deployment stack.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        parameters: Parameters may be supplied from a file using the ``` @{path} ``` syntax, a JSON string, or as ``` <KEY=VALUE> ``` pairs. Parameters are evaluated in order, so when a value is assigned twice, the latter value will be used. It is recommended that you supply your parameters file first, and then override selectively using KEY=VALUE syntax.
+        query-string: |-
+            The query string (a SAS token) to be used with the template-uri in the case of linked templates. --resources-without-delete-support --rwd Defines what happens to resources that do not support deletion when they are no longer managed by the stack.
+
+            Accepted values: detach, fail
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        template-file: A path to a template file or Bicep file in the file system.
+        template-spec: The template spec resource id.
+        template-uri: |-
+            A uri to a remote template file. --validation-level --vl Validation level for the deployment stack. The default is 'Provider'.
+
+            Accepted values: Provider, ProviderNoRbac, Template
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Create a deployment stack and deploy at the resource group scope.: az stack sub create --name StackName --template-file simpleTemplate.json --location westus --deployment-resource-group ResourceGroup --description description --deny-settings-mode None --action-on-unmanage deleteResources
+    Create a deployment stack at a different subscription.: az stack sub create --name StackName --template-file simpleTemplate.json --location westus2 --description description --subscription subscriptionId --deny-settings-mode None --action-on-unmanage deleteResources
+    Create a deployment stack from a local template, apply deny settings to child scopes.: az stack sub create --name StackName --template-file azuredeploy.json --deny-settings-mode denyDelete --deny-settings-excluded-actions Microsoft.Compute/virtualMachines/write --deny-settings-apply-to-child-scopes --location westus --action-on-unmanage deleteResources
+    ? Create a deployment stack from a local template, using a parameter file, a remote parameter file, and selectively overriding key/value pairs.
+    : az stack sub create --name StackName --template-file azuredeploy.json --parameters @params.json --parameters https://mysite/params.json --parameters MyValue=This MyArray=@array.json --location westus --deny-settings-mode None --action-on-unmanage deleteResources
+    Create a deployment stack from a local template, using deny settings.: az stack sub create --name StackName --template-file azuredeploy.json --deny-settings-mode denyDelete --deny-settings-excluded-actions Microsoft.Compute/virtualMachines/write --deny-settings-excluded-principals "test1 test2" --location westus --action-on-unmanage deleteResources
+    Create a deployment stack using bicep file and delete all resources on unmanage.: az stack sub create --name StackName --action-on-unmanage deleteAll --template-file simple.bicep --location westus2 --description description --deny-settings-mode None
+    Create a deployment stack using parameters from key/value pairs.: az stack sub create --name StackName --template-file simpleTemplate.json --location westus --description description --parameters simpleTemplateParams.json value1=foo value2=bar --deny-settings-mode None --action-on-unmanage deleteResources
+    Create a deployment stack using template file and detach all resources on unmanage.: az stack sub create --name StackName --template-file simpleTemplate.json --location westus2 --description description --deny-settings-mode None --action-on-unmanage detachAll
+    Create a deployment stack with parameter file and delete resources on unmanage.: az stack sub create --name StackName --action-on-unmanage deleteResources --template-file simpleTemplate.json --parameters simpleTemplateParams.json --location westus2 --description description --deny-settings-mode None
+    Create a deployment stack with template spec.: az stack sub create --name StackName --template-spec TemplateSpecResourceIDWithVersion --location westus2 --description description --deny-settings-mode None --action-on-unmanage deleteResources

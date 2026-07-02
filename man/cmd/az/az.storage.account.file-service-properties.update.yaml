@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update the properties of file service in storage account.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        auth-methods: SMB authentication methods supported by server. Valid values are NTLMv2, Kerberos. Should be passed as a string with delimiter ';'.
-        channel-encryption: 'SMB channel encryption supported by server. Valid values are AES-128-CCM, AES-128-GCM, AES-256-GCM. Should be passed as a string with delimiter '';'' '
-        delete-retention-days: Indicate the number of days that the deleted item should be retained. The minimum specified value can be 1 and the maximum value can be 365.
-        enable-smb-multichannel: Set SMB Multichannel setting for file service. Applies to Premium FileStorage only.
-        kerb-ticket-encryption: Kerberos ticket encryption supported by server. Valid values are RC4-HMAC, AES-256. Should be passed as a string with delimiter ';'.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        versions: SMB protocol versions supported by server. Valid values are SMB2.1, SMB3.0, SMB3.1.1. Should be passed as a string with delimiter ';'.
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -47,3 +34,47 @@ completion:
         enable-smb-multichannel:
             - "true"
             - "false"
+documentation:
+    flag:
+        account-name: The storage account name.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: |-
+            Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .
+
+            Default value: []
+        auth-methods: SMB authentication methods supported by server. Valid values are NTLMv2, Kerberos. Should be passed as a string with delimiter ';'.
+        change-reference: The related change reference ID for this resource operation.
+        channel-encryption: 'SMB channel encryption supported by server. Valid values are AES-128-CCM, AES-128-GCM, AES-256-GCM. Should be passed as a string with delimiter '';'' '
+        delete-retention-days: Indicate the number of days that the deleted item should be retained. The minimum specified value can be 1 and the maximum value can be 365.
+        enable-delete-retention: |
+            Enable file service properties for share soft delete.
+
+            Accepted values: false, true
+        enable-smb-multichannel: Set SMB Multichannel setting for file service. Applies to Premium FileStorage only.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Default value: False
+        kerb-ticket-encryption: |-
+            Kerberos ticket encryption supported by server. Valid values are RC4-HMAC, AES-256. Should be passed as a string with delimiter ';'.
+
+            Accepted values: false, true
+        remove: |-
+            Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .
+
+            Default value: []
+
+            Accepted values: false, true
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        set: |-
+            Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .
+
+            Default value: []
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        versions: SMB protocol versions supported by server. Valid values are SMB2.1, SMB3.0, SMB3.1.1. Should be passed as a string with delimiter ';'.
+examples:
+    Disable SMB Multichannel setting for file service.: az storage account file-service-properties update --enable-smb-multichannel false -n mystorageaccount -g MyResourceGroup
+    Disable soft delete policy for file service.: az storage account file-service-properties update --enable-delete-retention false -n mystorageaccount -g MyResourceGroup
+    Enable SMB Multichannel setting for file service.: az storage account file-service-properties update --enable-smb-multichannel -n mystorageaccount -g MyResourceGroup
+    Enable soft delete policy and set delete retention days to 100 for file service in storage account.: az storage account file-service-properties update --enable-delete-retention true --delete-retention-days 100 -n mystorageaccount -g MyResourceGroup
+    Set secured SMB setting for file service.: az storage account file-service-properties update --versions SMB2.1;SMB3.0;SMB3.1.1 --auth-methods NTLMv2;Kerberos --kerb-ticket-encryption RC4-HMAC;AES-256 --channel-encryption AES-128-CCM;AES-128-GCM;AES-256-GCM -n mystorageaccount -g MyResourceGroup

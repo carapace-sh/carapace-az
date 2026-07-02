@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Updates a Maps Account.
-documentation:
-    flag:
-        disable-local-auth: Allows toggle functionality on Azure Policy to disable Azure Maps local authentication support. This will disable Shared Keys authentication from any usage.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        user-identities: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''. Expected value: json-string/@json-file.'
 flags:
     --disable-local-auth=:
         description: Allows toggle functionality on Azure Policy to disable Azure Maps local authentication support.
@@ -45,3 +38,35 @@ completion:
             - UserAssigned
             - SystemAssigned, UserAssigned
             - None
+documentation:
+    command: Updates a Maps Account. Only a subset of the parameters may be updated after creation, such as Sku, Tags, Properties.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        disable-local-auth: |-
+            Allows toggle functionality on Azure Policy to disable Azure Maps local authentication support. This will disable Shared Keys authentication from any usage.
+
+            Accepted values: false, true
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        kind: |-
+            Get or Set Kind property.
+
+            Accepted values: Gen1, Gen2
+        linked-resources: 'Sets the resources to be used for Managed Identities based operations for the Map account resource. Usage: --linked-resources unique-name=XX id=XX unique-name: Required. A provided name which uniquely identifies the linked resource. id: Required. ARM resource id in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/accounts/{storageName}''. Multiple actions can be specified by using more than one --linked-resources argument.'
+        resource-group: Resource group name.
+        sku: |-
+            The name of the SKU, in standard format (such as S0).
+
+            Accepted values: G2, S0, S1
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        type: |-
+            The identity type.
+
+            Accepted values: None, SystemAssigned, SystemAssigned, UserAssigned, UserAssigned
+        user-identities: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''. Expected value: json-string/@json-file.'
+examples:
+    Update Account Managed Identities: az maps account update --type "SystemAssigned, UserAssigned" --user-identities "{\"/subscriptions/21a9967a-e8a9-4656-a70b-96ff1c4d05a0/resourceGroups/myResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identityName\":{}}" --kind "Gen2" --linked-resources id="/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/accounts/{storageName}" unique-name="myBatchStorageAccount" --account-name "myMapsAccount" --resource-group "myResourceGroup" --sku "S1"
+    Update Account Tags: az maps account update --tags specialTag="true" --account-name "myMapsAccount" --resource-group "myResourceGroup" --sku "S0"
+    Update to Gen1 Account: az maps account update --kind "Gen1" --account-name "myMapsAccount" --resource-group "myResourceGroup" --sku "S0"
+    Update to Gen2 Account: az maps account update --kind "Gen2" --account-name "myMapsAccount" --resource-group "myResourceGroup" --sku "S0"

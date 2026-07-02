@@ -1,11 +1,22 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: edit-link-tables
 description: Edit tables for a link connection.
-documentation:
-    flag:
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --subscription=: Name or ID of subscription.
     --workspace-name=!: The workspace name.
     -f, --file=!: The Edit link-tables file path, The file format can be viewed using --help.
     -n, --name=!: The link connection name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        file: The Edit link-tables file path, The file format can be viewed using --help.
+        name: The link connection name.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        workspace-name: The workspace name.
+examples:
+    ? Edit tables for a link connection. the file pattern should be { "linkTables":[ { "id":"00000000000000000000000000000000", // please change to your link table Id a uuid "source":{ "tableName":"sampleSourceTable", // please change to your source table name "schemaName":"sampleSourceSchema" // please change to your source database schema name }, "target":{ "tableName":"sampleTargetTable", // please change to your target table name "schemaName":"sampleTargetSchema", // please change to your target database schema name "distributionOptions":{ "type":"Round_RoBin", // please choose a type from Hash, Round_RoBin, Replicate "distributionColumn":"sampleColumn" // please change to the column name } }, "operationType":"add" // please choose a value from add, update, remove } ] }
+    : |-
+        az synapse link-connection edit-link-tables --workspace-name testsynapseworkspace \
+          --name linkconnectionname \
+          --file @path/edittablerequestfile.json

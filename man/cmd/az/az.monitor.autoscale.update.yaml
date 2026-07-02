@@ -1,32 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update an autoscale setting.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        add-actions: |-
-            Add an action to fire when a scaling event occurs.
-                    Usage:   --add-action TYPE KEY [ARG ...]
-                    Email:   --add-action email bob@contoso.com ann@contoso.com
-                    Webhook: --add-action webhook https://www.contoso.com/alert apiKey=value
-                    Webhook: --add-action webhook https://www.contoso.com/alert?apiKey=value
-                    Multiple actions can be specified by using more than one `--add-action` argument.
-                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        count: The numer of instances to use. If used with --min/max-count, the default number of instances to use.
-        enabled: the enabled flag. Specifies whether automatic scaling is enabled for the resource. The default value is 'false'.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        remove-actions: |-
-            Remove one or more actions.
-                    Usage:   --remove-action TYPE KEY [KEY ...]
-                    Email:   --remove-action email bob@contoso.com ann@contoso.com
-                    Webhook: --remove-action webhook https://contoso.com/alert https://alerts.contoso.com.
-                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        scale-look-ahead-time: the amount of time to specify by which instances are launched in advance. It must be between 1 minute and 60 minutes in ISO 8601 format (for example, 100 days would be P100D).
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Gets or sets a list of key value pairs that describe the resource. These tags can be used in viewing and grouping this resource (across resource groups). A maximum of 15 tags can be provided for a resource. Each tag must have a key no greater in length than 128 characters and a value no greater in length than 256 characters.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -119,3 +93,57 @@ completion:
             - Disabled
             - Enabled
             - ForecastOnly
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .'
+        add-action: '``` argument. Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        add-actions: |-
+            Add an action to fire when a scaling event occurs.
+                    Usage:   --add-action TYPE KEY [ARG ...]
+                    Email:   --add-action email bob@contoso.com ann@contoso.com
+                    Webhook: --add-action webhook https://www.contoso.com/alert apiKey=value
+                    Webhook: --add-action webhook https://www.contoso.com/alert?apiKey=value
+                    Multiple actions can be specified by using more than one `--add-action` argument.
+                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        change-reference: The related change reference ID for this resource operation.
+        count: The numer of instances to use. If used with --min/max-count, the default number of instances to use.
+        email-administrator: |-
+            Send email to subscription administrator on scaling.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        email-coadministrators: |-
+            Send email to subscription co-administrators on scaling.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        enabled: |-
+            The enabled flag. Specifies whether automatic scaling is enabled for the resource. The default value is 'false'.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        max-count: The maximum number of instances.
+        min-count: The minimum number of instances.
+        remove: 'Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .'
+        remove-actions: |-
+            Remove one or more actions.
+                    Usage:   --remove-action TYPE KEY [KEY ...]
+                    Email:   --remove-action email bob@contoso.com ann@contoso.com
+                    Webhook: --remove-action webhook https://contoso.com/alert https://alerts.contoso.com.
+                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        scale-look-ahead-time: the amount of time to specify by which instances are launched in advance. It must be between 1 minute and 60 minutes in ISO 8601 format (for example, 100 days would be P100D).
+        scale-mode: |-
+            The predictive autoscale mode.
+
+            Accepted values: Disabled, Enabled, ForecastOnly
+        set: 'Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Gets or sets a list of key value pairs that describe the resource. These tags can be used in viewing and grouping this resource (across resource groups). A maximum of 15 tags can be provided for a resource. Each tag must have a key no greater in length than 128 characters and a value no greater in length than 256 characters.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Update autoscale settings to remove an email notification.: az monitor autoscale update -g myrg -n autoscale-name --remove-action email bob@contoso.com
+    Update autoscale settings to use a fixed 3 instances by default.: az monitor autoscale update -g myrg -n autoscale-name --count 3
+    Update autoscale settings.: az monitor autoscale update --count 3 --email-administrator true --enabled true --max-count 5 --min-count 2 --name MyAutoscaleSettings --resource-group MyResourceGroup --tags key[=value]

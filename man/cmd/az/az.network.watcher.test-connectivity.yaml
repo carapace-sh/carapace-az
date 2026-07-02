@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: test-connectivity
 description: Test if a connection can be established between a Virtual Machine and a given endpoint.
-documentation:
-    flag:
-        dest-resource: Name or ID of the resource to receive traffic. Currently only Virtual Machines are supported.
-        headers: Space-separated list of headers in `KEY=VALUE` format.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        source-resource: Name or ID of the resource from which to originate traffic. Currently only Virtual Machines are supported.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        valid-status-codes: Space-separated list of HTTP status codes considered valid.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --dest-address=: IP address or URI at which to receive traffic.
     --dest-port=: Port number on which to receive traffic.
@@ -47,3 +40,34 @@ completion:
             - Https
             - Icmp
             - Tcp
+documentation:
+    command: |-
+        This command is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        dest-address: IP address or URI at which to receive traffic.
+        dest-port: Port number on which to receive traffic.
+        dest-resource: Name or ID of the resource to receive traffic. Currently only Virtual Machines are supported.
+        headers: Space-separated list of headers in ``` KEY=VALUE ``` format.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        method: |-
+            HTTP method to use.
+
+            Accepted values: Get
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        protocol: |-
+            Protocol to test on.
+
+            Accepted values: Http, Https, Icmp, Tcp
+        resource-group: Name of the resource group the target resource is in.
+        source-port: Port number from which to originate traffic.
+        source-resource: Name or ID of the resource from which to originate traffic. Currently only Virtual Machines are supported.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        valid-status-codes: Space-separated list of HTTP status codes considered valid.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Check connectivity between two virtual machines in the same resource group over port 80.: az network watcher test-connectivity -g MyResourceGroup --source-resource MyVmName1 --dest-resource MyVmName2 --dest-port 80
+    Check connectivity between two virtual machines in the same subscription in two different resource groups over port 80.: az network watcher test-connectivity --source-resource MyVmId1 --dest-resource MyVmId2 --dest-port 80

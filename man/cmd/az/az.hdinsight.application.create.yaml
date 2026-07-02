@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create an application for a HDInsight cluster.
-documentation:
-    flag:
-        disable-gateway-auth: 'Indicates whether to disable gateway authentication. Default is to enable gateway authentication. Default: false. '
-        edgenode-size: 'The size of the node. See also: https://learn.microsoft.com/azure/hdinsight/hdinsight-hadoop-provision-linux-clusters#configure-cluster-size'
-        no-validation-timeout: Permit timeout error during argument validation phase. If omitted, validation timeout error will be permitted.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet: The name or ID of subnet. If name is supplied, `--vnet-name` must be supplied.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --access-mode=: The access mode for the application.
     --cluster-name=!: The name of the cluster.
@@ -44,3 +35,73 @@ completion:
         type:
             - CustomApplication
             - RServer
+documentation:
+    flag:
+        access-mode: |-
+            The access mode for the application.
+
+            Default value: WebPage
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: The name of the cluster.
+        destination-port: |-
+            The destination port to connect to.
+
+            Default value: 8080
+        disable-gateway-auth: |-
+            Indicates whether to disable gateway authentication. Default is to enable gateway authentication. Default: false.
+
+            Accepted values: false, true
+        edgenode-size: |-
+            The size of the node. See also: https://learn.microsoft.com/azure/hdinsight/hdinsight-hadoop-provision-linux-clusters#configure-cluster-size .
+
+            Default value: Standard_D3_V2
+        marketplace-id: The marketplace identifier.
+        name: The constant value for the application name.
+        no-validation-timeout: |-
+            Permit timeout error during argument validation phase. If omitted, validation timeout error will be permitted.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        script-action-name: The name of the script action.
+        script-parameters: The parameters for the script.
+        script-uri: The URI to the script.
+        ssh-password: SSH password for the cluster nodes.
+        ssh-public-key: SSH public key for the cluster nodes.
+        ssh-user: |-
+            SSH username for the cluster nodes.
+
+            Default value: sshuser
+        sub-domain-suffix: The subdomain suffix of the application.
+        subnet: The name or ID of subnet. If name is supplied, `--vnet-name` must be supplied.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        type: |-
+            The application type.
+
+            Default value: CustomApplication
+
+            Accepted values: CustomApplication, RServer
+        vnet-name: The name of a virtual network.
+examples:
+    Create an application with HTTPS Endpoint.: |-
+        az hdinsight application create -g MyResourceGroup -n MyApplication \
+        --cluster-name MyCluster \
+        --script-uri https://hdiconfigactions.blob.core.windows.net/linuxhueconfigactionv02/install-hue-uber-v02.sh \
+        --script-action-name MyScriptAction \
+        --script-parameters "-version latest -port 20000" \
+        --destination-port 8888 \
+        --sub-domain-suffix was
+    Create an application with a script URI and specified edge node size.: |-
+        az hdinsight application create -g MyResourceGroup -n MyApplication \
+        --cluster-name MyCluster \
+        --script-uri https://hdiconfigactions.blob.core.windows.net/linuxhueconfigactionv02/install-hue-uber-v02.sh \
+        --script-action-name MyScriptAction \
+        --script-parameters "-version latest -port 20000" \
+        --edgenode-size Standard_D4_v2
+    Create an application with a script URI.: |-
+        az hdinsight application create -g MyResourceGroup -n MyApplication \
+        --cluster-name MyCluster \
+        --script-uri https://hdiconfigactions.blob.core.windows.net/linuxhueconfigactionv02/install-hue-uber-v02.sh \
+        --script-action-name MyScriptAction \
+        --script-parameters '"-version latest -port 20000"'

@@ -1,30 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a default activity log alert rule.
-documentation:
-    flag:
-        action-group: Add an action group. Accepts space-separated action group identifiers. The identifier can be the action group's name or its resource ID.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        all-of: The list of Activity Log Alert rule conditions.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        condition: |-
-            The condition that will cause the alert rule to activate. The format is FIELD=VALUE[ and FIELD=VALUE...]
-                    The possible values for the field are 'resourceId', 'category', 'caller',
-                    'level', 'operationName', 'resourceGroup', 'resourceProvider', 'status',
-                    'subStatus', 'resourceType', or anything beginning with 'properties'.
-                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        scope: |-
-            A list of strings that will be used as prefixes.
-                    The alert rule will only apply to activity logs with resourceIDs that fall under one of
-                    these prefixes. If not provided, the subscriptionId will be used.
-                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: The tags of the resource.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        webhook-properties: |-
-            Space-separated webhook properties in 'key[=value]' format. These properties are associated with the action groups added in this command.
-                    For any webhook receiver in these action group, this data is appended to the webhook
-                    payload. To attach different webhook properties to different action groups, add the
-                    action groups in separate update-action commands.
-                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --all-of=:
         description: The list of Activity Log Alert rule conditions.
@@ -64,3 +40,41 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        action-group: Add an action group. Accepts space-separated action group identifiers. The identifier can be the action group's name or its resource ID.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        all-of: The list of Activity Log Alert rule conditions.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        change-reference: The related change reference ID for this resource operation.
+        condition: |-
+            The condition that will cause the alert rule to activate. The format is FIELD=VALUE[ and FIELD=VALUE...]
+                    The possible values for the field are 'resourceId', 'category', 'caller',
+                    'level', 'operationName', 'resourceGroup', 'resourceProvider', 'status',
+                    'subStatus', 'resourceType', or anything beginning with 'properties'.
+                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        description: A description of this Activity Log Alert rule.
+        disable: |-
+            Disable the activity log alert rule after it is created.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        scope: |-
+            A list of strings that will be used as prefixes.
+                    The alert rule will only apply to activity logs with resourceIDs that fall under one of
+                    these prefixes. If not provided, the subscriptionId will be used.
+                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: The tags of the resource.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        webhook-properties: |-
+            Space-separated webhook properties in 'key[=value]' format. These properties are associated with the action groups added in this command.
+                    For any webhook receiver in these action group, this data is appended to the webhook
+                    payload. To attach different webhook properties to different action groups, add the
+                    action groups in separate update-action commands.
+                      Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Create an alert rule which is initially disabled.: az monitor activity-log alert create -n AlertName -g ResourceGroup --disable
+    Create an alert rule with an action group and specify webhook properties.: az monitor activity-log alert create -n AlertName -g ResourceGroup -a /subscriptions/{SubID}/resourceGroups/{ResourceGroup}/providers/microsoft.insights/actionGroups/{ActionGroup} -w usage=test owner=jane
+    Create an alert rule with condition about error level service health log.: az monitor activity-log alert create -n AlertName -g ResourceGroup --condition category=ServiceHealth and level=Error
+    Create an alert rule with default settings.: az monitor activity-log alert create -n AlertName -g ResourceGroup

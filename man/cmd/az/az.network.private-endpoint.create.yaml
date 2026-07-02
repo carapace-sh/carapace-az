@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a private endpoint.
-documentation:
-    flag:
-        asgs: 'The private endpoint application security groups.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.  Singular flags: `--asg`.'
-        group-ids: The ID of the group obtained from the remote resource that this private endpoint should connect to. You can use "az network private-link-resource list" to obtain the supported group ids. You must provide this except for PrivateLinkService.,  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        ip-configs: 'The private endpoint ip configurations.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.  Singular flags: `--ip-config`.'
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        manual-request: Use manual request to establish the connection. Configure it as 'true' when you don't have access to the subscription of private link service.
-        request-message: A message passed to the owner of the remote resource with this connection request. Restricted to 140 chars.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet: Name or ID of an existing subnet. If name specified, also specify --vnet-name. If you want to use an existing subnet in other resource group or subscription, please provide the ID instead of the name of the subnet and do not specify the--vnet-name.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'Space-separated tags: key[=value] [key[=value]...]. Use "" to clear existing tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
 flags:
     --asgs=:
         description: The private endpoint application security groups.
@@ -67,3 +55,50 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        asg: '``` .'
+        asgs: 'The private endpoint application security groups.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.  Singular flags: `--asg`.'
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        connection-name: Name of the private link service connection.
+        edge-zone: 'The name of edge zone. --group-id --group-ids The ID of the group obtained from the remote resource that this private endpoint should connect to. You can use "az network private-link-resource list" to obtain the supported group ids. You must provide this except for PrivateLinkService.,  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more. --ip-config --ip-configs The private endpoint ip configurations.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.  Singular flags: ```'
+        group-ids: The ID of the group obtained from the remote resource that this private endpoint should connect to. You can use "az network private-link-resource list" to obtain the supported group ids. You must provide this except for PrivateLinkService.,  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        ip-config: '``` .'
+        ip-configs: 'The private endpoint ip configurations.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.  Singular flags: `--ip-config`.'
+        ip-version-type: |-
+            Specifies the IP version type for the private IPs of the private endpoint. If not defined, this defaults to IPv4.
+
+            Default value: IPv4
+
+            Accepted values: DualStack, IPv4, IPv6
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        manual-request: |-
+            Use manual request to establish the connection. Configure it as 'true' when you don't have access to the subscription of private link service.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        name: Name of the private endpoint.
+        nic-name: The custom name of the network interface attached to the private endpoint.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        private-connection-resource-id: The resource id of the private endpoint to connect to.
+        request-message: A message passed to the owner of the remote resource with this connection request. Restricted to 140 chars.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-gateway: Reference to an existing service gateway.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        sharing-scope: |-
+            Set this property to Tenant to allow sharing subnet with other subscriptions in your AAD tenant. This property can only be set if defaultOutboundAccess is set to false, both properties can only be set if subnet is empty.
+
+            Accepted values: DelegatedServices, Tenant
+        subnet: Name or ID of an existing subnet. If name specified, also specify --vnet-name. If you want to use an existing subnet in other resource group or subscription, please provide the ID instead of the name of the subnet and do not specify the--vnet-name.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value]...]. Use "" to clear existing tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        vnet-name: The virtual network (VNet) associated with the subnet (Omit if supplying a subnet id).
+examples:
+    Create a private endpoint with ASGs.: az network private-endpoint create -n MyPE -g MyResourceGroup --vnet-name MyVnetName --subnet MySubnet --connection-name MyConnectionName --group-id MyGroupId --private-connection-resource-id MyResourceId --asg id=MyAsgId --asg id=MyAsgId
+    Create a private endpoint with ip-configs.: az network private-endpoint create -n MyPE -g MyResourceGroup --vnet-name MyVnetName --subnet MySubnet --connection-name MyConnectionName --group-id MyGroupId --private-connection-resource-id MyResourceId --ip-configs [{name:Myipconfig1,group-id:MyGroupId ,member-name:MyMemberName,private-ip-address:10.0.0.4},{name:Myipconfig2,private-ip-address:10.0.0.6}]
+    Create a private endpoint.: az network private-endpoint create -g MyResourceGroup -n MyPE --vnet-name MyVnetName --subnet MySubnet --private-connection-resource-id "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/MyResourceGroup/providers/Microsoft.Network/privateLinkServices/MyPLS" --connection-name tttt -l centralus

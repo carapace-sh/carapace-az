@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: upload
 description: Start to restore the HSM.
-documentation:
-    flag:
-        hsm-name: Name of the HSM. Can be omitted if --id is specified.
-        passwords: Space-separated password list for --sd-wrapping-keys. CLI will match them in order. Can be omitted if your keys are without password protection.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --hsm-name=: Name of the HSM.
     --id=: Full URI of the HSM.
@@ -20,3 +15,25 @@ flags:
         description: Space-separated file paths to PEM files containing private keys.
         nargs: -1
     --subscription=: Name or ID of subscription.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        hsm-name: Name of the HSM. Can be omitted if --id is specified.
+        id: Full URI of the HSM.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        passwords: Space-separated password list for --sd-wrapping-keys. CLI will match them in order. Can be omitted if your keys are without password protection.
+        restore-blob: |-
+            Indicator if blob is already restored.
+
+            Default value: False
+        sd-exchange-key: The exchange key for security domain.
+        sd-file: This file contains security domain encrypted using SD Exchange file downloaded in security-domain init-recovery command.
+        sd-wrapping-keys: Space-separated file paths to PEM files containing private keys.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Security domain upload (M=2).: az keyvault security-domain upload --hsm-name MyHSM --sd-file "{SD_TRANSFER_FILE}" --sd-exchange-key "{PEM_FILE_NAME}" --sd-wrapping-keys "{PEM_PRIVATE_KEY1_FILE_NAME}" "{PEM_PRIVATE_KEY2_FILE_NAME}"
+    Security domain upload, in which sd_file is already restored using keyvault security-domain restore-blob command: az keyvault security-domain upload --hsm-name MyHSM --sd-file "{SD_TRANSFER_FILE}" --restore-blob

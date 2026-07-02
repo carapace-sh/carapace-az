@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create an IoT Central application.
-documentation:
-    flag:
-        display-name: Custom display name for the IoT Central app. This will be used in the IoT Central application manager to help you identify your app. Default value is the resource name.
-        location: Where your app's info and resources are stored. We will default to the location of the target resource group. See documentation for a full list of supported locations.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subdomain: Enter a unique URL. Your app will be accessible via https://{subdomain}.azureiotcentral.com/. Avoid special characters `-` instead, use lower case letters (a-z), numbers (0-9), and dashes (-).
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        template: IoT Central application template name. Default is "Custom application". See documentation for a list of available templates.
 flags:
     --mi-system-assigned=: Provide this flag to use system assigned identity.
     --no-wait=: Do not wait for the long-running operation to finish.
@@ -26,3 +18,32 @@ completion:
             - ST0
             - ST1
             - ST2
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        display-name: Custom display name for the IoT Central app. This will be used in the IoT Central application manager to help you identify your app. Default value is the resource name.
+        location: Where your app's info and resources are stored. We will default to the location of the target resource group. See documentation for a full list of supported locations.
+        mi-system-assigned: |-
+            Provide this flag to use system assigned identity.
+
+            Default value: False
+        name: Give your IoT Central app a unique name so you can find it later.This will be used as the resource name in the Azure portal and CLI.Avoid special characters ``` - ``` instead, use lower case letters (a-z), numbers (0-9), and dashes (-).
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku: |-
+            Pricing plan for IoT Central application.
+
+            Default value: ST2
+
+            Accepted values: ST0, ST1, ST2
+        subdomain: Enter a unique URL. Your app will be accessible via https://{subdomain}.azureiotcentral.com/. Avoid special characters ``` - ``` instead, use lower case letters (a-z), numbers (0-9), and dashes (-).
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        template: IoT Central application template name. Default is "Custom application". See documentation for a list of available templates.
+examples:
+    Create an IoT Central application in the region of the resource group using the default pricing SKU.: az iot central app create -n my-first-iot-app -g MyResourceGroup -s my-iot-app
+    Create an IoT Central application the in the 'East US' region with the 'ST1' pricing plan and an industry template.: az iot central app create -n my-first-iot-app -g MyResourceGroup -s my-iot-app -l eastus -p ST1 -t iotc-distribution
+    Create an IoT Central application using system-assigned managed identity.: az iot central app create -n my-first-iot-app -g MyResourceGroup -s my-iot-app --mi-system-assigned

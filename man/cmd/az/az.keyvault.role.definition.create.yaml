@@ -1,10 +1,27 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a custom role definition.
-documentation:
-    flag:
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --hsm-name=!: Name of the HSM.
     --role-definition=!: Description of a role as JSON, or a path to a file containing a JSON description.
     --subscription=: Name or ID of subscription.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        hsm-name: Name of the HSM.
+        role-definition: Description of a role as JSON, or a path to a file containing a JSON description.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a role by a JSON string.: |-
+        az keyvault role definition create --hsm-name MyHSM --role-definition '{
+            "roleName": "My Custom Role",
+            "description": "The description of the custom rule.",
+            "actions": [],
+            "notActions": [],
+            "dataActions": [
+                "Microsoft.KeyVault/managedHsm/keys/read/action"
+            ],
+            "notDataActions": []
+        }'
+    Create a role from a file containing a JSON description.: az keyvault role definition create --hsm-name MyHSM --role-definition @keyvault-role.json

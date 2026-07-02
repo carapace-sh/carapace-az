@@ -1,9 +1,39 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a role definition.
-documentation:
-    flag:
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --role-definition=!: json formatted content which defines the new role.
     --subscription=: Name or ID of subscription.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        role-definition: Description of an existing role as JSON, or a path to a file containing a JSON description.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Update a role using the output of "az role definition list". (Bash): |-
+        az role definition update --role-definition '{
+            "roleName": "Contoso On-call",
+            "Description": "Perform VM actions and read storage and network information.",
+            "id": "/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/providers/Microsoft.Authorization/roleDefinitions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            "roleType": "CustomRole",
+            "type": "Microsoft.Authorization/roleDefinitions",
+            "Actions": [
+                "Microsoft.Compute/*/read",
+                "Microsoft.Compute/virtualMachines/start/action",
+                "Microsoft.Compute/virtualMachines/restart/action",
+                "Microsoft.Network/*/read",
+                "Microsoft.Storage/*/read",
+                "Microsoft.Authorization/*/read",
+                "Microsoft.Resources/subscriptions/resourceGroups/read",
+                "Microsoft.Resources/subscriptions/resourceGroups/resources/read",
+                "Microsoft.Support/*"
+            ],
+            "DataActions": [
+                "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/*"
+            ],
+            "NotDataActions": [
+                "Microsoft.Storage/storageAccounts/blobServices/containers/blobs/write"
+            ],
+            "AssignableScopes": ["/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
+        }'

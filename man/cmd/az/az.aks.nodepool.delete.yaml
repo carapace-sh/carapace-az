@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: delete
 description: Delete the agent pool in the managed Kubernetes cluster.
-documentation:
-    flag:
-        if-match: The value provided will be compared to the ETag of the node pool, if it matches the operation will proceed. If it does not match, the request will be rejected to prevent accidental overwrites. This must not be specified when creating a new agentpool.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --cluster-name=!: The cluster name.
     --if-match=: The value provided will be compared to the ETag of the node pool, if it matches the operation will proceed.
@@ -14,3 +9,20 @@ flags:
     -g, --resource-group=!: Name of resource group.
     -i, --ignore-pdb=: ""
     -n, --nodepool-name=!: The node pool name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: The cluster name. --name --nodepool-name -n The node pool name.
+        if-match: The value provided will be compared to the ETag of the node pool, if it matches the operation will proceed. If it does not match, the request will be rejected to prevent accidental overwrites. This must not be specified when creating a new agentpool.
+        ignore-pdb: Delete an existing nodepool without considering Pod Disruption Budget.
+        ignore-pod-disruption-budget: (PREVIEW) ignore-pod-disruption-budget deletes an existing nodepool without considering Pod Disruption Budget.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Delete an agent pool with ignore-pdb: az aks nodepool delete --resource-group MyResourceGroup --cluster-name MyManagedCluster --name nodepool1 --if-match etag --ignore-pdb
+    Delete an agent pool with ignore-pod-disruption-budget: az aks nodepool delete --resource-group MyResourceGroup --cluster-name MyManagedCluster --name nodepool1 --ignore-pod-disruption-budget=true

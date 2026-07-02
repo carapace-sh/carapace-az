@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List role assignments.
-documentation:
-    flag:
-        assignee: 'represent a user, group, or service principal. supported format: object id, user sign-in name, or service principal name'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --all=: show all assignments under the current subscription
     --assignee=: represent a user, group, or service principal.
@@ -22,3 +18,42 @@ completion:
         include-classic-administrators:
             - "true"
             - "false"
+documentation:
+    flag:
+        all: |-
+            Show all assignments under the current subscription.
+
+            Default value: False
+        assignee: 'Represent a user, group, or service principal. supported format: object id, user sign-in name, or service principal name.'
+        assignee-object-id: The assignee's object ID (also known as principal ID). Use this argument instead of '--assignee' to bypass Microsoft Graph query in case the logged-in account has no permission or the machine has no network access to query Microsoft Graph.
+        fill-principal-name: |-
+            Query Microsoft Graph to get the assignee's userPrincipalName (for user), servicePrincipalNames (for service principal) or displayName (for group), then fill principalName property with it. If the logged-in account has no permission or the machine has no network access to query Microsoft Graph, set this flag to false to avoid warning or error.
+
+            Default value: True
+
+            Accepted values: false, true
+        fill-role-definition-name: |-
+            Fill roleDefinitionName property in addition to roleDefinitionId. This operation is expensive. If you encounter performance issue, set this flag to false.
+
+            Default value: True
+
+            Accepted values: false, true
+        include-groups: |-
+            Include extra assignments to the groups of which the user is a member (transitively).
+
+            Default value: False
+        include-inherited: |-
+            Include assignments applied on parent scopes.
+
+            Default value: False
+        resource-group: Use it only if the role or assignment was added at the level of a resource group.
+        role: Role name or id.
+        scope: Scope at which the role assignment or definition applies to, e.g., /subscriptions/0b1f6471-1bf0-4dda-aec3-111122223333, /subscriptions/0b1f6471-1bf0-4dda-aec3-111122223333/resourceGroups/myGroup, or /subscriptions/0b1f6471-1bf0-4dda-aec3-111122223333/resourceGroups/myGroup/providers/Microsoft.Compute/virtualMachines/myVM.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    List role assignments at the subscription scope, without filling roleDefinitionName property.: az role assignment list --scope /subscriptions/00000000-0000-0000-0000-000000000000 --fill-role-definition-name false
+    List role assignments at the subscription scope.: az role assignment list --scope /subscriptions/00000000-0000-0000-0000-000000000000
+    ? List role assignments of an assignee (with its object ID) at the subscription scope, without filling principalName property. This command does not query Microsoft Graph.
+    : az role assignment list --assignee-object-id 00000000-0000-0000-0000-000000000000 --scope /subscriptions/00000000-0000-0000-0000-000000000000 --fill-principal-name false
+    List role assignments of an assignee at the subscription scope.: az role assignment list --assignee 00000000-0000-0000-0000-000000000000 --scope /subscriptions/00000000-0000-0000-0000-000000000000
+    List role assignments with "Reader" role at the subscription scope.: az role assignment list --role Reader --scope /subscriptions/00000000-0000-0000-0000-000000000000

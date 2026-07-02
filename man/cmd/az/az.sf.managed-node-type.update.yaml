@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update node type on a managed cluster.
-documentation:
-    flag:
-        capacity: 'Capacity tags applied to the nodes in the node type as key/value pairs, the cluster resource manager uses these tags to understand how much resource a node has. Updating this will override the current values.for example: --capacity ClientConnections=65536 param2=value2'
-        placement-property: 'Placement tags applied to nodes in the node type as key/value pairs, which can be used to indicate where certain services (workload) should run. Updating this will override the current values.for example: --placement-property NodeColor=Green SomeProperty=5'
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --application-end-port=: Application End port of a range of ports.
     --application-start-port=: Application start port of a range of ports.
@@ -23,3 +17,22 @@ flags:
     -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
     -g, --resource-group=!: Specify the resource group name.
     -n, --name=!: node type name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        capacity: 'Capacity tags applied to the nodes in the node type as key/value pairs, the cluster resource manager uses these tags to understand how much resource a node has. Updating this will override the current values.for example: --capacity ClientConnections=65536 param2=value2.'
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name. --name --node-type-name -n Node type name.
+        ephemeral-end-port: Ephemeral end port of a range of ports.
+        ephemeral-start-port: Ephemeral start port of a range of ports.
+        instance-count: '"The number of nodes in the node type.'
+        placement-property: 'Placement tags applied to nodes in the node type as key/value pairs, which can be used to indicate where certain services (workload) should run. Updating this will override the current values.for example: --placement-property NodeColor=Green SomeProperty=5.'
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags.'
+        vm-size: The size of virtual machines in the pool. All virtual machines in a pool are the same size.
+examples:
+    Update placement properties of the node type. This will overwrite older placement properties if any.: az sf managed-node-type update -g testRG -c testCluster -n snt --placement-property NodeColor=Red SomeProperty=6
+    Update the instance count of the node type.: az sf managed-node-type update -g testRG -c testCluster -n snt --instance-count 7
+    Update the node type tags.: az sf managed-node-type update -g testRG -c testCluster -n snt --tags key1=value1 key2=value2
+    Update vm size of the node type. This will initiate an in-place swap of the vm size.: az sf managed-node-type update -g testRG -c testCluster -n snt --vm-size Standard_DS2_v2

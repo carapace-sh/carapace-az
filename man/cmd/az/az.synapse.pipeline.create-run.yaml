@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create-run
 description: Creates a run of a pipeline.
-documentation:
-    flag:
-        is-recovery: Recovery mode flag. If recovery mode is set to true, the specified referenced pipeline run and the new run will be grouped under the same groupId.
-        parameters: Parameters for pipeline run. Can be supplied from a JSON file using the `@{path}` syntax or a JSON string.
-        reference-pipeline-run-id: The pipeline run ID for rerun. If run ID is specified, the parameters of the specified run will be used to create a new run.
-        start-activity-name: In recovery mode, the rerun will start from this activity. If not specified, all activities will run.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --is-recovery=:
         description: Recovery mode flag.
@@ -23,3 +16,21 @@ completion:
         is-recovery:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        is-recovery: |-
+            Recovery mode flag. If recovery mode is set to true, the specified referenced pipeline run and the new run will be grouped under the same groupId.
+
+            Accepted values: false, true
+        name: The pipeline name.
+        parameters: Parameters for pipeline run. Can be supplied from a JSON file using the ``` @{path} ``` syntax or a JSON string. --reference-pipeline-run-id --run-id The pipeline run ID for rerun. If run ID is specified, the parameters of the specified run will be used to create a new run.
+        reference-pipeline-run-id: The pipeline run ID for rerun. If run ID is specified, the parameters of the specified run will be used to create a new run.
+        start-activity-name: In recovery mode, the rerun will start from this activity. If not specified, all activities will run.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        workspace-name: The workspace name.
+examples:
+    Pipelines_CreateRun: |-
+        az synapse pipeline create-run --workspace-name testsynapseworkspace --name "myPipeline" \
+          --parameters "{\"OutputBlobNameList\":[\"exampleoutput.csv\"]}"

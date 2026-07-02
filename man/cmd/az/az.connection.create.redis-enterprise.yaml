@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: redis-enterprise
 description: Create a Service Connector local connection to redis-enterprise.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        database: Name of the redis enterprise database. Required if '--target-id' is not specified.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        server: Name of the redis enterprise server. Required if '--target-id' is not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-id: The resource id of target service. Required if ['--target-resource-group', '--server', '--database'] are not specified.
-        target-resource-group: The resource group which contains the redis server. Required if '--target-id' is not specified.
 flags:
     --client-type=: The client type used on the connection
     --connection=: Name of the connection.
@@ -39,3 +29,29 @@ completion:
             - go
             - springBoot
             - none
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the connection.
+
+            Accepted values: dotnet, dotnet-internal, go, java, nodejs, none, python, springBoot
+        connection: Name of the connection.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        database: Name of the redis enterprise database. Required if '--target-id' is not specified.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        secret: 'The secret auth info. Usage: --secret.'
+        server: Name of the redis enterprise server. Required if '--target-id' is not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-id: The resource id of target service. Required if ['--target-resource-group', '--server', '--database'] are not specified. --target-resource-group --tg The resource group which contains the redis server. Required if '--target-id' is not specified.
+        target-resource-group: The resource group which contains the redis server. Required if '--target-id' is not specified.
+examples:
+    Create a connection from local to redis-enterprise interactively: az connection create redis-enterprise -g resourceGroup
+    Create a connection from local to redis-enterprise with resource id: az connection create redis-enterprise -g resourceGroup --target-id /subscriptions/{subscription}/resourceGroups/{target_resource_group}/providers/Microsoft.Cache/redisEnterprise/{server}/databases/{database} --secret
+    Create a connection from local to redis-enterprise with resource name: az connection create redis-enterprise -g resourceGroup --tg RedisRG --server MyServer --database MyDB --secret

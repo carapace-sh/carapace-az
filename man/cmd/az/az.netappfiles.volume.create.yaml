@@ -1,45 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create or Update a volume
-documentation:
-    flag:
-        allowed-clients: Client ingress specification as comma separated string with IPv4 CIDRs, IPv4 host addresses and host names. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        ca-retrieval-policy: 'coolAccessRetrievalPolicy determines the data retrieval behavior from the cool tier to standard storage based on the read pattern for cool access enabled volumes. The possible values for this field are:   Default - Data will be pulled from cool tier to standard storage on random reads. This policy is the default.  OnRead - All client-driven data read is pulled from cool tier to standard storage on both sequential and random reads.  Never - No client-driven data is pulled from cool tier to standard storage.'
-        ca-tiering-policy: 'coolAccessTieringPolicy determines which cold data blocks are moved to cool tier. The possible values for this field are: Auto - Moves cold user data blocks in both the Snapshot copies and the active file system to the cool tier tier. This policy is the default. SnapshotOnly - Moves user data blocks of the Volume Snapshot copies that are not associated with the active file system to the cool tier.'
-        chown-mode: This parameter specifies who is authorized to change the ownership of a file. restricted - Only root user can change the ownership of the file. unrestricted - Non-root users can change ownership of files that they own. Possible values include- Restricted, Unrestricted. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        cifs: Allows CIFS protocol. Enable only for CIFS type volumes. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        default-group-quota: Default group quota for volume in KiBs. If isDefaultQuotaEnabled is set, the minimum value of 4 KiBs applies.
-        default-user-quota: Default user quota for volume in KiBs. If isDefaultQuotaEnabled is set, the minimum value of 4 KiBs applies .
-        delete-base-snapshot: If enabled (true) the snapshot the volume was created from will be automatically deleted after the volume create operation has finished.  Defaults to false
-        encryption-key-source: 'Source of key used to encrypt data in volume. Applicable if NetApp account has encryption.keySource = ''Microsoft.KeyVault''. Possible values (case-insensitive) are: ''Microsoft.NetApp, Microsoft.KeyVault'''
-        file-path: A unique file path for the volume. Used when creating mount targets
-        has-root-access: Has root access to volume. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        kerberos-enabled: Describe if a volume is KerberosEnabled. To be use with swagger version 2020-05-01 or later
-        kerberos5i-r: Kerberos5i Readonly access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        kerberos5i-rw: Kerberos5i Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        kerberos5p-r: Kerberos5p Readonly access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        kerberos5p-rw: Kerberos5p Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        kerberos5-r: Kerberos5 Read only access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        kerberos5-rw: Kerberos5 Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        kv-private-endpoint-id: The resource ID of private endpoint for KeyVault. It must reside in the same VNET as the volume. Only applicable if encryptionKeySource = 'Microsoft.KeyVault'.
-        placement-rules: Application specific placement rules for the particular volume  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        protocol-types: Set of protocol types, default NFSv3, CIFS for SMB protocol  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        rule-index: Order index. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        rules: Export policy rule  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        smb-access-enumeration: Enables access based enumeration share property for SMB Shares. Only applicable for SMB/DualProtocol volume
-        smb-ca: Enables continuously available share property for smb volume. Only applicable for SMB volume
-        smb-encryption: Enables encryption for in-flight smb3 data. Only applicable for SMB/DualProtocol volume. To be used with swagger version 2020-08-01 or later
-        smb-non-browsable: Enables non browsable property for SMB Shares. Only applicable for SMB/DualProtocol volume
-        subnet: The Azure Resource URI for a delegated subnet. Must have the delegation Microsoft.NetApp/volumes
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        unix-permissions: 'UNIX permissions for NFS volume accepted in octal 4 digit format. First digit selects the set user ID(4), set group ID (2) and sticky (1) attributes. Second digit selects permission for the owner of the file: read (4), write (2) and execute (1). Third selects permissions for other users in the same group. the fourth for other users not in the group. 0755 - gives read/write/execute permissions to owner and read/execute to group and other users.'
-        unix-read-only: Read only access. Exists for backwards compatibility, please use --export-policy-rules (--rules) instead.
-        unix-read-write: Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
-        vnet: Name or Resource ID of the vnet. If you want to use a vnet in other resource group, please provide the Resource ID instead of the name of the vnet.
-        volume-type: What type of volume is this. For destination volumes in Cross Region Replication, set type to DataProtection
-        zones: Availability Zone  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --allowed-clients=: Client ingress specification as comma separated string with IPv4 CIDRs, IPv4 host addresses and host names.
     --avs-data-store=: Specifies whether the volume is enabled for Azure VMware Solution (AVS) datastore purpose
@@ -470,3 +431,245 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    command: |-
+        This command is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        account-name: The name of the NetApp account. --creation-token --file-path A unique file path for the volume. Used when creating mount targets.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        allowed-clients: Client ingress specification as comma separated string with IPv4 CIDRs, IPv4 host addresses and host names. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+        avs-data-store: |-
+            Specifies whether the volume is enabled for Azure VMware Solution (AVS) datastore purpose.
+
+            Default value: Disabled
+
+            Accepted values: Disabled, Enabled
+        backup-id: Resource identifier used to identify the Backup.
+        backup-policy-id: Backup Policy Resource ID.
+        backup-vault-id: |-
+            Backup Vault Resource ID.
+
+            Accepted values: Default, Never, OnRead
+
+            Accepted values: Auto, SnapshotOnly
+        ca-retrieval-policy: 'coolAccessRetrievalPolicy determines the data retrieval behavior from the cool tier to standard storage based on the read pattern for cool access enabled volumes. The possible values for this field are:   Default - Data will be pulled from cool tier to standard storage on random reads. This policy is the default.  OnRead - All client-driven data read is pulled from cool tier to standard storage on both sequential and random reads.  Never - No client-driven data is pulled from cool tier to standard storage.'
+        ca-tiering-policy: 'coolAccessTieringPolicy determines which cold data blocks are moved to cool tier. The possible values for this field are: Auto - Moves cold user data blocks in both the Snapshot copies and the active file system to the cool tier tier. This policy is the default. SnapshotOnly - Moves user data blocks of the Volume Snapshot copies that are not associated with the active file system to the cool tier.'
+        change-reference: The related change reference ID for this resource operation.
+        chown-mode: |-
+            This parameter specifies who is authorized to change the ownership of a file. restricted - Only root user can change the ownership of the file. unrestricted - Non-root users can change ownership of files that they own. Possible values include- Restricted, Unrestricted. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: Restricted, Unrestricted
+        cifs: |-
+            Allows CIFS protocol. Enable only for CIFS type volumes. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        cool-access: |-
+            Specifies whether Cool Access(tiering) is enabled for the volume.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        coolness-period: Specifies the number of days after which data that is not accessed by clients will be tiered.
+        default-group-quota: |-
+            Default group quota for volume in KiBs. If isDefaultQuotaEnabled is set, the minimum value of 4 KiBs applies.
+
+            Default value: 0
+        default-group-quota-in-ki-bs: |-
+            Option '--default-group-quota-in-ki-bs' has been deprecated and will be removed in next breaking change release(2.92.0) scheduled for Nov 2026. Use 'netappfiles volume quota-rule' instead. Default group quota for volume in KiBs. If isDefaultQuotaEnabled is set, the minimum value of 4 KiBs applies.
+
+            Default value: 0
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        default-user-quota: |-
+            Default user quota for volume in KiBs. If isDefaultQuotaEnabled is set, the minimum value of 4 KiBs applies .
+
+            Default value: 0
+        default-user-quota-in-ki-bs: |-
+            Option '--default-user-quota-in-ki-bs' has been deprecated and will be removed in next breaking change release(2.92.0) scheduled for Nov 2026. Use 'netappfiles volume quota-rule' instead. Default user quota for volume in KiBs. If isDefaultQuotaEnabled is set, the minimum value of 4 KiBs applies .
+
+            Default value: 0
+        delete-base-snapshot: |-
+            If enabled (true) the snapshot the volume was created from will be automatically deleted after the volume create operation has finished.  Defaults to false.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+
+            Accepted values: Disabled, Enabled
+        enable-subvolumes: |-
+            Flag indicating whether subvolume operations are enabled on the volume.
+
+            Default value: Disabled
+
+            Accepted values: Disabled, Enabled
+        encryption-key-source: |-
+            Source of key used to encrypt data in volume. Applicable if NetApp account has encryption.keySource = 'Microsoft.KeyVault'. Possible values (case-insensitive) are: 'Microsoft.NetApp, Microsoft.KeyVault'.
+
+            Default value: Microsoft.NetApp
+
+            Accepted values: Microsoft.KeyVault, Microsoft.NetApp
+        endpoint-type: |-
+            Indicates whether the local volume is the source or destination for the Volume Replication.
+
+            Accepted values: dst, src
+        external-host-name: The Path to a ONTAP Host.
+        external-server-name: The name of a server on the ONTAP Host.
+        external-volume-name: The name of a volume on the server.
+        file-path: A unique file path for the volume. Used when creating mount targets
+        has-root-access: |-
+            Has root access to volume. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        is-default-quota-enabled: |-
+            Option '--is-default-quota-enabled' has been deprecated and will be removed in next breaking change release(2.92.0) scheduled for Nov 2026. Use 'netappfiles volume quota-rule' instead. Specifies if default quota is enabled for the volume.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        is-large-volume: |-
+            Specifies whether volume is a Large Volume or Regular Volume.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        is-restoring: |-
+            Restoring.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kerberos-enabled: |-
+            Describe if a volume is KerberosEnabled. To be use with swagger version 2020-05-01 or later.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kerberos5i-r: |-
+            Kerberos5i Readonly access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kerberos5i-rw: |-
+            Kerberos5i Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kerberos5p-r: |-
+            Kerberos5p Readonly access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kerberos5p-rw: |-
+            Kerberos5p Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kerberos5-r: |-
+            Kerberos5 Read only access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kerberos5-rw: |-
+            Kerberos5 Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        kv-private-endpoint-id: The resource ID of private endpoint for KeyVault. It must reside in the same VNET as the volume. Only applicable if encryptionKeySource = 'Microsoft.KeyVault'.
+        language: |-
+            Language.
+
+            Accepted values: ar, ar.utf-8, c, c.utf-8, cs, cs.utf-8, da, da.utf-8, de, de.utf-8, en, en-us, en-us.utf-8, en.utf-8, es, es.utf-8, fi, fi.utf-8, fr, fr.utf-8, he, he.utf-8, hr, hr.utf-8, hu, hu.utf-8, it, it.utf-8, ja, ja-jp.932, ja-jp.932.utf-8, ja-jp.pck, ja-jp.pck-v2, ja-jp.pck-v2.utf-8, ja-jp.pck.utf-8, ja-v1, ja-v1.utf-8, ja.utf-8, ko, ko.utf-8, nl, nl.utf-8, no, no.utf-8, pl, pl.utf-8, pt, pt.utf-8, ro, ro.utf-8, ru, ru.utf-8, sk, sk.utf-8, sl, sl.utf-8, sv, sv.utf-8, tr, tr.utf-8, utf8mb4, zh, zh-tw, zh-tw.big5, zh-tw.big5.utf-8, zh-tw.utf-8, zh.gbk, zh.gbk.utf-8, zh.utf-8
+        ldap-enabled: |-
+            Specifies whether LDAP is enabled or not for a given NFS volume.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        location: The geo-location where the resource lives  When not specified, the location of the resource group will be used.
+        network-features: |-
+            Basic network, or Standard features available to the volume.
+
+            Default value: Basic
+
+            Accepted values: Basic, Standard
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        placement-rules: Application specific placement rules for the particular volume  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        policy-enforced: |-
+            Policy Enforced.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        pool-name: The name of the capacity pool.
+        protocol-types: Set of protocol types, default NFSv3, CIFS for SMB protocol  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        relocation-requested: |-
+            Has relocation been requested for this volume.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        remote-path: The full path to a volume that is to be migrated into ANF. Required for Migration volumes  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        remote-volume-region: The remote region for the other end of the Volume Replication.
+        replication-schedule: |-
+            Schedule.
+
+            Accepted values: _10minutely, daily, hourly
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-index: Order index. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+        rules: Export policy rule  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        security-style: |-
+            The security style of volume, default unix, defaults to ntfs for dual protocol or CIFS protocol.
+
+            Default value: unix
+
+            Accepted values: ntfs, unix
+        service-level: |-
+            ServiceLevel.
+
+            Default value: Premium
+
+            Accepted values: Flexible, Premium, Standard, StandardZRS, Ultra
+
+            Accepted values: Disabled, Enabled
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        smb-access-enumeration: Enables access based enumeration share property for SMB Shares. Only applicable for SMB/DualProtocol volume
+        smb-ca: Enables continuously available share property for smb volume. Only applicable for SMB volume
+        smb-encryption: |-
+            Enables encryption for in-flight smb3 data. Only applicable for SMB/DualProtocol volume. To be used with swagger version 2020-08-01 or later.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        smb-non-browsable: |-
+            Enables non browsable property for SMB Shares. Only applicable for SMB/DualProtocol volume.
+
+            Accepted values: Disabled, Enabled
+
+            Default value: True
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        snapshot-id: Resource identifier used to identify the Snapshot.
+        snapshot-policy-id: |-
+            Snapshot Policy ResourceId.
+
+            Default value: default
+        subnet: The Azure Resource URI for a delegated subnet. Must have the delegation Microsoft.NetApp/volumes
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        throughput-mibps: Maximum throughput in MiB/s that can be achieved by this volume and this will be accepted as input only for manual qosType volume.
+        unix-permissions: 'UNIX permissions for NFS volume accepted in octal 4 digit format. First digit selects the set user ID(4), set group ID (2) and sticky (1) attributes. Second digit selects permission for the owner of the file: read (4), write (2) and execute (1). Third selects permissions for other users in the same group. the fourth for other users not in the group. 0755 - gives read/write/execute permissions to owner and read/execute to group and other users.'
+        unix-read-only: |-
+            Read only access. Exists for backwards compatibility, please use --export-policy-rules (--rules) instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        unix-read-write: |-
+            Read and write access. Exists for backwards compatibility, please use --export-policy-rules --rules instead.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        usage-threshold: |-
+            Maximum storage quota allowed for a file system in GiB.
+
+            Default value: 100
+        vnet: Name or Resource ID of the vnet. If you want to use a vnet in other resource group or subscription, please provide the Resource ID instead of the name of the vnet.
+        volume-spec-name: Volume spec name is the application specific designation or identifier for the particular volume in a volume group for e.g. data, log.
+        volume-type: What type of volume is this. For destination volumes in Cross Region Replication, set type to DataProtection. For creating clone volume, set type to ShortTermClone.
+        zones: Availability Zone  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Create an ANF volume: az netappfiles volume create -g group --account-name aname --pool-name pname --volume-name vname -l location --service-level "Premium" --usage-threshold 100 --creation-token "unique-token" --protocol-types NFSv3 --vnet myvnet --subnet-id "/subscriptions/mysubsid/resourceGroups/myrg/providers/Microsoft.Network/virtualNetworks/myvnet/subnets/default" --rules '[{"allowed_clients":"0.0.0.0/0","rule_index":"1","unix_read_only":"true","unix_read_write":"false","cifs":"false","nfsv3":"true","nfsv41":"false"}]'
+    Create an ANF volume with CMK Encryption: az netappfiles volume create -g mygroup --account-name myaccname --pool-name mypoolname --name myvolname -l westus2 --service-level premium --usage-threshold 100 --file-path "unique-file-path" --vnet myvnet --subnet mysubnet --protocol-types NFSv3 --network-features Standard --protocol-types NFSv4.1 --rule-index 1 --allowed-clients '10.7.0.0/24' --kerberos-enabled false --encryption-key-source  Microsoft.KeyVault --kv-private-endpoint-id myPrivateEndpointId
+    Create an ANF volume with zones (Availability Zone) specified: az netappfiles volume create -g mygroup --account-name myaccname --pool-name mypoolname --name myvolname -l westus2 --service-level premium --usage-threshold 100 --file-path "unique-file-path" --vnet myvnet --subnet mysubnet --protocol-types NFSv3 --zones zone1

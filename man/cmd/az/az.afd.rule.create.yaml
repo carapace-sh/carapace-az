@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new delivery rule within the specified rule set.
-documentation:
-    flag:
-        cache-duration: The duration for which the content needs to be cached. Allowed format is hh:mm:ss.xxxxxx
-        custom-hostname: Host to redirect. Leave empty to use the incoming host as the destination host.
-        custom-path: The full path to redirect. Path cannot be empty and must start with /.Leave empty to use the incoming path as destination pat
-        enable-compression: Indicates whether content compression is enabled on AzureFrontDoor. Default value is false.If compression is enabled, content will be served as compressed if user requests for a compressed version.Content won't be compressed on AzureFrontDoorwhen requested content is smaller than 8 MB or larger than 1 KB.
-        match-processing-behavior: If this rule is a match should the rules engine continue running the remaining rules or stop. If not present, defaults to Continue.
-        match-values: Match values of the match condition. e.g, space separated values 'GET' 'HTTP'.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        order: The order in which the rules are applied for the endpoint. Possible values {0,1,2,3,Ã¢â‚¬Â¦Ã¢â‚¬Â¦Ã¢â‚¬Â¦}. A rule with a lesser order will be applied before a rule with a greater order. Rule with order 0 is a special rule. It does not require any condition and actions listed in it will always be applied.
-        query-parameters: Query parameters to include or exclude.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        transforms: Transform to apply before matching.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --action-name=: 'The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/frontdoor/front-door-rules-engine-actions.'
     --cache-behavior=: Caching behavior for the requests.
@@ -126,3 +113,69 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        action-name: 'The name of the action for the delivery rule: https://learn.microsoft.com/en-us/azure/frontdoor/front-door-rules-engine-actions .'
+        cache-behavior: Caching behavior for the requests.
+        cache-duration: The duration for which the content needs to be cached. Allowed format is hh:mm:ss.xxxxxx.
+        change-reference: The related change reference ID for this resource operation.
+        custom-fragment: Fragment to add to the redirect URL.
+        custom-hostname: Host to redirect. Leave empty to use the incoming host as the destination host.
+        custom-path: The full path to redirect. Path cannot be empty and must start with /.Leave empty to use the incoming path as destination pat.
+        custom-querystring: The set of query strings to be placed in the redirect URL.leave empty to preserve the incoming query string.
+        destination: The destination path to be used in the rewrite.
+        edge-action-id: Resource ID of the edge action to invoke.
+        enable-caching: |-
+            Indicates whether to enable caching on the route.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        enable-compression: |-
+            Indicates whether content compression is enabled on AzureFrontDoor. Default value is false.If compression is enabled, content will be served as compressed if user requests for a compressed version.Content won't be compressed on AzureFrontDoorwhen requested content is smaller than 8 MB or larger than 1 KB.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        forwarding-protocol: Protocol this rule will use when forwarding traffic to backends.
+        header-action: Header action for the requests.
+        header-name: Name of the header to modify.
+        header-value: Value of the header.
+        invocation-point: |-
+            Defines at which point in the request processing pipeline the edge action will be invoked.
+
+            Accepted values: ClientRequest, OriginRequest
+        match-processing-behavior: |-
+            If this rule is a match should the rules engine continue running the remaining rules or stop. If not present, defaults to Continue.
+
+            Default value: Continue
+
+            Accepted values: Continue, Stop
+        match-values: Match values of the match condition. e.g, space separated values 'GET' 'HTTP'.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        match-variable: 'Name of the match condition: https://learn.microsoft.com/en-us/azure/frontdoor/rules-match-conditions .'
+        negate-condition: |-
+            If true, negates the condition.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        operator: Operator of the match condition.
+        order: The order in which the rules are applied for the endpoint. Possible values {0,1,2,3,Ã¢â‚¬Â¦Ã¢â‚¬Â¦Ã¢â‚¬Â¦}. A rule with a lesser order will be applied before a rule with a greater order. Rule with order 0 is a special rule. It does not require any condition and actions listed in it will always be applied.
+        origin-group: Name or ID of the OriginGroup that would override the default OriginGroup.
+        preserve-unmatched-path: |-
+            If True, the remaining path after the source pattern will be appended to the new destination path.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        profile-name: Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group.
+        query-parameters: Query parameters to include or exclude.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        query-string-caching-behavior: Defines how CDN caches requests that include query strings.You can ignore any query strings when caching,bypass caching to prevent requests that contain query strings from being cached,or cache every request with a unique URL.
+        redirect-protocol: Protocol to use for the redirect.
+        redirect-type: The redirect type the rule will use when redirecting traffic.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-set-name: Name of the rule set under the profile.
+        selector: Selector of the match condition.
+        source-pattern: A request URI pattern that identifies the type of requests that may be rewritten.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        transforms: Transform to apply before matching.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Create a rule for http to https redirect: az afd rule create -g group --rule-set-name ruleset1 --profile-name profile --order 1 --rule-name "redirect" --match-variable RequestScheme --operator Equal --match-values HTTP --action-name "UrlRedirect" --redirect-protocol Https --redirect-type Moved
+    Create a rule to append a response header for requests from Thailand.: az afd rule create -g group --rule-set-name ruleset1 --profile-name profile --order 2 --match-variable RemoteAddress --operator GeoMatch --match-values TH --rule-name disablecaching --action-name ModifyResponseHeader --header-action Append --header-name X-CDN --header-value AFDX

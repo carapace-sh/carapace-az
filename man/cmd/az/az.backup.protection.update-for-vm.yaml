@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update-for-vm
 description: Update disk exclusion settings associated with a backed up VM item.
-documentation:
-    flag:
-        container-name: Name of the backup container. Accepts 'Name' or 'FriendlyName' from the output of az backup container list command. If 'FriendlyName' is passed then BackupManagementType is required.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --disk-list-setting=: option to decide whether to include or exclude the disk or reset any previous settings to default behavior
     --diskslist=:
@@ -32,3 +26,24 @@ completion:
         exclude-all-data-disks:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        container-name: Name of the backup container. Accepts 'Name' or 'FriendlyName' from the output of az backup container list command. If 'FriendlyName' is passed then BackupManagementType is required.
+        disk-list-setting: |-
+            Option to decide whether to include or exclude the disk or reset any previous settings to default behavior.
+
+            Accepted values: exclude, include, resetexclusionsettings
+        diskslist: List of disks to be excluded or included.
+        exclude-all-data-disks: |-
+            Option to specify to backup OS disk only.
+
+            Accepted values: false, true
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        item-name: Name of the backed up item.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vault-name: Name of the Recovery services vault.
+examples:
+    Update disk exclusion settings associated with a backed up VM item.: az backup protection update-for-vm --vault-name MyVault --resource-group MyResourceGroup --container-name MyContainer --item-name MyItem --disk-list-setting exclude --diskslist 1

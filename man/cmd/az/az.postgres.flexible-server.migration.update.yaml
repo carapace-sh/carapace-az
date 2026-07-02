@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a specific migration.
-documentation:
-    flag:
-        cutover: Cut-over the data migration for all the databases in the migration. After this is complete, subsequent updates to all databases will not be migrated to the target.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        setup-replication: Allow the migration workflow to setup logical replication on the source. Note that this command will restart the source server.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --cancel=: Cancel the data migration for all the databases.
     --cutover=: Cut-over the data migration for all the databases in the migration.
@@ -18,3 +12,20 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=: Resource Group Name of the migration target server.
     -n, --name=: Migration target server name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        cancel: Cancel the data migration for all the databases.
+        change-reference: The related change reference ID for this resource operation.
+        cutover: Cut-over the data migration for all the databases in the migration. After this is complete, subsequent updates to all databases will not be migrated to the target.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: Name of the migration.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        server-name: Migration target server name.
+        setup-replication: Allow the migration workflow to setup logical replication on the source. Note that this command will restart the source server.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Allow the migration workflow to setup logical replication on the source. Note that this command will restart the source server.: az postgres flexible-server migration update --subscription xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx --resource-group testGroup --server-name testserver --name testmigration --setup-replication
+    Cancels the data migration for all the databases involved in the migration. Only 'InProgress' migration can be cancelled: az postgres flexible-server migration update --subscription xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx --resource-group testGroup --server-name testserver --name testmigration --cancel
+    ? Cut-over the data migration for all the databases involved in the migration. After this is complete, subsequent updates to all databases in the migration will not be migrated to the target. Cutover migration can only be triggered for migration_mode=Online.
+    : az postgres flexible-server migration update --subscription xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx --resource-group testGroup --server-name testserver --name testmigration --cutover

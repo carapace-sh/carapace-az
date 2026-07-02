@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Set the encryption settings for an Azure Media Services account.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        key-identifier: The URL of the Key Vault key used to encrypt the account. The key may either be versioned (for example https://vault/keys/mykey/version1) or reference a key without a version (for example https://vault/keys/mykey).
-        key-type: 'SystemKeyThe encryption key source (provider). Allowed values: , .CustomerKey'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --current-key-id=: The current key used to encrypt the Media Services account, including the key version.
     --ids=:
@@ -27,3 +20,22 @@ completion:
         system-assigned:
             - "true"
             - "false"
+documentation:
+    flag:
+        account-name: The name of the Azure Media Services account.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        current-key-id: The current key used to encrypt the Media Services account, including the key version.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        key-identifier: The URL of the Key Vault key used to encrypt the account. The key may either be versioned (for example https://vault/keys/mykey/version1) or reference a key without a version (for example https://vault/keys/mykey).
+        key-type: 'SystemKeyThe encryption key source (provider). Allowed values: , .CustomerKey.'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-assigned: |-
+            Set the system managed identity for account encryption.
+
+            Accepted values: false, true
+        user-assigned: Set the user managed identity for account encryption.
+examples:
+    Set the media account's encryption to a customer managed key: az ams account encryption set -a myAmsAccount -g myRG --key-type CustomerKey --key-identifier keyVaultId
+    Set the media account's encryption to a system managed key: az ams account encryption set -a myAmsAccount -g myRG --key-type SystemKey

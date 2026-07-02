@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update an instance pool.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        family: 'The compute generation component of the sku. Allowed values include: Gen4, Gen5.'
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        tier: 'The edition component of the sku. Allowed values include: GeneralPurpose, BusinessCritical.'
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -39,3 +29,45 @@ completion:
         license-type:
             - LicenseIncluded
             - BasePrice
+documentation:
+    command: |-
+        Command group 'sql instance-pool' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: |-
+            Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .
+
+            Default value: []
+        capacity: Capacity of the instance pool in vcores.
+        change-reference: The related change reference ID for this resource operation.
+        family: 'The compute generation component of the sku. Allowed values include: Gen4, Gen5.'
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Default value: False
+        license-type: |-
+            The license type to apply for this instance pool.
+
+            Accepted values: BasePrice, LicenseIncluded
+        maint-config-id: Assign maintenance configuration to this managed instance.
+        name: Instance Pool Name.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        remove: |-
+            Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .
+
+            Default value: []
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        set: |-
+            Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .
+
+            Default value: []
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        tier: 'The edition component of the sku. Allowed values include: GeneralPurpose, BusinessCritical.'
+examples:
+    Clear the tags assigned to an instance pool: az sql instance-pool update -n myinstancepool -g mygroup --tags ""
+    Update an instance pool with new tags (make sure they are space separated if there are multiple tags): az sql instance-pool update -n myinstancepool -g mygroup --tags mykey1=myvalue1 mykey2=myvalue2 --license-type LicenseIncluded --capacity 8 -e GeneralPurpose -f Gen5 -m SQL_{Region}_{MaintenanceConfigName}

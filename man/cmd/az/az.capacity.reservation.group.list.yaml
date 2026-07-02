@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List the capacity reservation groups.
-documentation:
-    flag:
-        max-items: Total number of items to return in the command's output. If the total number of items available is more than the value specified, a token is provided in the command's output. To resume pagination, provide the token value in `--next-token` argument of a subsequent command.
-        next-token: Token to specify where to start paginating. This is the token value from a previously truncated response.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        resource-ids-only: The query option to fetch capacity reservation group resource Ids. 'CreatedInSubscription' enables fetching resource Ids for all capacity reservation group resources created in the subscription. 'SharedWithSubscription' enables fetching resource Ids for all capacity reservation group resources shared with the subscription. 'All' enables fetching resource Ids for all capacity reservation group resources shared with the subscription and created in the subscription.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --max-items=: Total number of items to return in the command's output.
     --next-token=: Token to specify where to start paginating.
@@ -48,3 +41,25 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        max-items: Total number of items to return in the command's output. If the total number of items available is more than the value specified, a token is provided in the command's output. To resume pagination, provide the token value in `--next-token` argument of a subsequent command.
+        next-token: Token to specify where to start paginating. This is the token value from a previously truncated response.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        resource-ids-only: |-
+            The query option to fetch capacity reservation group resource Ids. 'CreatedInSubscription' enables fetching resource Ids for all capacity reservation group resources created in the subscription. 'SharedWithSubscription' enables fetching resource Ids for all capacity reservation group resources shared with the subscription. 'All' enables fetching resource Ids for all capacity reservation group resources shared with the subscription and created in the subscription.
+
+            Accepted values: All, CreatedInSubscription, SharedWithSubscription
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vm-instance: |-
+            Retrieve the Virtual Machine Instance which are associated to capacity reservation group in the response.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        vmss-instance: |-
+            Retrieve the ScaleSet VM Instance which are associated to capacity reservation group in the response.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+examples:
+    List capacity reservation groups: az capacity reservation group list -g rg
+    ? List the capacity reservation groups containing VM instances and VMSS instance which are associated to capacity reservation group
+    : az capacity reservation group list -g rg --vm-instance --vmss-instance

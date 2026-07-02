@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Add or update a container registry's details.
-documentation:
-    flag:
-        identity: The managed identity with which to authenticate to the Azure Container Registry (instead of username/password). Use 'system' for a system-defined identity or a resource id for a user-defined identity. The managed identity should have been assigned acrpull permissions on the ACR before deployment (use 'az role assignment create --role acrpull ...').
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        password: The password of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        username: The username of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied
 flags:
     --identity=: The managed identity with which to authenticate to the Azure Container Registry (instead of username/password).
     --ids=:
@@ -21,3 +12,25 @@ flags:
     --username=: The username of the registry.
     -g, --resource-group=: Name of resource group.
     -n, --name=: The name of the Containerapp.
+documentation:
+    command: |-
+        Command group 'containerapp registry' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        identity: The managed identity with which to authenticate to the Azure Container Registry (instead of username/password). Use 'system' for a system-defined identity, Use 'system-environment' for an environment level system-defined identity or a resource id for a user-defined environment/containerapp level identity. The managed identity should have been assigned acrpull permissions on the ACR before deployment (use 'az role assignment create --role acrpull ...').
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        password: The password of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        server: The container registry server, e.g. myregistry.azurecr.io.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        username: The username of the registry. If using Azure Container Registry, we will try to infer the credentials if not supplied.
+examples:
+    Configure a container app to use a registry.: |-
+        az containerapp registry set -n my-containerapp -g MyResourceGroup \
+            --server MyExistingContainerappRegistry.azurecr.io --username MyRegistryUsername --password MyRegistryPassword
+    Configure a container app to use environment system assigned managed identity to authenticate Azure container registry.: |-
+        az containerapp registry set -n my-containerapp -g MyResourceGroup \
+            --server MyExistingContainerappRegistry.azurecr.io --identity system-environment

@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: mysql
 description: Create a aks connection to mysql.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        database: Name of the mysql database. Required if '--target-id' is not specified.
-        name: Name of the managed cluster. Required if '--source-id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        private-endpoint: Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
-        resource-group: The resource group which contains the managed cluster. Required if '--source-id' is not specified.None
-        server: Name of the mysql server. Required if '--target-id' is not specified.
-        service-endpoint: Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
-        source-id: The resource id of a aks. Required if ['--resource-group', '--name'] are not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-id: The resource id of target service. Required if ['--target-resource-group', '--server', '--database'] are not specified.
-        target-resource-group: The resource group which contains the mysql server. Required if '--target-id' is not specified.
 flags:
     --appconfig-id=: The app configuration id to store configuration
     --client-type=: The client type used on the aks
@@ -71,3 +57,57 @@ completion:
         service-endpoint:
             - "true"
             - "false"
+documentation:
+    command: |-
+        Command group 'aks connection' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appconfig-id: The app configuration id to store configuration.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the aks.
+
+            Accepted values: django, dotnet, dotnet-internal, go, java, nodejs, none, php, python, ruby, springBoot
+        connection: Name of the aks connection.
+        connstr-props: The additional connection string properties used to build connection string.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        database: Name of the mysql database. Required if '--target-id' is not specified.
+        kube-namespace: |-
+            The kubernetes namespace where the connection information will be saved into (as kubernetes secret).
+
+            Default value: default
+        name: Name of the managed cluster. Required if '--source-id' is not specified.None.
+        no-recreate: |-
+            Skip executing creation operation when no updates to an existing connection.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        private-endpoint: |-
+            Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
+
+            Accepted values: false, true
+        resource-group: The resource group which contains the managed cluster. Required if '--source-id' is not specified.None.
+        secret: 'The secret auth info. Usage: --secret name=XX secret=XX --secret name=XX secret-name=XX name    : Required. Username or account name for secret auth. secret  : One of ``` <secret, secret-uri, secret-name> ``` is required. Password or account key for secret auth. secret-name : One of ``` <secret, secret-uri, secret-name> ``` is required. Keyvault secret name which stores password. It''s for AKS only.'
+        server: Name of the mysql server. Required if '--target-id' is not specified.
+        service-endpoint: |-
+            Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
+
+            Accepted values: false, true
+        source-id: The resource id of a aks. Required if ['--resource-group', '--name'] are not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-id: The resource id of target service. Required if ['--target-resource-group', '--server', '--database'] are not specified. --target-resource-group --tg The resource group which contains the mysql server. Required if '--target-id' is not specified.
+        target-resource-group: The resource group which contains the mysql server. Required if '--target-id' is not specified.
+examples:
+    Create a connection between aks and mysql interactively: az aks connection create mysql
+    Create a connection between aks and mysql with resource id: az aks connection create mysql --source-id /subscriptions/{subscription}/resourceGroups/{source_resource_group}/providers/Microsoft.ContainerService/managedClusters/{cluster} --target-id /subscriptions/{subscription}/resourceGroups/{target_resource_group}/providers/Microsoft.DBForMySQL/servers/{server}/databases/{database} --secret name=XX secret=XX
+    Create a connection between aks and mysql with resource name: az aks connection create mysql -g ClusterRG -n MyCluster --tg MysqlRG --server MyServer --database MyDB --secret name=XX secret=XX

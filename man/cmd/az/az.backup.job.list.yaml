@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List all backup jobs of a Recovery Services vault.
-documentation:
-    flag:
-        backup-management-type: 'Specify the backup management type. Define how Azure Backup manages the backup of entities within the ARM resource. For eg: AzureWorkloads refers to workloads installed within Azure VMs, AzureStorage refers to entities within Storage account. Required only if friendly name is used as Container name.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --backup-management-type=: Specify the backup management type.
     --end-date=: The end date of the range in UTC (d-m-Y).
@@ -35,3 +30,25 @@ completion:
             - CompletedWithWarnings
             - Failed
             - InProgress
+documentation:
+    flag:
+        backup-management-type: |-
+            Specify the backup management type. Define how Azure Backup manages the backup of entities within the ARM resource. For eg: AzureWorkloads refers to workloads installed within Azure VMs, AzureStorage refers to entities within Storage account. Required only if friendly name is used as Container name.
+
+            Accepted values: AzureIaasVM, AzureStorage, AzureWorkload, MAB
+        end-date: The end date of the range in UTC (d-m-Y).
+        operation: |-
+            User initiated operation.
+
+            Accepted values: Backup, ConfigureBackup, DeleteBackupData, DisableBackup, Restore
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        start-date: The start date of the range in UTC (d-m-Y).
+        status: |-
+            Status of the Job.
+
+            Accepted values: Cancelled, Completed, CompletedWithWarnings, Failed, InProgress
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        use-secondary-region: Use this flag to show recoverypoints in secondary region.
+        vault-name: Name of the Recovery services vault.
+examples:
+    List all backup jobs of a Recovery Services vault: az backup job list --resource-group MyResourceGroup --vault-name MyVault

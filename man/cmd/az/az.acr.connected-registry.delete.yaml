@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: delete
 description: Delete a connected registry from Azure Container Registry.
-documentation:
-    flag:
-        name: Name for the connected registry. Name must be between 5 to 40 character long, start with a letter and contain only alphanumeric characters (including ‘_’ or ‘-’). Name must be unique under the Cloud ACR hierarchy.
-        registry: The login server of the Cloud ACR registry. Must be the FQDN to support also Azure Stack.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --cleanup=: It will aslo delete the sync token and the scope map resources.
     --subscription=: Name or ID of subscription.
@@ -14,3 +8,23 @@ flags:
     -n, --name=!: Name for the connected registry.
     -r, --registry=!: The login server of the Cloud ACR registry.
     -y, --yes=: Do not prompt for confirmation.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cleanup: |-
+            It will aslo delete the sync token and the scope map resources.
+
+            Default value: False
+        name: Name for the connected registry. Name must be between 5 to 40 character long, start with a letter and contain only alphanumeric characters (including ‘_’ or ‘-’). Name must be unique under the Cloud ACR hierarchy.
+        registry: The login server of the Cloud ACR registry. Must be the FQDN to support also Azure Stack.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    ? Delete a read only connected registry 'myconnectedregistry' and it's sync token and scope-map from parent registry 'mycloudregistry'.
+    : az acr connected-registry delete -r mycloudregistry -n myconnectedregistry --cleanup
+    Delete a read only connected registry 'myconnectedregistry' from parent registry 'mycloudregistry'.: az acr connected-registry delete --registry mycloudregistry --name myconnectedregistry

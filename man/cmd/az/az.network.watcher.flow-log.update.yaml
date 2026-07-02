@@ -1,21 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update the flow log configuration of a network security group.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        filtering-criteria: Update condition to filter flowlogs based on SrcIP, SrcPort, DstIP, DstPort, Protocol, Encryption, Direction and Action. If not specified, all flowlogs will be logged.
-        identity: FlowLog resource Managed Identity  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        interval: Interval in minutes at which to conduct flow analytics. Temporarily allowed values are 10 and 60.
-        location: Location to identify the exclusive Network Watcher under a region. Only one Network Watcher can be existed per subscription and region.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        storage-account: Name or ID of the storage account in which to save the flow logs.                                Must be in the same region of flow log.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear                                existing tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
-        traffic-analytics: Enable traffic analytics. Defaults to true if `--workspace` is provided.
-        workspace: Name or ID of a Log Analytics workspace. Must be in the same region of flow log
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -108,3 +93,54 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .'
+        change-reference: The related change reference ID for this resource operation.
+        enabled: |-
+            Enable logging.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        filtering-criteria: Update condition to filter flowlogs based on SrcIP, SrcPort, DstIP, DstPort, Protocol, Encryption, Direction and Action. If not specified, all flowlogs will be logged.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        format: |-
+            File type of the flow log.
+
+            Accepted values: JSON
+        identity: FlowLog resource Managed Identity  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        interval: Interval in minutes at which to conduct flow analytics. Temporarily allowed values are 10 and 60.
+        location: Location to identify the exclusive Network Watcher under a region. Only one Network Watcher can be existed per subscription and region.
+        log-version: Version (revision) of the flow log.
+        name: The name of the flow logger.
+        nic: Name or ID of the Network Interface (NIC) Resource.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        nsg: Name or ID of the network security group.
+        record-types: Optional field to filter network traffic logs based on flow states. Value of this field could be any comma separated combination string of letters B,C,E or D. B represents Begin, when a flow is created. C represents Continue for an ongoing flow generated at every five-minute interval. E represents End, when a flow is terminated. D represents Deny, when a flow is denied. If not specified, all network traffic will be logged.
+        remove: 'Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        retention: Number of days to retain logs.
+        set: 'Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .'
+        storage-account: Name or ID of the storage account in which to save the flow logs.                                Must be in the same region of flow log.
+        subnet: Name or ID of Subnet.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear                                existing tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        traffic-analytics: Enable traffic analytics. Defaults to true if `--workspace` is provided.
+        user-assigned-identity: Name or ID of the ManagedIdentity Resource.
+        vnet: Name or ID of the Virtual Network Resource.
+        workspace: Name or ID of a Log Analytics workspace. Must be in the same region of flow log.
+examples:
+    Update Network Interface on another resource group: az network watcher flow-log update --location westus --resource-group MyAnotherResourceGroup --name MyFlowLog --nic MyNIC
+    Update Network Security Group on another resource group: az network watcher flow-log update --location westus --resource-group MyAnotherResourceGroup --name MyFlowLog --nsg MyNSG
+    Update Subnet on another resource group: az network watcher flow-log update --location westus --resource-group MyAnotherResourceGroup --name MyFlowLog --vnet MyVNet --subnet MySubnet
+    Update Virtual Network on another resource group: az network watcher flow-log update --location westus --resource-group MyAnotherResourceGroup --name MyFlowLog --vnet MyVNet
+    Update Workspace on another resource group: az network watcher flow-log update --location westus --resource-group MyAnotherResourceGroup --name MyFlowLog --workspace MyAnotherLogAnalyticWorkspace
+    Update flowlog with recordtypes filtering: az network watcher flow-log update --resource-group rg1 --network-watcher-name nw1 --name fl --location centraluseuap --target-resource-id /subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Network/networkSecurityGroups/desmondcentral-nsg --storage-account /subscriptions/subid/resourceGroups/rg1/providers/Microsoft.Storage/storageAccounts/nwtest1mgvbfmqsigdxe --filtering-criteria srcIP=158.255.7.8 || dstPort=56891 --record-types B,E --enabled True --format JSON --log-version 1 --identity "{type:UserAssigned,user-assigned-identities:{/subscriptions/subid/resourceGroups/rg1/providers/Microsoft.ManagedIdentity/userAssignedIdentities/id1:{}}}"
+    Update storage account with ID to let location identify the network watcher: az network watcher flow-log update --location westus --resource-group MyResourceGroup --name MyFlowLog --storage-account accountid
+    Update storage account with name to let resource group identify the storage account and network watcher: az network watcher flow-log update --location westus --resource-group MyResourceGroup --name MyFlowLog --storage-account accountname

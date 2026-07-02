@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Add an extension to a VMSS or update an existing extension.
-documentation:
-    flag:
-        extension-instance-name: 'Name of extension instance, which can be customized. Default: name of the extension.'
-        protected-settings: Protected settings in JSON format for sensitive information like credentials. A JSON file path is also accepted.
-        provision-after-extensions: Space-separated list of extension names after which this extension should be provisioned. These extensions must already be set on the vm.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        settings: Extension settings in JSON format. A JSON file path is also accepted.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        version: The version of the extension. To pin extension version to this value, please specify --no-auto-upgrade-minor-version.
-        vmss-name: Scale set name. You can configure the default using `az configure --defaults vmss=<name>`
 flags:
     --enable-auto-upgrade=:
         description: Indicate the extension should be automatically upgraded by the platform if there is a newer version of the extension available.
@@ -40,3 +30,52 @@ completion:
         no-auto-upgrade-minor-version:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        enable-auto-upgrade: |-
+            Indicate the extension should be automatically upgraded by the platform if there is a newer version of the extension available.
+
+            Accepted values: false, true
+        extension-instance-name: 'Name of extension instance, which can be customized. Default: name of the extension.'
+        force-update: |-
+            Force to update even if the extension configuration has not changed.
+
+            Default value: False
+        name: |-
+            Name of the extension.
+
+            Value from: az vm extension image list
+        no-auto-upgrade: |-
+            Option '--no-auto-upgrade' has been deprecated and will be removed in a future release. Use '--no-auto-upgrade-minor-version' instead. If set, the extension service will not automatically pick or upgrade to the latest minor version, even if the extension is redeployed.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-auto-upgrade-minor-version: |-
+            If set, the extension service will not automatically pick or upgrade to the latest minor version, even if the extension is redeployed.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        protected-settings: Protected settings in JSON format for sensitive information like credentials. A JSON file path is also accepted.
+        provision-after-extensions: Space-separated list of extension names after which this extension should be provisioned. These extensions must already be set on the vm.
+        publisher: The name of the extension publisher.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        settings: Extension settings in JSON format. A JSON file path is also accepted.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        version: The version of the extension. To pin extension version to this value, please specify --no-auto-upgrade-minor-version.
+        vmss-name: Scale set name. You can configure the default using ``` az configure --defaults vmss=<name> ``` .
+examples:
+    Add an extension and enable automatic upgrade by the platform if there is a newer version of the extension available.: az vmss extension set -n extName --publisher publisher --vmss-name my-vmss -g my-group \ --enable-auto-upgrade true
+    ? Set an extension which depends on two previously set extensions. That is, When a VMSS instance is created or reimaged, the customScript extension will be provisioned only after all extensions that it depends on have been provisioned. The extension need not depend on the other extensions for pre-requisite configurations.
+    : |-
+        az vmss extension set --vmss-name my-vmss --name customScript --resource-group my-group \
+            --version 2.0 --publisher Microsoft.Azure.Extensions \
+            --provision-after-extensions NetworkWatcherAgentLinux VMAccessForLinux  \
+            --settings '{"commandToExecute": "echo testing"}'

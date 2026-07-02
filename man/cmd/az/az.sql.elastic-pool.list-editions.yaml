@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list-editions
 description: Gets elastic pool capabilities and optionally applies the specified filters.
-documentation:
-    flag:
-        dtu: Number of DTUs to search for. If unspecified, all DTU sizes are shown.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tier: Edition to search for. If unspecified, all editions are shown.
-        vcores: Number of vcores to search for. If unspecified, all vcore sizes are shown.
 flags:
     --dtu=: Number of DTUs to search for.
     --subscription=: Name or ID of subscription.
@@ -25,3 +18,26 @@ completion:
             - db-min-dtu
             - db-max-dtu
             - db-max-size
+documentation:
+    command: List elastic pool editions available for the active subscription.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        available: |-
+            If specified, show only results that are available in the specified region.
+
+            Default value: False
+        change-reference: The related change reference ID for this resource operation.
+        dtu: Number of DTUs to search for. If unspecified, all DTU sizes are shown.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        show-details: |-
+            List of additional details to include in output.
+
+            Accepted values: db-max-dtu, db-max-size, db-min-dtu, max-size
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tier: Edition to search for. If unspecified, all editions are shown.
+        vcores: Number of vcores to search for. If unspecified, all vcore sizes are shown.
+examples:
+    Show all elastic pool editions and pool DTU limits in the West US region.: az sql elastic-pool list-editions -l westus -o table
+    Show all pool DTU limits for Standard edition in the West US region.: az sql elastic-pool list-editions -l westus --edition Standard -o table
+    Show available max sizes for elastic pools with at least 100 DTUs in the West US region.: az sql elastic-pool list-editions -l westus --dtu 100 --show-details max-size -o table
+    Show available per database settings for Standard 100 DTU elastic pools in the West US region.: az sql elastic-pool list-editions -l westus --edition Standard --dtu 100 -o table --show-details db-min-dtu db-max-dtu db-max-size

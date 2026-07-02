@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates or Updates Virtual Network Rules
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        server: Name of the Azure SQL Server. You can configure the default using `az configure --defaults sql-server=<name>`
-        subnet: Name or ID of the subnet that allows access to an Azure Sql Server. If subnet name is provided, --vnet-name must be provided.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --subnet=!: Name or ID of the subnet that allows access to an Azure Sql Server.
     --subscription=: Name or ID of subscription.
@@ -22,3 +16,28 @@ completion:
         ignore-missing-endpoint:
             - "true"
             - "false"
+documentation:
+    command: Create a virtual network rule to allows access to an Azure SQL Server.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        ignore-missing-endpoint: |-
+            Create firewall rule before the virtual network has vnet service endpoint enabled.
+
+            Default value: False
+
+            Accepted values: false, true
+        name: The name of the virtual network rule.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        server: Name of the Azure SQL Server. You can configure the default using ``` az configure --defaults sql-server=<name> ``` .
+        subnet: Name or ID of the subnet that allows access to an Azure Sql Server. If subnet name is provided, --vnet-name must be provided.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet-name: The virtual network name.
+examples:
+    Create a vnet rule by providing the subnet id.: |-
+        az sql server vnet-rule create --server MyAzureSqlServer --name MyVNetRule \
+          -g MyResourceGroup --subnet /subscriptions/{SubID}/resourceGroups/{ResourceGroup}/providers/Microsoft.Network/virtualNetworks/{VNETName}/subnets/{SubnetName}
+    ? Create a vnet rule by providing the vnet and subnet name. The subnet id is created by taking the resource group name and subscription id of the SQL server.
+    : |-
+        az sql server vnet-rule create --server MyAzureSqlServer --name MyVNetRule \
+            -g MyResourceGroup --subnet subnetName --vnet-name vnetName

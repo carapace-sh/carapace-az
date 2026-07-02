@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: build
 description: Queues a quick build task that builds an app and pushes it into an Azure Container Registry.
-documentation:
-    flag:
-        platform: The platform where build/task is run, Eg, 'windows' and 'linux'. When it's used in build commands, it also can be specified in 'os/arch/variant' format for the resulting image. Eg, linux/arm/v7. The 'arch' and 'variant' parts are optional.
-        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --agent-pool=: The name of the agent pool.
     --auth-mode=: Auth mode of the source registry.
@@ -27,3 +21,45 @@ completion:
         auth-mode:
             - None
             - Default
+documentation:
+    command: |-
+        Command group 'acr pack' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        agent-pool: The name of the agent pool.
+        auth-mode: |-
+            Auth mode of the source registry.
+
+            Accepted values: Default, None
+        builder: The name and tag of a Buildpack builder image.
+        change-reference: The related change reference ID for this resource operation.
+        image: 'The name and tag of the image using the format: ''-t repo/image:tag''.'
+        no-format: |-
+            Indicates whether the logs should be displayed in raw format.
+
+            Default value: False
+        no-logs: |-
+            Do not show logs after successfully queuing the build.
+
+            Default value: False
+        no-wait: |-
+            Do not wait for the run to complete and return immediately after queuing the run.
+
+            Default value: False
+        pack-image-tag: |-
+            The tag of the 'pack' runner image ('mcr.microsoft.com/oryx/pack').
+
+            Default value: stable
+        platform: The platform where build/task is run, Eg, 'windows' and 'linux'. When it's used in build commands, it also can be specified in 'os/arch/variant' format for the resulting image. Eg, linux/arm/v7. The 'arch' and 'variant' parts are optional.
+        pull: |-
+            Pull the latest builder and run images before use.
+
+            Default value: False
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: The timeout in seconds. <SOURCE_LOCATION> The local source code directory path (e.g., './src'), or the URL to a git repository (e.g., 'https://github.com/Azure-Samples/acr-build-helloworld-node.git') or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag').
+examples:
+    Queue a build for the current directory with the CloudFoundry builder.: az acr pack build -r myregistry -t {{.Run.Registry}}/node-app:{{.Run.ID}} --builder cloudfoundry/cnb:bionic .
+    Queue a build for the given GitHub repository with the Heroku builder.: az acr pack build -r myregistry -t {{.Run.Registry}}/node-app:{{.Run.ID}} --pull --builder heroku/buildpacks:18 https://github.com/Azure-Samples/nodejs-docs-hello-world.git

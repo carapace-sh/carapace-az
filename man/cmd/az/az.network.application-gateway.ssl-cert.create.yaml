@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Upload an SSL certificate.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --cert-file=: Path to the pfx certificate file.
     --cert-password=: Certificate password.
@@ -29,3 +25,24 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        cert-file: Path to the pfx certificate file.
+        cert-password: Certificate password.
+        change-reference: The related change reference ID for this resource operation.
+        gateway-name: Name of the application gateway.
+        hsm: Managed HSM properties of the Application Gateway resource.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        key-vault-secret-id: Secret ID of (base-64 encoded unencrypted pfx) ``` Secret ``` or ``` Certificate ``` object stored in Azure KeyVault.
+        name: Name of the SSL certificate.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Upload an SSL certificate via --cert-file and --cert-password.: az network application-gateway ssl-cert create -g MyResourceGroup --gateway-name MyAppGateway -n MySSLCert --cert-file FilePath --cert-password Abc123
+    Upload an SSL certificate via --key-vault-secret-id of a KeyVault Certificate.: |-
+        az keyvault certificate create --vault-name MyKeyVault --name MyCertificate --policy "$(az keyvault certificate get-default-policy)"
+        az network application-gateway ssl-cert create --resource-group MyResourceGroup --gateway-name MyAppGateway -n MySSLCert --key-vault-secret-id MyCertificateSecretID

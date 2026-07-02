@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: show
 description: Get the details of an event subscription.
-documentation:
-    flag:
-        include-full-endpoint-url: Specify to indicate whether the full endpoint URL should be returned. True if flag present.
-        include-static-delivery-attribute-secret: Indicate whether any static delivery attribute secrets should be returned. True if flag present.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --include-full-endpoint-url=:
         description: Specify to indicate whether the full endpoint URL should be returned.
@@ -24,3 +19,32 @@ completion:
         include-static-delivery-attribute-secret:
             - "true"
             - "false"
+documentation:
+    flag:
+        include-full-endpoint-url: |-
+            Specify to indicate whether the full endpoint URL should be returned. True if flag present.
+
+            Default value: False
+
+            Accepted values: false, true
+        include-static-delivery-attribute-secret: Indicate whether any static delivery attribute secrets should be returned. True if flag present.
+        name: Name of the event subscription.
+        source-resource-id: 'Fully qualified identifier of the Azure resource whose event subscription needs to be shown. Usage:                      --source-resource-id Azure-Resource-ID For Azure subscription:     --source-resource-id /subscriptions/{SubID} For resource group:         --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1 For EventGrid topic:        --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/topics/t1 For storage account:        --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.Storage/storageaccounts/sa1 For EventGrid domain:       --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/domains/d1 For EventGrid domain topic: --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/domains/d1/topics/t1.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Show the details of an event subscription for a resource group including any static delivery attribute secrets.: |-
+        az eventgrid event-subscription show --name es3 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1 \
+            --include-static-delivery-attribute-secret
+    Show the details of an event subscription for a resource group.: |-
+        az eventgrid event-subscription show --name es3 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1
+    Show the details of an event subscription for a storage account.: |-
+        az eventgrid event-subscription show --name es3 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/microsoft.storage/storageaccounts/kalsegblob
+    Show the details of an event subscription for an Azure subscription.: |-
+        az eventgrid event-subscription show --name es2 \
+            --source-resource-id /subscriptions/{SubID}
+    Show the details of an event subscription for an Event Grid topic.: |-
+        az eventgrid event-subscription show --name es1 \
+            --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/topics/topic1

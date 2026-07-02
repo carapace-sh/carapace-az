@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Sets Sql Vulnerability Assessment baseline.
-documentation:
-    flag:
-        baseline: 'Baseline records to be set. The following example will set a baseline for two rules: --baseline rule=VA1111 line1_w1 line1_w2 --baseline rule=VA2222 line1_w1 line1_w2 line1_w3 --baseline rule=VA1111 line2_w1 line2_w2'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vm-resource-id: Resource ID of the scanned machine. For On-Premise machines, please provide your workspace resource ID
 flags:
     --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
     --database-name=!: The name of the scanned database
@@ -26,3 +21,28 @@ completion:
         latest:
             - "true"
             - "false"
+documentation:
+    command: Sets Sql Vulnerability Assessment baseline. Replaces the current baseline.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        agent-id: Provide the ID of the agent on the scanned machine, for On-Premise resources only.
+        baseline: 'Baseline records to be set. The following example will set a baseline for two rules: --baseline rule=VA1111 line1_w1 line1_w2 --baseline rule=VA2222 line1_w1 line1_w2 line1_w3 --baseline rule=VA1111 line2_w1 line2_w2.'
+        change-reference: The related change reference ID for this resource operation.
+        database-name: The name of the scanned database.
+        latest: |-
+            Use this argument without parameters to set baseline upon latest scan results.
+
+            Default value: False
+
+            Accepted values: false, true
+        server-name: The name of the scanned server.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vm-name: Provide the name of the machine, for On-Premise resources only.
+        vm-resource-id: Resource ID of the scanned machine. For On-Premise machines, please provide your workspace resource ID.
+        vm-uuid: Provide the UUID of the scanned machine, for On-Premise resources only.
+        workspace-id: The ID of the workspace connected to the scanned machine.
+examples:
+    Sets Sql Vulnerability Assessment baseline on an Azure virtual machine. Replaces the current baseline with latest scan results.: az security va sql baseline set --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.Compute/VirtualMachines/MyVmName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --latest
+    Sets Sql Vulnerability Assessment baseline on an Azure virtual machine. Replaces the current baseline with provided results.: az security va sql baseline set --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.Compute/VirtualMachines/MyVmName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --baseline rule=VA9999 Line1_col1 Line1_col2 Line1_col3 --baseline rule=VA8888 Line1_col1 Line1_col2 --baseline rule=VA9999 Line2_col1 Line2_col2 Line2_col3
+    Sets Sql Vulnerability Assessment baseline on an On-Premise machine. Replaces the current baseline with latest scan results.: az security va sql baseline set --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.OperationalInsights/Workspaces/MyWorkspaceName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --vm-name MyVmName --agent-id MyAgentId --vm-uuid MyVmUUID --latest
+    Sets Sql Vulnerability Assessment baseline on an On-Premise machine. Replaces the current baseline with provided results.: az security va sql baseline set --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.OperationalInsights/Workspaces/MyWorkspaceName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --vm-name MyVmName --agent-id MyAgentId --vm-uuid MyVmUUID --baseline rule=VA9999 Line1_col1 Line1_col2 Line1_col3 --baseline rule=VA8888 Line1_col1 Line1_col2 --baseline rule=VA9999 Line2_col1 Line2_col2 Line2_col3

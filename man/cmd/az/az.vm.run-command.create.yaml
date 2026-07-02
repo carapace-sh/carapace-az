@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: The operation to create the run command.
-documentation:
-    flag:
-        async-execution: Optional. If set to true, provisioning will complete as soon as the script starts and will not wait for script to complete.
-        command-id: Specify a command id of predefined script. All command ids can be listed using "list" command.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        protected-parameters: Set custom parameters in a name-value pair. These parameters will be encrypted during transmission and will not be logged.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        run-as-password: 'Password if needed for using run-as-user parameter. It will be encrypted and not logged. '
-        run-as-user: By default script process runs under system/root user. Specify custom user to host the process.
-        script-uri: 'Contain a uri to the script to execute on the VM. Uri can be any link accessible from the VM or a storage blob without SAS. If subscription has access to the storage blob, then SAS will be auto-generated. '
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --async-execution=:
         description: Optional.
@@ -45,3 +33,33 @@ completion:
         async-execution:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        async-execution: |-
+            Optional. If set to true, provisioning will complete as soon as the script starts and will not wait for script to complete.
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        command-id: Specify a command id of predefined script. All command ids can be listed using "list" command.
+        error-blob-uri: Specify the Azure storage blob where script error stream will be uploaded.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        output-blob-uri: Specify the Azure storage blob (SAS URI) where script output stream will be uploaded.
+        parameters: 'The parameters used by the script. Usage: --parameters arg1=XX arg2=XX.'
+        protected-parameters: Set custom parameters in a name-value pair. These parameters will be encrypted during transmission and will not be logged.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        run-as-password: 'Password if needed for using run-as-user parameter. It will be encrypted and not logged. '
+        run-as-user: By default script process runs under system/root user. Specify custom user to host the process.
+        script: Specify the script content to be executed on the VM.
+        script-uri: 'Contain a uri to the script to execute on the VM. Uri can be any link accessible from the VM or a storage blob without SAS. If subscription has access to the storage blob, then SAS will be auto-generated. '
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        timeout-in-seconds: The timeout in seconds to execute the run command.
+        vm-name: The name of the virtual machine.
+examples:
+    Create a run command with uploading script output stream to Azure storage blob (SAS URI).: az vm run-command create --resource-group "myResourceGroup" --location "West US" --script "Write-Host Hello World!" --run-command-name "myRunCommand" --vm-name "myVM" --output-blob-uri "https://mystorageaccount.blob.core.windows.net/mycontainer/RuncommandOutput.txt?sp=racw&st=2022-10-17T19:02:15Z&se=2022-10-18T03:02:15Z&spr=https&sv=2021-06-08&sr=b&sig=3BxtEasfdasdfasdfdYki9yvYsqc60V0%3D"
+    Create a run command.: az vm run-command create --resource-group "myResourceGroup" --location "West US" --async-execution false --parameters arg1=param1 arg2=value1 --run-as-password "<runAsPassword>" --run-as-user "user1" --script "Write-Host Hello World!" --timeout-in-seconds 3600 --run-command-name "myRunCommand" --vm-name "myVM"

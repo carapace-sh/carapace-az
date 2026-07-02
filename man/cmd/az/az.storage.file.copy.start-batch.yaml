@@ -1,24 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: start-batch
 description: Copy a group of files asynchronously
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        destination-path: The directory where the source data is copied to. If omitted, data is copied to the root directory.
-        destination-share: Name of the destination share. The share must exist.
-        disallow-source-trailing-dot: If true, the trailing dot will be trimmed from the source URI. Default to False
-        disallow-trailing-dot: If true, the trailing dot will be trimmed from the target URI. Default to False
-        dryrun: List the files and blobs to be copied. No actual data transfer will occur.
-        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
-        pattern: The pattern used for globbing files and blobs. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3/library/fnmatch.html.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        source-account-key: The account key for the source storage account. If omitted, the active login is used to determine the account key.
-        source-account-name: The source storage account to copy the data from. If omitted, the destination account is used.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        timeout: Request timeout in seconds. Applies to each call to the service.
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -54,3 +36,44 @@ completion:
         disallow-trailing-dot:
             - "true"
             - "false"
+documentation:
+    command: Copy multiple files or blobs to a file share.
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        destination-path: The directory where the source data is copied to. If omitted, data is copied to the root directory.
+        destination-share: |-
+            The file share where the source data is copied to. --disallow-source-trailing-dot --disallow-src-trailing If true, the trailing dot will be trimmed from the source URI. Default to False.
+
+            Default value: False
+
+            Accepted values: false, true
+        disallow-source-trailing-dot: If true, the trailing dot will be trimmed from the source URI. Default to False
+        disallow-trailing-dot: |-
+            If true, the trailing dot will be trimmed from the target URI. Default to False.
+
+            Default value: False
+
+            Accepted values: false, true
+        dryrun: |-
+            List the files and blobs to be copied. No actual data transfer will occur.
+
+            Default value: False
+        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
+        pattern: The pattern used for globbing files and blobs. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3.7/library/fnmatch.html . When you use '*' in --pattern, it will match any character including the the directory separator '/'.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        source-account-key: The account key for the source storage account. If omitted, the active login is used to determine the account key.
+        source-account-name: The source storage account to copy the data from. If omitted, the destination account is used.
+        source-container: The source container blobs are copied from.
+        source-sas: The shared access signature for the source storage account.
+        source-share: The source share files are copied from.
+        source-uri: A URI that specifies a the source file share or blob container. If the source is in another account, the source must either be public or authenticated via a shared access signature.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: Request timeout in seconds. Applies to each call to the service.
+examples:
+    Copy all files in a file share to another storage account.: az storage file copy start-batch --source-account-name srcaccount --source-account-key 00000000 --source-share srcshare --destination-path <destpath-to-directory> --destination-share destshare --account-name destaccount --account-key 00000000
+    Copy all files in a file share to another storage account. with sas token.: az storage file copy start-batch --source-uri "https://srcaccount.file.core.windows.net/myshare?<sastoken>" --destination-path <destpath-to-directory> --destination-share destshare --account-name destaccount --sas-token <destination-sas>

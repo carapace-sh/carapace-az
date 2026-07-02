@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Adds an Access Restriction to the function app
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        slot: the name of the slot. Default to the productions slot if not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --action=: Allow or deny access
     --description=: Description of the access restriction rule
@@ -50,3 +44,57 @@ completion:
         skip-service-tag-validation:
             - "true"
             - "false"
+documentation:
+    command: Adds an Access Restriction to the function app.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        action: |-
+            Allow or deny access.
+
+            Default value: Allow
+
+            Accepted values: Allow, Deny
+        change-reference: The related change reference ID for this resource operation.
+        description: Description of the access restriction rule.
+        http-headers: Space-separated http headers in a format of ``` <name>=<value> ``` .
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        ignore-missing-endpoint: |-
+            Create access restriction rule with checking if the subnet has Microsoft.Web service endpoint enabled.
+
+            Default value: False
+
+            Accepted values: false, true
+        ip-address: IP address or CIDR range (optional comma separated list of up to 8 ranges).
+        name: Name of the function app.
+        priority: Priority of the access restriction rule.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-name: Name of the access restriction rule to add.
+        scm-site: |-
+            True if access restrictions is added for scm site.
+
+            Default value: False
+
+            Accepted values: false, true
+        service-tag: Service Tag (optional comma separated list of up to 8 tags).
+        skip-service-tag-validation: |-
+            Skip validating public service tags.
+
+            Accepted values: false, true
+        slot: The name of the slot. Default to the productions slot if not specified.
+        subnet: Subnet name (requires vNet name) or subnet resource id.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet-name: VNet name.
+        vnet-resource-group: Resource group of virtual network (default is web app resource group).
+examples:
+    ? Add Access Restriction opening (Allow) named agents in vNet 'corp01' in rg 'vnets' with subnet 'agents' (using subnet resource id)
+    : az functionapp config access-restriction add -g ResourceGroup -n AppName --rule-name remote_agents --action Allow --priority 800 --subnet '/subscriptions/<subscription-id>/resourceGroups/vnets/providers/Microsoft.Network/virtualNetworks/corp01/subnets/agents'
+    Add Access Restriction opening (Allow) named app_gateway for Subnet app_gw in vNet core_weu with priority 300 to main site.: az functionapp config access-restriction add -g ResourceGroup -n AppName --rule-name app_gateway --action Allow --vnet-name core_weu --subnet app_gateway --priority 300
+    Add Access Restriction opening (Allow) named build_server for IPv4 address 192.168.0.0/27 with priority 250 to scm site.: az functionapp config access-restriction add -g ResourceGroup -n AppName --rule-name build_server --action Allow --ip-address 192.168.0.0/27 --priority 250 --scm-site true
+    Add Access Restriction opening (Allow) named developers for IPv4 address 130.220.0.0/27 with priority 200 to main site.: az functionapp config access-restriction add -g ResourceGroup -n AppName --rule-name developers --action Allow --ip-address 130.220.0.0/27 --priority 200
+    ? Add Access Restriction opening (Allow) named internal_agents for Subnet build_agents in vNet corp01 with priority 500 to scm site; and ignore service endpoint registration on the Subnet.
+    : az functionapp config access-restriction add -g ResourceGroup -n AppName --rule-name internal_agents --action Allow --vnet-name corp01 --subnet build_agents --priority 500 --scm-site true --ignore-missing-endpoint true
+    Add Access Restriction opening (Allow) named remote_agents in vNet 'corp01' in rg 'vnets' with subnet 'agents': az functionapp config access-restriction add -g ResourceGroup -n AppName --rule-name remote_agents --action Allow --vnet-name corp01 --subnet agents --priority 500 --vnet-resource-group vnets
+    Add Access Restriction opening (Allow) with multiple http-header values for the same header 'X-Azure-FDID': az functionapp config access-restriction add -g ResourceGroup -n AppName --priority 400 --service-tag AzureFrontDoor.Backend --http-header x-azure-fdid=12345678-abcd-1234-abcd-12345678910a x-azure-fdid=11111111-abcd-1234-abcd-222222222222
+    Add Access Restriction opening (Allow) with no rule name for service tag AzureCloud: az functionapp config access-restriction add -g ResourceGroup -n AppName --priority 400 --service-tag AzureCloud
+    ? Add Access Restriction opening (Allow) with no rule name for service tag AzureFrontDoor.Backend and http-header X-Azure-FDID with value '12345678-abcd-1234-abcd-12345678910a'
+    : az functionapp config access-restriction add -g ResourceGroup -n AppName --priority 400 --service-tag AzureFrontDoor.Backend --http-header x-azure-fdid=12345678-abcd-1234-abcd-12345678910a

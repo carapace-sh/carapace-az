@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: show
 description: Show past logs and/or print logs in real time (with the --follow parameter).
-documentation:
-    flag:
-        replica: The name of the replica. List replicas with 'az containerapp replica list'. A replica may not exist if there is not traffic to your app.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        revision: The name of the container app revision. Defaults to the latest revision.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --container=: The name of the container
     --follow=:
@@ -31,3 +25,39 @@ completion:
         type:
             - console
             - system
+documentation:
+    command: Show past logs and/or print logs in real time (with the --follow parameter). Note that the logs are only taken from one revision, replica, and container (for non-system logs).
+    flag:
+        container: The name of the container.
+        follow: |-
+            Print logs in real time if present.
+
+            Default value: False
+
+            Accepted values: false, true
+        format: |-
+            Log output format.
+
+            Default value: json
+
+            Accepted values: json, text
+        name: The name of the Containerapp.
+        replica: The name of the replica. List replicas with 'az containerapp replica list'. A replica may not exist if there is not traffic to your app.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        revision: The name of the container app revision. Defaults to the latest revision.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tail: |-
+            The number of past logs to print (0-300).
+
+            Default value: 20
+        type: |-
+            Type of logs to stream.
+
+            Default value: console
+
+            Accepted values: console, system
+examples:
+    Fetch 30 lines of past logs logs from an app and print logs as they come in: az containerapp logs show -n my-containerapp -g MyResourceGroup --follow --tail 30
+    Fetch logs for a particular revision, replica, and container: az containerapp logs show -n my-containerapp -g MyResourceGroup --replica MyReplica --revision MyRevision --container MyContainer
+    Fetch the past 20 lines of logs from an app and return: az containerapp logs show -n my-containerapp -g MyResourceGroup
+    Fetch the past 20 lines of system logs from an app and return: az containerapp logs show -n my-containerapp -g MyResourceGroup --type system

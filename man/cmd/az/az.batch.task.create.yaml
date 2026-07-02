@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Parameters for creating an Azure Batch Task.
-documentation:
-    flag:
-        account-endpoint: 'Batch service endpoint. Alternatively, set by environment variable: AZURE_BATCH_ENDPOINT'
-        account-key: 'The Batch account key. Alternatively, set by environment variable: AZURE_BATCH_ACCESS_KEY'
-        account-name: 'The Batch account name. Only needed Alternatively, set by environment variable: AZURE_BATCH_ACCOUNT'
-        affinity-id: Required. You can pass the affinityId of a Node to indicate that this Task needs to run on that Compute Node. Note that this is just a soft affinity. If the target Compute Node is busy or unavailable at the time the Task is scheduled, then the Task will be scheduled elsewhere.
-        application-package-references: The space-separated list of IDs specifying the application packages to be installed. Space-separated application IDs with optional version in 'id[#version]' format.
-        command-line: The command line of the task. The command line does not run under a shell, and therefore cannot take advantage of shell features such as environment variable expansion. If you want to take advantage of such features, you should invoke the shell in the command line, for example using "cmd /c MyCommand" in Windows or "/bin/sh -c MyCommand" in Linux.
-        environment-settings: A list of environment variable settings for the task. Space-separated values in 'key=value' format.
-        json-file: The file containing the task(s) to create in JSON(formatted to match REST API request body). When submitting multiple tasks, accepts either an array of tasks or a TaskAddCollectionParamater. If this parameter is specified, all other parameters are ignored.
-        max-task-retry-count: The maximum number of times the Task may be retried. The Batch service retries a Task if its exit code is nonzero. Note that this value specifically controls the number of retries for the Task executable due to a nonzero exit code. The Batch service will try the Task once, and may then retry up to this limit. For example, if the maximum retry count is 3, Batch tries the Task up to 4 times (one initial try and 3 retries). If the maximum retry count is 0, the Batch service does not retry the Task after the first attempt. If the maximum retry count is -1, the Batch service retries the Task without limit, however this is not recommended for a start task or any task. The default value is 0 (no retries).
-        resource-files: A list of files that the Batch service will download to the compute node before running the command line. Space-separated resource references in filename=httpurl format, with httpurl being any HTTP url with public access or a SAS url with read access.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-endpoint=: Batch service endpoint.
     --account-key=: The Batch account key.
@@ -36,3 +23,25 @@ flags:
     --retention-time=: The default is 7 days, i.e. the Task directory will be retained for 7 days unless the Compute Node is removed or the Job is deleted.
     --subscription=: Name or ID of subscription.
     --task-id=: The ID of the task.
+documentation:
+    command: Create Batch tasks.
+    flag:
+        account-endpoint: 'Batch service endpoint. Alternatively, set by environment variable: AZURE_BATCH_ENDPOINT.'
+        account-key: 'The Batch account key. Alternatively, set by environment variable: AZURE_BATCH_ACCESS_KEY.'
+        account-name: 'The Batch account name. Only needed Alternatively, set by environment variable: AZURE_BATCH_ACCOUNT.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        affinity-id: Required. You can pass the affinityId of a Node to indicate that this Task needs to run on that Compute Node. Note that this is just a soft affinity. If the target Compute Node is busy or unavailable at the time the Task is scheduled, then the Task will be scheduled elsewhere.
+        application-package-references: The space-separated list of IDs specifying the application packages to be installed. Space-separated application IDs with optional version in 'id[#version]' format.
+        change-reference: The related change reference ID for this resource operation.
+        command-line: The command line of the task. The command line does not run under a shell, and therefore cannot take advantage of shell features such as environment variable expansion. If you want to take advantage of such features, you should invoke the shell in the command line, for example using "cmd /c MyCommand" in Windows or "/bin/sh -c MyCommand" in Linux.
+        environment-settings: A list of environment variable settings for the task. Space-separated values in 'key=value' format.
+        job-id: The ID of the job containing the task.
+        json-file: The file containing the task(s) to create in JSON(formatted to match REST API request body). When submitting multiple tasks, accepts either an array of tasks or a TaskAddCollectionParamater. If this parameter is specified, all other parameters are ignored.
+        max-task-retry-count: The maximum number of times the Task may be retried. The Batch service retries a Task if its exit code is nonzero. Note that this value specifically controls the number of retries for the Task executable due to a nonzero exit code. The Batch service will try the Task once, and may then retry up to this limit. For example, if the maximum retry count is 3, Batch tries the Task up to 4 times (one initial try and 3 retries). If the maximum retry count is 0, the Batch service does not retry the Task after the first attempt. If the maximum retry count is -1, the Batch service retries the Task without limit, however this is not recommended for a start task or any task. The default value is 0 (no retries).
+        max-wall-clock-time: If this is not specified, there is no time limit on how long the Task may run.
+        resource-files: A list of files that the Batch service will download to the compute node before running the command line. Space-separated resource references in filename=httpurl format, with httpurl being any HTTP url with public access or a SAS url with read access.
+        retention-time: The default is 7 days, i.e. the Task directory will be retained for 7 days unless the Compute Node is removed or the Job is deleted.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        task-id: The ID of the task.
+examples:
+    Create a task which sleeps for 1 minute.: az batch task create --task-id task1 --job-id job1 --command-line "sleep 60"

@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Add a managed rule set to an exclusion.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        rule-ids: List of rules that will be disabled. If provided, --group-name must be provided too.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        version: The version of the web application firewall rule set type. 0.1, 1.0, and 1.1 are used for Microsoft_BotManagerRuleSet.
 flags:
     --group-name=: The managed rule group for exclusion.
     --match-variable=!: The variable to be excluded.
@@ -50,3 +44,24 @@ completion:
             - "3.0"
             - "3.1"
             - "3.2"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        group-name: The managed rule group for exclusion.
+        match-variable: |-
+            The variable to be excluded.
+
+            Accepted values: RequestArgKeys, RequestArgNames, RequestArgValues, RequestCookieKeys, RequestCookieNames, RequestCookieValues, RequestHeaderKeys, RequestHeaderNames, RequestHeaderValues
+        policy-name: The name of the web application firewall policy.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-ids: List of rules that will be disabled. If provided, --group-name must be provided too.
+        selector: When matchVariable is a collection, operator used to specify which elements in the collection this exclusion applies to.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        type: |-
+            The type of the web application firewall rule set.
+
+            Accepted values: Microsoft_BotManagerRuleSet, Microsoft_DefaultRuleSet, Microsoft_HTTPDDoSRuleSet, OWASP
+        version: The version of the web application firewall rule set type. 0.1, 1.0, and 1.1 are used for Microsoft_BotManagerRuleSet.
+examples:
+    Add a managed rule set to an exclusion.: az network application-gateway waf-policy managed-rule exclusion rule-set add -g MyResourceGroup --policy-name MyPolicy --match-variable RequestHeaderNames --match-operator StartsWith --selector Bing --type OWASP --version 3.2 --group-name MyRuleGroup --rule-ids 921140 921150

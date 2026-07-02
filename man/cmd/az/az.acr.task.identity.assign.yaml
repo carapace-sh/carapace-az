@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: assign
 description: Update the managed identity for a task.
-documentation:
-    flag:
-        identities: Assigns managed identities to the task. Use '[system]' to refer to the system-assigned identity or a resource ID to refer to a user-assigned identity.
-        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --identities=:
         description: Assigns managed identities to the task.
@@ -15,3 +9,20 @@ flags:
     -g, --resource-group=: Name of resource group.
     -n, --name=!: The name of the task.
     -r, --registry=!: The name of the container registry.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        identities: Assigns managed identities to the task. Use '[system]' to refer to the system-assigned identity or a resource ID to refer to a user-assigned identity.
+        name: The name of the task.
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Assign both system-assigned and user-assigned managed identities to an existing task.: |-
+        az acr task identity assign -n MyTask -r myregistry \
+            --identities [system] "/subscriptions/<SUBSCRIPTON ID>/resourcegroups/<RESOURCE GROUP>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myUserAssignedIdentitiy"
+    Assign user-assigned managed identities to an existing task. This will remove the existing system-assigned identity.: |-
+        az acr task identity assign -n MyTask -r myregistry \
+            --identities "/subscriptions/<SUBSCRIPTON ID>/resourcegroups/<RESOURCE GROUP>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myUserAssignedIdentitiy"
+    Enable the system-assigned identity on an existing task. This will replace all existing user-assigned identities for that task.: az acr task identity assign -n MyTask -r myregistry

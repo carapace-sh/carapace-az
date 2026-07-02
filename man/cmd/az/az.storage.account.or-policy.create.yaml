@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create Object Replication Service Policy for storage account.
-documentation:
-    flag:
-        destination-account: The destination storage account name or resource Id. Apply --account-name value as destination account when there is no destination account provided in --policy and --destination-account.
-        destination-container: The destination storage container name. Required when no --policy provided.
-        min-creation-time: 'Blobs created after the time will be replicated to the destination. It must be in datetime format ''yyyy-MM-ddTHH:mm:ssZ''. Example: 2020-02-19T16:05:00Z'
-        policy: The object replication policy definition between two storage accounts, in JSON format. Multiple rules can be defined in one policy.
-        policy-id: The ID of object replication policy or "default" if the policy ID is unknown. Policy Id will be auto-generated when setting on destination account. Required when setting on source account.
-        prefix-match: Optional. Filter the results to replicate only blobs whose names begin with the specified prefix.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        rule-id: Rule Id is auto-generated for each new rule on destination account. It is required for put policy on source account.
-        source-account: The source storage account name or resource Id. Required when no --policy provided.
-        source-container: The source storage container name. Required when no --policy provided.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --destination-container=: The destination storage container name.
     --policy-id=: The ID of object replication policy or "default" if the policy ID is unknown.
@@ -29,3 +16,38 @@ flags:
     -p, --policy=: The object replication policy definition between two storage accounts, in JSON format.
     -s, --source-account=: The source storage account name or resource Id.
     -t, --min-creation-time=: Blobs created after the time will be replicated to the destination.
+documentation:
+    flag:
+        account-name: The storage account name.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        destination-account: The destination storage account name or resource Id. Apply --account-name value as destination account when there is no destination account provided in --policy and --destination-account.
+        destination-container: The destination storage container name. Required when no --policy provided.
+        enable-metrics: |-
+            Indicates whether object replication metrics feature is enabled for the policy.
+
+            Accepted values: false, true
+        min-creation-time: 'Blobs created after the time will be replicated to the destination. It must be in datetime format ''yyyy-MM-ddTHH:mm:ssZ''. Example: 2020-02-19T16:05:00Z.'
+        policy: The object replication policy definition between two storage accounts, in JSON format. Multiple rules can be defined in one policy.
+        policy-id: |-
+            The ID of object replication policy or "default" if the policy ID is unknown. Policy Id will be auto-generated when setting on destination account. Required when setting on source account.
+
+            Default value: default
+        prefix-match: Optional. Filter the results to replicate only blobs whose names begin with the specified prefix.
+        priority-replication: |-
+            Indicates whether object replication priority replication feature is enabled for the policy.
+
+            Accepted values: false, true
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-id: Rule Id is auto-generated for each new rule on destination account. It is required for put policy on source account.
+        source-account: The source storage account name or resource Id. Required when no --policy provided.
+        source-container: The source storage container name. Required when no --policy provided.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags-replication: |-
+            Indicates whether object replication tags replication feature is enabled for the policy.
+
+            Accepted values: false, true
+examples:
+    Create Object Replication Service Policy for storage account.: az storage account or-policy create -g ResourceGroupName -n storageAccountName -d destAccountName -s srcAccountName --destination-container dcont --source-container scont
+    Create Object Replication Service Policy through json file for storage account.: az storage account or-policy create -g ResourceGroupName -n storageAccountName --policy @policy.json
+    Create Object Replication Service Policy to source storage account through policy associated with destination storage account.: az storage account or-policy show -g ResourceGroupName -n destAccountName --policy-id "3496e652-4cea-4581-b2f7-c86b3971ba92" | az storage account or-policy create -g ResourceGroupName -n srcAccountName -p "@-"

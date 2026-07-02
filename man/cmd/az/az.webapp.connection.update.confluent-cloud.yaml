@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: confluent-cloud
 description: Update a webapp to confluent-cloud connection.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        name: Name of the webapp. Required if '--source-id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        resource-group: The resource group which contains the webapp. Required if '--source-id' is not specified.None
-        slot: The name of the slot. Default to the production slot if not specified.
-        source-id: The resource id of a webapp. Required if ['--resource-group', '--name'] are not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --appconfig-id=: The app configuration id to store configuration
     --bootstrap-server=: Kafka bootstrap server url
@@ -47,3 +38,39 @@ completion:
             - publicnetwork
             - configinfo
             - auth
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appconfig-id: The app configuration id to store configuration.
+        bootstrap-server: Kafka bootstrap server url.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the webapp.
+
+            Accepted values: dotnet, dotnet-internal, go, java, none, python, springBoot
+        connection: Name of the connection.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        kafka-key: Kafka API-Key (key).
+        kafka-secret: Kafka API-Key (secret).
+        name: Name of the webapp. Required if '--source-id' is not specified.None.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        resource-group: The resource group which contains the webapp. Required if '--source-id' is not specified.None.
+        schema-key: Schema registry API-Key (key).
+        schema-registry: Schema registry url.
+        schema-secret: Schema registry API-Key (secret).
+        slot: The name of the slot. Default to the production slot if not specified.
+        source-id: The resource id of a webapp. Required if ['--resource-group', '--name'] are not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vault-id: The id of key vault to store secret value.
+examples:
+    Update the auth configurations of a bootstrap server connection: az webapp connection update confluent-cloud -g WebAppRG -n MyWebApp --connection MyConnection --bootstrap-server xxx.eastus.azure.confluent.cloud:9092 --kafka-key Name --kafka-secret Secret
+    Update the auth configurations of a schema registry connection: az webapp connection update confluent-cloud -g WebAppRG -n MyWebApp --connection MyConnection_schema --schema-registry https://xxx.eastus.azure.confluent.cloud --schema-key Name --schema-secret Secret
+    Update the client-type of a bootstrap server connection: az webapp connection update confluent-cloud -g WebAppRG -n MyWebApp --connection MyConnection --client python
+    Update the client-type of a schema registry connection: az webapp connection update confluent-cloud -g WebAppRG -n MyWebApp --connection MyConnection_schema --client python

@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update an existing cluster.
-documentation:
-    flag:
-        coord-server-edition: 'The edition of a coordinator server (default: GeneralPurpose). Required for creation.'
-        coordinator-storage: The storage of a server in MB. Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
-        coordinator-v-cores: 'The vCores count of a server (max: 96). Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        login-password: The password of the administrator login. Required for creation.  If value is blank it's asked from the tty.
-        maintenance-window: Maintenance window of a cluster.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        node-count: Worker node count of the cluster. When node count is 0, it represents a single node configuration with the ability to create distributed tables on that node. 2 or more worker nodes represent multi-node configuration. Node count value cannot be 1.
-        node-storage: The storage in MB on each worker node. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
-        node-v-cores: 'The compute in vCores on each worker node (max: 104). See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Application-specific metadata in the form of key-value pairs.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --citus-version=: The Citus extension version on all cluster servers.
     --coord-public-ip-access=:
@@ -99,3 +85,43 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    command: Update an existing cluster. The request body can contain one or several properties from the cluster definition.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        citus-version: |-
+            The Citus extension version on all cluster servers.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        coord-server-edition: 'The edition of a coordinator server (default: GeneralPurpose). Required for creation.'
+        coordinator-storage: The storage of a server in MB. Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
+        coordinator-v-cores: 'The vCores count of a server (max: 96). Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
+        enable-ha: |
+            If high availability (HA) is enabled or not for the cluster.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        login-password: The password of the administrator login. Required for creation.  If value is blank it's asked from the tty.
+        maintenance-window: Maintenance window of a cluster.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        node-count: Worker node count of the cluster. When node count is 0, it represents a single node configuration with the ability to create distributed tables on that node. 2 or more worker nodes represent multi-node configuration. Node count value cannot be 1.
+        node-server-edition: 'The edition of a node server (default: MemoryOptimized).'
+        node-storage: The storage in MB on each worker node. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
+        node-v-cores: 'The compute in vCores on each worker node (max: 104). See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
+        postgresql-version: The major PostgreSQL version on all cluster servers.
+        preferred-primary-zone: Preferred primary availability zone (AZ) for all cluster servers.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Application-specific metadata in the form of key-value pairs.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    'Scale out: Add new worker nodes': az cosmosdb postgres cluster update -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --node-count 2
+    Scale up coordinator storage: az cosmosdb postgres cluster update -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --coordinator-storage 2097152
+    Scale up worker node storage: az cosmosdb postgres cluster update -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --node-storage 2097152
+    Scale worker node compute up or down: az cosmosdb postgres cluster update -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --node-v-cores 16
+    Update multiple configuration settings of the cluster: az cosmosdb postgres cluster update -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --node-v-cores 16 --node-count 4 coordinator-v-cores 16 --administrator-login-password "newPassword"
+    Update or define maintenance window: az cosmosdb postgres cluster update -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --maintenance-window day-of-week=1 start-hour=2 --start-minute=0 custom-window="Enabled"
+    Upgrade PostgreSQL major version: az cosmosdb postgres cluster update -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --postgresql-version "15"

@@ -1,26 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: start
 description: Copy a file asynchronously.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        destination-share: Name of the destination share. The share must exist.
-        disallow-source-trailing-dot: If true, the trailing dot will be trimmed from the source URI. Default to False
-        disallow-trailing-dot: If true, the trailing dot will be trimmed from the target URI. Default to False
-        enable-file-backup-request-intent: Required parameter to use with OAuth (Azure AD) Authentication for Files. This will bypass any file/directory level permission checks and allow access, based on the allowed data actions, even if there are ACLs in place for those files/directories.
-        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        file-mode: The mode permissions to be set on the file. Only applicable to NFS Files. Only work together with parameter `--file-mode-copy-mode Override`. Symbolic (rwxrw-rw-) is supported. The sticky bit is also supported and its represented either by the letter t or T in the final character-place depending on whether the execution bit for the others category is set or unset respectively, absence of t or T indicates sticky bit not set."
-        file-mode-copy-mode: Only applicable to NFS Files. Applicable only when the copy source is a File. Determines the copy behavior of the mode bits of the destination file. If not populated, the destination file will have the default File Mode.
-        group: Only applicable to NFS Files. Only work together with parameter `--owner-copy-mode Override`. The owner group identifier (GID) to be set on the directory. The default value is 0 (root group).
-        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
-        owner: Only applicable to NFS Files. Only work together with parameter `--owner-copy-mode Override`. The owner user identifier (UID) to be set on the directory. The default value is 0 (root).
-        owner-copy-mode: Only applicable to NFS Files. Applicable only when the copy source is a File. Determines the copy behavior of the owner and group of the destination file. If not populated, the destination file will have the default Owner and Group.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        timeout: Request timeout in seconds. Applies to each call to the service.
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -74,3 +54,63 @@ completion:
         owner-copy-mode:
             - source
             - override
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+
+            Default value: False
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: |-
+            Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.
+
+            Default value: False
+
+            Accepted values: false, true
+        destination-path: The path to the file within the file share.
+        destination-share: Name of the destination share. The share must exist.
+        disallow-source-trailing-dot: If true, the trailing dot will be trimmed from the source URI. Default to False
+        disallow-trailing-dot: |-
+            If true, the trailing dot will be trimmed from the target URI. Default to False.
+
+            Default value: False
+
+            Accepted values: false, true
+        enable-file-backup-request-intent: Required parameter to use with OAuth (Azure AD) Authentication for Files. This will bypass any file/directory level permission checks and allow access, based on the allowed data actions, even if there are ACLs in place for those files/directories.
+        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        file-mode: The mode permissions to be set on the file. Only applicable to NFS Files. Only work together with parameter ``` --file-mode-copy-mode Override ``` . Symbolic (rwxrw-rw-) is supported. The sticky bit is also supported and its represented either by the letter t or T in the final character-place depending on whether the execution bit for the others category is set or unset respectively, absence of t or T indicates sticky bit not set.".
+        file-mode-copy-mode: |-
+            Only applicable to NFS Files. Applicable only when the copy source is a File. Determines the copy behavior of the mode bits of the destination file. If not populated, the destination file will have the default File Mode.
+
+            Accepted values: override, source
+        file-snapshot: The file snapshot for the source storage account.
+        group: Only applicable to NFS Files. Only work together with parameter ``` --owner-copy-mode Override ``` . The owner group identifier (GID) to be set on the directory. The default value is 0 (root group).
+        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
+        owner: Only applicable to NFS Files. Only work together with parameter ``` --owner-copy-mode Override ``` . The owner user identifier (UID) to be set on the directory. The default value is 0 (root).
+        owner-copy-mode: |-
+            Only applicable to NFS Files. Applicable only when the copy source is a File. Determines the copy behavior of the owner and group of the destination file. If not populated, the destination file will have the default Owner and Group.
+
+            Accepted values: override, source
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        source-account-key: The storage account key of the source blob.
+        source-account-name: The storage account name of the source blob.
+        source-blob: The blob name for the source storage account.
+        source-container: The container name for the source storage account.
+        source-path: The file path for the source storage account.
+        source-sas: The shared access signature for the source storage account.
+        source-share: The share name for the source storage account.
+        source-snapshot: The blob snapshot for the source storage account.
+        source-uri: 'A URL of up to 2 KB in length that specifies an Azure file or blob. The value should be URL-encoded as it would appear in a request URI. If the source is in another account, the source must either be public or must be authenticated via a shared access signature. If the source is public, no authentication is required. Examples: ``` https://myaccount.file.core.windows.net/myshare/mydir/myfile ``` https://otheraccount.file.core.windows.net/myshare/mydir/myfile?sastoken .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: Request timeout in seconds. Applies to each call to the service.
+examples:
+    Copy a file asynchronously from file snapshot to destination storage account with sas token.: az storage file copy start --source-account-name srcaccount --source-account-key 00000000 --source-path <srcpath-to-file> --source-share srcshare --file-snapshot "2020-03-02T13:51:54.0000000Z" --destination-path <destpath-to-file> --destination-share destshare --account-name destaccount --sas-token <destination-sas>
+    Copy a file asynchronously from source uri to destination storage account with sas token.: az storage file copy start --source-uri "https://srcaccount.file.core.windows.net/myshare/mydir/myfile?<sastoken>" --destination-path <destpath-to-file> --destination-share destshare --account-name destaccount --sas-token <destination-sas>
+    Copy a file asynchronously.: az storage file copy start --source-account-name srcaccount --source-account-key 00000000 --source-path <srcpath-to-file> --source-share srcshare --destination-path <destpath-to-file> --destination-share destshare --account-name destaccount --account-key 00000000
+    Copy a file with the overridden file-mode, group, owner.: az storage file copy start --source-account-name srcaccount --source-path srcpath --source-share srcshare --destination-path dstpath --destination-share dstshare --owner-copy-mode Override --file-mode-copy-mode Override --file-mode rw-rw-rw- --owner 4 --group 5
+    Copy a file with the source file-mode, group, owner.: az storage file copy start --source-account-name srcaccount --source-path srcpath --source-share srcshare --destination-path dstpath --destination-share dstshare --owner-copy-mode Source --file-mode-copy-mode Source

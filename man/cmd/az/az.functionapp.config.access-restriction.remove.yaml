@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: remove
 description: Removes an Access Restriction from the functionapp.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        slot: the name of the slot. Default to the productions slot if not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --action=: Allow or deny access
     --ids=:
@@ -38,3 +32,37 @@ completion:
         skip-service-tag-validation:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        action: |-
+            Allow or deny access.
+
+            Default value: Allow
+
+            Accepted values: Allow, Deny
+        change-reference: The related change reference ID for this resource operation.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        ip-address: IP address or CIDR range (optional comma separated list of up to 8 ranges).
+        name: Name of the function app.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-name: Name of the access restriction to remove.
+        scm-site: |-
+            True if access restriction should be removed from scm site.
+
+            Default value: False
+
+            Accepted values: false, true
+        service-tag: Service Tag (optional comma separated list of up to 8 tags).
+        skip-service-tag-validation: |-
+            Skip validating public service tags.
+
+            Accepted values: false, true
+        slot: The name of the slot. Default to the productions slot if not specified.
+        subnet: Subnet name (requires vNet name) or subnet resource id.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet-name: VNet name.
+examples:
+    Remove Access Restriction named developers from the main site.: az functionapp config access-restriction remove -g ResourceGroup -n AppName --rule-name developers
+    Remove Access Restriction named internal_agents from the scm site.: az functionapp config access-restriction remove -g ResourceGroup -n AppName --rule-name internal_agents --scm-site true
+    Remove Access Restriction with service tag AzureFrontDoor.Backend from the main site.: az functionapp config access-restriction remove -g ResourceGroup -n AppName --service-tag AzureFrontDoor.Backend

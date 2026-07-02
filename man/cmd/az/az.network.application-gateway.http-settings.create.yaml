@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create HTTP settings.
-documentation:
-    flag:
-        auth-certs: Space-separated list of authentication certificates (Names and IDs) to associate with the HTTP settings.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        connection-draining-timeout: Time in seconds after a backend server is removed during which on open connection remains active. Range from 0 (Disabled) to 3600.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        root-certs: Space-separated list of trusted root certificates (Names and IDs) to associate with the HTTP settings. `--host-name` or `--host-name-from-backend-pool` is required when this field is set.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --affinity-cookie-name=: Name used for the affinity cookie.
     --auth-certs=:
@@ -82,3 +75,63 @@ completion:
             - Https
             - Tcp
             - Tls
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        affinity-cookie-name: Name used for the affinity cookie.
+        auth-certs: Space-separated list of authentication certificates (Names and IDs) to associate with the HTTP settings.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        change-reference: The related change reference ID for this resource operation.
+        connection-draining-timeout: |-
+            Time in seconds after a backend server is removed during which on open connection remains active. Range from 0 (Disabled) to 3600.
+
+            Default value: 0
+        cookie-based-affinity: |-
+            Enable or disable cookie-based affinity.
+
+            Default value: Disabled
+
+            Accepted values: Disabled, Enabled
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        enable-probe: |-
+            Whether the probe is enabled.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        gateway-name: Name of the application gateway.
+        host-name: Host header sent to the backend servers.
+        host-name-from-backend-pool: |-
+            Whether to pick host header should be picked from the host name of the backend server.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        name: Name of the backend http settings.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        path: Path that will prefix all HTTP requests.
+        port: Number of the destination port on the backend.
+        probe: Name or ID of the probe to associate with the HTTP settings.
+        protocol: |-
+            Protocol used to communicate with the backend.
+
+            Default value: Http
+
+            Accepted values: Http, Https, Tcp, Tls
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        root-certs: Space-separated list of trusted root certificates (Names and IDs) to associate with the HTTP settings. `--host-name` or `--host-name-from-backend-pool` is required when this field is set.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        sni-name: Specify an SNI value to match the common name of the certificate on the backend. By default, the application gateway uses the incoming request’s host header as the SNI. Default value is null.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: |-
+            Request timeout in seconds. --validate-cert-ce --validate-cert-chain-and-expiry Verify or skip both chain and expiry validations of the certificate on the backend server. Default is set to true.
+
+            Default value: True
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        validate-sni: |-
+            When enabled, verifies if the Common Name of the certificate provided by the backend server matches the Server Name Indication (SNI) value. Default value is true.
+
+            Default value: True
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+examples:
+    Create HTTP settings.: az network application-gateway http-settings create -g MyResourceGroup --gateway-name MyAppGateway -n MyHttpSettings --port 80 --protocol Http --cookie-based-affinity Disabled --timeout 30

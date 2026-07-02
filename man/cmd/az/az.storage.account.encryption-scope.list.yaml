@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List encryption scopes within storage account.
-documentation:
-    flag:
-        marker: A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. If specified, this generator will begin returning results from the point where the previous generator stopped.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-name=!: The storage account name.
     --filter=: When specified, only encryption scope names starting with the filter will be listed
@@ -20,3 +15,18 @@ completion:
             - All
             - Enabled
             - Disabled
+documentation:
+    flag:
+        account-name: The storage account name.
+        filter: When specified, only encryption scope names starting with the filter will be listed.
+        include: |-
+            When specified, will list encryption scopes with the specific state.
+
+            Accepted values: All, Disabled, Enabled
+        marker: A string value that identifies the portion of the list of containers to be returned with the next listing operation. The operation returns the NextMarker value within the response body if the listing operation did not return all containers remaining to be listed with the current page. If specified, this generator will begin returning results from the point where the previous generator stopped.
+        maxpagesize: The maximum number of encryption scopes that will be included in the list response.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    List encryption scopes starting with specific name.: az storage account encryption-scope list --account-name mystorageaccount -g myresourcegroup --filter 'startswith(name, value)'
+    List encryption scopes within storage account.: az storage account encryption-scope list --account-name mystorageaccount -g MyResourceGroup

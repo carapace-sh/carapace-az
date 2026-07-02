@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: show
 description: Get a manifest in an Azure Container Registry.
-documentation:
-    flag:
-        name: The name of the artifact. May include a tag in the format 'name:tag' or digest in the format 'name@digest'.
-        registry: The name of the container registry. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        suffix: The tenant suffix in registry login server. You may specify '--suffix tenant' if your registry login server is in the format 'registry-tenant.azurecr.io'. Applicable if you're accessing the registry from a different subscription or you have permission to access images but not the permission to manage the registry resource.
 flags:
     --raw=: Output the raw manifest text with no formatting.
     --subscription=: Name or ID of subscription.
@@ -15,3 +9,19 @@ flags:
     -p, --password=: The password used to log into a container registry
     -r, --registry=: The name of the container registry.
     -u, --username=: The username used to log into a container registry
+documentation:
+    command: |-
+        Command group 'acr manifest' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        name: The name of the artifact. May include a tag in the format 'name:tag' or digest in the format 'name@digest'.
+        password: The password used to log into a container registry.
+        raw: Output the raw manifest text with no formatting.
+        registry: The name of the container registry. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        suffix: The tenant suffix in registry login server. You may specify '--suffix tenant' if your registry login server is in the format 'registry-tenant.azurecr.io'. Applicable if you're accessing the registry from a different subscription or you have permission to access images but not the permission to manage the registry resource.
+        username: The username used to log into a container registry. <MANIFEST_ID> A fully qualified manifest specifier such as 'myregistry.azurecr.io/hello-world:latest'.
+examples:
+    Get the manifest of the artifact 'hello-world:latest'.: az acr manifest show myregistry.azurecr.io/hello-world:latest
+    Get the manifest of the artifact referenced by digest 'hello-world@sha256:abc123'.: az acr manifest show -r myregistry -n hello-world@sha256:abc123
+    Get the raw, unformatted manifest of the artifact 'hello-world:latest'.: az acr manifest show -r myregistry -n hello-world:latest --raw

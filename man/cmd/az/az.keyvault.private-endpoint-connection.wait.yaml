@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: wait
 description: Place the CLI in a waiting state until a condition of the private endpoint connection is met.
-documentation:
-    flag:
-        custom: Wait until the condition satisfies a custom JMESPath query. E.g. provisioningState!='InProgress', instanceView.statuses[?code=='PowerState/running']
-        hsm-name: Name of the HSM. Required if --id is not specified.(--hsm-name and --vault-name are mutually exclusive, please specify just one of them)
-        id: The ID of the private endpoint connection associated with the Key Vault/HSM. If specified --vault-name/--hsm-name and --name/-n, this should be omitted.
-        name: The name of the private endpoint connection associated with the Key Vault/HSM. Required if --id is not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vault-name: Name of the Key Vault. Required if --id is not specified
 flags:
     --created=: wait until created with 'provisioningState' at 'Succeeded'
     --custom=: Wait until the condition satisfies a custom JMESPath query.
@@ -23,3 +15,41 @@ flags:
     --vault-name=: Name of the Key Vault.
     -g, --resource-group=: Proceed only if Key Vault belongs to the specified resource group.
     -n, --name=: The name of the private endpoint connection associated with the Key Vault/HSM.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        created: |-
+            Wait until created with 'provisioningState' at 'Succeeded'.
+
+            Default value: False
+        custom: Wait until the condition satisfies a custom JMESPath query. E.g. provisioningState!='InProgress', instanceView.statuses[?code=='PowerState/running'].
+        deleted: |-
+            Wait until deleted.
+
+            Default value: False
+        exists: |-
+            Wait until the resource exists.
+
+            Default value: False
+        hsm-name: Name of the HSM. Required if --id is not specified.(--hsm-name and --vault-name are mutually exclusive, please specify just one of them).
+        id: The ID of the private endpoint connection associated with the Key Vault/HSM. If specified --vault-name/--hsm-name and --name/-n, this should be omitted.
+        interval: |-
+            Polling interval in seconds.
+
+            Default value: 30
+        name: The name of the private endpoint connection associated with the Key Vault/HSM. Required if --id is not specified.
+        resource-group: Name of resource group.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: |-
+            Maximum wait in seconds.
+
+            Default value: 3600
+        updated: |-
+            Wait until updated with provisioningState at 'Succeeded'.
+
+            Default value: False
+        vault-name: Name of the Key Vault. Required if --id is not specified.
+examples:
+    Pause CLI until the private endpoint connection is approved/rejected by ID.: az keyvault private-endpoint-connection wait --id "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myrg/providers/Microsoft.KeyVault/vaults/mykv/privateEndpointConnections/mykv.00000000-0000-0000-0000-000000000000" --created
+    Pause CLI until the private endpoint connection is approved/rejected using vault name and connection name.: az keyvault private-endpoint-connection wait -g myrg --vault-name mykv --name myconnection --created

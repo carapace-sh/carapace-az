@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: upload
 description: Upload files or subdirectories to a directory in ADLS Gen2 file system.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        destination-path: The upload destination directory path. It should be an absolute path to file system. If the specified destination path does not exist, a new directory path will be created.
-        recursive: Recursively upload files. If enabled, all the files including the files in subdirectories will be uploaded.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -27,3 +17,29 @@ completion:
         auth-mode:
             - login
             - key
+documentation:
+    command: |-
+        This command is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        destination-path: The upload destination directory path. It should be an absolute path to file system. If the specified destination path does not exist, a new directory path will be created.
+        file-system: The upload destination file system.
+        recursive: Recursively upload files. If enabled, all the files including the files in subdirectories will be uploaded.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        service-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        source: The source file path to upload from.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Upload a local directory to a directory in ADLS Gen2 file system.: az storage fs directory upload -f myfilesystem --account-name mystorageaccount -s "path/to/directory" -d directory --recursive
+    Upload a local directory to root directory in ADLS Gen2 file system.: az storage fs directory upload -f myfilesystem --account-name mystorageaccount -s "path/to/directory" --recursive
+    Upload a set of files in a local directory to a directory in ADLS Gen2 file system.: az storage fs directory upload -f myfilesystem --account-name mystorageaccount -s "path/to/file*" -d directory --recursive
+    Upload a single file to a storage blob directory.: az storage fs directory upload -f myfilesystem --account-name mystorageaccount -s "path/to/file" -d directory

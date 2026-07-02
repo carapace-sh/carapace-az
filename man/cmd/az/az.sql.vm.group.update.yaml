@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Updates a SQL virtual machine group if there are not SQL virtual machines attached to the group.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        ou-path: 'Organizational Unit path in which the nodes and cluster will be present. Example: OU=WSCluster,DC=testdomain,DC=com'
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -45,3 +35,43 @@ completion:
         cluster-subnet-type:
             - SingleSubnet
             - MultiSubnet
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: |-
+            Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .
+
+            Default value: []
+        bootstrap-acc: Account name used for creating cluster (at minimum needs permissions to 'Create Computer Objects' in domain).
+        change-reference: The related change reference ID for this resource operation.
+        cluster-subnet-type: |-
+            Cluster subnet type.
+
+            Accepted values: MultiSubnet, SingleSubnet
+        domain-fqdn: Fully qualified name of the domain.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Default value: False
+        fsw-path: Optional path for fileshare witness.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: Name of the SQL virtual machine group.
+        operator-acc: Account name used for operating cluster i.e. will be part of administrators group on all the participating virtual machines in the cluster.
+        ou-path: 'Organizational Unit path in which the nodes and cluster will be present. Example: OU=WSCluster,DC=testdomain,DC=com.'
+        remove: |-
+            Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .
+
+            Default value: []
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sa-key: Primary key of the witness storage account.
+        service-acc: Account name under which SQL service will run on all participating SQL virtual machines in the cluster.
+        set: |-
+            Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .
+
+            Default value: []
+        storage-account: Storage account url of the witness storage account.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Update an empty SQL virtual machine group operator account.: az sql vm group update -n sqlvmgroup -g myresourcegroup --operator-acc testop
+    Update an empty SQL virtual machine group storage account and key.: az sql vm group update -n sqlvmgroup -g myresourcegroup --sa-key {PublicKey} --storage-account 'https://newstoracc.blob.core.windows.net/'

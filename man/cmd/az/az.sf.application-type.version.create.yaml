@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new application type on an Azure Service Fabric cluster.
-documentation:
-    flag:
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --name=!: Specify the application type name.
     --package-url=!: Specify the url of the application package sfpkg file.
@@ -12,3 +8,16 @@ flags:
     --version=!: Specify the application type version.
     -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
     -g, --resource-group=!: Specify the resource group name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name.
+        package-url: Specify the url of the application package sfpkg file.
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    ? Create new application type version using the provided package url. The version in the application manifest contained in the package should have the same version as the one specified in --version.
+    : |-
+        az sf application-type version create -g testRG -c testCluster --application-type-name testAppType \
+          --version 1.0 --package-url "https://sftestapp.blob.core.windows.net/sftestapp/testApp_1.0.sfpkg"

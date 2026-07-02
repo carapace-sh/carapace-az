@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create and purchase a custom domain.
-documentation:
-    flag:
-        accept-terms: 'By using this flag, you are accepting the conditions shown using the --show-hostname-purchase-terms flag. '
-        contact-info: 'The file path to a JSON object with your contact info for domain registration. Please see the following link for the format of the JSON file expected: https://github.com/AzureAppServiceCLI/appservice_domains_templates/blob/master/contact_info.json'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --accept-terms=: By using this flag, you are accepting the conditions shown using the --show-hostname-purchase-terms flag.
     --dryrun=: Show summary of the purchase and create operation instead of executing it
@@ -20,3 +13,34 @@ flags:
     -g, --resource-group=!: Name of resource group.
     -n, --hostname=!: Name of the custom domain
     -p, --privacy=: Enable privacy protection
+documentation:
+    command: |-
+        Command group 'appservice domain' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        accept-terms: |-
+            By using this flag, you are accepting the conditions shown using the --show-hostname-purchase-terms flag.
+
+            Default value: False
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auto-renew: |-
+            Enable auto-renew on the domain.
+
+            Default value: True
+        change-reference: The related change reference ID for this resource operation.
+        contact-info: 'The file path to a JSON object with your contact info for domain registration. Please see the following link for the format of the JSON file expected: https://github.com/AzureAppServiceCLI/appservice_domains_templates/blob/master/contact_info.json .'
+        dryrun: |-
+            Show summary of the purchase and create operation instead of executing it.
+
+            Default value: False
+        hostname: Name of the custom domain.
+        privacy: |-
+            Enable privacy protection.
+
+            Default value: True
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Accept the legal terms for purchasing and creating MyCustomDomain.com, then purchase and create domain.: az appservice domain create -g MyResourceGroup --hostname MyCustomDomain.com --contact-info=@'C:/path_to_contact_info.json' --accept-terms
+    View the details of the domain that will be purchased and created, without actually running the operation: az appservice domain create -g MyResourceGroup --hostname MyCustomDomain.com --contact-info=@'C:/path_to_contact_info.json' --dryrun

@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates a new operation in the API or updates an existing one.
-documentation:
-    flag:
-        api-id: API identifier. Must be unique in the current API Management service instance. Non-current revision has ;rev=n as a suffix where n is the revision number.
-        description: Description of the operation. May include HTML formatting tags.
-        display-name: Required. Operation Name.
-        method: Required. A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST but not limited by only them.
-        operation-id: Operation identifier within an API. Must be unique in the current API Management service instance.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        url-template: Relative URL template identifying the target resource for this operation. May include parameters.
 flags:
     --api-id=!: API identifier.
     --description=: Description of the operation.
@@ -25,3 +15,20 @@ flags:
     -p, --template-parameters=:
         description: Collection of URL template parameters.
         nargs: -1
+documentation:
+    command: Creates a new operation in the API.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        api-id: API identifier. Must be unique in the current API Management service instance. Non-current revision has ;rev=n as a suffix where n is the revision number.
+        change-reference: The related change reference ID for this resource operation.
+        description: Description of the operation. May include HTML formatting tags.
+        display-name: Required. Operation Name.
+        if-match: ETag of the Entity.
+        method: Required. A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST but not limited by only them.
+        operation-id: Operation identifier within an API. Must be unique in the current API Management service instance. --params --template-parameters -p Collection of URL template parameters.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-name: The name of the API Management service instance.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        url-template: Relative URL template identifying the target resource for this operation. May include parameters.
+examples:
+    Creates a new operation in the API with several parameters: az apim api operation create --resource-group MyResourceGroup --service-name MyServiceName --api-id MyApiId --url-template "/session/{param1}/{param2}" --method "GET" --display-name MyOperationName --description MyDescription --template-parameters name=param1 description=descriptionContent type=paramType required="true" --template-parameters name=param2 required="false" type="string"

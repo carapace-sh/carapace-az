@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: restore-azurefileshare
 description: Restore backed up Azure file shares to the same file-share or another file-share in registered storage accounts.
-documentation:
-    flag:
-        container-name: Name of the backup container. Accepts 'Name' or 'FriendlyName' from the output of az backup container list command. If 'FriendlyName' is passed then BackupManagementType is required.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-folder: Destination folder to which content will be restored. To restore content to root , leave the folder name empty
 flags:
     --ids=:
         description: One or more resource IDs (space-delimited).
@@ -33,3 +26,28 @@ completion:
         restore-mode:
             - OriginalLocation
             - AlternateLocation
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        container-name: Name of the backup container. Accepts 'Name' or 'FriendlyName' from the output of az backup container list command. If 'FriendlyName' is passed then BackupManagementType is required.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        item-name: Name of the backed up item.
+        resolve-conflict: |-
+            Instruction if there's a conflict with the restored data.
+
+            Accepted values: Overwrite, Skip
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        restore-mode: |-
+            Specify the restore mode.
+
+            Accepted values: AlternateLocation, OriginalLocation
+        rp-name: Name of the recovery point.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-file-share: Destination file share to which content will be restored.
+        target-folder: Destination folder to which content will be restored. To restore content to root , leave the folder name empty. --target-resource-group-name --target-rg-name Resource group of the destination storage account to which the content will be restored, needed if it is different from the vault resource group.
+        target-storage-account: Destination storage account to which content will be restored.
+        tenant-id: ID of the tenant if the Resource Guard protecting the vault exists in a different tenant.
+        vault-name: Name of the Recovery services vault.
+examples:
+    Restore backed up Azure file shares to the same file-share or another file-share in registered storage accounts.: az backup restore restore-azurefileshare --resource-group MyResourceGroup --vault-name MyVault --container-name MyContainer --item-name MyItem --rp-name recoverypoint --resolve-conflict Overwrite --restore-mode OriginalLocation

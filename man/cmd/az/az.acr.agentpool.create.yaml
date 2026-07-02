@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create an agent pool for an Azure Container Registry.
-documentation:
-    flag:
-        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tier: 'Sets the VM your agent pool will run on. Valid values are: S1(2 vCPUs, 3 GiB RAM), S2(4 vCPUs, 8 GiB RAM), S3(8 vCPUs, 16 GiB RAM) or I6(64 vCPUs, 216 GiB RAM, Isolated)'
 flags:
     --no-wait=: Do not wait for the Agent Pool to complete action and return immediately after queuing the request.
     --os=: The os of the agent pool.
@@ -17,3 +11,31 @@ flags:
     -g, --resource-group=: Name of resource group.
     -n, --name=!: The name of the agent pool.
     -r, --registry=!: The name of the container registry.
+documentation:
+    command: |-
+        Command group 'acr agentpool' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        count: |-
+            The count of the agent pool.
+
+            Default value: 1
+        name: The name of the agent pool.
+        no-wait: |-
+            Do not wait for the Agent Pool to complete action and return immediately after queuing the request.
+
+            Default value: False
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subnet-id: The Virtual Network Subnet Resource Id of the agent machine.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tier: |-
+            Sets the VM your agent pool will run on. Valid values are: S1(2 vCPUs, 3 GiB RAM), S2(4 vCPUs, 8 GiB RAM), S3(8 vCPUs, 16 GiB RAM) or I6(64 vCPUs, 216 GiB RAM, Isolated).
+
+            Default value: S1
+examples:
+    Create the agent pool 'MyAgentName' associated with the registry 'myregistry' in VNET subnet.: az acr agentpool create -n MyAgentName -r myregistry --subnet-id /subscriptions/<SubscriptionId>/resourceGroups/<ResourceGroupName>/providers/Microsoft.ClassicNetwork/virtualNetworks/<myNetwork>/subnets/<subNet>
+    Create the agent pool 'MyAgentName' associated with the registry 'myregistry'.: az acr agentpool create -n MyAgentName -r myregistry
+    Create the agent pool 'MyAgentName' with 2 agent count.: az acr agentpool create -n MyAgentName -r myregistry --count 2

@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: invoke
 description: Execute a specific run command on a vm.
-documentation:
-    flag:
-        command-id: The command id. Use 'az vm run-command list' to get the list
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: The name of the Virtual Machine. You can configure the default using `az configure --defaults vm=<name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        scripts: Space-separated script lines. Use @{file} to load script from a file
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --command-id=!: The command id.
     --ids=:
@@ -24,3 +16,35 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=: Name of resource group.
     -n, --name=: The name of the Virtual Machine.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        command-id: The command id. Use 'az vm run-command list' to get the list
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: The name of the Virtual Machine. You can configure the default using ``` az configure --defaults vm=<name> ``` .
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        parameters: Space-separated parameters in the format of '[name=]value'.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        scripts: Space-separated script lines. Use @{file} to load script from a file.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Install nginx on a linux VM.: az vm run-command invoke -g MyResourceGroup -n MyVm --command-id RunShellScript --scripts "sudo apt-get update && sudo apt-get install -y nginx"
+    Run powershell script on a windows VM with parameters. Script supplied from file.: |-
+        # script.ps1
+        #   param(
+        #       [string]$arg1,
+        #       [string]$arg2
+        #   )
+        #   Write-Host This is a sample script with parameters $arg1 and $arg2
+        az vm run-command invoke  --command-id RunPowerShellScript --name win-vm -g my-resource-group \
+            --scripts @script.ps1 --parameters "arg1=somefoo" "arg2=somebar"
+    Run powershell script on a windows VM with parameters. Script supplied inline. Be wary of single-quoting in CMD.exe.: |-
+        az vm run-command invoke  --command-id RunPowerShellScript --name win-vm -g my-resource-group  \
+            --scripts 'param([string]$arg1,[string]$arg2)' \
+            'Write-Host This is a sample script with parameters $arg1 and $arg2' \
+            --parameters 'arg1=somefoo' 'arg2=somebar'
+    Run shell command on a linux VM with parameters.: az vm run-command invoke -g MyResourceGroup -n MyVm --command-id RunShellScript --scripts 'echo $1 $2' --parameters hello world

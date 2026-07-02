@@ -1,15 +1,40 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates an Azure Cosmos DB SQL Role Definition
-documentation:
-    flag:
-        body: |
-            Role Definition body with Id (Optional for create), DataActions or Permissions, Type (Default is CustomRole), and AssignableScopes.  You can enter it as a string or as a file, e.g., --body @rdbody-file.json or --body "{ \"Id\": \"be79875a-2cc4-40d5-8958-566017875b39\", \"RoleName\": \"My Read Write Role\", \"Type\": \"CustomRole\", \"AssignableScopes\": [ \"/\" ], \"DataActions\": [ \"Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/create\", \"Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read\" ]}"
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --no-wait=: Do not wait for the long-running operation to finish.
     --subscription=: Name or ID of subscription.
     -a, --account-name=!: Cosmosdb account name.
     -b, --body=!: Role Definition body with Id (Optional for create), DataActions or Permissions, Type (Default is CustomRole), and AssignableScopes.
     -g, --resource-group=!: Name of resource group.
+documentation:
+    command: Create a SQL role definition under an Azure Cosmos DB account.
+    flag:
+        account-name: Cosmosdb account name.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        body: |
+            Role Definition body with Id (Optional for create), DataActions or Permissions, Type (Default is CustomRole), and AssignableScopes.  You can enter it as a string or as a file, e.g., --body @rdbody-file.json or --body "{ \"Id\": \"be79875a-2cc4-40d5-8958-566017875b39\", \"RoleName\": \"My Read Write Role\", \"Type\": \"CustomRole\", \"AssignableScopes\": [ \"/\" ], \"DataActions\": [ \"Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/create\", \"Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read\" ]}"
+        change-reference: The related change reference ID for this resource operation.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a SQL role definition under an Azure Cosmos DB account using a JSON file.: az cosmosdb sql role definition create --account-name MyAccount --resource-group MyResourceGroup --body @role-definition.json
+    Create a SQL role definition under an Azure Cosmos DB account using a JSON string.: |-
+        az cosmosdb sql role definition create --account-name MyAccount --resource-group MyResourceGroup --body '{
+          "Id": "be79875a-2cc4-40d5-8958-566017875b39",
+          "RoleName": "My Read Only Role",
+          "Type": "CustomRole",
+          "AssignableScopes": ["/dbs/mydb/colls/mycontainer"],
+          "Permissions": [{
+            "DataActions": [
+              "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read",
+              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/executeQuery",
+              "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/readChangeFeed"
+            ]
+          }]
+        }'

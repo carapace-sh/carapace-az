@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create an application gateway WAF policy custom rule.
-documentation:
-    flag:
-        group-by-user-session: List of user session identifier group by clauses.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        match-conditions: List of match conditions.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        priority: Rule priority. Lower values are evaluated prior to higher values.
-        rate-limit-duration: Duration over which Rate Limit policy will be applied. Applies only when ruleType is RateLimitRule.
-        rate-limit-threshold: Rate Limit threshold to apply in case ruleType is RateLimitRule. Must be greater than or equal to 1
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --action=!: Action to take.
     --group-by-user-session=:
@@ -44,3 +35,39 @@ completion:
         state:
             - Disabled
             - Enabled
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        action: |-
+            Action to take.
+
+            Accepted values: Allow, Block, JSChallenge, Log
+        change-reference: The related change reference ID for this resource operation.
+        group-by-user-session: List of user session identifier group by clauses.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        match-conditions: |-
+            List of match conditions.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+
+            Default value: []
+        name: Name of the WAF policy rule.
+        policy-name: Name of the application gateway WAF policy.
+        priority: Rule priority. Lower values are evaluated prior to higher values.
+        rate-limit-duration: |-
+            Duration over which Rate Limit policy will be applied. Applies only when ruleType is RateLimitRule.
+
+            Accepted values: FiveMins, OneMin
+        rate-limit-threshold: Rate Limit threshold to apply in case ruleType is RateLimitRule. Must be greater than or equal to 1.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rule-type: |-
+            Type of rule.
+
+            Accepted values: Invalid, MatchRule, RateLimitRule
+        state: |-
+            Describe if the custom rule is in enabled or disabled state.
+
+            Default value: Enabled
+
+            Accepted values: Disabled, Enabled
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create an application gateway WAF policy custom rule with user session identifier.: az network application-gateway waf-policy custom-rule create -g MyResourceGroup --policy-name MyPolicy -n MyRule --priority 3 --action Block --rule-type RateLimitRule --rate-limit-duration FiveMins --rate-limit-threshold 15 --group-by-user-session "[{group-by-variables:[{variable-name:GeoLocation}]}]"
+    Create an application gateway WAF policy custom rule.: az network application-gateway waf-policy custom-rule create --action Allow --name MyWafPolicyRule --policy-name MyPolicy --priority 500 --resource-group MyResourceGroup --rule-type MatchRule

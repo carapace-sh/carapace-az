@@ -1,14 +1,23 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List all the connected registries under the current parent registry.
-documentation:
-    flag:
-        registry: The login server of the Cloud ACR registry. Must be the FQDN to support also Azure Stack.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --no-children=: Used to remove all children from the list.
     --subscription=: Name or ID of subscription.
     -g, --resource-group=: Name of resource group.
     -p, --parent=: The name of the parent connected registry.
     -r, --registry=!: The login server of the Cloud ACR registry.
+documentation:
+    flag:
+        no-children: |-
+            Used to remove all children from the list.
+
+            Default value: False
+        parent: The name of the parent connected registry.
+        registry: The login server of the Cloud ACR registry. Must be the FQDN to support also Azure Stack.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    List all the connected registries of 'mycloudregistry' in table format.: az acr connected-registry list --registry mycloudregistry --output table
+    List all the offspring of 'myconnectedregistry' in expanded form inside a table.: az acr connected-registry list -r mycloudregistry -p myconnectedregistry --output table
+    List only the inmediate children of 'mycloudregistry' in expanded form in a table.: az acr connected-registry list --registry mycloudregistry --no-children --output table

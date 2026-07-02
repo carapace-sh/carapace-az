@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create-inbound-services
 description: Private DNS Zone for Internal (ILB) App Service Environments.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet: Name or ID of existing subnet for DNS Zone link.                    To create vnet and/or subnet use `az network vnet [subnet] create`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vnet-name: Name of the vNet. Mandatory if only subnet name is specified.
 flags:
     --skip-dns=:
         description: Do not create Private DNS Zone and DNS records.
@@ -21,3 +15,25 @@ completion:
         skip-dns:
             - "true"
             - "false"
+documentation:
+    command: |-
+        This command is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        name: Name of the app service environment.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        skip-dns: |-
+            Argument 'skip_dns' has been deprecated and will be removed in version '3.0.0'. Do not create Private DNS Zone and DNS records.
+
+            Default value: False
+
+            Accepted values: false, true
+        subnet: Name or ID of existing subnet for DNS Zone link.                    To create vnet and/or subnet use ``` az network vnet [subnet] create ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet-name: Name of the vNet. Mandatory if only subnet name is specified.
+examples:
+    Create Private DNS Zone and A records.: |-
+        az appservice ase create-inbound-services -n MyASEName -g ASEResourceGroup \
+          --vnet-name MyASEVirtualNetwork --subnet MyAseSubnet

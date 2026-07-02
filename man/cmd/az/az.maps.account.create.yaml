@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a Maps Account.
-documentation:
-    flag:
-        disable-local-auth: Allows toggle functionality on Azure Policy to disable Azure Maps local authentication support. This will disable Shared Keys authentication from any usage.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        user-identities: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''. Expected value: json-string/@json-file.'
 flags:
     --accept-tos=: You must agree to the License and Privacy Statement to create an account.
     --disable-local-auth=:
@@ -42,3 +36,35 @@ completion:
             - UserAssigned
             - SystemAssigned, UserAssigned
             - None
+documentation:
+    command: Create a Maps Account. A Maps Account holds the keys which allow access to the Maps REST APIs.
+    flag:
+        accept-tos: You must agree to the License and Privacy Statement to create an account.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        disable-local-auth: |-
+            Allows toggle functionality on Azure Policy to disable Azure Maps local authentication support. This will disable Shared Keys authentication from any usage.
+
+            Accepted values: false, true
+        kind: |-
+            Get or Set Kind property.
+
+            Accepted values: Gen1, Gen2
+        linked-resources: 'Sets the resources to be used for Managed Identities based operations for the Map account resource. Usage: --linked-resources unique-name=XX id=XX unique-name: Required. A provided name which uniquely identifies the linked resource. id: Required. ARM resource id in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/accounts/{storageName}''. Multiple actions can be specified by using more than one --linked-resources argument.'
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        resource-group: Resource group name.
+        sku: |-
+            The name of the SKU, in standard format (such as S0).
+
+            Accepted values: G2, S0, S1
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        type: |-
+            The identity type.
+
+            Accepted values: None, SystemAssigned, SystemAssigned, UserAssigned, UserAssigned
+        user-identities: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''. Expected value: json-string/@json-file.'
+examples:
+    Create Account with Managed Identities: az maps account create --type "SystemAssigned, UserAssigned" --user-identities "{\"/subscriptions/21a9967a-e8a9-4656-a70b-96ff1c4d05a0/resourceGroups/myResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identityName\":{}}" --kind "Gen2" --disable-local-auth false --linked-resources id="/subscriptions/21a9967a-e8a9-4656-a70b-96ff1c4d05a0/resourceGroups/myResourceGroup/providers/Microsoft.Storage/accounts/mystorageacc" unique-name="myBatchStorageAccount" --linked-resources id="/subscriptions/21a9967a-e8a9-4656-a70b-96ff1c4d05a0/resourceGroups/myResourceGroup/providers/Microsoft.Storage/accounts/mystorageacc" unique-name="myBlobDataSource" --tags test="true" --account-name "myMapsAccount" --resource-group "myResourceGroup" --sku "S0"
+    Create Gen1 Account: az maps account create --kind "Gen1" --disable-local-auth false --tags test="true" --account-name "myMapsAccount" --resource-group "myResourceGroup" --sku "S0"
+    Create Gen2 Account: az maps account create --kind "Gen2" --disable-local-auth true --tags test="true" --account-name "myMapsAccount" --resource-group "myResourceGroup" --sku "S0"

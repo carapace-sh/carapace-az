@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Update the settings of a cluster.
-documentation:
-    flag:
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        settings-section-description: 'JSON encoded parameters configuration. Use @{file} to load from a file. For example: [{"section": "NamingService","parameter": "MaxOperationTimeout","value": 1000},{"section": "MaxFileOperationTimeout","parameter": "Max2","value": 1000]'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --parameter=: parameter name
     --section=: section name
@@ -14,3 +9,17 @@ flags:
     --value=: Specify the value
     -c, --cluster-name=!: Specify the name of the cluster, if not given it will be same as resource group name
     -g, --resource-group=!: Specify the resource group name.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name.
+        parameter: Parameter name.
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        section: 'Section name. --settings-section --settings-section-description JSON encoded parameters configuration. Use @{file} to load from a file. For example: [{"section": "NamingService","parameter": "MaxOperationTimeout","value": 1000},{"section": "MaxFileOperationTimeout","parameter": "Max2","value": 1000}].'
+        settings-section-description: 'JSON encoded parameters configuration. Use @{file} to load from a file. For example: [{"section": "NamingService","parameter": "MaxOperationTimeout","value": 1000},{"section": "MaxFileOperationTimeout","parameter": "Max2","value": 1000]'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        value: Specify the value.
+examples:
+    Set the `MaxFileOperationTimeout` setting for a cluster to 5 seconds using settings file.: az sf cluster setting set -g group-name -c cluster1 --settings-section '@settings-section.json'
+    Set the `MaxFileOperationTimeout` setting for a cluster to 5 seconds.: az sf cluster setting set -g group-name -c cluster1 --section 'NamingService' --parameter 'MaxFileOperationTimeout' --value 5000

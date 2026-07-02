@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Set extensions for a VM.
-documentation:
-    flag:
-        extension-instance-name: 'Name of extension instance, which can be customized. Default: name of the extension.'
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        protected-settings: Protected settings in JSON format for sensitive information like credentials. A JSON file path is also accepted.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        settings: Extension settings in JSON format. A JSON file path is also accepted.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        version: The version of the extension. To pin extension version to this value, please specify --no-auto-upgrade-minor-version.
-        vm-name: The name of the Virtual Machine. You can configure the default using `az configure --defaults vm=<name>`
 flags:
     --enable-auto-upgrade=:
         description: Indicate the extension should be automatically upgraded by the platform if there is a newer version of the extension available.
@@ -40,3 +30,53 @@ completion:
         no-auto-upgrade-minor-version:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        enable-auto-upgrade: |-
+            Indicate the extension should be automatically upgraded by the platform if there is a newer version of the extension available.
+
+            Accepted values: false, true
+        extension-instance-name: 'Name of extension instance, which can be customized. Default: name of the extension.'
+        force-update: |-
+            Force to update even if the extension configuration has not changed.
+
+            Default value: False
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: |-
+            Name of the extension.
+
+            Value from: az vm extension image list
+        no-auto-upgrade: |-
+            Option '--no-auto-upgrade' has been deprecated and will be removed in a future release. Use '--no-auto-upgrade-minor-version' instead. If set, the extension service will not automatically pick or upgrade to the latest minor version, even if the extension is redeployed.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-auto-upgrade-minor-version: |-
+            If set, the extension service will not automatically pick or upgrade to the latest minor version, even if the extension is redeployed.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        protected-settings: Protected settings in JSON format for sensitive information like credentials. A JSON file path is also accepted.
+        publisher: The name of the extension publisher.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        settings: Extension settings in JSON format. A JSON file path is also accepted.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        version: The version of the extension. To pin extension version to this value, please specify --no-auto-upgrade-minor-version.
+        vm-name: The name of the Virtual Machine. You can configure the default using ``` az configure --defaults vm=<name> ``` .
+examples:
+    Add a customScript extension to VM(s) specified by --ids.: az vm extension set -n customScript --publisher Microsoft.Azure.Extensions --ids {vm_id}
+    Add a user account to a Linux VM.: |-
+        az vm extension set -n VMAccessForLinux --publisher Microsoft.OSTCExtensions --version 1.4 \
+            --vm-name MyVm --resource-group MyResourceGroup \
+            --protected-settings '{"username":"user1", "ssh_key":"ssh_rsa ..."}'
+    Add an extension and enable automatic upgrade by the platform if there is a newer version of the extension available.: |-
+        az vm extension set -n extName --publisher publisher --vm-name MyVM -g MyResourceGroup \
+        --enable-auto-upgrade true

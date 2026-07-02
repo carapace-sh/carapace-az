@@ -1,24 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a series of steps for building, testing and OS & Framework patching containers.
-documentation:
-    flag:
-        arg: 'Build argument in ''--arg name[=value]'' format. Multiples are supported by passing ''--arg name[=value]'' multiple times. IMPORTANT: This parameter should not include passwords, access tokens, or sensitive information of any kind. This parameter value will be visible to the ACR team for debugging purposes.'
-        assign-identity: Assigns managed identities to the task. Use '[system]' to refer to the system-assigned identity or a resource ID to refer to a user-assigned identity. Please see https://aka.ms/acr/tasks/task-create-managed-identity for more information.
-        context: The full URL to the source code repository (Requires '.git' suffix for a github repo) or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag'). If '/dev/null' is specified, the value will be set to None and ignored. This is a required argument if the task is not a system task.
-        file: Relative path of the the task/docker file to the source code root folder. Task files must be suffixed with '.yaml' or piped from the standard input using '-'.
-        image: 'The name and tag of the image using the format: ''-t repo/image:tag''. Multiple tags are supported by passing -t multiple times.'
-        is-system-task: Indicates whether the task resource is a system task. The name of the task must be 'quicktask'. Only applicable to CMK enabled registry.
-        log-template: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}''). Only applicable to CMK enabled registry.'
-        platform: The platform where build/task is run, Eg, 'windows' and 'linux'. When it's used in build commands, it also can be specified in 'os/arch/variant' format for the resulting image. Eg, linux/arm/v7. The 'arch' and 'variant' parts are optional.
-        pull-request-trigger-enabled: Indicates whether the source control pull request trigger is enabled. The trigger is disabled by default.
-        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using `az configure --defaults acr=<registry name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        schedule: Schedule for a timer trigger represented as a cron expression. An optional trigger name can be specified using `--schedule name:schedule` format. Multiples supported by passing --schedule multiple times.
-        secret-arg: Secret build argument in '--secret-arg name[=value]' format. Multiples are supported by passing '--secret-arg name[=value]' multiple times. This parameter value is not surfaced to the ACR team and is more suitable for sensitive information.
-        set: Task value in '--set name[=value]' format. Multiples supported by passing --set multiple times.
-        set-secret: Secret task value in '--set-secret name[=value]' format. Multiples supported by passing --set-secret multiple times.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --agent-pool=: The name of the agent pool.
     --arg=: Build argument in '--arg name[=value]' format.
@@ -95,3 +77,144 @@ completion:
         update-trigger-payload-type:
             - Default
             - Token
+documentation:
+    command: Create a series of steps for building, testing and OS & Framework patching containers. Tasks support triggers from git commits and base image updates.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        agent-pool: The name of the agent pool.
+        arg: 'Build argument in ''--arg name[=value]'' format. Multiples are supported by passing ''--arg name[=value]'' multiple times. IMPORTANT: This parameter should not include passwords, access tokens, or sensitive information of any kind. This parameter value will be visible to the ACR team for debugging purposes.'
+        assign-identity: Assigns managed identities to the task. Use '[system]' to refer to the system-assigned identity or a resource ID to refer to a user-assigned identity. Please see https://aka.ms/acr/tasks/task-create-managed-identity for more information.
+        auth-mode: |-
+            Auth mode of the source registry.
+
+            Accepted values: Default, None
+        base-image-trigger-enabled: |-
+            Indicates whether the base image trigger is enabled.
+
+            Default value: True
+
+            Accepted values: false, true
+        base-image-trigger-name: |-
+            The name of the base image trigger.
+
+            Default value: defaultBaseimageTriggerName
+        base-image-trigger-type: |-
+            The type of the auto trigger for base image dependency updates.
+
+            Default value: Runtime
+
+            Accepted values: All, Runtime
+        change-reference: The related change reference ID for this resource operation.
+        cmd: Commands to execute. This also supports additional docker run parameters ( https://docs.docker.com/engine/reference/commandline/run/ ) or even other docker commands ( https://docs.docker.com/engine/reference/commandline/docker/ ).
+        commit-trigger-enabled: |-
+            Indicates whether the source control commit trigger is enabled.
+
+            Default value: True
+
+            Accepted values: false, true
+        context: The full URL to the source code repository (Requires '.git' suffix for a github repo) or a remote tarball (e.g., 'http://server/context.tar.gz'), or the repository of an OCI artifact in an Azure container registry (e.g., 'oci://myregistry.azurecr.io/myartifact:mytag'). If '/dev/null' is specified, the value will be set to None and ignored. This is a required argument if the task is not a system task.
+        cpu: |-
+            The CPU configuration in terms of number of cores required for the run.
+
+            Default value: 2
+        file: Relative path of the the task/docker file to the source code root folder. Task files must be suffixed with '.yaml' or piped from the standard input using '-'.
+        git-access-token: The access token used to access the source control provider.
+        image: 'The name and tag of the image using the format: ''-t repo/image:tag''. Multiple tags are supported by passing -t multiple times.'
+        is-system-task: |-
+            Indicates whether the task resource is a system task. The name of the task must be 'quicktask'. Only applicable to CMK enabled registry.
+
+            Default value: False
+        log-template: 'The repository and tag template for run log artifact using the format: ''log/repo:tag'' (e.g., ''acr/logs:{{.Run.ID}}''). Only applicable to CMK enabled registry.'
+        name: The name of the task.
+        no-cache: |-
+            Indicates whether the image cache is enabled.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-push: |-
+            Indicates whether the image built should be pushed to the registry.
+
+            Default value: False
+
+            Accepted values: false, true
+        platform: The platform where build/task is run, Eg, 'windows' and 'linux'. When it's used in build commands, it also can be specified in 'os/arch/variant' format for the resulting image. Eg, linux/arm/v7. The 'arch' and 'variant' parts are optional.
+        pull-request-trigger-enabled: |-
+            Indicates whether the source control pull request trigger is enabled. The trigger is disabled by default.
+
+            Default value: False
+
+            Accepted values: false, true
+        registry: The name of the container registry. It should be specified in lower case. You can configure the default registry name using ``` az configure --defaults acr=<registry name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        schedule: Schedule for a timer trigger represented as a cron expression. An optional trigger name can be specified using ``` --schedule name:schedule ``` format. Multiples supported by passing --schedule multiple times.
+        secret-arg: Secret build argument in '--secret-arg name[=value]' format. Multiples are supported by passing '--secret-arg name[=value]' multiple times. This parameter value is not surfaced to the ACR team and is more suitable for sensitive information.
+        set: Task value in '--set name[=value]' format. Multiples supported by passing --set multiple times.
+        set-secret: Secret task value in '--set-secret name[=value]' format. Multiples supported by passing --set-secret multiple times.
+        source-acr-auth-id: Assign the managed identity used for source registry login. Use '[system]' to refer to the system-assigned identity or a resource ID to refer to a user-assigned managed identity.
+        source-trigger-name: |-
+            The name of the source trigger.
+
+            Default value: defaultSourceTriggerName
+        status: |-
+            The current status of task.
+
+            Default value: Enabled
+
+            Accepted values: Disabled, Enabled
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target: The name of the target build stage.
+        timeout: |-
+            The timeout in seconds.
+
+            Default value: 3600
+        update-trigger-endpoint: The full URL of the endpoint to receive base image update trigger notifications.
+        update-trigger-payload-type: |-
+            Indicates whether to include metadata about the base image trigger in the payload alongwith the update trigger token, when a notification is sent.
+
+            Default value: Default
+
+            Accepted values: Default, Token
+        values: The task values/parameters file path relative to the source context.
+examples:
+    ? Create a Linux multi-step task from a public GitHub repository with both system-assigned and user-assigned managed identities and base image, git commit, pull request, and timer triggers that run the task at noon on Mondays through Fridays with the timer trigger name provided.
+    : |-
+        az acr task create -t hello-world:{{.Run.ID}} -n hello-world -r myregistry \
+            --pull-request-trigger-enabled true --schedule "dailyTimer:0 12 * * Mon-Fri" \
+            -c https://github.com/Azure-Samples/acr-tasks.git#:multipleRegistries -f testtask.yaml \
+            --assign-identity [system] "/subscriptions/<subscriptionId>/resourcegroups/<myResourceGroup>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<myUserAssignedIdentitiy>"
+    ? Create a Linux task from a public GitHub repository which builds the hello-world image with both a git commit and pull request trigger enabled. Note that this task does not use Source Registry (myregistry), so we can explicitly set Auth mode as None for it.
+    : |-
+        az acr task create -t hello-world:{{.Run.ID}} -n hello-world -r myregistry  -f Dockerfile \
+            --no-push true --auth-mode None -c https://github.com/Azure-Samples/acr-build-helloworld-node.git \
+            --pull-request-trigger-enabled true --git-access-token 000000000000000000000000000000000
+    ? Create a Linux task from a public GitHub repository which builds the hello-world image without triggers and uses a build argument.
+    : |-
+        az acr task create -t hello-world:{{.Run.ID}} -n hello-world -r myregistry \
+            -c https://github.com/Azure/acr-builder.git -f Dockerfile \
+            --commit-trigger-enabled false --base-image-trigger-enabled false \
+            --arg DOCKER_CLI_BASE_IMAGE=docker:18.03.0-ce-git
+    ? Create a Linux task using a specific branch of a private Azure DevOps repository which builds the hello-world image on Arm architecture (V7 variant) and has triggers enabled.
+    : |-
+        az acr task create -t hello-world:{{.Run.ID}} -n hello-world -r myregistry \
+            -c https://msazure.visualstudio.com/DefaultCollection/Project/_git/Repo#Branch:Folder \
+            -f Dockerfile --git-access-token <Personal Access Token> --platform linux/arm/v7
+    ? Create a Windows task from a public GitHub repository which builds the Azure Container Builder image on Amd64 architecture with only base image trigger enabled.
+    : |-
+        az acr task create -t acb:{{.Run.ID}} -n acb-win -r myregistry \
+            -c https://github.com/Azure/acr-builder.git -f Windows.Dockerfile \
+            --commit-trigger-enabled false --platform Windows/amd64
+    ? Create a task with the definition from the standard input and with a timer trigger that runs the task at the top of every hour using the default trigger name. Either 'Ctrl + Z'(Windows) or 'Ctrl + D'(Linux) terminates the input stream.
+    : |-
+        cat task.yaml | az acr task create -n hello-world -r myregistry -f - -c /dev/null \
+            --schedule "0 */1 * * *"
+        az acr task create -n hello-world -r myregistry -f - -c /dev/null --schedule "0 */1 * * *"
+    ? Create a task without the source location in an ABAC-based Repository Permission registry and specify a system-assigned managed identity used for auth with the source registry.
+    : az acr task create -n hello-world -r myregistry --cmd '$Registry/myimage' -c /dev/null --source-acr-auth-id [system]
+    ? Create a task without the source location in an ABAC-based Repository Permission registry and specify a user-assigned managed identity used for auth with the source registry.
+    : az acr task create -n hello-world -r myregistry --cmd '$Registry/myimage' -c /dev/null --source-acr-auth-id "/subscriptions/<subscriptionId>/resourcegroups/<myResourceGroup>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<myUserAssignedIdentitiy>"
+    ? Create a task without the source location in an ABAC-based Repository Permission registry with both system-assigned and user-assigned managed identities, and specify the system-assigned managed identity used for auth with the source registry.
+    : |-
+        az acr task create -n hello-world -r myregistry --cmd '$Registry/myimage' -c /dev/null --source-acr-auth-id [system]
+            --assign-identity [system] "/subscriptions/<subscriptionId>/resourcegroups/<myResourceGroup>/providers/Microsoft.ManagedIdentity/userAssignedIdentities/<myUserAssignedIdentitiy>"
+    Create a task without the source location.: az acr task create -n hello-world -r myregistry --cmd '$Registry/myimage' -c /dev/null

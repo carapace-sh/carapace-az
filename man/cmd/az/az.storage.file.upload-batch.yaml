@@ -1,20 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: upload-batch
 description: Upload local files to Azure Storage File Share in batch
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        destination-path: The directory where the source data is copied to. If omitted, data is copied to the root directory.
-        disallow-trailing-dot: If true, the trailing dot will be trimmed from the target URI. Default to False
-        dryrun: List the files and blobs to be uploaded. No actual data transfer will occur.
-        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        max-connections: The maximum number of parallel connections to use. Default value is 1.
-        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
-        pattern: The pattern used for file globbing. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3/library/fnmatch.html.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -47,3 +33,55 @@ completion:
         disallow-trailing-dot:
             - "true"
             - "false"
+documentation:
+    command: Upload files from a local directory to an Azure Storage File Share in a batch operation.
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+
+            Default value: False
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        content-disposition: Conveys additional information about how to process the response payload, and can also be used to attach additional metadata.
+        content-encoding: The content encoding type.
+        content-language: The content language.
+        content-md5: The content's MD5 hash.
+        content-type: The content MIME type.
+        destination: The destination of the upload operation. The destination can be the file share URL or the share name. When the destination is the share URL, the storage account name is parsed from the URL.
+        destination-path: The directory where the source data is copied to. If omitted, data is copied to the root directory.
+        disallow-trailing-dot: |-
+            If true, the trailing dot will be trimmed from the target URI. Default to False.
+
+            Default value: False
+
+            Accepted values: false, true
+        dryrun: |-
+            List the files and blobs to be uploaded. No actual data transfer will occur.
+
+            Default value: False
+        file-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        max-connections: |-
+            The maximum number of parallel connections to use. Default value is 1.
+
+            Default value: 1
+        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
+        no-progress: |-
+            Include this flag to disable progress reporting for the command.
+
+            Default value: False
+        pattern: The pattern used for file globbing. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3.7/library/fnmatch.html . When you use '*' in --pattern, it will match any character including the the directory separator '/'.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        source: The directory to upload files from.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        validate-content: |-
+            If set, calculates an MD5 hash for each range of the file for validation. The storage service checks the hash of the content that has arrived is identical to the hash that was sent. This is mostly valuable for detecting bitflips during transfer if using HTTP instead of HTTPS. This hash is not stored.
+
+            Default value: False
+examples:
+    Upload files from a local directory to an Azure Storage File Share in a batch operation.: az storage file upload-batch --destination myshare --source . --account-name myaccount --account-key 00000000
+    Upload files from a local directory to an Azure Storage File Share with url in a batch operation.: az storage file upload-batch --destination https://myaccount.file.core.windows.net/myshare --source . --account-key 00000000

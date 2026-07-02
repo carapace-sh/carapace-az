@@ -1,13 +1,20 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: Get tasks in a service.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --project-name=!: The name of the Project.
     --service-name=!: The name of the Service.
     --subscription=: Name or ID of subscription.
     --task-type=: Filter tasks by task type.
     -g, --resource-group=!: Name of resource group.
+documentation:
+    command: List the tasks within a project. Some tasks may have a status of Unknown, which indicates that an error occurred while querying the status of that task.
+    flag:
+        project-name: The name of the Project.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-name: The name of the Service.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        task-type: Filters the list by the type of task. For the list of possible types see "az dms check-status".
+examples:
+    List all tasks within a project.: az dms project task list --project-name myproject -g myresourcegroup --service-name mydms
+    List only the SQL to SQL migration tasks within a project.: az dms project task list --project-name myproject -g myresourcegroup --service-name mydms --task-type Migrate.SqlServer.SqlDb

@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a monitored Azure DevOps repository resource.
-documentation:
-    flag:
-        actionable-remediation: Configuration payload for PR Annotations.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --actionable-remediation=:
         description: Configuration payload for PR Annotations.
@@ -36,3 +30,24 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    command: |-
+        Command group 'az security security-connector devops azuredevopsorg project repo' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        actionable-remediation: Configuration payload for PR Annotations.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        change-reference: The related change reference ID for this resource operation.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        org-name: The Azure DevOps organization name.
+        project-name: The project name.
+        repo-name: The repository name.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Disable pull request annotations: az security security-connectors devops azuredevopsorgs projects repos update --security-connector-name myConnectorName --resource-group myResourceGroup --org-name myOrganization --project-name myProject --repo-name myRepo  --actionable-remediation state=Disabled
+    Enable pull request annotations with minimum severity level: az security security-connectors devops azuredevopsorgs projects repos update --security-connector-name myConnectorName --resource-group myResourceGroup --org-name myOrganization --project-name myProject --repo-name myRepo  --actionable-remediation state=Enabled category-configurations[0].category=IaC category-configurations[0].minimum-severity-level=Low

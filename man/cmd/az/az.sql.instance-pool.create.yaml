@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates a new instance pool
-documentation:
-    flag:
-        family: 'The compute generation component of the sku. Allowed value: Gen5'
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet: Name or ID of the subnet that allows access to an Instance Pool. If subnet name is provided, --vnet-name must be provided.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        tier: 'The edition component of the sku. Allowed value: GeneralPurpose.'
 flags:
     --license-type=: The license type to apply for this instance pool.
     --no-wait=: Do not wait for the long-running operation to finish.
@@ -31,3 +22,32 @@ completion:
         license-type:
             - LicenseIncluded
             - BasePrice
+documentation:
+    command: |-
+        Command group 'sql instance-pool' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        capacity: Capacity of the instance pool in vcores.
+        change-reference: The related change reference ID for this resource operation.
+        family: 'The compute generation component of the sku. Allowed value: Gen5.'
+        license-type: |-
+            The license type to apply for this instance pool.
+
+            Accepted values: BasePrice, LicenseIncluded
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        maint-config-id: Assign maintenance configuration to this managed instance.
+        name: Instance Pool Name.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subnet: Name or ID of the subnet that allows access to an Instance Pool. If subnet name is provided, --vnet-name must be provided.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        tier: 'The edition component of the sku. Allowed value: GeneralPurpose.'
+        vnet-name: The virtual network name.
+examples:
+    Example to create an instance pool (include --no-wait in the end to get an asynchronous experience): az sql instance-pool create -g resource_group_name -n instance_pool_name -l location --subnet /subscriptions/{SubID}/resourceGroups/{ResourceGroup}/providers/Microsoft.Network/virtualNetworks/{VNETName}/subnets/{SubnetName} --license-type LicenseIncluded --capacity 8 -e GeneralPurpose -f Gen5 -m SQL_{Region}_{MaintenanceConfigName} --no-wait
+    Example to create an instance pool with subnet name and vnet-name: az sql instance-pool create --license-type LicenseIncluded -l northcentralus -n myinstancepool -c 8 -e GeneralPurpose -f Gen5 -g billingPools --subnet mysubnetname --vnet-name myvnetname

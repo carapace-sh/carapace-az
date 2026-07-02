@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a budget for an Azure subscription.
-documentation:
-    flag:
-        meter-filter: Space-separated list of meters to filter on. Required if category is usage.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --amount=!: Amount of a budget.
     --budget-name=!: Name of a budget.
@@ -33,3 +28,29 @@ completion:
             - monthly
             - quarterly
             - annually
+documentation:
+    command: |-
+        Command group 'consumption' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        amount: Amount of a budget.
+        budget-name: Name of a budget.
+        category: |-
+            Category of the budget can be cost or usage.
+
+            Accepted values: cost, usage
+        change-reference: The related change reference ID for this resource operation.
+        end-date: End date (YYYY-MM-DD in UTC) of time period of a budget.
+        meter-filter: Space-separated list of meters to filter on. Required if category is usage.
+        resource-filter: Space-separated list of resource instances to filter on.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        resource-group-filter: Space-separated list of resource groups to filter on.
+        start-date: Start date (YYYY-MM-DD in UTC) of time period of a budget.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        time-grain: |-
+            Time grain of the budget can be monthly, quarterly, or annually.
+
+            Accepted values: annually, monthly, quarterly
+examples:
+    Create a cost-based monthly budget with a specified amount, start date, and end date.: az consumption budget create --budget-name "costbudget" --category "cost" --amount 100.0 -s "xxx" -e "xxx" --time-grain "monthly"

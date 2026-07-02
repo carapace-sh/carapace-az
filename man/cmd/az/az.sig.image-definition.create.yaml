@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: create a gallery image definition
-documentation:
-    flag:
-        features: A list of gallery image features. E.g. "IsSecureBootSupported=true IsMeasuredBootSupported=false"
-        hyper-v-generation: The hypervisor generation of the Virtual Machine. Applicable to OS disks only.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --architecture=: CPU architecture.
     --description=: the description of the gallery image definition
@@ -55,3 +47,148 @@ completion:
         os-type:
             - Windows
             - Linux
+documentation:
+    command: Create a gallery image definition.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        architecture: |-
+            CPU architecture.
+
+            Accepted values: Arm64, x64
+        change-reference: The related change reference ID for this resource operation.
+        description: The description of the gallery image definition.
+        disallowed-disk-types: Disk types which would not work with the image, e.g., Standard_LRS.
+        end-of-life-date: The end of life date, e.g. '2020-12-31'.
+        eula: The Eula agreement for the gallery image.
+        features: A list of gallery image features. E.g. "IsSecureBootSupported=true IsMeasuredBootSupported=false".
+        gallery-image-definition: Gallery image definition.
+        gallery-name: Gallery name.
+        hyper-v-generation: |-
+            The hypervisor generation of the Virtual Machine. Applicable to OS disks only.
+
+            Default value: V2
+
+            Accepted values: V1, V2
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        maximum-cpu-core: Maximum cpu cores.
+        maximum-memory: Maximum memory in MB.
+        minimum-cpu-core: Minimum cpu cores.
+        minimum-memory: Minimum memory in MB.
+        offer: Image offer.
+        os-state: |-
+            This property allows the user to specify whether the virtual machines created under this image are 'Generalized' or 'Specialized'.
+
+            Default value: Generalized
+
+            Accepted values: Generalized, Specialized
+        os-type: |-
+            The type of the OS that is included in the disk if creating a VM from user-image or a specialized VHD.
+
+            Accepted values: Linux, Windows
+        plan-name: Plan name.
+        plan-product: Plan product.
+        plan-publisher: Plan publisher.
+        privacy-statement-uri: The privacy statement uri.
+        publisher: Image publisher.
+        release-note-uri: The release note uri.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku: Image sku.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Create an image definition and indicate end of life date: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --end-of-life-date YYYY-MM-DDTHH:MM:SS+00:00
+    Create an image definition and indicate which OS disk types are not recommended for the image: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --disallowed-disk-types Standard_LRS
+    Create an image definition and provide the EULA, privacy statement URI, and release notes URI: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --eula path_to_eula --privacy-statement-uri path_to_statement \
+        --release-note-uri path_to_release_notes
+    Create an image definition and recommend minimum and maximum CPU and memory (GB): |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --minimum-cpu-core myMinCPU --maximum-cpu-core myMaxCPU \
+        --minimum-memory myMinMemory --maximum-memory myMaxMemory
+    Create an image definition for generalized linux images: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Generalized
+    Create an image definition for generalized windows images: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type windows --os-state Generalized
+    Create an image definition for images that can be used to create Confidential VMs.: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --features SecurityType=ConfidentialVmSupported
+    Create an image definition for images that can be used to create Gen2 or TrustedLaunchSupported VMs.: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --features SecurityType=TrustedLaunchSupported
+    Create an image definition for images that can be used to create Gen2, TrustedLaunch, or Confidential VMs.: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --features SecurityType=TrustedLaunchAndConfidentialVmSupported
+    ? Create an image definition for images that can only be used to create Confidential VMs. Only Confidential VMs can be created from this image.
+    : |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --features SecurityType=ConfidentialVM
+    ? Create an image definition for images that can only be used to create Trusted VMs. Only Trusted VMs can be created from this image.
+    : |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --features SecurityType=TrustedLaunch
+    Create an image definition for images that support accelerated networking: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --features IsAcceleratedNetworkSupported=true
+    Create an image definition for images that support hibernate feature: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized \
+        --features IsHibernateSupported=true
+    Create an image definition for specialized linux images: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized
+    Create an image definition for specialized windows images: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type windows --os-state Specialized
+    Create an image definition with plan information: |-
+        az sig image-definition create --resource-group MyResourceGroup \
+        --gallery-name MyGallery --gallery-image-definition MyImage \
+        --publisher GreatPublisher --offer GreatOffer --sku GreatSku \
+        --os-type linux --os-state Specialized --plan-name PlanName \
+        --plan-product PlanProduct --plan-publisher PlanPublisher

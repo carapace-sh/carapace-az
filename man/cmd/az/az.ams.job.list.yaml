@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List Jobs.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --filter=: Restricts the set of items returned.
     --orderby=: Specifies the key by which the result collection should be ordered.
@@ -12,3 +8,15 @@ flags:
     -a, --account-name=!: The name of the Azure Media Services account.
     -g, --resource-group=!: Name of resource group.
     -t, --transform-name=!: The name of the transform.
+documentation:
+    command: List all the jobs of a transform within an Azure Media Services account.
+    flag:
+        account-name: The name of the Azure Media Services account.
+        filter: Restricts the set of items returned.
+        orderby: Specifies the key by which the result collection should be ordered.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        transform-name: The name of the transform.
+examples:
+    List all the jobs of a transform by name and input.: az ams job list -a amsAccount -g resourceGroup -t transformName --query [].{jobName:name,jobInput:input}
+    List all the jobs of a transform with 'Normal' priority by name.: az ams job list -a amsAccount -g resourceGroup -t transformName --query [?priority=='Normal'].{jobName:name}

@@ -1,21 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a connected registry for an Azure Container Registry.
-documentation:
-    flag:
-        audit-logs-enabled: Indicate whether audit log synchronization is enabled. It is enabled by default.
-        client-tokens: Specify the client access to the repositories in the connected registry. It can be in the format [TOKEN_NAME01] [TOKEN_NAME02]...
-        log-level: Set the log level for logging on the instance. Accepted log levels are Debug, Information, Warning, Error, and None.
-        name: Name for the connected registry. Name must be between 5 to 40 character long, start with a letter and contain only alphanumeric characters (including ‘_’ or ‘-’). Name must be unique under the Cloud ACR hierarchy.
-        notifications: List of artifact pattern for which notifications need to be generated. Use the format "--notifications [PATTERN1 PATTERN2 ...]".
-        registry: The login server of the Cloud ACR registry. Must be the FQDN to support also Azure Stack.
-        repository: Specify the repositories that need to be sync to the connected registry. It can be in the format [REPO01] [REPO02]...
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        sync-message-ttl: Determine how long the sync messages will be kept in the cloud. Uses ISO 8601 duration format.
-        sync-schedule: Optional parameter to define the sync schedule. Uses cron expression to determine the schedule. If not specified, the instance is considered always online and attempts to sync every minute.
-        sync-token: Specifies the sync token used to synchronize the connected registry with its parent. It most have only repo permissions and at least the actions required for its mode. It can include access for multiple repositories.
-        sync-window: Required parameter if --sync-schedule is present. Used to determine the schedule duration. Uses ISO 8601 duration format.
 flags:
     --audit-logs-enabled=:
         description: Indicate whether audit log synchronization is enabled.
@@ -49,3 +34,62 @@ completion:
         mode:
             - ReadOnly
             - ReadWrite
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        audit-logs-enabled: Indicate whether audit log synchronization is enabled. It is enabled by default.
+        change-reference: The related change reference ID for this resource operation.
+        client-tokens: Specify the client access to the repositories in the connected registry. It can be in the format [TOKEN_NAME01] [TOKEN_NAME02]...
+        gc-enabled: |-
+            Indicate whether garbage collection is enabled. It is enabled by default.
+
+            Default value: true
+
+            Accepted values: false, true
+        gc-schedule: |-
+            Used to determine garbage collection schedule. Uses cron expression to determine the schedule. If not specified, garbage collection is set to run once a day.
+
+            Default value: 0 0 * * *
+        log-level: |-
+            Set the log level for logging on the instance. Accepted log levels are Debug, Information, Warning, Error, and None.
+
+            Default value: Information
+        mode: |-
+            Determine the access it will have when synchronized.
+
+            Default value: ReadOnly
+
+            Accepted values: ReadOnly, ReadWrite
+        name: Name for the connected registry. Name must be between 5 to 40 character long, start with a letter and contain only alphanumeric characters (including ‘_’ or ‘-’). Name must be unique under the Cloud ACR hierarchy.
+        notifications: List of artifact pattern for which notifications need to be generated. Use the format "--notifications [PATTERN1 PATTERN2 ...]".
+        parent: The name of the parent connected registry.
+        registry: The login server of the Cloud ACR registry. Must be the FQDN to support also Azure Stack.
+        repository: Specify the repositories that need to be sync to the connected registry. It can be in the format [REPO01] [REPO02]...
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        sync-message-ttl: |-
+            Determine how long the sync messages will be kept in the cloud. Uses ISO 8601 duration format.
+
+            Default value: P2D
+        sync-schedule: |-
+            Optional parameter to define the sync schedule. Uses cron expression to determine the schedule. If not specified, the instance is considered always online and attempts to sync every minute.
+
+            Default value: * * * * *
+        sync-token: Specifies the sync token used to synchronize the connected registry with its parent. It most have only repo permissions and at least the actions required for its mode. It can include access for multiple repositories.
+        sync-window: Required parameter if --sync-schedule is present. Used to determine the schedule duration. Uses ISO 8601 duration format.
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    ? Create a connected registry in registry mode with access to repos app/hello-world and service/mycomponent. It'll create a sync token and scope-map with the right repo permissions.
+    : |-
+        az acr connected-registry create --registry mycloudregistry --name myconnectedregistry \
+            --repository "app/hello-world" "service/mycomponent"
+    Create a read only connected registry with client tokens, that syncs every day at midninght and sync window of 4 hours.: |-
+        az acr connected-registry create -r mycloudregistry -n myreadonlyacr -p myconnectedregistry \
+            --repository "app/mycomponent" -m ReadOnly -s "0 12 * * *" -w PT4H \
+            --client-tokens myTokenName1 myTokenName2
+    Create a read only connected registry with only read permissions and pass the sync token: |-
+        az acr connected-registry create --registry mycloudregistry  --name myreadonlyacr \
+            --mode readonly --parent myconnectedregistry --sync-token mySyncTokenName

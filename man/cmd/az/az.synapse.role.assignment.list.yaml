@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List role assignments.
-documentation:
-    flag:
-        assignee: 'Represent a user or service principal. Supported format: object id, user sign-in name, or service principal name.'
-        assignee-object-id: Use this parameter instead of '--assignee' to bypass Graph API invocation in case of insufficient privileges. This parameter only works with object ids for users, groups, service principals, and managed identities. For managed identities use the principal id. For service principals, use the object id and not the app id.
-        item: Item granted access in the workspace. Using with --item-type to combine the scope of assignment
-        item-type: Item type granted access in the workspace. Using with --item to combine the scope of assignment.
-        scope: A scope defines the resources or artifacts that the access applies to. Synapse supports hierarchical scopes. Permissions granted at a higher-level scope are inherited by objects at a lower level. In Synapse RBAC, the top-level scope is a workspace. Assigning a role with workspace scope grants permissions to all applicable objects in the workspace.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --assignee-object-id=: Use this parameter instead of '--assignee' to bypass Graph API invocation in case of insufficient privileges.
     --assignee=: Represent a user or service principal.
@@ -25,3 +17,33 @@ completion:
             - integrationRuntimes
             - credentials
             - linkedServices
+documentation:
+    flag:
+        assignee: 'Represent a user or service principal. Supported format: object id, user sign-in name, or service principal name.'
+        assignee-object-id: Use this parameter instead of '--assignee' to bypass Graph API invocation in case of insufficient privileges. This parameter only works with object ids for users, groups, service principals, and managed identities. For managed identities use the principal id. For service principals, use the object id and not the app id.
+        item: Item granted access in the workspace. Using with --item-type to combine the scope of assignment.
+        item-type: |-
+            Item type granted access in the workspace. Using with --item to combine the scope of assignment.
+
+            Accepted values: bigDataPools, credentials, integrationRuntimes, linkedServices
+        role: The role name/id that is assigned to the principal.
+        scope: A scope defines the resources or artifacts that the access applies to. Synapse supports hierarchical scopes. Permissions granted at a higher-level scope are inherited by objects at a lower level. In Synapse RBAC, the top-level scope is a workspace. Assigning a role with workspace scope grants permissions to all applicable objects in the workspace.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        workspace-name: The workspace name.
+examples:
+    List role assignments by assignee.: |-
+        az synapse role assignment list --workspace-name testsynapseworkspace \
+        --assignee sp_name
+    List role assignments by item type and item name.: |-
+        az synapse role assignment list --workspace-name testsynapseworkspace \
+        --item-type "bigDataPools" --item "bigDataPoolName"
+    List role assignments by objectId of the User, Group or Service Principal.: |-
+        az synapse role assignment list --workspace-name testsynapseworkspace \
+        --assignee-object-id 00000000-0000-0000-0000-000000000000
+    List role assignments by role id/name.: |-
+        az synapse role assignment list --workspace-name testsynapseworkspace \
+        --role "Synapse Apache Spark Administrator"
+    List role assignments by scope.: |-
+        az synapse role assignment list --workspace-name testsynapseworkspace \
+        --scope "workspaces/{workspaceName}"
+    List role assignments.: az synapse role assignment list --workspace-name testsynapseworkspace

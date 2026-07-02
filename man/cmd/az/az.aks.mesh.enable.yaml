@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: enable
 description: Enable Azure Service Mesh.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --ca-cert-object-name=: Intermediate cert object name in the Azure Keyvault.
     --ca-key-object-name=: Intermediate key object name in the Azure Keyvault.
@@ -16,3 +12,28 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=!: Name of resource group.
     -n, --name=!: Name of the managed cluster.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        ca-cert-object-name: Intermediate cert object name in the Azure Keyvault.
+        ca-key-object-name: Intermediate key object name in the Azure Keyvault.
+        cert-chain-object-name: Cert chain object name in the Azure Keyvault.
+        change-reference: The related change reference ID for this resource operation.
+        key-vault-id: The Azure Keyvault id with plugin CA info.
+        name: Name of the managed cluster.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        proxy-redirection-mechanism: |-
+            Set the proxy redirection mechanism. Allowed values are "CNIChaining" which uses CNI plugins for traffic redirection, and "InitContainers" which uses privileged init containers.
+
+            Accepted values: CNIChaining, InitContainers
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        revision: Azure Service Mesh revision to install.
+        root-cert-object-name: Root cert object name in the Azure Keyvault.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Enable Azure Service Mesh with CNI chaining.: az aks mesh enable --resource-group MyResourceGroup --name MyManagedCluster --proxy-redirection-mechanism CNIChaining
+    Enable Azure Service Mesh with plugin CA.: az aks mesh enable --resource-group MyResourceGroup --name MyManagedCluster --key-vault-id /subscriptions/8ecadfc9-d1a3-4ea4-b844-0d9f87e4d7c8/resourceGroups/foo/providers/Microsoft.KeyVault/vaults/foo --ca-cert-object-name my-ca-cert --ca-key-object-name my-ca-key --cert-chain-object-name my-cert-chain --root-cert-object-name my-root-cert
+    Enable Azure Service Mesh with selfsigned CA.: az aks mesh enable --resource-group MyResourceGroup --name MyManagedCluster

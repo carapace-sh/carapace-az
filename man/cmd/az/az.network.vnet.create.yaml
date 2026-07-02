@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a virtual network.
-documentation:
-    flag:
-        address-prefixes: 'Space-separated list of IP address prefixes for the VNet. Default: 10.0.0.0/16. If provided, --ipam-allocations should not be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
-        dns-servers: Space-separated list of DNS server IP addresses.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        ipam-allocations: A list of IPAM Pools allocating IP address prefixes. If provided, --address-prefixes would be empty and should not be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet-prefixes: Space-separated list of address prefixes in CIDR format for the new subnet. If omitted, automatically reserves a /24 (or as large as available) block within the VNet address space.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        subnets: Manage a list of subnets in a Virtual Network (similar to `az network vnet subnet`).  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'Space-separated tags: key[=value] [key[=value] ...].  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
 flags:
     --address-prefixes=:
         description: Space-separated list of IP address prefixes for the VNet.
@@ -106,3 +96,55 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        address-prefixes: |-
+            Space-separated list of IP address prefixes for the VNet. Default: 10.0.0.0/16. If provided, --ipam-allocations should not be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+
+            Default value: ['10.0.0.0/16']
+        bgp-community: The BGP community associated with the virtual network.
+        change-reference: The related change reference ID for this resource operation.
+        ddos-protection: |-
+            Control whether DDoS protection is enabled.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        ddos-protection-plan: Name or ID of a DDoS protection plan to associate with the VNet.
+        dns-servers: Space-separated list of DNS server IP addresses.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        edge-zone: The name of edge zone.
+        enable-encryption: |-
+            Enable encryption on the virtual network.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+
+            Accepted values: AllowUnencrypted, DropUnencrypted
+        flowtimeout: The FlowTimeout value (in minutes) for the Virtual Network. --ipam-allocations --ipam-pool-prefix-allocations A list of IPAM Pools allocating IP address prefixes. If provided, --address-prefixes would be ignored and should not be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        ipam-allocations: A list of IPAM Pools allocating IP address prefixes. If provided, --address-prefixes would be empty and should not be specified.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        location: Resource location. --network-security-group --nsg Name or ID of a network security group (NSG).
+        name: The virtual network (VNet) name.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+
+            Accepted values: Basic, Disabled
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subnet-name: Name of a new subnet to create within the VNet.
+        subnet-prefixes: Space-separated list of address prefixes in CIDR format for the new subnet. If omitted, automatically reserves a /24 (or as large as available) block within the VNet address space.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        subnets: Manage a list of subnets in a Virtual Network (similar to ``` az network vnet subnet ``` ).  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...].  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+        vm-protection: |-
+            Enable VM protection for all subnets in the VNet.
+
+            Default value: False
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+examples:
+    Create a virtual network with a specific address prefix and one subnet.: az network vnet create -g MyResourceGroup -n MyVnet --address-prefix 10.0.0.0/16 --subnet-name MySubnet --subnet-prefixes 10.0.0.0/24
+    Create a virtual network.: az network vnet create --address-prefixes 10.0.0.0/16 --name MyVirtualNetwork --resource-group MyResourceGroup --subnet-name MyAseSubnet --subnet-prefixes 10.0.0.0/24
+    Create virtual network with an IPAM pool allocation.: az network vnet create -g MyResourceGroup -n MyVNet --ipam-allocations [0].number-of-ip-addresses=100 [0].id=ipam-pool-resource-id
+    For --summarized-gateway-prefixes with address-prefixes: az network vnet create --resource-group rg1 --name test-vnet --location eastus --address-prefixes 10.0.0.0/16 --summarized-gateway-prefixes address-prefixes="[10.0.0.0/16]"
+    For --summarized-gateway-prefixes with ipam-pool-prefix-allocations: az network vnet create -g {rg} -n {vnet} --address-prefixes 10.0.0.0/16 --summarized-gateway-prefixes ipam-pool-prefix-allocations="[{id:<pool-resource-id>,number-of-ip-addresses:10}]"

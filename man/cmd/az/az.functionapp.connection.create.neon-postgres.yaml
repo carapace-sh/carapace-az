@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: neon-postgres
 description: Create a functionapp connection to neon-postgres.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        database: Name of the sql database. Required if '--target-id' is not specified.
-        name: Name of the function app. Required if '--source-id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        resource-group: The resource group which contains the function app. Required if '--source-id' is not specified.None
-        server: Name of the sql server. Required if '--target-id' is not specified.
-        source-id: The resource id of a functionapp. Required if ['--resource-group', '--name'] are not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --appconfig-id=: The app configuration id to store configuration
     --client-type=: The client type used on the functionapp
@@ -53,3 +43,40 @@ completion:
             - publicnetwork
             - configinfo
             - auth
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appconfig-id: The app configuration id to store configuration.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the functionapp.
+
+            Accepted values: django, dotnet, dotnet-internal, go, java, nodejs, none, php, python, ruby, springBoot
+        connection: Name of the functionapp connection.
+        connstr-props: The additional connection string properties used to build connection string.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        database: Name of the sql database. Required if '--target-id' is not specified.
+        name: Name of the function app. Required if '--source-id' is not specified.None.
+        no-recreate: |-
+            Skip executing creation operation when no updates to an existing connection.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        resource-group: The resource group which contains the function app. Required if '--source-id' is not specified.None.
+        secret: 'The secret auth info. Usage: --secret name=XX secret=XX --secret name=XX secret-uri=XX --secret name=XX secret-name=XX name    : Required. Username or account name for secret auth. secret  : One of ``` <secret, secret-uri, secret-name> ``` is required. Password or account key for secret auth. secret-uri  : One of ``` <secret, secret-uri, secret-name> ``` is required. Keyvault secret uri which stores password. secret-name : One of ``` <secret, secret-uri, secret-name> ``` is required. Keyvault secret name which stores password. It''s for AKS only.'
+        server: Name of the sql server. Required if '--target-id' is not specified.
+        source-id: The resource id of a functionapp. Required if ['--resource-group', '--name'] are not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vault-id: The id of key vault to store secret value.
+examples:
+    Create a connection between functionapp and neon-postgres interactively: az functionapp connection create neon-postgres
+    Create a connection between functionapp and neon-postgres with resource name: az functionapp connection create neon-postgres -g FuncAppRG -n MyFunctionApp --server MyServer --database MyDB --secret name=XX secret=XX

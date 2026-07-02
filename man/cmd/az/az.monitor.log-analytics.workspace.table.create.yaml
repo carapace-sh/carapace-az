@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a Log Analytics workspace microsoft/custom log table.
-documentation:
-    flag:
-        plan: 'The table plan. Possible values include: "Basic", "Analytics".'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --columns=:
         description: A list of table custom columns.Extracts multiple space-separated columns in column_name=column_type format
@@ -24,3 +19,26 @@ completion:
         plan:
             - Basic
             - Analytics
+documentation:
+    command: Create a Log Analytics workspace microsoft/custom log table. The table name needs to end with '_CL'.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        columns: A list of table custom columns.Extracts multiple space-separated columns in column_name=column_type format.
+        description: Schema description.
+        name: Name of the table.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        plan: |-
+            The table plan. Possible values include: "Basic", "Analytics".
+
+            Accepted values: Analytics, Basic
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        retention-time: The table retention in days, between 4 and 730. Setting this property to -1 will default to the workspace retention.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        total-retention-time: The table total retention in days, between 4 and 2556. Setting this property to -1 will default to table retention.
+        workspace-name: Name of the Log Analytics Workspace.
+examples:
+    Create a Log Analytics workspace custom log table.: az monitor log-analytics workspace table create --resource-group MyResourceGroup --workspace-name MyWorkspace -n MyTable_CL --retention-time 45 --columns MyColumn1=string TimeGenerated=datetime

@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: appconfig
 description: Create a aks connection to appconfig.
-documentation:
-    flag:
-        app-config: Name of the app configuration. Required if '--target-id' is not specified.
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        name: Name of the managed cluster. Required if '--source-id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        private-endpoint: Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
-        resource-group: The resource group which contains the managed cluster. Required if '--source-id' is not specified.None
-        source-id: The resource id of a aks. Required if ['--resource-group', '--name'] are not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-id: The resource id of target service. Required if ['--target-resource-group', '--app-config'] are not specified.
-        target-resource-group: The resource group which contains the app configuration. Required if '--target-id' is not specified.
 flags:
     --app-config=: Name of the app configuration.
     --appconfig-id=: The app configuration id to store configuration
@@ -69,3 +57,60 @@ completion:
         use-appconfig-extension:
             - "true"
             - "false"
+documentation:
+    command: |-
+        Command group 'aks connection' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        app-config: Name of the app configuration. Required if '--target-id' is not specified.
+        appconfig-id: The app configuration id to store configuration.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the aks.
+
+            Accepted values: dotnet, dotnet-internal, java, nodejs, none, python
+        connection: Name of the aks connection.
+        connstr-props: The additional connection string properties used to build connection string.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        kube-namespace: |-
+            The kubernetes namespace where the connection information will be saved into (as kubernetes secret).
+
+            Default value: default
+        name: Name of the managed cluster. Required if '--source-id' is not specified.None.
+        no-recreate: |-
+            Skip executing creation operation when no updates to an existing connection.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        private-endpoint: |-
+            Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
+
+            Accepted values: false, true
+        resource-group: The resource group which contains the managed cluster. Required if '--source-id' is not specified.None.
+        secret: 'The secret auth info. Usage: --secret.'
+        service-principal: 'The service principal auth info. Usage: --service-principal client-id=XX secret=XX client-id      : Required. Client id of the service principal. object-id      : Optional. Object id of the service principal (Enterprise Application). secret         : Required. Secret of the service principal.'
+        source-id: The resource id of a aks. Required if ['--resource-group', '--name'] are not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-id: The resource id of target service. Required if ['--target-resource-group', '--app-config'] are not specified. --target-resource-group --tg The resource group which contains the app configuration. Required if '--target-id' is not specified.
+        target-resource-group: The resource group which contains the app configuration. Required if '--target-id' is not specified.
+        use-appconfig-extension: |-
+            Install Azure App Configuration extension in the Kubernetes cluster.
+
+            Default value: False
+
+            Accepted values: false, true
+        workload-identity: 'The user-assigned managed identity used to create workload identity federation. Usage: --workload-identity ``` <user-identity-resource-id> ``` user-identity-resource-id: Required. The resource id of the user assigned identity. Please DO NOT use AKS control plane identity and kubelet identity which is not supported by federated identity credential.'
+examples:
+    Create a connection between aks and appconfig interactively: az aks connection create appconfig
+    Create a connection between aks and appconfig with resource id: az aks connection create appconfig --source-id /subscriptions/{subscription}/resourceGroups/{source_resource_group}/providers/Microsoft.ContainerService/managedClusters/{cluster} --target-id /subscriptions/{subscription}/resourceGroups/{target_resource_group}/providers/Microsoft.AppConfiguration/configurationStores/{config_store} --secret
+    Create a connection between aks and appconfig with resource name: az aks connection create appconfig -g ClusterRG -n MyCluster --tg AppconfigRG --app-config MyConfigStore --secret

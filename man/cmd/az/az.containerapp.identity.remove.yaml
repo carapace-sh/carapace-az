@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: remove
 description: Remove a managed identity from a container app.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        user-assigned: Space-separated user identities. If no user identities are specified, all user identities will be removed.
 flags:
     --ids=:
         description: One or more resource IDs (space-delimited).
@@ -20,3 +13,26 @@ flags:
         nargs: -1
     -g, --resource-group=: Name of resource group.
     -n, --name=: The name of the Containerapp.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: The name of the Containerapp. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-assigned: |-
+            Boolean indicating whether to assign system-assigned identity.
+
+            Default value: False
+        user-assigned: Space-separated user identities. If no user identities are specified, all user identities will be removed.
+examples:
+    Remove all user identities.: az containerapp identity remove -n my-containerapp -g MyResourceGroup --user-assigned
+    Remove system and user identity (from a different resource group than the containerapp).: az containerapp identity remove -n my-containerapp -g MyResourceGroup --system-assigned --user-assigned myUserIdentityResourceId
+    Remove system identity and all user identities.: az containerapp identity remove -n my-containerapp -g MyResourceGroup --system-assigned --user-assigned
+    Remove system identity.: az containerapp identity remove -n my-containerapp -g MyResourceGroup --system-assigned
+    Remove user identity.: az containerapp identity remove -n my-containerapp -g MyResourceGroup --user-assigned myUserIdentityName

@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a shared access policy in an Azure IoT Hub Device Provisioning Service instance.
-documentation:
-    flag:
-        primary-key: Primary SAS key value. Set to empty string in order to regenerate a new primary key.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        rights: Access rights for the IoT Hub Device Provisioning Service. Use space-separated list for multiple rights.
-        secondary-key: Secondary SAS key value. Set to empty string in order to regenerate a new secondary key.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --no-wait=: Do not wait for the long-running operation to finish.
     --policy-name=!: A friendly name for DPS access policy.
@@ -28,3 +21,23 @@ completion:
             - DeviceConnect
             - RegistrationStatusRead
             - RegistrationStatusWrite
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        dps-name: IoT Hub Device Provisioning Service name. --pn --policy-name A friendly name for DPS access policy.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        primary-key: Primary SAS key value. Set to empty string in order to regenerate a new primary key.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        rights: |-
+            Access rights for the IoT Hub Device Provisioning Service. Use space-separated list for multiple rights.
+
+            Accepted values: DeviceConnect, EnrollmentRead, EnrollmentWrite, RegistrationStatusRead, RegistrationStatusWrite, ServiceConfig
+        secondary-key: Secondary SAS key value. Set to empty string in order to regenerate a new secondary key.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Regenerate keys for access policy 'MyPolicy' by updating keys to empty values: az iot dps policy update --dps-name MyDps --resource-group MyResourceGroup --policy-name MyPolicy --primary-key "" --secondary-key ""
+    Update shared access policy 'MyPolicy' in an Azure IoT Hub Device Provisioning Service instance with EnrollmentWrite right: az iot dps policy update --dps-name MyDps --resource-group MyResourceGroup --policy-name MyPolicy --rights EnrollmentWrite

@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Update a web app's connection strings.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: Name of the web app. You can configure the default using `az configure --defaults web=<name>`. If `--ids` is provided this should NOT be specified.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        slot: the name of the slot. Default to the productions slot if not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --ids=:
         description: One or more resource IDs (space-delimited).
@@ -37,3 +30,22 @@ completion:
             - DocDb
             - RedisCache
             - PostgreSQL
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        connection-string-type: |-
+            Connection string type.
+
+            Accepted values: ApiHub, Custom, DocDb, EventHub, MySql, NotificationHub, PostgreSQL, RedisCache, SQLAzure, SQLServer, ServiceBus
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: Name of the web app. You can configure the default using `az configure --defaults web=<name>`. If `--ids` is provided this should NOT be specified.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        settings: Space-separated connection-string in a format of ``` <name>=<value> ``` .
+        slot: The name of the slot. Default to the productions slot if not specified.
+        slot-settings: Space-separated slot connection-string in a format of either ``` <name>=<value> ``` or ``` @<json_file> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Add a mysql connection string.: |-
+        az webapp config connection-string set -g MyResourceGroup -n MyUniqueApp -t mysql \
+            --settings mysql1='Server=myServer;Database=myDB;Uid=myUser;Pwd=myPwd;'

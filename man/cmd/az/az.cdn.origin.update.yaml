@@ -1,23 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a new origin within the specified endpoint.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        host-name: The address of the origin. Domain names, IPv4 addresses, and IPv6 addresses are supported.This should be unique across all origins in an endpoint.
-        http-port: The value of the HTTP port. Must be between 1 and 65535.
-        https-port: The value of the HTTPS port. Must be between 1 and 65535.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        origin-host-header: The host header value sent to the origin with each request. If you leave this blank, the request hostname determines this value. Azure CDN origins, such as Web Apps, Blob Storage, and Cloud Services require this host header value to match the origin hostname by default. This overrides the host header defined at Endpoint
-        priority: Priority of origin in given origin group for load balancing. Higher priorities will not be used for load balancing if any lower priority origin is healthy.Must be between 1 and 5
-        private-link-alias: The Alias of the Private Link resource. Populating this optional field indicates that this origin is 'Private'
-        private-link-location: The location of the Private Link resource. Required only if 'privateLinkResourceId' is populated
-        private-link-resource-id: The Resource Id of the Private Link resource. Populating this optional field indicates that this backend is 'Private'
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        weight: Weight of the origin in given origin group for load balancing. Must be between 1 and 1000
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -104,3 +87,45 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .'
+        change-reference: The related change reference ID for this resource operation.
+        disabled: |-
+            Don't use the origin for load balancing.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        enabled: |-
+            Origin is enabled for load balancing or not.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        endpoint-name: Name of the endpoint under the profile which is unique globally.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        host-name: The address of the origin. Domain names, IPv4 addresses, and IPv6 addresses are supported.This should be unique across all origins in an endpoint.
+        http-port: The value of the HTTP port. Must be between 1 and 65535.
+        https-port: The value of the HTTPS port. Must be between 1 and 65535.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        origin-host-header: The host header value sent to the origin with each request. If you leave this blank, the request hostname determines this value. Azure CDN origins, such as Web Apps, Blob Storage, and Cloud Services require this host header value to match the origin hostname by default. This overrides the host header defined at Endpoint.
+        priority: Priority of origin in given origin group for load balancing. Higher priorities will not be used for load balancing if any lower priority origin is healthy.Must be between 1 and 5.
+        private-link-alias: The Alias of the Private Link resource. Populating this optional field indicates that this origin is 'Private'.
+        private-link-approval-message: A custom message to be included in the approval request to connect to the Private Link.
+        private-link-location: The location of the Private Link resource. Required only if 'privateLinkResourceId' is populated.
+        private-link-resource-id: The Resource Id of the Private Link resource. Populating this optional field indicates that this backend is 'Private'.
+        profile-name: Name of the CDN profile which is unique within the resource group.
+        remove: 'Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        set: 'Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        weight: Weight of the origin in given origin group for load balancing. Must be between 1 and 1000.
+examples:
+    Connect an origin to a private link service: az cdn origin update -g group --profile-name profile --endpoint-name endpoint -n origin --http-port 80 --https-port 443 --private-link-resource-id /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/group/providers/Microsoft.Network/privateLinkServices/pls --private-link-location EastUS --private-link-approval-message 'Please approve this request'
+    Disable an origin: az cdn origin update -g group --profile-name profile --endpoint-name endpoint -n origin --disabled
+    Update an origin: az cdn origin update -g group --profile-name profile --endpoint-name endpoint -n origin --http-port 80 --https-port 443 --priority 3 --weight 500 --host-name example.contoso.com

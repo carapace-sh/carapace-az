@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: setup
 description: Create GitHub Actions workflow file for MySQL server.
-documentation:
-    flag:
-        admin-password: 'The password of the administrator. Minimum 8 characters and maximum 128 characters. Password must contain characters from three of the following categories: English uppercase letters, English lowercase letters, numbers, and non-alphanumeric characters.'
-        admin-user: 'Administrator username for the server. Once set, it cannot be changed. '
-        allow-push: Push the action yml file to the remote repository. The changes will be pushed to origin repository, speicified branch or current branch if not specified.
-        branch: The name of the branch you want upload github action file. The default will be your current branch.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        repo: 'The name of your github username and repository e.g., Azure/azure-cli '
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        server-name: Name of the server. The name can contain only lowercase letters, numbers, and the hyphen (-) character. Minimum 3 characters and maximum 63 characters.
-        sql-file: The path of the sql file. The sql file should be already in the repository
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --action-name=: The name of the github action
     --allow-push=:
@@ -35,3 +23,27 @@ completion:
         allow-push:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        action-name: The name of the github action.
+        admin-password: 'The password of the administrator. Minimum 8 characters and maximum 128 characters. Password must contain characters from three of the following categories: English uppercase letters, English lowercase letters, numbers, and non-alphanumeric characters.'
+        admin-user: 'Administrator username for the server. Once set, it cannot be changed. '
+        allow-push: |-
+            Push the action yml file to the remote repository. The changes will be pushed to origin repository, speicified branch or current branch if not specified.
+
+            Default value: False
+
+            Accepted values: false, true
+        branch: The name of the branch you want upload github action file. The default will be your current branch.
+        change-reference: The related change reference ID for this resource operation.
+        database-name: The name of the database to be created when provisioning the database server.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        repo: 'The name of your github username and repository e.g., Azure/azure-cli '
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        server-name: Name of the server. The name can contain only lowercase letters, numbers, and the hyphen (-) character. Minimum 3 characters and maximum 63 characters.
+        sql-file: The path of the sql file. The sql file should be already in the repository.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create GitHub Actions workflow file for MySQL server and push it to the remote repository: az mysql flexible-server deploy setup -s testserver -g testGroup -u username -p password --sql-file test.sql --repo username/userRepo -d flexibleserverdb --action-name testAction --branch userBranch --allow-push
+    Create GitHub Actions workflow file for MySQL server.: az mysql flexible-server deploy setup -s testserver -g testGroup -u username -p password --sql-file test.sql --repo username/userRepo -d flexibleserverdb --action-name testAction

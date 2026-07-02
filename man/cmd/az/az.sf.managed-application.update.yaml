@@ -1,24 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a Azure Service Fabric managed application.
-documentation:
-    flag:
-        failure-action: Specify the action to take if the monitored upgrade fails. The acceptable values for this parameter are Rollback or Manual.
-        hc-stable-duration: Specify the duration, in seconds, that Service Fabric waits in order to verify that the application is stable before moving to the next upgrade domain or completing the upgrade. This wait duration prevents undetected changes of health right after the health check is performed.
-        instance-close-delay-duration: Specify the duration in seconds, to wait before a stateless instance is closed, to allow the active requests to drain gracefully. This would be effective when the instance is closing during the application/cluster upgrade, only for those instances which have a non-zero delay duration configured in the service description.
-        max-percent-unhealthy-deployed-applications: Specify the maximum percentage of the application instances deployed on the nodes in the cluster that have a health state of error before the application health state for the cluster is error. Allowed values are form 0 to 100.
-        max-percent-unhealthy-partitions: Specify the maximum percent of unhelthy partitions per service allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
-        max-percent-unhealthy-replicas: Specify the maximum percent of unhelthy replicas per service allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
-        max-percent-unhealthy-services: Specify the maximum percent of unhelthy services allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
-        parameters: 'Specify the application parameters as key/value pairs. These parameters must exist in the application manifest. for example: --application-parameters param1=value1 param2=value2'
-        recreate-application: Determines whether the application should be recreated on update. If value=true, the rest of the upgrade policy parameters are not allowed.
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        service-type-health-policy-map: 'Specify the map of the health policy to use for different service types as key/value pairs in the following format: "ServiceTypeName"="MaxPercentUnhealthyPartitionsPerService,MaxPercentUnhealthyReplicasPerPartition,MaxPercentUnhealthyServices". for example: --service-type-health-policy-map "ServiceTypeName01"="5,10,5" "ServiceTypeName02"="5,5,5"'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        ud-timeout: Specify the maximum time, in seconds, that Service Fabric takes to upgrade a single upgrade domain. After this period, the upgrade fails.
-        upgrade-mode: Specify the mode used to monitor health during a rolling upgrade. The values are Monitored, and UnmonitoredAuto.
-        upgrade-timeout: Specify the maximum time, in seconds, that Service Fabric takes for the entire upgrade. After this period, the upgrade fails.
 flags:
     --failure-action=: Specify the action to take if the monitored upgrade fails.
     --force-restart=:
@@ -73,3 +55,58 @@ completion:
         warning-as-error:
             - "true"
             - "false"
+documentation:
+    command: Breaking change
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name.
+        failure-action: |-
+            Specify the action to take if the monitored upgrade fails. The acceptable values for this parameter are Rollback or Manual.
+
+            Accepted values: Manual, Rollback
+        force-restart: |-
+            Indicates that the service host restarts even if the upgrade is a configuration-only change.
+
+            Default value: False
+
+            Accepted values: false, true
+        hc-stable-duration: Specify the duration, in seconds, that Service Fabric waits in order to verify that the application is stable before moving to the next upgrade domain or completing the upgrade. This wait duration prevents undetected changes of health right after the health check is performed.
+        instance-close-delay-duration: Specify the duration in seconds, to wait before a stateless instance is closed, to allow the active requests to drain gracefully. This would be effective when the instance is closing during the application/cluster upgrade, only for those instances which have a non-zero delay duration configured in the service description.
+        max-percent-unhealthy-deployed-applications: Specify the maximum percentage of the application instances deployed on the nodes in the cluster that have a health state of error before the application health state for the cluster is error. Allowed values are form 0 to 100.
+        max-percent-unhealthy-partitions: Specify the maximum percent of unhelthy partitions per service allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
+        max-percent-unhealthy-replicas: Specify the maximum percent of unhelthy replicas per service allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
+        max-percent-unhealthy-services: Specify the maximum percent of unhelthy services allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
+        max-unhealthy-apps: Specify the maximum percentage of the application instances deployed on the nodes in the cluster that have a health state of error before the application health state for the cluster is error. Allowed values are from 0 to 100.
+        max-unhealthy-parts: Specify the maximum percent of unhealthy partitions per service allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
+        max-unhealthy-reps: Specify the maximum percent of unhealthy replicas per service allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
+        max-unhealthy-servs: Specify the maximum percent of unhealthy services allowed by the health policy for the default service type to use for the monitored upgrade. Allowed values are from 0 to 100.
+        parameters: 'Specify the application parameters as key/value pairs. These parameters must exist in the application manifest. for example: --application-parameters param1=value1 param2=value2'
+        recreate-application: |-
+            Determines whether the application should be recreated on update. If value=true, the rest of the upgrade policy parameters are not allowed.
+
+            Default value: False
+
+            Accepted values: false, true
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-type-health-policy-map: 'Specify the map of the health policy to use for different service types as key/value pairs in the following format: "ServiceTypeName"="MaxPercentUnhealthyPartitionsPerService,MaxPercentUnhealthyReplicasPerPartition,MaxPercentUnhealthyServices". for example: --service-type-health-policy-map "ServiceTypeName01"="5,10,5" "ServiceTypeName02"="5,5,5".'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use "" to clear existing tags. --ud-timeout --upgrade-domain-timeout Specify the maximum time, in seconds, that Service Fabric takes to upgrade a single upgrade domain. After this period, the upgrade fails.'
+        ud-timeout: Specify the maximum time, in seconds, that Service Fabric takes to upgrade a single upgrade domain. After this period, the upgrade fails.
+        upgrade-mode: |-
+            Specify the mode used to monitor health during a rolling upgrade. The values are Monitored, and UnmonitoredAuto.
+
+            Accepted values: Monitored, UnmonitoredAuto
+        upgrade-timeout: Specify the maximum time, in seconds, that Service Fabric takes for the entire upgrade. After this period, the upgrade fails.
+        warning-as-error: |-
+            Indicates whether to treat a warning health event as an error event during health evaluation.
+
+            Default value: False
+
+            Accepted values: false, true
+examples:
+    Update application parameters and upgrade policy values and app type version to v2.: |-
+        az sf managed-application update -g testRG -c testCluster --application-name testApp --application-type-version v2 \
+          --application-parameters key0=value0 --health-check-stable-duration 0 --health-check-wait-duration 0 --health-check-retry-timeout 0 \
+            --upgrade-domain-timeout 5000 --upgrade-timeout 7000 --failure-action Rollback --replica-check-timeout 300 --force-restart
+    Update managed application service type health policy map.: az sf managed-application update -g testRG -c testCluster --application-name testApp --service-type-health-policy-map  "ServiceTypeName01"="5,10,5" "ServiceTypeName02"="5,5,5"

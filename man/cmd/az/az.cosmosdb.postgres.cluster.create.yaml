@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new cluster with nodes.
-documentation:
-    flag:
-        coord-server-edition: 'The edition of a coordinator server (default: GeneralPurpose). Required for creation.'
-        coordinator-storage: The storage of a server in MB. Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
-        coordinator-v-cores: 'The vCores count of a server (max: 96). Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
-        login-password: The password of the administrator login. Required for creation.  If value is blank it's asked from the tty.
-        maintenance-window: Maintenance window of a cluster.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        node-count: Worker node count of the cluster. When node count is 0, it represents a single node configuration with the ability to create distributed tables on that node. 2 or more worker nodes represent multi-node configuration. Node count value cannot be 1. Required for creation.
-        node-storage: The storage in MB on each worker node. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
-        node-v-cores: 'The compute in vCores on each worker node (max: 104). See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --citus-version=: The Citus extension version on all cluster servers.
     --coord-public-ip-access=:
@@ -113,3 +100,47 @@ completion:
             - "no"
             - "n"
             - "0"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        citus-version: |-
+            The Citus extension version on all cluster servers.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        coord-server-edition: 'The edition of a coordinator server (default: GeneralPurpose). Required for creation.'
+        coordinator-storage: The storage of a server in MB. Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
+        coordinator-v-cores: 'The vCores count of a server (max: 96). Required for creation. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
+        enable-ha: |
+            If high availability (HA) is enabled or not for the cluster.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        location: The geo-location where the resource lives  When not specified, the location of the resource group will be used.
+        login-password: The password of the administrator login. Required for creation.  If value is blank it's asked from the tty.
+        maintenance-window: Maintenance window of a cluster.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        node-count: |-
+            Worker node count of the cluster. When node count is 0, it represents a single node configuration with the ability to create distributed tables on that node. 2 or more worker nodes represent multi-node configuration. Node count value cannot be 1. Required for creation.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        node-server-edition: 'The edition of a node server (default: MemoryOptimized).'
+        node-storage: The storage in MB on each worker node. See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.
+        node-v-cores: 'The compute in vCores on each worker node (max: 104). See https://learn.microsoft.com/rest/api/postgresqlhsc/#values for more information.'
+        point-in-time-utc: Date and time in UTC (ISO8601 format) for cluster restore.
+        postgresql-version: The major PostgreSQL version on all cluster servers.
+        preferred-primary-zone: Preferred primary availability zone (AZ) for all cluster servers.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        source-location: The Azure region of source cluster for read replica clusters.
+        source-resource-id: The resource id of source cluster for read replica clusters.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Create a new cluster as a point in time restore: az cosmosdb postgres cluster create -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --point-in-time-utc "2017-12-14T00:00:37.467Z" --source-location "eastus" --source-resource-id "/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/source-cluster"
+    Create a new cluster as a read replica: az cosmosdb postgres cluster create -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --source-location "eastus" --source-resource-id "/subscriptions/ffffffff-ffff-ffff-ffff-ffffffffffff/resourceGroups/testGroup/providers/Microsoft.DBforPostgreSQL/serverGroupsv2/source-cluster"
+    Create a new multi-node cluster: az cosmosdb postgres cluster create -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --enable-ha false --coordinator-v-cores 8 --coordinator-server-edition "GeneralPurpose" --coordinator-storage 131072 --enable-shards-on-coord false --node-count 3 --node-server-edition "MemoryOptimized" --node-v-cores 8 --node-storage 131072 --postgresql-version "15" --preferred-primary-zone "1" --administrator-login-password "password"
+    Create a new single node Burstable 1 vCore cluster: az cosmosdb postgres cluster create -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --enable-ha false --coordinator-v-cores 1 --coordinator-server-edition "BurstableMemoryOptimized" --coord-public-ip-access true --coordinator-storage 131072 --enable-shards-on-coord true --node-count 0 --preferred-primary-zone "1" --administrator-login-password "password"
+    Create a new single node Burstable 2 vCores cluster: az cosmosdb postgres cluster create -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --enable-ha false --coordinator-v-cores 2 --coordinator-server-edition "BurstableGeneralPurpose" --coord-public-ip-access true --coordinator-storage 131072 --enable-shards-on-coord true --node-count 0 --preferred-primary-zone "1" --administrator-login-password "password"
+    Create a new single node cluster: az cosmosdb postgres cluster create -n "test-cluster" -g "testGroup" --subscription "ffffffff-ffff-ffff-ffff-ffffffffffff" --enable-ha false --coordinator-v-cores 8 --coordinator-server-edition "GeneralPurpose" --coordinator-storage 131072 --enable-shards-on-coord true --node-count 0 --preferred-primary-zone "1" --administrator-login-password "password"

@@ -1,9 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: delete
 description: Delete specified deployment stack from management group scope
-documentation:
-    flag:
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --action-on-unmanage=!: Defines what happens to resources that are no longer managed after the stack is updated or deleted.
     --bypass-stack-out-of-sync-error=:
@@ -23,3 +20,27 @@ completion:
         bypass-stack-out-of-sync-error:
             - "true"
             - "false"
+documentation:
+    command: Delete specified deployment stack from management group scope.
+    flag:
+        acquire-policy-token: |-
+            Acquiring an Azure Policy token automatically for this resource operation.
+
+            Default value: False
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        id: The deployment stack resource id.
+        management-group-id: The management group id to create stack at.
+        name: |-
+            The deployment stack name. --resources-without-delete-support --rwd Defines what happens to resources that do not support deletion when they are no longer managed by the stack.
+
+            Accepted values: detach, fail
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Delete stack by name.: az stack mg delete --name StackName --management-group-id myMg --action-on-unmanage detachAll
+    Delete stack by stack resource id.: az stack mg delete --id /providers/Microsoft.Management/managementGroups/myMg/providers/Microsoft.Resources/deploymentStacks/StackName --management-group-id myMg --action-on-unmanage deleteAll

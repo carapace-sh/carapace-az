@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update an existing Azure storage account configuration on a web app.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using `az configure --defaults web=<name>`
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        slot: the name of the slot. Default to the productions slot if not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --ids=:
         description: One or more resource IDs (space-delimited).
@@ -28,3 +21,30 @@ completion:
         storage-type:
             - AzureFiles
             - AzureBlob
+documentation:
+    flag:
+        access-key: Storage account access key.
+        account-name: Storage account name.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        custom-id: Name of the share configured within the web app.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        mount-path: 'The path which the web app uses to read-write data ex: /share1 or /share2.'
+        name: Name of the web app. If left unspecified, a name will be randomly generated. You can configure the default using ``` az configure --defaults web=<name> ``` .
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        slot: The name of the slot. Default to the productions slot if not specified.
+        slot-setting: |-
+            With slot setting you can decide to make BYOS configuration sticky to a slot, meaning that when that slot is swapped, the storage account stays with that slot.
+
+            Default value: False
+        storage-type: |-
+            Storage type.
+
+            Accepted values: AzureBlob, AzureFiles
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Update an existing Azure storage account configuration on a web app.: az webapp config storage-account update --access-key MyAccessKey --account-name MyAccount --custom-id CustomId --mount-path /path/to/new/mount --name MyUniqueApp --resource-group MyResourceGroup --share-name MyShare --storage-type AzureFiles
+    Update the mount path for a connection to the Azure Files file share with the ID MyId.: |-
+        az webapp config storage-account update -g MyResourceGroup -n MyUniqueApp \
+          --custom-id CustomId \
+          --mount-path /path/to/new/mount

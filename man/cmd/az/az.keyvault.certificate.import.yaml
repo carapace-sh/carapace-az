@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: import
 description: Import a certificate created externally.
-documentation:
-    flag:
-        policy: JSON encoded policy definition. Use @{file} to load from a file(e.g. @my_policy.json).
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --disabled=:
         description: Import the certificate in disabled state.
@@ -24,3 +19,30 @@ completion:
         disabled:
             - "true"
             - "false"
+documentation:
+    command: Import a certificate into KeyVault.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        disabled: |-
+            Import the certificate in disabled state.
+
+            Accepted values: false, true
+        file: PKCS12 file or PEM file containing the certificate and private key.
+        name: Name of the certificate.
+        password: If the private key in certificate is encrypted, the password used for encryption.
+        policy: JSON encoded policy definition. Use @{file} to load from a file(e.g. @my_policy.json) .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        vault-name: Name of the Vault.
+examples:
+    Create a service principal with a certificate, add the certificate to Key Vault and provision a VM with that certificate.: |-
+        service_principal=$(az ad sp create-for-rbac --create-cert)
+        cert_file=$(echo $service_principal | jq .fileWithCertAndPrivateKey -r)
+        az keyvault create -g my-group -n vaultname
+        az keyvault certificate import --vault-name vaultname -n cert_name -f cert_file
+        secrets=$(az keyvault secret list-versions --vault-name vaultname \
+          -n cert1 --query "[?attributes.enabled].id" -o tsv)
+        vm_secrets=$(az vm secret format -s "$secrets")
+        az vm create -g group-name -n vm-name --admin-username deploy  \
+          --image Debian11 --secrets "$vm_secrets"

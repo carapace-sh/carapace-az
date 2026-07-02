@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a network security group rule.
-documentation:
-    flag:
-        description: Description for this rule. Restricted to 140 chars.
-        destination-address-prefixes: Space-separated list of CIDR prefixes or IP ranges. Alternatively, specify ONE of 'VirtualNetwork', 'AzureLoadBalancer', 'Internet' or '*' to match all IPs. Besides, it also supports all available Service Tags like 'ApiManagement', 'SqlManagement', 'AzureMonitor', etc.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        destination-asgs: Space-separated list of application security group names or IDs. Limited by backend server, temporarily this argument only supports one application security group name or ID.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        destination-port-ranges: Space-separated list of ports or port ranges between 0-65535. Use '*' to match all ports.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        direction: Direction of the rule. The direction specifies if rule will be evaluated on incoming or outgoing traffic.
-        priority: Priority of the rule. The value can be between 100 and 4096. The priority number must be unique for each rule in the collection. The lower the priority number, the higher the priority of the rule.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        source-address-prefixes: Space-separated list of CIDR prefixes or IP ranges. Alternatively, specify ONE of 'VirtualNetwork', 'AzureLoadBalancer', 'Internet' or '*' to match all IPs. Besides, it also supports all available Service Tags like 'ApiManagement', 'SqlManagement', 'AzureMonitor', etc.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        source-asgs: Space-separated list of application security group names or IDs. Limited by backend server, temporarily this argument only supports one application security group name or ID.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        source-port-ranges: Space-separated list of ports or port ranges between 0-65535. Use '*' to match all ports.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --access=: Network traffic is allowed or denied.
     --description=: Description for this rule.
@@ -71,3 +58,58 @@ completion:
             - Icmp
             - Tcp
             - Udp
+documentation:
+    flag:
+        access: |-
+            Network traffic is allowed or denied.
+
+            Default value: Allow
+
+            Accepted values: Allow, Deny
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        description: Description for this rule. Restricted to 140 chars.
+        destination-address-prefixes: |-
+            Space-separated list of CIDR prefixes or IP ranges. Alternatively, specify ONE of 'VirtualNetwork', 'AzureLoadBalancer', 'Internet' or '*' to match all IPs. Besides, it also supports all available Service Tags like 'ApiManagement', 'SqlManagement', 'AzureMonitor', etc.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+
+            Default value: ['*']
+        destination-asgs: Space-separated list of application security group names or IDs. Limited by backend server, temporarily this argument only supports one application security group name or ID.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        destination-port-ranges: |-
+            Space-separated list of ports or port ranges between 0-65535. Use '*' to match all ports.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+
+            Default value: ['80']
+        direction: |-
+            Direction of the rule. The direction specifies if rule will be evaluated on incoming or outgoing traffic.
+
+            Default value: Inbound
+
+            Accepted values: Inbound, Outbound
+        name: Name of the network security group rule.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        nsg-name: Name of the network security group.
+        priority: Priority of the rule. The value can be between 100 and 4096. The priority number must be unique for each rule in the collection. The lower the priority number, the higher the priority of the rule.
+        protocol: |-
+            Network protocol this rule applies to.
+
+            Default value: *
+
+            Accepted values: *, Ah, Esp, Icmp, Tcp, Udp
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        source-address-prefixes: |-
+            Space-separated list of CIDR prefixes or IP ranges. Alternatively, specify ONE of 'VirtualNetwork', 'AzureLoadBalancer', 'Internet' or '*' to match all IPs. Besides, it also supports all available Service Tags like 'ApiManagement', 'SqlManagement', 'AzureMonitor', etc.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+
+            Default value: ['*']
+        source-asgs: Space-separated list of application security group names or IDs. Limited by backend server, temporarily this argument only supports one application security group name or ID.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        source-port-ranges: |-
+            Space-separated list of ports or port ranges between 0-65535. Use '*' to match all ports.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+
+            Default value: ['*']
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a "Deny" rule over TCP for a specific IP address range with the lowest priority.: az network nsg rule create -g MyResourceGroup --nsg-name MyNsg -n MyNsgRule --priority 4096 --source-address-prefixes 208.130.28.0/24 --source-port-ranges 80 --destination-address-prefixes '*' --destination-port-ranges 80 8080 --access Deny --protocol Tcp --description "Deny from specific IP address ranges on 80 and 8080."
+    Create a basic "Allow" NSG rule with the highest priority.: az network nsg rule create -g MyResourceGroup --nsg-name MyNsg -n MyNsgRule --priority 100
+    Create a security rule using application security groups (https://aka.ms/applicationsecuritygroups).: az network nsg rule create -g MyResourceGroup --nsg-name MyNsg -n MyNsgRuleWithAsg --priority 500 --source-address-prefixes Internet --destination-port-ranges 80 8080 --destination-asgs Web --access Allow --protocol Tcp --description "Allow Internet to Web ASG on ports 80,8080."
+    Create a security rule using service tags (https://aka.ms/servicetags).: az network nsg rule create -g MyResourceGroup --nsg-name MyNsg -n MyNsgRuleWithTags --priority 400 --source-address-prefixes VirtualNetwork --destination-address-prefixes Storage --destination-port-ranges '*' --direction Outbound --access Allow --protocol Tcp --description "Allow VirtualNetwork to Storage."

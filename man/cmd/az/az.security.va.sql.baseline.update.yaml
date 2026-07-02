@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update Sql Vulnerability Assessment rule baseline.
-documentation:
-    flag:
-        baseline: 'Baseline records to be set. The following example will set a baseline with two records: --baseline line1_w1 line1_w2 line1_w3 --baseline line2_w1 line2_w2 line2_w3'
-        rule-id: 'The ID of the scanned rule. Format: "VAXXXX", where XXXX indicates the number of the rule'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vm-resource-id: Resource ID of the scanned machine. For On-Premise machines, please provide your workspace resource ID
 flags:
     --agent-id=: Provide the ID of the agent on the scanned machine, for On-Premise resources only
     --database-name=!: The name of the scanned database
@@ -28,3 +22,33 @@ completion:
         latest:
             - "true"
             - "false"
+documentation:
+    command: Update Sql Vulnerability Assessment rule baseline. Replaces the current rule baseline.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        agent-id: Provide the ID of the agent on the scanned machine, for On-Premise resources only.
+        baseline: 'Baseline records to be set. The following example will set a baseline with two records: --baseline line1_w1 line1_w2 line1_w3 --baseline line2_w1 line2_w2 line2_w3.'
+        change-reference: The related change reference ID for this resource operation.
+        database-name: The name of the scanned database.
+        latest: |-
+            Use this argument without parameters to set baseline upon latest scan results.
+
+            Default value: False
+
+            Accepted values: false, true
+        rule-id: 'The ID of the scanned rule. Format: "VAXXXX", where XXXX indicates the number of the rule.'
+        server-name: The name of the scanned server.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vm-name: Provide the name of the machine, for On-Premise resources only.
+        vm-resource-id: Resource ID of the scanned machine. For On-Premise machines, please provide your workspace resource ID.
+        vm-uuid: Provide the UUID of the scanned machine, for On-Premise resources only.
+        workspace-id: The ID of the workspace connected to the scanned machine.
+examples:
+    ? Update Sql Vulnerability Assessment rule baseline on an Azure virtual machine. Replaces the current rule baseline with latest scan results.
+    : az security va sql baseline update --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.Compute/VirtualMachines/MyVmName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --rule-id VA9999 --latest
+    ? Update Sql Vulnerability Assessment rule baseline on an Azure virtual machine. Replaces the current rule baseline with provided results.
+    : az security va sql baseline update --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.Compute/VirtualMachines/MyVmName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --rule-id VA9999 --baseline Line1_Col1 Line1_Col2 --baseline Line2_Col1 Line2_Col2
+    ? Update Sql Vulnerability Assessment rule baseline on an On-Premise machine. Replaces the current rule baseline with latest scan results.
+    : az security va sql baseline update --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.OperationalInsights/Workspaces/MyWorkspaceName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --vm-name MyVmName --agent-id MyAgentId --vm-uuid MyVmUUID --rule-id VA9999 --latest
+    ? Update Sql Vulnerability Assessment rule baseline on an On-Premise machine. Replaces the current rule baseline with provided results.
+    : az security va sql baseline update --vm-resource-id subscriptions/MySubscription/ResourceGroups/MyResourceGroup/Providers/Microsoft.OperationalInsights/Workspaces/MyWorkspaceName --workspace-id 00000000-0000-0000-0000-000000000000 --server-name MyServerName --database-name MyDbName --vm-name MyVmName --agent-id MyAgentId --vm-uuid MyVmUUID --rule-id VA9999 --baseline Line1_Col1 Line1_Col2 --baseline Line2_Col1 Line2_Col2

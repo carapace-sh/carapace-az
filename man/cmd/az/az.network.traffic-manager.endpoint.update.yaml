@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a traffic manager endpoint.
-documentation:
-    flag:
-        endpoint-status: The status of the endpoint. If enabled the endpoint is probed for endpoint health and included in the traffic routing method.
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        min-child-endpoints: The minimum number of endpoints that must be available in the child profile for the parent profile to be considered available. Only applicable to an endpoint of type 'NestedEndpoints'.
-        min-child-ipv4: The minimum number of IPv4 (DNS record type A) endpoints that must be available in the child profile in order for the parent profile to be considered available. Only applicable to endpoint of type 'NestedEndpoints'.
-        min-child-ipv6: The minimum number of IPv6 (DNS record type AAAA) endpoints that must be available in the child profile in order for the parent profile to be considered available. Only applicable to endpoint of type 'NestedEndpoints'.
-        priority: Priority of the endpoint when using the 'Priority' traffic routing method. Values range from 1 to 1000, with lower values representing higher priority.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-resource-id: The Azure Resource URI of the endpoint. Not applicable for endpoints of type 'ExternalEndpoints'.
-        weight: Weight of the endpoint when using the 'Weighted' traffic routing method. Values range from 1 to 1000.
 flags:
     --always-serve=: If Always Serve is enabled, probing for endpoint health will be disabled and endpoints will be included in the traffic routing method.
     --custom-headers=:
@@ -54,3 +42,39 @@ completion:
             - azureEndpoints
             - externalEndpoints
             - nestedEndpoints
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        always-serve: |-
+            If Always Serve is enabled, probing for endpoint health will be disabled and endpoints will be included in the traffic routing method.
+
+            Accepted values: Disabled, Enabled
+        change-reference: The related change reference ID for this resource operation.
+        custom-headers: Space-separated list of custom headers in KEY=VALUE format.
+        endpoint-location: Location of the external or nested endpoints when using the 'Performance' routing method.
+        endpoint-monitor-status: The monitoring status of the endpoint.
+        endpoint-status: |-
+            The status of the endpoint. If enabled the endpoint is probed for endpoint health and included in the traffic routing method.
+
+            Accepted values: Disabled, Enabled
+        geo-mapping: Space-separated list of country/region codes mapped to this endpoint when using the 'Geographic' routing method.
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        min-child-endpoints: The minimum number of endpoints that must be available in the child profile for the parent profile to be considered available. Only applicable to an endpoint of type 'NestedEndpoints'.
+        min-child-ipv4: The minimum number of IPv4 (DNS record type A) endpoints that must be available in the child profile in order for the parent profile to be considered available. Only applicable to endpoint of type 'NestedEndpoints'.
+        min-child-ipv6: The minimum number of IPv6 (DNS record type AAAA) endpoints that must be available in the child profile in order for the parent profile to be considered available. Only applicable to endpoint of type 'NestedEndpoints'.
+        name: Endpoint name.
+        priority: Priority of the endpoint when using the 'Priority' traffic routing method. Values range from 1 to 1000, with lower values representing higher priority.
+        profile-name: Name of parent profile.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subnets: Space-separated list of subnet CIDR prefixes (10.0.0.0/24) or subnet ranges (10.0.0.0-11.0.0.0).
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target: Fully-qualified DNS name of the endpoint.
+        target-resource-id: The Azure Resource URI of the endpoint. Not applicable for endpoints of type 'ExternalEndpoints'.
+        type: |-
+            Endpoint type.
+
+            Accepted values: azureEndpoints, externalEndpoints, nestedEndpoints
+        weight: Weight of the endpoint when using the 'Weighted' traffic routing method. Values range from 1 to 1000.
+examples:
+    Update a traffic manager endpoint to change its weight.: az network traffic-manager endpoint update -g MyResourceGroup --profile-name MyTmProfile \ -n MyEndpoint --weight 20 --type azureEndpoints
+    Update a traffic manager endpoint. (autogenerated): az network traffic-manager endpoint update --endpoint-status Enabled --name MyEndpoint --profile-name MyTmProfile --resource-group MyResourceGroup --type azureEndpoints

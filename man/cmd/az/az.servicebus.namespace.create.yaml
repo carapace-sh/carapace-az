@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a Service Bus Namespace
-documentation:
-    flag:
-        capacity: Number of message units. This property is only applicable to namespaces of Premium SKU
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        premium-messaging-partitions: The number of partitions of a Service Bus namespace. This property is only applicable to Premium SKU namespaces. The default value is 1 and possible values are 1, 2 and 4
-        public-network-access: This determines if traffic is allowed over public network. By default it is enabled. If value is SecuredByPerimeter then Inbound and Outbound communication is controlled by the network security perimeter and profile' access rules.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --alternate-name=: Alternate name specified when alias and namespace names are same.
     --capacity=: Number of message units.
@@ -78,3 +69,56 @@ completion:
         zone-redundant:
             - "true"
             - "false"
+documentation:
+    command: Create a Service Bus Namespace.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        alternate-name: Alternate name specified when alias and namespace names are same.
+        capacity: |-
+            Number of message units. This property is only applicable to namespaces of Premium SKU.
+
+            Accepted values: 1, 16, 2, 4, 8
+        change-reference: The related change reference ID for this resource operation.
+        disable-local-auth: |-
+            A boolean value that indicates whether SAS authentication is enabled/disabled for the Service Bus.
+
+            Accepted values: false, true
+        encryption-config: List of KeyVaultProperties objects. --geo-data-replication-config --replica-config A list of regions where replicas of the namespace are maintained Object.
+        infra-encryption: |-
+            A boolean value that indicates whether Infrastructure Encryption (Double Encryption).
+
+            Accepted values: false, true
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` . --max-lag --max-replication-lag-duration-in-seconds The maximum acceptable lag for data replication operations from the primary replica to a quorum of secondary replicas.'
+        mi-system-assigned: |-
+            Enable System Assigned Identity.
+
+            Accepted values: false, true
+        mi-user-assigned: |-
+            List of User Assigned Identity ids.
+
+            Accepted values: 1.0, 1.1, 1.2
+        name: Name of Namespace.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+
+            Accepted values: Disabled, Enabled
+        premium-messaging-partitions: The number of partitions of a Service Bus namespace. This property is only applicable to Premium SKU namespaces. The default value is 1 and possible values are 1, 2 and 4
+        public-network-access: This determines if traffic is allowed over public network. By default it is enabled. If value is SecuredByPerimeter then Inbound and Outbound communication is controlled by the network security perimeter and profile' access rules.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        sku: |-
+            Namespace SKU.
+
+            Default value: Standard
+
+            Accepted values: Basic, Premium, Standard
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        zone-redundant: |-
+            Enabling this property creates a ServiceBus Zone Redundant Namespace in regions supported availability zones.
+
+            Accepted values: false, true
+examples:
+    Create a Service Bus Namespace.: az servicebus namespace create --resource-group myresourcegroup --name mynamespace --location westus --tags tag1=value1 tag2=value2 --sku Standard
+    Create a new namespace with Identity and Encryption enabled.: az servicebus namespace create --resource-group myresourcegroup --name mynamespace --location westus --sku Premium --mi-user-assigned /subscriptions/{subscriptionId}/resourceGroups/{resourcegroup}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MSIName --encryption-config key-name=key1 key-vault-uri=https://mykeyvault.vault.azure.net/ user-assigned-identity=/subscriptions/{subscriptionId}}/resourceGroups/{resourcegroup}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MSIName --encryption-config key-name=key1 key-vault-uri=https://mykeyvault.vault.azure.net/ user-assigned-identity=/subscriptions/{subscriptionId}}/resourceGroups/{resourcegroup}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/MSIName

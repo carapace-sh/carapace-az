@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Build a metric alert rule condition.
-documentation:
-    flag:
-        num-periods: 'The number of evaluation periods for dynamic threshold. Range: 1-6.'
-        num-violations: 'The number of violations to trigger an dynamic alert. Range: 1-6. It should be less than or equal to --num-periods.'
-        operator: Operator for static threshold can be 'Equals', 'NotEquals', 'GreaterThan', 'GreaterThanOrEqual', 'LessThan' or 'LessThanOrEqual'. Operator for dynamic threshold can be 'GreaterThan', 'LessThan', 'GreaterOrLessThan'.
-        since: 'The date from which to start learning the metric historical data and calculate the dynamic thresholds. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        skip-metric-validation: Cause the metric validation to be skipped. This allows to use a metric that has not been emitted yet.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --aggregation=!: Time aggregation.
     --dimension=:
@@ -55,3 +47,45 @@ completion:
         type:
             - static
             - dynamic
+documentation:
+    command: |-
+        This command is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        aggregation: |-
+            Time aggregation.
+
+            Accepted values: Average, Count, Maximum, Minimum, Total
+        change-reference: The related change reference ID for this resource operation.
+        dimension: Dimension created by 'az monitor metrics alert dimension create'.
+        metric: |-
+            Name of the metric to base the rule on.
+
+            Value from: az monitor metrics list-definitions
+
+            Accepted values: Equals, GreaterOrLessThan, GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual, NotEquals
+        namespace: Namespace of metric.
+        num-periods: 'The number of evaluation periods for dynamic threshold. Range: 1-6.'
+        num-violations: 'The number of violations to trigger an dynamic alert. Range: 1-6. It should be less than or equal to --num-periods.'
+        operator: Operator for static threshold can be 'Equals', 'NotEquals', 'GreaterThan', 'GreaterThanOrEqual', 'LessThan' or 'LessThanOrEqual'. Operator for dynamic threshold can be 'GreaterThan', 'LessThan', 'GreaterOrLessThan'.
+        sensitivity: |-
+            Alert sensitivity for dynamic threshold.
+
+            Default value: Medium
+
+            Accepted values: High, Low, Medium
+        since: 'The date from which to start learning the metric historical data and calculate the dynamic thresholds. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        skip-metric-validation: |-
+            Cause the metric validation to be skipped. This allows to use a metric that has not been emitted yet.
+
+            Accepted values: false, true
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        threshold: Static threshold value.
+        type: |-
+            Type of condition threshold.
+
+            Accepted values: dynamic, static
+examples:
+    Build a dynamic condition.: "$condition = az monitor metrics alert condition create -t dynamic \n--aggregation Average \n--metric \"CPU Percentage\" \n--op GreaterOrLessThan \n--num-violations 4 \n--num-periods 4 \n--since 2020-11-02T12:11"
+    Build a static condition.: "$dim1 = az monitor metrics alert dimension create -n dimName --op Include -v GetBlob PutBlob\n$dim2 = az monitor metrics alert dimension create -n Instance --op Exclude -v Get Put\n$condition = az monitor metrics alert condition create -t static \n--aggregation Count \n--metric \"CPU Percentage\" \n--op GreaterThan  \n--threshold 95 \n--dimension \"$dim1\" \"$dim2\""

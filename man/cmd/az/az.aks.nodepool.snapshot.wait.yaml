@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: wait
 description: Wait for a nodepool snapshot to reach a desired state.
-documentation:
-    flag:
-        custom: Wait until the condition satisfies a custom JMESPath query. E.g. provisioningState!='InProgress', instanceView.statuses[?code=='PowerState/running']
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --created=: wait until created with 'provisioningState' at 'Succeeded'
     --custom=: Wait until the condition satisfies a custom JMESPath query.
@@ -17,3 +12,37 @@ flags:
     --updated=: wait until updated with provisioningState at 'Succeeded'
     -g, --resource-group=!: Name of resource group.
     -n, --name=!: Name of the managed cluster.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        created: |-
+            Wait until created with 'provisioningState' at 'Succeeded'.
+
+            Default value: False
+        custom: Wait until the condition satisfies a custom JMESPath query. E.g. provisioningState!='InProgress', instanceView.statuses[?code=='PowerState/running'].
+        deleted: |-
+            Wait until deleted.
+
+            Default value: False
+        exists: |-
+            Wait until the resource exists.
+
+            Default value: False
+        interval: |-
+            Polling interval in seconds.
+
+            Default value: 30
+        name: Name of the managed cluster.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        timeout: |-
+            Maximum wait in seconds.
+
+            Default value: 3600
+        updated: |-
+            Wait until updated with provisioningState at 'Succeeded'.
+
+            Default value: False
+examples:
+    Wait for a node pool to reach a desired state, polling every minute for up to thirty minutes.: az aks nodepool snapshot wait --created --interval 60 --name MySnapshot --resource-group MyResourceGroup --timeout 1800

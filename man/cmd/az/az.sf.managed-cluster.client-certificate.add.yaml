@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Add a new client certificate to the managed cluster.
-documentation:
-    flag:
-        resource-group: Specify the resource group name. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --common-name=: Client certificate common name.
     --is-admin=:
@@ -22,3 +18,22 @@ completion:
         is-admin:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cluster-name: Specify the name of the cluster, if not given it will be same as resource group name.
+        common-name: Client certificate common name.
+        is-admin: |-
+            Client authentication type.
+
+            Default value: False
+
+            Accepted values: false, true
+        issuer-thumbprint: Space-separated list of issuer thumbprints.
+        resource-group: Specify the resource group name. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        thumbprint: Client certificate thumbprint.
+examples:
+    Add admin client certificate by thumbprint.: az sf managed-cluster client-certificate add -g testRG -c testCluster --thumbprint XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --is-admin
+    Add non admin client certificate by common name.: az sf managed-cluster client-certificate add -g testRG -c testCluster --common-name Contoso.com --issuer-thumbprint XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

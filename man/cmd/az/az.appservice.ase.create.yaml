@@ -1,21 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create app service environment.
-documentation:
-    flag:
-        force-network-security-group: Override network security group for subnet. Applies to ASEv2 only.
-        force-route-table: Override route table for subnet. Applies to ASEv2 only.
-        front-end-scale-factor: Scale of front ends to app service plan instance ratio. Applies to ASEv2 only.
-        front-end-sku: Size of front end servers. Applies to ASEv2 only.
-        ignore-network-security-group: Configure network security group manually. Applies to ASEv2 only.
-        ignore-route-table: Configure route table manually. Applies to ASEv2 only.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        os-preference: Determine if app service environment should start with Linux workers. Applies to ASEv2 only.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subnet: Name or ID of existing subnet. To create vnet and/or subnet                    use `az network vnet [subnet] create`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        vnet-name: Name of the vNet. Mandatory if only subnet name is specified.
-        zone-redundant: Configure App Service Environment as Zone Redundant. Applies to ASEv3 only.
 flags:
     --force-network-security-group=:
         description: Override network security group for subnet.
@@ -80,3 +65,66 @@ completion:
         zone-redundant:
             - "true"
             - "false"
+documentation:
+    command: Create App Service Environment.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        force-network-security-group: Override network security group for subnet. Applies to ASEv2 only.
+        force-route-table: Override route table for subnet. Applies to ASEv2 only.
+        front-end-scale-factor: Scale of front ends to app service plan instance ratio. Applies to ASEv2 only.
+        front-end-sku: Size of front end servers. Applies to ASEv2 only.
+        ignore-network-security-group: Configure network security group manually. Applies to ASEv2 only.
+        ignore-route-table: Configure route table manually. Applies to ASEv2 only.
+        ignore-subnet-size-validation: |-
+            Do not check if subnet is sized according to recommendations.
+
+            Default value: False
+
+            Accepted values: false, true
+        kind: |-
+            Specify App Service Environment version.
+
+            Default value: ASEv3
+
+            Accepted values: ASEv3
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        name: Name of the app service environment.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        os-preference: Determine if app service environment should start with Linux workers. Applies to ASEv2 only.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subnet: Name or ID of existing subnet. To create vnet and/or subnet                    use ``` az network vnet [subnet] create ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        virtual-ip-type: |-
+            Specify if app service environment should be accessible from internet.
+
+            Default value: Internal
+
+            Accepted values: External, Internal
+        vnet-name: Name of the vNet. Mandatory if only subnet name is specified.
+        zone-redundant: |-
+            Configure App Service Environment as Zone Redundant.
+
+            Accepted values: false, true
+examples:
+    Create Virtual Network and App Service Environment in a smaller than recommended subnet in existing resource group.: |-
+        az network vnet create -g MyResourceGroup -n MyVirtualNetwork \
+          --address-prefixes 10.0.0.0/16 --subnet-name MyAseSubnet --subnet-prefixes 10.0.0.0/26
+        az appservice ase create -n MyAseName -g MyResourceGroup --vnet-name MyVirtualNetwork \
+          --subnet MyAseSubnet --ignore-subnet-size-validation
+    Create external App Service Environments in existing resource group and Virtual Network.: |-
+        az appservice ase create -n MyAseName -g MyResourceGroup --vnet-name MyVirtualNetwork \
+          --subnet MyAseSubnet --virtual-ip-type External
+    Create external zone redundant App Service Environment with default values.: |-
+        az appservice ase create -n MyASEName -g ASEResourceGroup \
+          --vnet-name MyASEVirtualNetwork --subnet MyASESubnet \
+          --zone-redundant --virtual-ip-type External
+    Create resource group, Virtual Network and App Service Environment with default values.: |-
+        az group create -g MyResourceGroup --location westeurope
+        az network vnet create -g MyResourceGroup -n MyVirtualNetwork \
+          --address-prefixes 10.0.0.0/16 --subnet-name MyAseSubnet --subnet-prefixes 10.0.0.0/24
+        az appservice ase create -n MyAseName -g MyResourceGroup --vnet-name MyVirtualNetwork \
+          --subnet MyAseSubnet

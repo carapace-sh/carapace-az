@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Set given sub-domain hostname to the static app.
-documentation:
-    flag:
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --hostname=!: custom hostname such as www.example.com. Only support sub domain in preview.
     --no-wait=: Do not wait for the long-running operation to finish.
@@ -17,3 +13,25 @@ completion:
         validation-method:
             - cname-delegation
             - dns-txt-token
+documentation:
+    command: Set given sub-domain hostname to the static app. Please configure CNAME/TXT/ALIAS record with your DNS provider. Use --no-wait to not wait for validation.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        hostname: Custom hostname such as ``` www.example.com ``` . Only support sub domain in preview.
+        name: Name of the static site.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        validation-method: |-
+            Validation method for the custom domain.
+
+            Default value: cname-delegation
+
+            Accepted values: cname-delegation, dns-txt-token
+examples:
+    Set a hostname for a static app using CNAME validation (default): az staticwebapp hostname set -n MyStaticAppName --hostname www.example.com
+    Set a root domain for a webapp using TXT validation: az staticwebapp hostname set -n MyStaticAppName --hostname example.com --validation-method "dns-txt-token"

@@ -1,18 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create an Azure IoT hub.
-documentation:
-    flag:
-        enforce-data-residency: Enforce data residency for this IoT Hub by disabling cross-region disaster recovery. This property is immutable once set on the resource. Only available in select regions. Learn more at https://aka.ms/iothubdisabledr
-        fileupload-storage-container-name: The name of the root container where you upload files. The container need not exist but should be creatable using the connectionString specified.
-        fileupload-storage-identity: The managed identity to use for file upload authentication. Use '[system]' to refer to the system-assigned managed identity or a resource ID to refer to a user-assigned managed identity.
-        location: Location of your IoT Hub. Default is the location of target resource group.
-        mi-user-assigned: Enable user-assigned managed identities for this hub. Accept space-separated list of identity resource IDs.
-        min-tls-version: Specify the minimum TLS version to support for this hub. Can be set to "1.0" or "1.2". For example, minimum TLS version set to "1.2" results in clients that use a TLS version below 1.2 to be rejected.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        sku: Pricing tier for Azure IoT Hub. Note that only one free IoT hub instance (F1) is allowed in each subscription. Exception will be thrown if free instances exceed one.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --c2d-max-delivery-count=: The number of times the IoT hub will attempt to deliver a cloud-to-device message to a device, between 1 and 100.
     --c2d-ttl=: The amount of time a message is available for the device to consume before it is expired by IoT Hub, between 1 and 48 hours.
@@ -96,3 +84,107 @@ completion:
             - B1
             - B2
             - B3
+documentation:
+    flag:
+        acquire-policy-token: |-
+            Acquiring an Azure Policy token automatically for this resource operation.
+
+            Default value: 10
+
+            Default value: 1
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Accepted values: false, true
+
+
+
+
+            Default value: 10
+
+            Default value: 5
+
+            Default value: 1
+
+
+
+
+            Default value: False
+
+
+
+            Accepted values: identityBased, keyBased
+        custom-ns-role-id: |-
+            Fully qualified role definition Id to apply to ADR Namespace, in the following format: /subscriptions/{subscriptionId}/providers/Microsoft.Authorization/roleDefinitions/{roleId}. Only applicable to Gen2 IoT Hubs.
+
+            Accepted values: false, true
+
+
+
+
+            Default value: 10
+
+            Default value: 5
+
+            Default value: 1
+
+
+
+
+            Default value: False
+
+
+
+            Accepted values: identityBased, keyBased
+        enforce-data-residency: Enforce data residency for this IoT Hub by disabling cross-region disaster recovery. This property is immutable once set on the resource. Only available in select regions. Learn more at https://aka.ms/iothubdisabledr
+        fileupload-storage-container-name: The name of the root container where you upload files. The container need not exist but should be creatable using the connectionString specified.
+        fileupload-storage-identity: The managed identity to use for file upload authentication. Use '[system]' to refer to the system-assigned managed identity or a resource ID to refer to a user-assigned managed identity.
+        location: Location of your IoT Hub. Default is the location of target resource group.
+        mi-system-assigned: |-
+            Enable system-assigned managed identity for this hub.
+
+            Accepted values: false, true
+        mi-user-assigned: Enable user-assigned managed identities for this hub. Accept space-separated list of identity resource IDs. --min-tls-version --mintls Specify the minimum TLS version to support for this hub. Can be set to "1.0" or "1.2". For example, minimum TLS version set to "1.2" results in clients that use a TLS version below 1.2 to be rejected.
+        min-tls-version: Specify the minimum TLS version to support for this hub. Can be set to "1.0" or "1.2". For example, minimum TLS version set to "1.2" results in clients that use a TLS version below 1.2 to be rejected.
+        name: IoT Hub name.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        ns-identity-id: User-managed identity resource ID to access Device Registry namespace.
+        ns-resource-id: Device Registry namespace resource ID to link to this IoT hub.
+        partition-count: |-
+            The number of partitions of the backing Event Hub for device-to-cloud messages.
+
+            Default value: 4
+
+            Default value: 1
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        role: Role to assign to the hub's system-assigned managed identity.
+        scopes: Space separated list of scopes to assign the role (--role) for the system-assigned managed identity.
+        skip-ns-ra: |-
+            Used to skip ADR Namespace role assignment after IoT hub creation. Only applicable to Gen2 IoT Hubs.
+
+            Accepted values: false, true
+        sku: |-
+            Pricing tier for Azure IoT Hub. Note that only one free IoT hub instance (F1) is allowed in each subscription. Exception will be thrown if free instances exceed one.
+
+            Default value: S1
+
+            Accepted values: B1, B2, B3, F1, GEN2, S1, S2, S3
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        unit: |-
+            Units in your IoT Hub.
+
+            Default value: 1
+examples:
+    Create a Generation2 IoT Hub with Device Registry namespace properties and custom role assignment.: az iot hub create --resource-group MyResourceGroup --name MyHub --sku GEN2 --ns-resource-id NamespaceResourceId --ns-identity-id UserIdentityResourceId --custom-ns-role-id RoleResourceId
+    Create a Generation2 IoT Hub with Device Registry namespace properties and skip role assignment.: az iot hub create --resource-group MyResourceGroup --name MyHub --sku GEN2 --ns-resource-id NamespaceResourceId --ns-identity-id UserIdentityResourceId --skip-ns-ra
+    Create a Generation2 IoT Hub with Device Registry namespace properties.: az iot hub create --resource-group MyResourceGroup --name MyHub --sku GEN2 --ns-resource-id NamespaceResourceId --ns-identity-id UserIdentityResourceId
+    ? Create an IoT Hub with a system-assigned managed identity, and assign a role and scope to a storage account for the created identity.
+    : az iot hub create --resource-group MyResourceGroup --name MyIotHub --location westus --mi-system-assigned --role "Storage Blob Data Contributor" --scopes {resourceId}
+    Create an IoT Hub with data residency enforced. This will disable cross-region disaster recovery.: az iot hub create --resource-group MyResourceGroup --name MyIoTHub --edr
+    Create an IoT Hub with local authentication, device SAS keys, and module SAS keys all disabled: az iot hub create --resource-group MyResourceGroup --name MyIotHub --location westus --disable-local-auth --disable-device-sas --disable-module-sas
+    Create an IoT Hub with the free pricing tier F1, in the region of the resource group.: az iot hub create --resource-group MyResourceGroup --name MyIotHub --sku F1 --partition-count 2
+    Create an IoT Hub with the standard pricing tier S1 and 4 partitions, in the 'westus' region, with tags.: az iot hub create --resource-group MyResourceGroup --name MyIotHub --location westus --tags a=b c=d

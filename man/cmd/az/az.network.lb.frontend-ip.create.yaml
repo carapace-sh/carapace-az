@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a frontend IP address.
-documentation:
-    flag:
-        private-ipv: Whether the specific ipconfiguration is IPv4 or IPv6. Default is taken as IPv4.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        zone: A list of availability zones denoting the IP allocated for the resource needs to come from.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
 flags:
     --gateway-lb=: The reference to gateway load balancer frontend IP.
     --lb-name=!: The load balancer name.
@@ -41,3 +35,31 @@ completion:
         private-ipv:
             - IPv4
             - IPv6
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        gateway-lb: The reference to gateway load balancer frontend IP.
+        lb-name: The load balancer name.
+        name: The name of the frontend IP configuration.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        private-ip-address: |-
+            Static private IP address to associate with the configuration.
+
+            Default value: IPv4
+
+            Accepted values: IPv4, IPv6
+        private-ipv: Whether the specific ipconfiguration is IPv4 or IPv6. Default is taken as IPv4.
+        public-ip-address: Name or ID of the existing public IP to associate with the configuration.
+        public-ip-prefix: Name or ID of a public IP prefix.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subnet: Resource ID.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        vnet-name: The virtual network (VNet) associated with the subnet (Omit if supplying a subnet id).
+        zone: A list of availability zones denoting the IP allocated for the resource needs to come from.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Create a frontend ip address for a public load balancer.: az network lb frontend-ip create -g MyResourceGroup -n MyFrontendIp --lb-name MyLb --public-ip-address MyFrontendIp
+    Create a frontend ip address for an internal load balancer.: az network lb frontend-ip create -g MyResourceGroup -n MyFrontendIp --lb-name MyLb --private-ip-address 10.10.10.100 --subnet MySubnet --vnet-name MyVnet

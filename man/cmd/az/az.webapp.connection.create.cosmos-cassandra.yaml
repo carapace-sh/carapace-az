@@ -1,21 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: cosmos-cassandra
 description: Create a webapp connection to cosmos-cassandra.
-documentation:
-    flag:
-        account: Name of the cosmos database account. Required if '--target-id' is not specified.
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        key-space: Name of the keyspace. Required if '--target-id' is not specified.
-        name: Name of the webapp. Required if '--source-id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        private-endpoint: Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
-        resource-group: The resource group which contains the webapp. Required if '--source-id' is not specified.None
-        service-endpoint: Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
-        slot: The name of the slot. Default to the production slot if not specified.
-        source-id: The resource id of a webapp. Required if ['--resource-group', '--name'] are not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-id: The resource id of target service. Required if ['--target-resource-group', '--account', '--key-space'] are not specified.
-        target-resource-group: The resource group which contains the cosmos database account. Required if '--target-id' is not specified.
 flags:
     --account=: Name of the cosmos database account.
     --appconfig-id=: The app configuration id to store configuration
@@ -79,3 +64,56 @@ completion:
         service-endpoint:
             - "true"
             - "false"
+documentation:
+    flag:
+        account: Name of the cosmos database account. Required if '--target-id' is not specified.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appconfig-id: The app configuration id to store configuration.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the webapp.
+
+            Accepted values: dotnet, dotnet-internal, go, java, nodejs, none, python, springBoot
+        connection: Name of the webapp connection.
+        connstr-props: The additional connection string properties used to build connection string.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        key-space: Name of the keyspace. Required if '--target-id' is not specified.
+        name: Name of the webapp. Required if '--source-id' is not specified.None.
+        no-recreate: |-
+            Skip executing creation operation when no updates to an existing connection.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        private-endpoint: |-
+            Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
+
+            Accepted values: false, true
+        resource-group: The resource group which contains the webapp. Required if '--source-id' is not specified.None.
+        secret: 'The secret auth info. Usage: --secret.'
+        service-endpoint: |-
+            Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
+
+            Accepted values: false, true
+        service-principal: 'The service principal auth info. Usage: --service-principal client-id=XX secret=XX client-id      : Required. Client id of the service principal. object-id      : Optional. Object id of the service principal (Enterprise Application). secret         : Required. Secret of the service principal.'
+        slot: The name of the slot. Default to the production slot if not specified.
+        source-id: The resource id of a webapp. Required if ['--resource-group', '--name'] are not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-identity: 'The flag to use system assigned identity auth info. No additional parameters are needed. Usage: --system-identity.'
+        target-id: The resource id of target service. Required if ['--target-resource-group', '--account', '--key-space'] are not specified. --target-resource-group --tg The resource group which contains the cosmos database account. Required if '--target-id' is not specified.
+        target-resource-group: The resource group which contains the cosmos database account. Required if '--target-id' is not specified.
+        user-identity: 'The user assigned identity auth info. Usage: --user-identity client-id=XX subs-id=XX client-id      : Required. Client id of the user assigned identity. subs-id        : Required. Subscription id of the user assigned identity.'
+        vault-id: The id of key vault to store secret value.
+examples:
+    Create a connection between webapp and cosmos-cassandra interactively: az webapp connection create cosmos-cassandra
+    Create a connection between webapp and cosmos-cassandra with resource id: az webapp connection create cosmos-cassandra --source-id /subscriptions/{subscription}/resourceGroups/{source_resource_group}/providers/Microsoft.Web/sites/{site} --target-id /subscriptions/{subscription}/resourceGroups/{target_resource_group}/providers/Microsoft.DocumentDB/databaseAccounts/{account}/cassandraKeyspaces/{key_space} --system-identity
+    Create a connection between webapp and cosmos-cassandra with resource name: az webapp connection create cosmos-cassandra -g WebAppRG -n MyWebApp --tg CosmosRG --account MyAccount --key-space MyKeySpace --system-identity
+    Create a connection between webapp slot and cosmos-cassandra with resource name: az webapp connection create cosmos-cassandra -g WebAppRG -n MyWebApp --slot MySlot --tg CosmosRG --account MyAccount --key-space MyKeySpace --system-identity

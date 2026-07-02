@@ -1,23 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: upload-batch
 description: Upload files from a local directory to a blob container.
-documentation:
-    flag:
-        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY'
-        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit'
-        auth-mode: 'The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE'
-        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with `az storage account show`. Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT'
-        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING'
-        if-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag matches the value specified.
-        if-none-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag does not match the value specified. Specify the wildcard character (*) to perform the operation only if the resource does not exist, and fail the operation if it does exist.
-        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
-        overwrite: 'Whether the blob to be uploaded should overwrite the current data. If True, blob upload operation will overwrite the existing data. If set to False, the operation will fail with ResourceExistsError. The exception to the above is with Append blob types: if set to False and the data already exists, an error will not be raised and the data will be appended to the existing blob. If set overwrite=True, then the existing append blob will be deleted, and a new one created. Defaults to False.'
-        pattern: The pattern used for globbing files or blobs in the source. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3/library/fnmatch.html.
-        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        tier: The tier value to set the blob to. For page blob, the tier correlates to the size of the blob and number of allowed IOPS. Possible values are P10, P15, P20, P30, P4, P40, P50, P6, P60, P70, P80 and this is only applicable to page blobs on premium storage accounts; For block blob, possible values are Archive, Cold, Cool, and Hot. This is only applicable to block blobs on standard storage accounts.
-        timeout: Request timeout in seconds. Applies to each call to the service.
 flags:
     --account-key=: Storage account key.
     --account-name=: Storage account name.
@@ -72,3 +55,66 @@ completion:
             - block
             - page
             - append
+documentation:
+    flag:
+        account-key: 'Storage account key. Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_KEY.'
+        account-name: 'Storage account name. Related environment variable: AZURE_STORAGE_ACCOUNT. Must be used in conjunction with either storage account key or a SAS token. If neither are present, the command will try to query the storage account key using the authenticated Azure account. If a large number of storage commands are executed the API quota may be hit.'
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        auth-mode: |-
+            The mode in which to run the command. "login" mode will directly use your login credentials for the authentication. The legacy "key" mode will attempt to query for an account key if no authentication parameters for the account are provided. Environment variable: AZURE_STORAGE_AUTH_MODE.
+
+            Accepted values: key, login
+        blob-endpoint: 'Storage data service endpoint. Must be used in conjunction with either storage account key or a SAS token. You can find each service primary endpoint with ``` az storage account show ``` . Environment variable: AZURE_STORAGE_SERVICE_ENDPOINT.'
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: 'Storage account connection string. Environment variable: AZURE_STORAGE_CONNECTION_STRING.'
+        content-disposition: Conveys additional information about how to process the response payload, and can also be used to attach additional metadata.
+        content-encoding: The content encoding type.
+        content-language: The content language.
+        content-md5: The content's MD5 hash.
+        content-type: The content MIME type.
+        destination: The blob container where the files will be uploaded. The destination can be the container URL or the container name. When the destination is the container URL, the storage account name will be parsed from the URL.
+        destination-path: The destination path that will be prepended to the blob name.
+        dryrun: |-
+            Show the summary of the operations to be taken instead of actually uploading the file(s).
+
+            Default value: False
+        if-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag matches the value specified.
+        if-modified-since: Commence only if modified since supplied UTC datetime (Y-m-d'T'H:M'Z').
+        if-none-match: An ETag value, or the wildcard character (*). Specify this header to perform the operation only if the resource's ETag does not match the value specified. Specify the wildcard character (*) to perform the operation only if the resource does not exist, and fail the operation if it does exist.
+        if-unmodified-since: Commence only if unmodified since supplied UTC datetime (Y-m-d'T'H:M'Z').
+        lease-id: The active lease id for the blob.
+        max-connections: |-
+            Maximum number of parallel connections to use when the blob size exceeds 64MB.
+
+            Default value: 2
+        maxsize-condition: The max length in bytes permitted for an append blob.
+        metadata: Metadata in space-separated key=value pairs. This overwrites any existing metadata.
+        no-progress: |-
+            Include this flag to disable progress reporting for the command.
+
+            Default value: False
+        overwrite: |-
+            Whether the blob to be uploaded should overwrite the current data. If True, blob upload operation will overwrite the existing data. If set to False, the operation will fail with ResourceExistsError. The exception to the above is with Append blob types: if set to False and the data already exists, an error will not be raised and the data will be appended to the existing blob. If set overwrite=True, then the existing append blob will be deleted, and a new one created. Defaults to False.
+
+            Accepted values: false, true
+        pattern: The pattern used for globbing files or blobs in the source. The supported patterns are '*', '?', '[seq]', and '[!seq]'. For more information, please refer to https://docs.python.org/3/library/fnmatch.html . When you use '*' in --pattern, it will match any character including the the directory separator '/'.
+        sas-token: 'A Shared Access Signature (SAS). Must be used in conjunction with storage account name or service endpoint. Environment variable: AZURE_STORAGE_SAS_TOKEN.'
+        source: The directory where the files to be uploaded are located.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        tags-condition: Specify a SQL where clause on blob tags to operate only on blobs with a matching value.
+        tier: The tier value to set the blob to. For page blob, the tier correlates to the size of the blob and number of allowed IOPS. Possible values are P10, P15, P20, P30, P4, P40, P50, P6, P60, P70, P80 and this is only applicable to page blobs on premium storage accounts; For block blob, possible values are Archive, Cold, Cool, and Hot. This is only applicable to block blobs on standard storage accounts.
+        timeout: Request timeout in seconds. Applies to each call to the service.
+        type: |-
+            Defaults to 'page' for *.vhd files, or 'block' otherwise. The setting will override blob types for every file.
+
+            Accepted values: append, block, page
+        validate-content: |-
+            Specifies that an MD5 hash shall be calculated for each chunk of the blob and verified by the service when the chunk has arrived.
+
+            Default value: False
+examples:
+    Upload all files from local path directory to a container named "mycontainer".: az storage blob upload-batch -d mycontainer -s <path-to-directory>
+    Upload all files that end with .py unless blob exists and has been modified since given date.: az storage blob upload-batch -d mycontainer --account-name mystorageaccount --account-key 00000000 -s <path-to-directory> --pattern "*.py" --if-unmodified-since 2018-08-27T20:51Z
+    Upload all files with the format 'cli-201x-xx-xx.txt' except cli-2018-xx-xx.txt' and 'cli-2019-xx-xx.txt' in a container.: az storage blob upload-batch -d mycontainer -s <path-to-directory> --pattern "cli-201[!89]-??-??.txt"
+    Upload all files with the format 'cli-2018-xx-xx.txt' or 'cli-2019-xx-xx.txt' in local path directory.: az storage blob upload-batch -d mycontainer -s <path-to-directory> --pattern "cli-201[89]-??-??.txt"

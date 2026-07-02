@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: keyvault
 description: Create a functionapp connection to keyvault.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        name: Name of the function app. Required if '--source-id' is not specified.None
-        opt-out: Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
-        private-endpoint: Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
-        resource-group: The resource group which contains the function app. Required if '--source-id' is not specified.None
-        service-endpoint: Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
-        source-id: The resource id of a functionapp. Required if ['--resource-group', '--name'] are not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-id: The resource id of target service. Required if ['--target-resource-group', '--vault'] are not specified.
-        target-resource-group: The resource group which contains the keyvault. Required if '--target-id' is not specified.
-        vault: Name of the keyvault. Required if '--target-id' is not specified.
 flags:
     --appconfig-id=: The app configuration id to store configuration
     --client-type=: The client type used on the functionapp
@@ -77,3 +64,60 @@ completion:
         service-endpoint:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        appconfig-id: The app configuration id to store configuration.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the functionapp.
+
+            Accepted values: dotnet, dotnet-internal, java, nodejs, none, python, springBoot
+        connection: Name of the functionapp connection.
+        connstr-props: The additional connection string properties used to build connection string.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        name: Name of the function app. Required if '--source-id' is not specified.None.
+        new: |-
+            Indicates whether to create a new keyvault when creating the functionapp connection.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-recreate: |-
+            Skip executing creation operation when no updates to an existing connection.
+
+            Default value: False
+
+            Accepted values: false, true
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        opt-out: |-
+            Whether to disable some configuration steps. Use configinfo to disbale configuration information changes on source. Use publicnetwork to disable public network access configuration.Use auth to skip auth configuration such as enabling managed identity and granting RBAC roles.
+
+            Accepted values: auth, configinfo, publicnetwork
+        private-endpoint: |-
+            Connect target service by private endpoint. The private endpoint in source virtual network must be created ahead.
+
+            Accepted values: false, true
+        resource-group: The resource group which contains the function app. Required if '--source-id' is not specified.None.
+        service-endpoint: |-
+            Connect target service by service endpoint. Source resource must be in the VNet and target SKU must support service endpoint feature.
+
+            Accepted values: false, true
+        service-principal: 'The service principal auth info. Usage: --service-principal client-id=XX secret=XX client-id      : Required. Client id of the service principal. object-id      : Optional. Object id of the service principal (Enterprise Application). secret         : Required. Secret of the service principal.'
+        source-id: The resource id of a functionapp. Required if ['--resource-group', '--name'] are not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        system-identity: 'The flag to use system assigned identity auth info. No additional parameters are needed. Usage: --system-identity.'
+        target-id: The resource id of target service. Required if ['--target-resource-group', '--vault'] are not specified. --target-resource-group --tg The resource group which contains the keyvault. Required if '--target-id' is not specified.
+        target-resource-group: The resource group which contains the keyvault. Required if '--target-id' is not specified.
+        user-identity: 'The user assigned identity auth info. Usage: --user-identity client-id=XX subs-id=XX client-id      : Required. Client id of the user assigned identity. subs-id        : Required. Subscription id of the user assigned identity.'
+        vault: Name of the keyvault. Required if '--target-id' is not specified.
+        vault-id: The id of key vault to store secret value.
+examples:
+    Create a connection between functionapp and keyvault interactively: az functionapp connection create keyvault
+    Create a connection between functionapp and keyvault with resource id: az functionapp connection create keyvault --source-id /subscriptions/{subscription}/resourceGroups/{source_resource_group}/providers/Microsoft.Web/sites/{site} --target-id /subscriptions/{subscription}/resourceGroups/{target_resource_group}/providers/Microsoft.KeyVault/vaults/{vault} --system-identity
+    Create a connection between functionapp and keyvault with resource name: az functionapp connection create keyvault -g FuncAppRG -n MyFunctionApp --tg KeyvaultRG --vault MyVault --system-identity
+    Create a new keyvault and connect functionapp to it: az functionapp connection create keyvault --source-id /subscriptions/{subscription}/resourceGroups/{source_resource_group}/providers/Microsoft.Web/sites/{site} --new
+    Create a new keyvault and connect functionapp to it interactively: az functionapp connection create keyvault --new

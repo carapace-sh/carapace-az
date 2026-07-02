@@ -1,15 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a workspace instance
-documentation:
-    flag:
-        level: The capacity reservation level for this workspace, when CapacityReservation sku is selected. The maximum value is 1000 and must be in multiples of 100. If you want to increase the limit, please contact LAIngestionRate@microsoft.com.
-        quota: The workspace daily quota for ingestion in gigabytes. The minimum value is 0.023 and default is -1 which means unlimited.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        retention-time: The workspace data retention in days. Allowed values are per pricing plan. See pricing tiers documentation for details.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        user-assigned: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
 flags:
     --identity-type=: Type of managed service identity.
     --ingestion-access=: The public network access type to access workspace ingestion.
@@ -75,3 +66,52 @@ completion:
             - Premium
             - Standalone
             - Standard
+documentation:
+    command: Create a workspace instance.
+    flag:
+        acquire-policy-token: |-
+            Acquiring an Azure Policy token automatically for this resource operation.
+
+            Accepted values: 100, 1000, 10000, 200, 2000, 25000, 300, 400, 500, 5000, 50000
+        change-reference: |-
+            The related change reference ID for this resource operation.
+
+            Accepted values: None, SystemAssigned, UserAssigned
+        ingestion-access: |-
+            The public network access type to access workspace ingestion.
+
+            Default value: Enabled
+
+            Accepted values: Disabled, Enabled
+        level: The capacity reservation level for this workspace, when CapacityReservation sku is selected. The maximum value is 1000 and must be in multiples of 100. If you want to increase the limit, please contact LAIngestionRate@microsoft.com.
+        location: The geo-location where the resource lives  When not specified, the location of the resource group will be used.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        query-access: |-
+            The public network access type to access workspace query.
+
+            Default value: Enabled
+
+            Accepted values: Disabled, Enabled
+        quota: The workspace daily quota for ingestion in gigabytes. The minimum value is 0.023 and default is -1 which means unlimited.
+        replication-enabled: |-
+            Specifies whether the replication is enabled or not. When true, workspace configuration and data is replicated to the specified location. If replication is been enabled, location must be provided.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        replication-location: The location of the replication.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        retention-time: |-
+            The workspace data retention in days. Allowed values are per pricing plan. See pricing tiers documentation for details.
+
+            Default value: 30
+
+            Default value: PerGB2018
+
+            Accepted values: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: Resource tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        user-assigned: 'The list of user identities associated with the resource. The user identity dictionary key references will be ARM resource ids in the form: ''/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}''.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
+examples:
+    Create a workspace instance: az monitor log-analytics workspace create -g MyResourceGroup -n MyWorkspace

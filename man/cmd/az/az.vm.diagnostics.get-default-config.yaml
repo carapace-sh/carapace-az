@@ -1,9 +1,21 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: get-default-config
 description: Get the default configuration settings for a VM.
-documentation:
-    flag:
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --is-windows-os=: for Windows VMs
     --subscription=: Name or ID of subscription.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        is-windows-os: |-
+            For Windows VMs.
+
+            Default value: False
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Get the default diagnostics for a Linux VM and override the storage account name and the VM resource ID.: |-
+        az vm diagnostics get-default-config \
+            | sed "s#__DIAGNOSTIC_STORAGE_ACCOUNT__#MyStorageAccount#g" \
+            | sed "s#__VM_OR_VMSS_RESOURCE_ID__#MyVmResourceId#g"
+    Get the default diagnostics for a Windows VM.: az vm diagnostics get-default-config --is-windows-os

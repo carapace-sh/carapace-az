@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update existing product details.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        approval-required: whether subscription approval is required. If false, new subscriptions will be approved automatically enabling developers to call the product’s APIs immediately after subscribing. If true, administrators must manually approve the subscription before the developer can use any of the product’s APIs. Can be present only if subscriptionRequired property is present and has a value of false.
-        description: Product description. May include HTML formatting tags.
-        legal-terms: Product terms of use. Developers trying to subscribe to the product will be presented and required to accept these terms before they can complete the subscription process.
-        product-id: Product identifier. Must be unique in the current API Management service instance.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        state: 'whether product is published or not. Published products are discoverable by users of developer portal. Non published products are visible only to administrators. Default state of Product is notPublished. Possible values include: ''notPublished'', ''published'''
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        subscriptions-limit: Whether the number of subscriptions a user can have to this product at the same time. Set to null or omit to allow unlimited per user subscriptions. Can be present only if subscriptionRequired property is present and has a value of false.
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -53,3 +40,50 @@ completion:
         subscription-required:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: |-
+            Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .
+
+            Default value: []
+        approval-required: |-
+            Whether subscription approval is required. If false, new subscriptions will be approved automatically enabling developers to call the product’s APIs immediately after subscribing. If true, administrators must manually approve the subscription before the developer can use any of the product’s APIs. Can be present only if subscriptionRequired property is present and has a value of false.
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        description: Product description. May include HTML formatting tags.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Default value: False
+        if-match: ETag of the Entity.
+        legal-terms: Product terms of use. Developers trying to subscribe to the product will be presented and required to accept these terms before they can complete the subscription process.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        product-id: Product identifier. Must be unique in the current API Management service instance.
+        product-name: Product name.
+        remove: |-
+            Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .
+
+            Default value: []
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-name: The name of the api management service instance.
+        set: |-
+            Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .
+
+            Default value: []
+        state: |-
+            Whether product is published or not. Published products are discoverable by users of developer portal. Non published products are visible only to administrators. Default state of Product is notPublished. Possible values include: 'notPublished', 'published'.
+
+            Accepted values: notPublished, published
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        subscription-required: |-
+            Whether a product subscription is required for accessing APIs included in this product.
+
+            Accepted values: false, true
+        subscriptions-limit: Whether the number of subscriptions a user can have to this product at the same time. Set to null or omit to allow unlimited per user subscriptions. Can be present only if subscriptionRequired property is present and has a value of false.
+examples:
+    Update existing product details.: az apim product update --resource-group MyResourceGroup  --service-name MyServiceName --product-id MyProductID --product-name MyNewProductName --description MyNewDescription --legal-terms MyNewTerms --subscription-required false --state "notPublished"

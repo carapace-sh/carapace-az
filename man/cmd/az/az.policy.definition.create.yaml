@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a policy definition.
-documentation:
-    flag:
-        management-group: The name of the management group of the policy [set] definition. This parameter is required if your policy set is scoped to a management group.
-        mode: Mode of the policy definition, e.g. All, Indexed. Please visit https://aka.ms/azure-policy-mode for more information.
 flags:
     --description=: Description of policy definition.
     --display-name=: Display name of policy definition.
@@ -17,3 +13,20 @@ flags:
     --subscription=: The subscription id of the policy [set] definition.
     -m, --mode=: Mode of the policy definition, e.g. All, Indexed.
     -n, --name=!: Name of the new policy definition.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        description: Policy definition description.
+        display-name: The display name of the policy definition.
+        management-group: The name of the management group of the policy [set] definition. This parameter is required if your policy set is scoped to a management group.
+        metadata: The policy definition metadata.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        mode: Mode of the policy definition, e.g. All, Indexed. Please visit https://aka.ms/azure-policy-mode for more information.
+        name: The name of the policy definition.
+        params: The policy rule parameter definitions.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        version: The policy definition version.
+examples:
+    Create a policy definition with mode: 'az policy definition create --name TagsPolicyDefinition --subscription "MySubscription" --mode Indexed --rules "{ ''if'': { ''field'': ''tags'', ''exists'': ''false'' }, ''then'': { ''effect'': ''deny'' } }"'
+    Create a policy definition with parameters: 'az policy definition create --name allowedLocations --rules "{ ''if'': { ''allOf'': [{ ''field'': ''location'',''notIn'': ''[parameters(\''listOfAllowedLocations\'')]'' }, { ''field'': ''location'', ''notEquals'': ''global'' }, { ''field'': ''type'', ''notEquals'': ''Microsoft.AzureActiveDirectory/b2cDirectories''}] }, ''then'': { ''effect'': ''deny'' } }" --params "{ ''allowedLocations'': {''type'': ''array'', ''metadata'': { ''description'': ''The list of locations that can be specified when deploying resources'', ''strongType'': ''location'', ''displayName'': ''Allowed locations'' } } }"'
+    Create a read-only storage policy: 'az policy definition create --name readOnlyStorage --rules "{ ''if'': { ''field'': ''type'', ''equals'': ''Microsoft.Storage/storageAccounts/write'' }, ''then'': { ''effect'': ''deny'' } }"'
+    Create a read-only storage policy that can be applied within a management group: 'az policy definition create -n readOnlyStorage --management-group "MyManagementGroup" --rules "{ ''if'': { ''field'': ''type'', ''equals'': ''Microsoft.Storage/storageAccounts/write'' }, ''then'': { ''effect'': ''deny'' } }"'

@@ -1,24 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a container apps job.
-documentation:
-    flag:
-        args: A list of container startup command argument(s). Space-separated values e.g. "-c" "mycommand". Empty string to clear existing values
-        command: A list of supported commands on the container that will executed during startup. Space-separated values e.g. "/bin/queue" "mycommand". Empty string to clear existing values
-        cron-expression: Cron expression. Only supported for trigger type "Schedule"
-        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
-        name: The name of the Container Apps Job. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
-        polling-interval: Interval to check each event source in seconds. Defaults to 30s.
-        registry-identity: A Managed Identity to authenticate with the registry server instead of username/password. Use a resource ID or 'system' for user-defined and system-defined identities, respectively. The registry must be an ACR. If possible, an 'acrpull' role assignemnt will be created for the identity automatically.
-        registry-password: The password to log in to container registry. If stored as a secret, value must start with 'secretref:' followed by the secret name.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        scale-rule-auth: Scale rule auth parameters. Auth parameters must be in format "{triggerParameter}={secretRef} {triggerParameter}={secretRef} ...".
-        scale-rule-metadata: Scale rule metadata. Metadata must be in format "{key}={value} {key}={value} ...".
-        secrets: A list of secret(s) for the container app. Space-separated values in 'key=value' format.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        trigger-type: Trigger type. Schedule | Event | Manual
-        yaml: Path to a .yaml file with the configuration of a container app. All other parameters will be ignored. For an example, see  https://learn.microsoft.com/azure/container-apps/azure-resource-manager-api-spec#examples
 flags:
     --args=:
         description: A list of container startup command argument(s).
@@ -71,3 +53,136 @@ flags:
         description: A list of secret(s) for the container app.
         nargs: -1
     -w, --workload-profile-name=: The friendly name for the workload profile
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        args: A list of container startup command argument(s). Space-separated values e.g. "-c" "mycommand". Empty string to clear existing values.
+        change-reference: The related change reference ID for this resource operation.
+        command: A list of supported commands on the container that will executed during startup. Space-separated values e.g. "/bin/queue" "mycommand". Empty string to clear existing values.
+        container-name: Name of the container.
+        cpu: Required CPU in cores from 0.25 - 2.0, e.g. 0.5.
+        cron-expression: Cron expression. Only supported for trigger type "Schedule".
+        env-vars: A list of environment variable(s) for the container. Space-separated values in 'key=value' format. Empty string to clear existing values. Prefix value with 'secretref:' to reference a secret.
+        environment: Name or resource ID of the container app's environment.
+        environment-type: |-
+            Type of environment.
+
+            Default value: managed
+
+            Accepted values: connected, managed
+        image: Container image, e.g. publisher/image-name:tag.
+        max-executions: |-
+            Maximum number of job executions that are created for a trigger.
+
+            Default value: 100
+        memory: Required memory from 0.5 - 4.0 ending with "Gi", e.g. 1.0Gi.
+        mi-system-assigned: |-
+            Boolean indicating whether to assign system-assigned identity.
+
+            Default value: False
+        mi-user-assigned: Space-separated user identities to be assigned.
+        min-executions: |-
+            Minimum number of job executions that are created for a trigger. Default: 0.
+
+            Default value: 0
+        name: The name of the Container Apps Job. A name must consist of lower case alphanumeric characters or '-', start with a letter, end with an alphanumeric character, cannot have '--', and must be less than 32 characters.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        parallelism: |-
+            Maximum number of replicas to run per execution.
+
+            Default value: 1
+        polling-interval: |-
+            Interval to check each event source in seconds.
+
+            Default value: 30
+
+            Default value: 1
+        registry-identity: The managed identity with which to authenticate to the Azure Container Registry (instead of username/password). Use 'system' for a system-defined identity, Use 'system-environment' for an environment level system-defined identity or a resource id for a user-defined environment/containerappjob level identity. The managed identity should have been assigned acrpull permissions on the ACR before deployment (use 'az role assignment create --role acrpull ...').
+        registry-password: The password to log in to container registry. If stored as a secret, value must start with 'secretref:' followed by the secret name.
+        registry-server: The container registry server hostname, e.g. myregistry.azurecr.io.
+        registry-username: The username to log in to container registry.
+        replica-retry-limit: |-
+            Maximum number of retries before the replica fails. Default: 0.
+
+            Default value: 0
+        replica-timeout: Maximum number of seconds a replica can execute. --scale-rule-auth --sra Scale rule auth parameters. Auth parameters must be in format "{triggerParameter}={secretRef} {triggerParameter}={secretRef} ...".
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        scale-rule-auth: Scale rule auth parameters. Auth parameters must be in format "{triggerParameter}={secretRef} {triggerParameter}={secretRef} ...".
+        scale-rule-metadata: Scale rule metadata. Metadata must be in format "{key}={value} {key}={value} ...".
+        secrets: A list of secret(s) for the container app. Space-separated values in 'key=value' format.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        trigger-type: Trigger type. Schedule | Event | Manual.
+        workload-profile-name: The friendly name for the workload profile.
+        yaml: Path to a .yaml file with the configuration of a container app. All other parameters will be ignored. For an example, see https://learn.microsoft.com/azure/container-apps/azure-resource-manager-api-spec#examples .
+examples:
+    Create a container apps job hosted on a Connected Environment.: |-
+        az containerapp job create -n MyContainerappsjob -g MyResourceGroup \
+            --environment MyContainerappConnectedEnv
+            --environment-type connected
+            --trigger-type Manual \
+            --replica-timeout 5 \
+            --replica-retry-limit 2 \
+            --replica-completion-count 1 \
+            --parallelism 1 \
+            --image imageName \
+            --workload-profile-name my-wlp
+    Create a container apps job with Trigger Type as Event.: |-
+        az containerapp job create -n MyContainerappsjob -g MyResourceGroup \
+            --environment MyContainerappEnv \
+            --trigger-type Event \
+            --replica-timeout 5 \
+            --replica-retry-limit 2 \
+            --replica-completion-count 1 \
+            --parallelism 1 \
+            --polling-interval 30 \
+            --min-executions 0 \
+            --max-executions 1 \
+            --scale-rule-name queueJob \
+            --scale-rule-type azure-queue \
+            --scale-rule-metadata "accountName=mystorageaccountname" \
+                                  "cloud=AzurePublicCloud" \
+                                  "queueLength=5" "queueName=foo" \
+            --scale-rule-auth "connection=my-connection-string-secret-name" \
+            --image imageName
+    Create a container apps job with Trigger Type as Manual.: |-
+        az containerapp job create -n MyContainerappsjob -g MyResourceGroup \
+            --environment MyContainerappEnv \
+            --trigger-type Manual \
+            --replica-timeout 5 \
+            --replica-retry-limit 2 \
+            --replica-completion-count 1 \
+            --parallelism 1 \
+            --image imageName \
+            --workload-profile-name my-wlp
+    Create a container apps job with Trigger Type as Schedule.: |-
+        az containerapp job create -n MyContainerappsjob -g MyResourceGroup \
+            --environment MyContainerappEnv \
+            --trigger-type Schedule \
+            --replica-timeout 5 \
+            --replica-retry-limit 2 \
+            --replica-completion-count 1 \
+            --parallelism 1 \
+            --cron-expression "*/1 * * * *" \
+            --image imageName
+    Create container app job with Trigger Type as Event using identity to authenticate: |-
+        az containerapp job create -n MyContainerappsjob -g MyResourceGroup \
+            --environment MyContainerappEnv
+            --trigger-type Event \
+            --replica-timeout 5 \
+            --replica-retry-limit 2 \
+            --replica-completion-count 1 \
+            --parallelism 1 \
+            --polling-interval 30 \
+            --min-executions 0 \
+            --max-executions 1 \
+            --scale-rule-name azure-queue \
+            --scale-rule-type azure-queue \
+            --scale-rule-metadata "accountName=mystorageaccountname" \
+                                  "cloud=AzurePublicCloud" \
+                                  "queueLength=5" "queueName=foo" \
+            --scale-rule-identity myUserIdentityResourceId \
+            --image imageName

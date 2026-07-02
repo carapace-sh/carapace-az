@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Update an SSL policy settings.
-documentation:
-    flag:
-        cipher-suites: SSL cipher suites to be enabled in the specified order to application gateway. Values from `az network application-gateway ssl-policy list-options`.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        disabled-ssl-protocols: Space-separated list of protocols to disable. Values from `az network application-gateway ssl-policy list-options`.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        min-protocol-version: 'Minimum version of SSL protocol to be supported on application gateway. Values from: `az network application-gateway ssl-policy list-options`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --cipher-suites=:
         description: SSL cipher suites to be enabled in the specified order to application gateway.
@@ -52,3 +45,31 @@ completion:
             - Custom
             - CustomV2
             - Predefined
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        cipher-suites: SSL cipher suites to be enabled in the specified order to application gateway. Values from ``` az network application-gateway ssl-policy list-options ``` .  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        disabled-ssl-protocols: Space-separated list of protocols to disable. Values from ``` az network application-gateway ssl-policy list-options ``` .  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        gateway-name: Name of the application gateway.
+        min-protocol-version: |-
+            Minimum version of SSL protocol to be supported on application gateway. Values from: ``` az network application-gateway ssl-policy list-options ``` .
+
+            Accepted values: TLSv1_0, TLSv1_1, TLSv1_2, TLSv1_3
+        name: |-
+            Name of SSL policy.
+
+            Accepted values: AppGwSslPolicy20150501, AppGwSslPolicy20170401, AppGwSslPolicy20170401S, AppGwSslPolicy20220101, AppGwSslPolicy20220101S
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        policy-type: |-
+            Type of SSL policy.
+
+            Accepted values: Custom, CustomV2, Predefined
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Set a custom SSL policy with TLSv1_2 and the cipher suites below.: az network application-gateway ssl-policy set -g MyResourceGroup --gateway-name MyAppGateway --policy-type Custom --min-protocol-version TLSv1_2 --cipher-suites TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_128_GCM_SHA256
+    Set a predefined SSL policy.: az network application-gateway ssl-policy set -g MyResourceGroup --gateway-name MyAppGateway -n AppGwSslPolicy20170401S --policy-type Predefined

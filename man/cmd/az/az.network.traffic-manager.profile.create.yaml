@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a traffic manager profile.
-documentation:
-    flag:
-        path: Path to monitor. Use ""('""' in PowerShell) for none.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
-        unique-dns-name: Relative DNS name for the traffic manager profile. Resulting FQDN will be `<unique-dns-name>.trafficmanager.net` and must be globally unique.
 flags:
     --custom-headers=:
         description: Space-separated list of NAME=VALUE pairs.
@@ -48,3 +41,47 @@ completion:
         status:
             - Enabled
             - Disabled
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        custom-headers: Space-separated list of NAME=VALUE pairs.
+        interval: The interval in seconds at which health checks are conducted.
+        max-failures: The number of consecutive failed health checks tolerated before an endpoint is considered degraded.
+        max-return: Maximum number of endpoints to be returned for MultiValue routing type.
+        name: Traffic manager profile name.
+        path: Path to monitor. Use ""('""' in PowerShell) for none.
+        port: |-
+            Port to monitor.
+
+            Default value: 80
+        protocol: |-
+            Monitor protocol.
+
+            Default value: HTTP
+
+            Accepted values: HTTP, HTTPS, TCP
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        routing-method: |-
+            Routing method.
+
+            Accepted values: Geographic, Multivalue, Performance, Priority, Subnet, Weighted
+        status: |-
+            Status of the Traffic Manager profile.
+
+            Default value: Enabled
+
+            Accepted values: Disabled, Enabled
+        status-code-ranges: Space-separated list of status codes in MIN-MAX or VAL format.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+        timeout: The time in seconds allowed for endpoints to respond to a health check.
+        ttl: |-
+            DNS config time-to-live in seconds.
+
+            Default value: 30
+        unique-dns-name: Relative DNS name for the traffic manager profile. Resulting FQDN will be ``` <unique-dns-name>.trafficmanager.net ``` and must be globally unique.
+examples:
+    Create a traffic manager profile with performance routing.: |-
+        az network traffic-manager profile create -g MyResourceGroup -n MyTmProfile --routing-method Performance \
+            --unique-dns-name mywebapp --ttl 30 --protocol HTTP --port 80 --path "/"

@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates a product.
-documentation:
-    flag:
-        approval-required: whether subscription approval is required. If false, new subscriptions will be approved automatically enabling developers to call the product’s APIs immediately after subscribing. If true, administrators must manually approve the subscription before the developer can use any of the product’s APIs. Can be present only if subscriptionRequired property is present and has a value of false.
-        description: Product description. May include HTML formatting tags.
-        legal-terms: Product terms of use. Developers trying to subscribe to the product will be presented and required to accept these terms before they can complete the subscription process.
-        product-id: Product identifier. Must be unique in the current API Management service instance.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        state: 'whether product is published or not. Published products are discoverable by users of developer portal. Non published products are visible only to administrators. Default state of Product is notPublished. Possible values include: ''notPublished'', ''published'''
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        subscriptions-limit: Whether the number of subscriptions a user can have to this product at the same time. Set to null or omit to allow unlimited per user subscriptions. Can be present only if subscriptionRequired property is present and has a value of false.
 flags:
     --approval-required=:
         description: whether subscription approval is required.
@@ -39,3 +29,33 @@ completion:
         subscription-required:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        approval-required: |-
+            Whether subscription approval is required. If false, new subscriptions will be approved automatically enabling developers to call the product’s APIs immediately after subscribing. If true, administrators must manually approve the subscription before the developer can use any of the product’s APIs. Can be present only if subscriptionRequired property is present and has a value of false.
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        description: Product description. May include HTML formatting tags.
+        legal-terms: Product terms of use. Developers trying to subscribe to the product will be presented and required to accept these terms before they can complete the subscription process.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        product-id: Product identifier. Must be unique in the current API Management service instance.
+        product-name: Product name.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        service-name: The name of the api management service instance.
+        state: |-
+            Whether product is published or not. Published products are discoverable by users of developer portal. Non published products are visible only to administrators. Default state of Product is notPublished. Possible values include: 'notPublished', 'published'.
+
+            Accepted values: notPublished, published
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        subscription-required: |-
+            Whether a product subscription is required for accessing APIs included in this product.
+
+            Accepted values: false, true
+        subscriptions-limit: Whether the number of subscriptions a user can have to this product at the same time. Set to null or omit to allow unlimited per user subscriptions. Can be present only if subscriptionRequired property is present and has a value of false.
+examples:
+    Creates a product.: az apim product create --resource-group MyResourceGroup  --service-name MyServiceName --product-id MyProductID --product-name MyProductName --description MyDescription --legal-terms MyTerms --subscription-required true --approval-required true --subscriptions-limit 8 --state "published"

@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: postgres-flexible
 description: Create a Service Connector local connection to postgres-flexible.
-documentation:
-    flag:
-        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
-        database: Name of postgres flexible database. Required if '--target-id' is not specified.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        server: Name of postgres flexible server. Required if '--target-id' is not specified.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        target-id: The resource id of target service. Required if ['--target-resource-group', '--server', '--database'] are not specified.
-        target-resource-group: The resource group which contains the flexible postgres service. Required if '--target-id' is not specified.
 flags:
     --client-type=: The client type used on the connection
     --connection=: Name of the connection.
@@ -45,3 +35,39 @@ completion:
             - django
             - springBoot
             - none
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        client-type: |-
+            The client type used on the connection.
+
+            Accepted values: django, dotnet, dotnet-internal, go, java, nodejs, none, php, python, ruby, springBoot
+        connection: Name of the connection.
+        customized-keys: The customized keys used to change default configuration names. Key is the original name, value is the customized name.
+        database: Name of postgres flexible database. Required if '--target-id' is not specified.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        new: |-
+            Deleting existing users with the same name before creating a new user in database.
+
+            Default value: False
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        secret: 'The secret auth info. Usage: --secret name=XX secret=XX --secret name=XX secret-uri=XX --secret name=XX secret-name=XX name    : Required. Username or account name for secret auth. secret  : Required. Password or account key for secret auth.'
+        server: Name of postgres flexible server. Required if '--target-id' is not specified.
+        service-principal: 'The service principal auth info. Usage: --service-principal client-id=XX secret=XX client-id      : Required. Client id of the service principal. object-id      : Optional. Object id of the service principal (Enterprise Application). secret         : Required. Secret of the service principal.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        target-id: The resource id of target service. Required if ['--target-resource-group', '--server', '--database'] are not specified. --target-resource-group --tg The resource group which contains the flexible postgres service. Required if '--target-id' is not specified.
+        target-resource-group: The resource group which contains the flexible postgres service. Required if '--target-id' is not specified.
+        user-account: 'The user account auth info. Usage: --user-account object-id=XX object-id              : Optional. Object id of current login user. It will be set automatically if not provided.'
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Create a connection from local to postgres-flexible interactively: az connection create postgres-flexible -g resourceGroup
+    Create a connection from local to postgres-flexible with resource id: az connection create postgres-flexible -g resourceGroup --target-id /subscriptions/{subscription}/resourceGroups/{target_resource_group}/providers/Microsoft.DBforPostgreSQL/flexibleServers/{server}/databases/{database} --secret name=XX secret=XX
+    Create a connection from local to postgres-flexible with resource name: az connection create postgres-flexible -g resourceGroup --tg PostgresRG --server MyServer --database MyDB --secret name=XX secret=XX

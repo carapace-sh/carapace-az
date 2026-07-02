@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: set
 description: Sets if SCM site is using the same restrictions as the main site.
-documentation:
-    flag:
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        slot: the name of the slot. Default to the productions slot if not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --default-action=: Configure default action for main site
     --ids=:
@@ -31,3 +25,28 @@ completion:
         use-same-restrictions-for-scm-site:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        default-action: |-
+            Configure default action for main site.
+
+            Accepted values: Allow, Deny
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: Name of the function app.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        scm-default-action: |-
+            Configure default action for scm site.
+
+            Accepted values: Allow, Deny
+        slot: The name of the slot. Default to the productions slot if not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        use-same-restrictions-for-scm-site: |-
+            Use same access restrictions for scm site.
+
+            Accepted values: false, true
+examples:
+    Enable SCM site to use same access restrictions as main site.: az functionapp config access-restriction set -g ResourceGroup -n AppName --use-same-restrictions-for-scm-site true
+    Set default action to Allow for main site.: az functionapp config access-restriction set -g ResourceGroup -n AppName --default-action Allow
+    Set default action to Deny for scm site.: az functionapp config access-restriction set -g ResourceGroup -n AppName --scm-default-action Deny

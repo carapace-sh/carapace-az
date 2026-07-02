@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: summarize
 description: Summarize policy compliance states.
-documentation:
-    flag:
-        resource: Resource ID or resource name. If a name is given, please provide the resource group and other relevant resource id arguments.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --filter=: Filter expression using OData notation.
     --from=: ISO 8601 formatted timestamp specifying the start time of the interval to query.
@@ -21,3 +16,35 @@ flags:
     -g, --resource-group=: Name of resource group.
     -m, --management-group=: Name of management group.
     -s, --policy-set-definition=: Name of policy set definition.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        filter: Filter expression using OData notation.
+        from: ISO 8601 formatted timestamp specifying the start time of the interval to query.
+        management-group: Name of management group.
+        namespace: 'Provider namespace (Ex: Microsoft.Provider).'
+        parent: 'The parent path (Ex: resourceTypeA/nameA/resourceTypeB/nameB).'
+        policy-assignment: Name of policy assignment.
+        policy-definition: Name of policy definition.
+        policy-set-definition: Name of policy set definition.
+        resource: Resource ID or resource name. If a name is given, please provide the resource group and other relevant resource id arguments.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        resource-type: 'Resource type (Ex: resourceTypeC).'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        to: ISO 8601 formatted timestamp specifying the end time of the interval to query.
+        top: Maximum number of records to return.
+examples:
+    Get latest non-compliant policy states summary at current subscription scope.: az policy state summarize
+    Get latest non-compliant policy states summary at management group scope.: az policy state summarize -m "myMg"
+    Get latest non-compliant policy states summary at resource group scope in current subscription.: az policy state summarize -g "myRg"
+    Get latest non-compliant policy states summary for a nested resource using resource name.: az policy state summarize --resource "myRule1" --namespace "Microsoft.Network" --resource-type "securityRules" --parent "networkSecurityGroups/mysecuritygroup1" -g "myresourcegroup"
+    Get latest non-compliant policy states summary for a policy assignment in current subscription.: az policy state summarize -a "ddd8ef92e3714a5ea3d208c1"
+    Get latest non-compliant policy states summary for a policy assignment in the specified resource group in current subscription.: az policy state summarize -g "myRg" -a "ddd8ef92e3714a5ea3d208c1"
+    Get latest non-compliant policy states summary for a policy definition in current subscription.: az policy state summarize -d "fff69973-fff8-fff5-fffc-fffbe7c9d698"
+    Get latest non-compliant policy states summary for a policy set definition in current subscription.: az policy state summarize -s "fff58873-fff8-fff5-fffc-fffbe7c9d697"
+    Get latest non-compliant policy states summary for a resource using resource ID.: az policy state summarize --resource "/subscriptions/fff10b27-fff3-fff5-fff8-fffbe01e86a5/resourceGroups/myResourceGroup /providers/Microsoft.EventHub/namespaces/myns1/eventhubs/eh1/consumergroups/cg1"
+    Get latest non-compliant policy states summary for a resource using resource name.: az policy state summarize --resource "myKeyVault" --namespace "Microsoft.KeyVault" --resource-type "vaults" -g "myresourcegroup"
+    Get latest non-compliant policy states summary in current subscription filtering results based on some property values.: az policy state summarize --filter "(policyDefinitionAction eq 'deny' or policyDefinitionAction eq 'audit') and resourceLocation ne 'eastus'"
+    Get latest non-compliant policy states summary in current subscription for a custom time interval.: az policy state summarize --from "2018-03-08T00:00:00Z" --to "2018-03-15T00:00:00Z"
+    Get latest non-compliant policy states summary in current subscription, limiting the assignments summary to top 5.: az policy state summarize --top 5

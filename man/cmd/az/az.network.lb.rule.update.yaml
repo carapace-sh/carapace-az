@@ -1,19 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: update
 description: Update a load balancing rule.
-documentation:
-    flag:
-        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: `--add property.listProperty <key=value, string or JSON string>`'
-        backend-pools-name: List of ID or name of the backend address pools. Multiple pools are only supported by Gateway SKU load balancer.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        backend-port: The port used for internal connections on the endpoint. Acceptable values are between 0 and 65535. Note that value 0 enables "Any Port".
-        enable-tcp-reset: Receive bidirectional TCP Reset on TCP flow idle timeout or unexpected connection termination. This element is only used when the protocol is set to TCP.
-        floating-ip: Configures a virtual machine's endpoint for the floating IP capability required to configure a SQL AlwaysOn Availability Group. This setting is required when using the SQL AlwaysOn Availability Groups in SQL server. This setting can't be changed after you create the endpoint.
-        frontend-port: The port for the external endpoint. Port numbers for each rule must be unique within the Load Balancer. Acceptable values are between 0 and 65534. Note that value 0 enables "Any Port".
-        idle-timeout: The timeout for the TCP idle connection. The value can be set between 4 and 30 minutes. The default value is 4 minutes. This element is only used when the protocol is set to TCP.
-        remove: 'Remove a property or an element from a list.  Example: `--remove property.list <indexToRemove>` OR `--remove propertyToRemove`'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        set: 'Update an object by specifying a property path and value to set.  Example: `--set property1.property2=<value>`'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --add=:
         description: Add an object to a list of objects by specifying a path and key value pairs.
@@ -118,3 +105,46 @@ completion:
             - All
             - Tcp
             - Udp
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        add: 'Add an object to a list of objects by specifying a path and key value pairs.  Example: ``` --add property.listProperty <key=value, string or JSON string> ``` .'
+        backend-pools-name: List of ID or name of the backend address pools. Multiple pools are only supported by Gateway SKU load balancer.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        backend-port: The port used for internal connections on the endpoint. Acceptable values are between 0 and 65535. Note that value 0 enables "Any Port".
+        change-reference: The related change reference ID for this resource operation.
+        disable-outbound-snat: |
+            Configures SNAT for the VMs in the backend pool to use the publicIP address specified in the frontend of the load balancing rule.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        enable-tcp-reset: |-
+            Receive bidirectional TCP Reset on TCP flow idle timeout or unexpected connection termination. This element is only used when the protocol is set to TCP.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        floating-ip: Configures a virtual machine's endpoint for the floating IP capability required to configure a SQL AlwaysOn Availability Group. This setting is required when using the SQL AlwaysOn Availability Groups in SQL server. This setting can't be changed after you create the endpoint.
+        force-string: |-
+            When using 'set' or 'add', preserve string literals instead of attempting to convert to JSON.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        frontend-port: The port for the external endpoint. Port numbers for each rule must be unique within the Load Balancer. Acceptable values are between 0 and 65534. Note that value 0 enables "Any Port".
+        idle-timeout: The timeout for the TCP idle connection. The value can be set between 4 and 30 minutes. The default value is 4 minutes. This element is only used when the protocol is set to TCP.
+        lb-name: The load balancer name.
+        load-distribution: |-
+            The load distribution policy for this rule.
+
+            Accepted values: Default, SourceIP, SourceIPProtocol
+        name: The name of the load balancing rule.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        protocol: |-
+            The reference to the transport protocol used by the load balancing rule.
+
+            Accepted values: All, Tcp, Udp
+        remove: 'Remove a property or an element from a list.  Example: ``` --remove property.list <indexToRemove> ``` OR ``` --remove propertyToRemove ``` .'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        set: 'Update an object by specifying a property path and value to set.  Example: ``` --set property1.property2=<value> ``` .'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Update a load balancing rule to change the protocol to UDP.: az network lb rule update -g MyResourceGroup --lb-name MyLb -n MyLbRule --protocol Udp
+    Update a load balancing rule to support HA ports.: az network lb rule update -g MyResourceGroup --lb-name MyLb -n MyLbRule --protocol All --frontend-port 0 --backend-port 0

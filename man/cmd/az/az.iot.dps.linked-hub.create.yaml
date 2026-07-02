@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a linked IoT hub in an Azure IoT Hub Device Provisioning Service instance.
-documentation:
-    flag:
-        connection-string: Connection string of the IoT hub. Required if hub name is not provided using --hub-name.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --allocation-weight=: Allocation weight of the IoT hub.
     --apply-allocation-policy=:
@@ -24,3 +19,23 @@ completion:
         apply-allocation-policy:
             - "true"
             - "false"
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        allocation-weight: Allocation weight of the IoT hub.
+        apply-allocation-policy: |-
+            A boolean indicating whether to apply allocation policy to the IoT hub.
+
+            Accepted values: false, true
+        change-reference: The related change reference ID for this resource operation.
+        connection-string: Connection string of the IoT hub. Required if hub name is not provided using --hub-name.
+        dps-name: IoT Hub Device Provisioning Service name.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Create a linked IoT hub in an Azure IoT Hub Device Provisioning Service instance: az iot dps linked-hub create --dps-name MyDps --resource-group MyResourceGroup --location westus --connection-string 'HostName=myhub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=12345'
+    Create a linked IoT hub in an Azure IoT Hub Device Provisioning Service which applies allocation weight and weight being 10: az iot dps linked-hub create --dps-name MyDps --resource-group MyResourceGroup --location westus --allocation-weight 10 --apply-allocation-policy True --connection-string 'HostName=myhub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=12345'

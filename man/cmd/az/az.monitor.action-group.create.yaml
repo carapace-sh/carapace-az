@@ -1,8 +1,21 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a new action group.
+flags:
+    --short-name=: The short name of the action group.
+    --subscription=: Name or ID of subscription.
+    --tags=:
+        description: 'Space-separated tags: key[=value] [key[=value] ...].'
+        nargs: -1
+    -a, --actions=:
+        description: Add receivers to the action group during the creation.
+        nargs: -1
+    -g, --resource-group=!: Name of resource group.
+    -l, --location=: Location.
+    -n, --name=!: The name of the action group.
 documentation:
     flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
         actions: |4-
                     Add receivers to the action group during the creation.
                     Usage:   --action TYPE NAME [ARG ...]
@@ -43,20 +56,32 @@ documentation:
                     'useaadauth', 'isglobalrunbook' and 'usecommonalertschema' are optional arguements that only need to be passed to set the respective parameter to True.
                     If the 'useaadauth' argument is passed, then the OBJECT_ID and IDENTIFIER_URI values are required as well.
                       Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.  When not specified, the location of the resource group will be used.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`.
+        arm-role-receivers: The list of ARM role receivers that are part of this action group. Roles are Azure RBAC roles and only built-in roles are supported.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        automation-runbook-receivers: The list of AutomationRunbook receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        azure-app-push-receivers: The list of AzureAppPush receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        azure-function-receivers: The list of azure function receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        change-reference: The related change reference ID for this resource operation.
+        email-receivers: The list of email receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        enabled: |-
+            Indicates whether this action group is enabled. If an action group is not enabled, then none of its receivers will receive communications.
+
+            Default value: True
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        event-hub-receivers: The list of event hub receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        incident-receivers: The list of incident receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        itsm-receivers: The list of ITSM receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        location: |-
+            Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .  When not specified, the location of the resource group will be used.
+
+            Default value: Global
+        logic-app-receivers: The list of logic app receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
         short-name: The short name of the action group. This will be used in SMS messages.
+        sms-receivers: The list of SMS receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
         subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
         tags: 'Space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.'
-flags:
-    --short-name=: The short name of the action group.
-    --subscription=: Name or ID of subscription.
-    --tags=:
-        description: 'Space-separated tags: key[=value] [key[=value] ...].'
-        nargs: -1
-    -a, --actions=:
-        description: Add receivers to the action group during the creation.
-        nargs: -1
-    -g, --resource-group=!: Name of resource group.
-    -l, --location=: Location.
-    -n, --name=!: The name of the action group.
+        voice-receivers: The list of voice receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        webhook-receivers: The list of webhook receivers that are part of this action group.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+examples:
+    Create a new action group: az monitor action-group create --action webhook MyActionName https://alerts.contoso.com apiKey={APIKey} type=HighCPU --name MyActionGroup --resource-group MyResourceGroup

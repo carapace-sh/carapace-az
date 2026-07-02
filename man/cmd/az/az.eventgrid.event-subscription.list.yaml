@@ -1,12 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: list
 description: List event subscriptions.
-documentation:
-    flag:
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        odata-query: 'The OData query used for filtering the list results. Filtering is currently allowed on the Name property only. The supported operations include: CONTAINS, eq (for equal), ne (for not equal), AND, OR and NOT.'
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --odata-query=: The OData query used for filtering the list results.
     --source-resource-id=: Fully qualified identifier of the source Azure resource.
@@ -14,3 +8,28 @@ flags:
     --topic-type-name=: Name of the topic type.
     -g, --resource-group=: Name of resource group.
     -l, --location=: Location.
+documentation:
+    flag:
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        odata-query: 'The OData query used for filtering the list results. Filtering is currently allowed on the Name property only. The supported operations include: CONTAINS, eq (for equal), ne (for not equal), AND, OR and NOT.'
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        source-resource-id: 'Fully qualified identifier of the Azure resource whose event subscription needs to be listed. Usage:                      --source-resource-id Azure-Resource-ID For Azure subscription:     --source-resource-id /subscriptions/{SubID} For resource group:         --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1 For EventGrid topic:        --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/topics/t1 For storage account:        --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.Storage/storageaccounts/sa1 For EventGrid domain:       --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/domains/d1 For EventGrid domain topic: --source-resource-id /subscriptions/{SubID}/resourceGroups/rg1/providers/Microsoft.EventGrid/domains/d1/topics/t1.'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        topic-type-name: 'Name of the topic-type whose event subscriptions need to be listed. When this is specified, you must also specify --location. Example 1: List all Storage event subscriptions in WestUS2 --resource-group TestRG --topic-type-name Microsoft.Storage.StorageAccounts --location westus2 Example 2: List all event subscriptions on Azure subscriptions --topic-type-name Microsoft.Resources.Subscriptions --location global.'
+examples:
+    List all Storage event subscriptions (under the currently selected Azure subscription) in westus2.: az eventgrid event-subscription list --topic-type Microsoft.Storage.StorageAccounts --location westus2
+    List all Storage event subscriptions (under the given resource group) in westus2.: az eventgrid event-subscription list --topic-type Microsoft.Storage.StorageAccounts --location westus2 --resource-group {RG}
+    List all event subscriptions created for a resource group.: az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}
+    List all event subscriptions created for a storage account.: az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.Storage/storageaccounts/kalsegblob
+    List all event subscriptions created for an Azure subscription.: az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}
+    List all event subscriptions created for an Event Grid topic.: az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/topics/topic1
+    List all event subscriptions for an Event Grid domain except the event subscription with name "name1": az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/domains/d1 --odata-query "NOT (name eq 'name1')"
+    List all event subscriptions for an Event Grid domain topic.: az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/domains/d1/topics/topic1
+    List all event subscriptions for an Event Grid domain whose name contains the pattern "XYZ": az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/domains/d1 --odata-query "Contains(name, 'XYZ')"
+    List all event subscriptions for an Event Grid domain.: az eventgrid event-subscription list --source-resource-id /subscriptions/{SubID}/resourceGroups/{RG}/providers/Microsoft.EventGrid/domains/d1
+    List all regional or global event subscriptions (under the currently selected Azure subscription).: |-
+        az eventgrid event-subscription list --location westus2
+        az eventgrid event-subscription list --location global
+    List all regional or global event subscriptions under a specified resource group.: |-
+        az eventgrid event-subscription list --location westus2 --resource-group {RG}
+        az eventgrid event-subscription list --location global --resource-group {RG}

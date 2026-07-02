@@ -1,11 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Creates an application group for an EventHub namespace
-documentation:
-    flag:
-        is-enabled: Determines if Application Group is allowed to create connection with namespace or not. Once the isEnabled is set to false, all the existing connections of application group gets dropped and no new connections will be allowed
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --client-app-group-identifier=!: The Unique identifier for application group.Supports SAS(NamespaceSASKeyName=KeyName or EntitySASKeyName=KeyName) or AAD(AADAppID=Guid)
     --is-enabled=:
@@ -23,3 +18,19 @@ completion:
         is-enabled:
             - "true"
             - "false"
+documentation:
+    command: Creates an application group for an EventHub namespace.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        is-enabled: |-
+            Determines if Application Group is allowed to create connection with namespace or not. Once the isEnabled is set to false, all the existing connections of application group gets dropped and no new connections will be allowed.
+
+            Accepted values: false, true
+        name: Name of Application Group.
+        namespace-name: Name of Namespace.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    ? Create an application group myAppGroup for eventhub namespace mynamespace with 2 throttling policies. Maximum allowed throttling policies is 4.
+    : az eventhubs namespace application-group create --namespace-name mynamespace -g MyResourceGroup --name myAppGroup --client-app-group-identifier NamespaceSASKeyName=keyname --throttling-policy-config name=policy1 metric-id=IncomingMessages rate-limit-threshold=10000 --throttling-policy-config name=policy2 metric-id=IncomingBytes rate-limit-threshold=20000

@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a partner configuration.
-documentation:
-    flag:
-        authorized-partner: Add authorized partner information. Multiple authorized partners can be specified by using more than one `--authorized-partner` argument
-        default-maximum-expiration-time-in-days: Time used to validate the authorization expiration time for each authorized partner. If DefaultMaximumExpirationTimeInDays is not specified, the default is 7 days. Otherwise, allowed values are between 1 and 365 days.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
 flags:
     --authorized-partner=:
         description: Add authorized partner information.
@@ -18,3 +11,18 @@ flags:
         description: 'space-separated tags: key[=value] [key[=value] ...].'
         nargs: -1
     -g, --resource-group=!: Name of resource group.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        authorized-partner: '``` argument. ``` partner-name ``` represents the verified partner resource name corresponding to the partner if it is a verified publisher. ``` partner-registration-immutable-id ``` represents the immutable id of the publisher registration ARM resource. ``` partner-name ``` and ``` partner-registration-immutable-id ``` are optional parameters but at least one parameter should be specified when authorizing a partner. When both are present, they both should correspond to the same verified parner information. Usage:                     --authorized-partner [partner-name={name}] [partner-registration-immutable-id={id}] [expiration-time={timestamp}] Partner Name:              --authorized-partner partner-name=somename expiration-time=2022-06-14T05:37:51.272Z Partner Registration ID:   --authorized-partner partner-registration-immutable-id=795c9f2f-6d2d-42ff-a570-42fd3043192c expiration-time=2022-06-14T05:37:51.272Z Both Name and ID:          --authorized-partner partner-name=somename partner-registration-immutable-id=795c9f2f-6d2d-42ff-a570-42fd3043192c expiration-time=2022-06-14T05:37:51.272Z.'
+        change-reference: The related change reference ID for this resource operation.
+        default-maximum-expiration-time-in-days: Time used to validate the authorization expiration time for each authorized partner. If DefaultMaximumExpirationTimeInDays is not specified, the default is 7 days. Otherwise, allowed values are between 1 and 365 days.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        tags: 'space-separated tags: key[=value] [key[=value] ...]. Use '''' to clear existing tags.'
+examples:
+    Create a partner configuration with multiple authorized partners.: |-
+        az eventgrid partner configuration create -g rg1 \
+            --authorized-partner partner-name=somepartner1 \
+            --authorized-partner partner-name=somepartner2 \
+            --default-maximum-expiration-time-in-days 5

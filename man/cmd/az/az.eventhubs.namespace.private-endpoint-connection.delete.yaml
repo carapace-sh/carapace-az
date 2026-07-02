@@ -1,10 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: delete
 description: Delete a private endpoint connection request for eventhubs namespace.
-documentation:
-    flag:
-        id: The ID of the private endpoint connection associated with the EventHubs Namespace. You can get it using `az eventhubs namespace show`.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --description=: Comments for delete operation.
     --id=: The ID of the private endpoint connection associated with the EventHubs Namespace.
@@ -13,3 +9,25 @@ flags:
     -g, --resource-group=: The resource group name of specified eventhubs namespace.
     -n, --name=: The name of the private endpoint connection associated with the EventHubs Namespace.
     -y, --yes=: Do not prompt for confirmation.
+documentation:
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        description: Comments for delete operation.
+        id: The ID of the private endpoint connection associated with the EventHubs Namespace. You can get it using ``` az eventhubs namespace show ``` .
+        name: The name of the private endpoint connection associated with the EventHubs Namespace.
+        namespace-name: The eventhubs namesapce name.
+        resource-group: The resource group name of specified eventhubs namespace.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Delete a private endpoint connection request for eventhubs namespace by ID.: |-
+        id = (az eventhubs namespace show -n mynamespace --query "privateEndpointConnections[0].id")
+        az eventhubs namespace private-endpoint-connection delete --id $id
+    Delete a private endpoint connection request for eventhubs namespace using account name and connection name.: az eventhubs namespace private-endpoint-connection delete -g myRg --namespace-name mynamespace --name myconnection
+    Delete a private endpoint connection request for eventhubs namespace using namespace name and connection name.: |-
+        name = (az eventhubs namespace show -n mynamespace --query "privateEndpointConnections[0].name")
+        az eventhubs namespace private-endpoint-connection delete -g myRg --namespace-name mynamespace --name $name

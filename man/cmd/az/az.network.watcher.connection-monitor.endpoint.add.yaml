@@ -1,16 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: add
 description: Add an endpoint to a connection monitor.
-documentation:
-    flag:
-        address-exclude: List of address of the endpoint item which needs to be excluded to the endpoint scope.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        address-include: List of address of the endpoint item which needs to be included to the endpoint scope.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        coverage-level: 'Test coverage for the endpoint. Allowed values: AboveAverage, Average, BelowAverage, Default, Full, Low'
-        dest-test-groups: Space-separated list of names for test group to reference as destination.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        location: 'Location. Values from: `az account list-locations`. You can configure the default location using `az configure --defaults location=<location>`.'
-        source-test-groups: Space-separated list of names for test group to reference as source.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
-        type: 'The endpoint type.  Allowed values: AzureArcVM, AzureSubnet, AzureVM, AzureVMSS, AzureVNet, ExternalAddress, MMAWorkspaceMachine, MMAWorkspaceNetwork.'
 flags:
     --address-exclude=:
         description: List of address of the endpoint item which needs to be excluded to the endpoint scope.
@@ -64,3 +54,35 @@ completion:
             - ExternalAddress
             - MMAWorkspaceMachine
             - MMAWorkspaceNetwork
+documentation:
+    command: |-
+        Command group 'az network watcher connection-monitor endpoint' is in preview and under development. Reference and support levels:
+        https://aka.ms/CLI_refstatus
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        address: Address of the connection monitor endpoint (IP or domain name).
+        address-exclude: List of address of the endpoint item which needs to be excluded to the endpoint scope.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        address-include: List of address of the endpoint item which needs to be included to the endpoint scope.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        change-reference: The related change reference ID for this resource operation.
+        connection-monitor: Connection monitor name. --endpoint-name --name -n The name of the connection monitor endpoint.
+        coverage-level: |-
+            Test coverage for the endpoint. Allowed values: AboveAverage, Average, BelowAverage, Default, Full, Low.
+
+            Accepted values: AboveAverage, Average, BelowAverage, Default, Full, Low
+        dest-test-groups: Space-separated list of names for test group to reference as destination.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        location: 'Location. Values from: ``` az account list-locations ``` . You can configure the default location using ``` az configure --defaults location=<location> ``` .'
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Accepted values: 0, 1, f, false, n, no, t, true, y, yes
+        resource-id: Resource ID of the connection monitor endpoint.
+        source-test-groups: Space-separated list of names for test group to reference as source.  Support shorthand-syntax, json-file and yaml-file. Try "??" to show more.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        type: |-
+            The endpoint type.  Allowed values: AzureArcVM, AzureSubnet, AzureVM, AzureVMSS, AzureVNet, ExternalAddress, MMAWorkspaceMachine, MMAWorkspaceNetwork.
+
+            Accepted values: AzureArcVM, AzureSubnet, AzureVM, AzureVMSS, AzureVNet, ExternalAddress, MMAWorkspaceMachine, MMAWorkspaceNetwork
+examples:
+    Add a Subnet as a source endpoint with addresses excluded: az network watcher connection-monitor endpoint add --connection-monitor MyConnectionMonitor --location westus --name MySubnetEndpoint --resource-id MySubnetID --source-test-groups DefaultTestGroup --type AzureSubnet --address-exclude 10.0.0.25 10.0.0.30 --coverage-level BelowAverage
+    Add an Azure VM as a source endpoint: az network watcher connection-monitor endpoint add --connection-monitor MyConnectionMonitor --location westus --name MyVMEndpoint --resource-id MyVMResourceID --source-test-groups DefaultTestGroup --type AzureVM
+    Add an external address as a destination endpoint: az network watcher connection-monitor endpoint add --connection-monitor MyConnectionMonitor --location westus --name MyExternalEndpoint --address "bing.com" --dest-test-groups DefaultTestGroup --type ExternalAddress

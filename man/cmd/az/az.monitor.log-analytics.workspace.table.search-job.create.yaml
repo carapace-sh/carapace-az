@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: create
 description: Create a Log Analytics workspace search results table.
-documentation:
-    flag:
-        end-search-time: 'Datetime format. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        name: Name of the table. The table name needs to end with _SRCH
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        start-search-time: 'Datetime format. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm)'
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --end-search-time=!:
         description: Datetime format.
@@ -24,3 +17,24 @@ flags:
     --workspace-name=!: Name of the Log Analytics Workspace.
     -g, --resource-group=!: Name of resource group.
     -n, --name=!: Name of the table.
+documentation:
+    command: Create a Log Analytics workspace search results table. The table name needs to end with '_SRCH'.
+    flag:
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        end-search-time: 'Datetime format. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        limit: Limit the search job to return up to specified number of rows.
+        name: Name of the table. The table name needs to end with _SRCH.
+        no-wait: |-
+            Do not wait for the long-running operation to finish.
+
+            Default value: False
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        retention-time: The table retention in days, between 4 and 730. Setting this property to -1 will default to the workspace retention.
+        search-query: Search job query.
+        start-search-time: 'Datetime format. Format: date (yyyy-mm-dd) time (hh:mm:ss.xxxxx) timezone (+/-hh:mm).'
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        total-retention-time: The table total retention in days, between 4 and 2556. Setting this property to -1 will default to table retention.
+        workspace-name: Name of the Log Analytics Workspace.
+examples:
+    Create a Log Analytics workspace search result table.: az monitor log-analytics workspace table search-job create --resource-group MyResourceGroup --workspace-name MyWorkspace -n MyTable_SRCH --retention-time 45 --search-query "Heartbeat | where SourceSystem != '' | project SourceSystem" --limit 1000 --start-search-time "Sat, 28 Aug 2021 05:29:18 GMT" --end-search-time "Sat, 28 Aug 2021 08:29:18 GMT"

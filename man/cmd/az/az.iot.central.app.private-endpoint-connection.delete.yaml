@@ -1,13 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: delete
 description: Delete a private endpoint connection for an IoT Central application.
-documentation:
-    flag:
-        account-name: Name of the IoT Central application. Required if --id is not specified
-        id: The ID of the private endpoint connection associated with the IoT Central application. If --account-name --resource-group/-g and --name/-n are specified, this should be omitted.
-        name: The name of the private endpoint connection associated with IoT Central application. Required if --id is not specified
-        resource-group: The resource group name of specified IoT Central application. Required if --id is not specified
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-name=: Name of the IoT Central application.
     --id=: The ID of the private endpoint connection associated with the IoT Central application.
@@ -15,3 +8,23 @@ flags:
     -g, --resource-group=: The resource group name of specified IoT Central application.
     -n, --name=: The name of the private endpoint connection associated with IoT Central application.
     -y, --yes=: Do not prompt for confirmation.
+documentation:
+    flag:
+        account-name: Name of the IoT Central application. Required if --id is not specified.
+        acquire-policy-token: Acquiring an Azure Policy token automatically for this resource operation.
+        change-reference: The related change reference ID for this resource operation.
+        id: The ID of the private endpoint connection associated with the IoT Central application. If --account-name --resource-group/-g and --name/-n are specified, this should be omitted.
+        name: The name of the private endpoint connection associated with IoT Central application. Required if --id is not specified.
+        resource-group: The resource group name of specified IoT Central application. Required if --id is not specified.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+        "yes": |-
+            Do not prompt for confirmation.
+
+            Default value: False
+examples:
+    Delete a private endpoint connection for an IoT Central application by ID.: |-
+        id = (az iot central app show -n my-iotc-app --query "privateEndpointConnections[0].id")
+        az iot central app private-endpoint-connection delete --id $id
+    Delete a private endpoint connection for an IoT Central application using account name and connection name.: |-
+        name = (az iot central app show -n my-iotc-app --query "privateEndpointConnections[0].name")
+        az iot central app private-endpoint-connection delete -g myRg --account-name my-iotc-app --name $name

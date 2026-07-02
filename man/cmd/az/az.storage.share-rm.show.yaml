@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://carapace.sh/schemas/command.json
 name: show
 description: Show the properties for a specified Azure file share or share snapshot.
-documentation:
-    flag:
-        account-name: The name of the storage account within the specified resource group. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
-        expand: 'Optional, used to expand the properties within share''s properties. Valid values are: deleted, snapshots. Should be passed as a string with delimiter '','''
-        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
-        name: The name of the file share within the specified storage account. File share names must be between 3 and 63 characters in length and use numbers, lower-case letters and dash (-) only. Every dash (-) character must be immediately preceded and followed by a letter or number.
-        resource-group: Name of resource group. You can configure the default group using `az configure --defaults group=<name>`
-        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
 flags:
     --account-name=: The name of the storage account within the specified resource group.
     --expand=: Optional, used to expand the properties within share's properties.
@@ -19,3 +11,18 @@ flags:
     --subscription=: Name or ID of subscription.
     -g, --resource-group=: Name of resource group.
     -n, --name=: The name of the file share within the specified storage account.
+documentation:
+    flag:
+        account-name: The name of the storage account within the specified resource group. Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
+        expand: 'Optional, used to expand the properties within share''s properties. Valid values are: deleted, snapshots. Should be passed as a string with delimiter '',''.'
+        ids: One or more resource IDs (space-delimited). It should be a complete resource ID containing all information of 'Resource Id' arguments. You should provide either --ids or other 'Resource Id' arguments.
+        name: The name of the file share within the specified storage account. File share names must be between 3 and 63 characters in length and use numbers, lower-case letters and dash (-) only. Every dash (-) character must be immediately preceded and followed by a letter or number.
+        resource-group: Name of resource group. You can configure the default group using ``` az configure --defaults group=<name> ``` .
+        snapshot: Optional, used to delete a snapshot.The DateTime value that specifies the share snapshot to retrieve.
+        subscription: Name or ID of subscription. You can configure the default subscription using `az account set -s NAME_OR_ID`
+examples:
+    Show the properties for an Azure file share 'myfileshare' under the storage account 'mystorageaccount' (account id).: az storage share-rm show --storage-account mystorageaccount --name myfileshare
+    ? Show the properties for an Azure file share 'myfileshare' under the storage account 'mystorageaccount' (account name) in resource group 'MyResourceGroup'.
+    : az storage share-rm show -g MyResourceGroup --storage-account mystorageaccount --name myfileshare
+    Show the properties of an Azure file share by resource id.: az storage share-rm show --ids file-share-id
+    Show the properties of an Azure file share snapshot: az storage share-rm show --ids file-share-id --snapshot "2021-03-25T05:29:56.0000000Z"
