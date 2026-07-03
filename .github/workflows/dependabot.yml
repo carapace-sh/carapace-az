@@ -15,32 +15,48 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: check for docker changes
+      id: docker-changed
+      run: |
+        if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -qE '^(Dockerfile|compose\.yaml)$'; then
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: fix git safe.directory
       run:  git config --global --add safe.directory '*'
 
     - name: generate command table
+      if: steps.docker-changed.outputs.changed == 'true'
       run: docker compose build && docker compose run --rm az > az_commands.json
 
     - name: setup go
+      if: steps.docker-changed.outputs.changed == 'true'
       uses: actions/setup-go@v5
       with:
         go-version-file: go.mod
 
     - name: generate specs
+      if: steps.docker-changed.outputs.changed == 'true'
       run: go run -C cmd/carapace-spec-az . --target cmd/carapace-az/cmd/azcli --no-doc az_commands.json
 
     - name: install carapace-man
+      if: steps.docker-changed.outputs.changed == 'true'
       run: go install github.com/carapace-sh/carapace-man@latest
 
     - name: generate man specs
+      if: steps.docker-changed.outputs.changed == 'true'
       run: |
         go run -C cmd/carapace-spec-az . --stdout az_commands.json > /tmp/az-full-spec.yaml
         carapace-man update /tmp/az-full-spec.yaml man/cmd/az
 
     - name: generate code
+      if: steps.docker-changed.outputs.changed == 'true'
       run: go generate ./cmd/carapace-az
 
     - name: push
+      if: steps.docker-changed.outputs.changed == 'true'
       run: |
         if [ ! -z "$(git status --porcelain)" ]; then
           git config user.name rsteube-bot
