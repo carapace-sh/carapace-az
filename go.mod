@@ -3,7 +3,7 @@ module github.com/carapace-sh/carapace-az
 go 1.25.0
 
 require (
-	github.com/carapace-sh/carapace v1.13.2
+	github.com/carapace-sh/carapace v1.13.3
 	github.com/carapace-sh/carapace-bridge v1.6.2
 	github.com/carapace-sh/carapace-spec v1.8.0
 	github.com/neurosnap/sentences v1.1.2
