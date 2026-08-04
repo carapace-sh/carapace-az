@@ -3,7 +3,6 @@
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/carapace-sh/carapace-az)](https://pkg.go.dev/github.com/carapace-sh/carapace-az)
 [![Coverage Status](https://coveralls.io/repos/github/carapace-sh/carapace-az/badge.svg?branch=master)](https://coveralls.io/github/carapace-sh/carapace-az?branch=master)
 [![Packaging status](https://repology.org/badge/tiny-repos/carapace-az.svg)](https://repology.org/project/carapace-az/versions)
-[![az](https://github.com/carapace-sh/carapace-az/actions/workflows/az.yml/badge.svg)](https://github.com/carapace-sh/carapace-az/actions/workflows/az.yml)
 
 Carapace-az is an enriched completer for [azure-cli].
 
